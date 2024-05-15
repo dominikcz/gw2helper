@@ -1,0 +1,27 @@
+
+@baseUrl = https://api.guildwars2.com/
+@key = C04B53EB-53F4-FD46-A87F-EA027535AD9FCC56F2C3-DD5D-4659-80FC-25F7847D07D0
+
+###
+GET {{baseUrl}}/v2/account/bank
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/account/inventory
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/items
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/characters
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/characters/Hoza Jagodka/equipment
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/characters?ids=all
+Authorization: Bearer {{key}}

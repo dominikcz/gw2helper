@@ -3,6 +3,6 @@ export const ssr = false;
 export async function load({ fetch, parent }) {
     const { apiService } = await parent();
 	return {
-		characters: await apiService.characters(),
+		bank: await apiService.bank(),
 	};
 }

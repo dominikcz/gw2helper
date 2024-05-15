@@ -1,4 +1,5 @@
 export const ssr = false;
+export const trailingSlash = 'always';
 
 import utils from "$lib/utils";
 import apiService from "$lib/apiService.ts";

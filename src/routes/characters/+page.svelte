@@ -21,3 +21,4 @@
 {#each data.characters as char}
     <li>{char.name} - {age(char.created)}yo, next birthday in {tillBirthday(char.created)} days</li>
 {/each}
+
