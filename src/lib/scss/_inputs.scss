@@ -3,7 +3,6 @@ input, button {
 	padding: 0.6em 1em;
 	border: 1px solid #a2a9b1;
 	border-radius: 0.25em;
-	cursor: pointer;
 	vertical-align: middle;
 	font-family: sans-serif;
 }
@@ -23,6 +22,7 @@ button {
 	font-weight: bold;
 	line-height: 1.28571429em;
 	text-align: center;
+	cursor: pointer;
 	:hover {
 		background-color: #fff;
 	}

@@ -1,0 +1,46 @@
+$junk : #aaaaaa;
+$basic: #000000;
+$fine: #62a4da;
+$masterwork: #1a9306;
+$rare: #fcd00b;
+$exotic: #ffa405;
+$ascended: #fb3e8d;
+$legendary: #4c139d;
+
+.rarity-junk {
+    color: $junk
+}
+.rarity-basic {
+    color: $basic;
+}
+.rarity-fine {
+    color: $fine;
+}
+.rarity-masterwork {
+    color: $masterwork;
+}
+.rarity-rare {
+    color: $rare;
+}
+.rarity-exotic {
+    color: $exotic;
+}
+.rarity-ascended {
+    color: $ascended;
+}
+.rarity-legendary {
+    color: $legendary;
+}
+
+:root {
+	/* Colors */
+
+	--rarity-junk: $junk;
+	--rarity-basic: $basic;
+	--rarity-fine: $fine;
+	--rarity-masterwork: $masterwork;
+	--rarity-rare: $rare;
+	--rarity-exotic: $exotic;
+	--rarity-ascended: $ascended;
+	--rarity-legendary: $legendary;
+}

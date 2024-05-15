@@ -47,7 +47,7 @@ const tryCache = (req: string): object | undefined => {
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
-    const origReq = req;
+    const origReq = req+query;
     let cachedValue = tryCache(origReq);
     Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
@@ -89,25 +89,52 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     return cachedValue;
 };
 
+const charactersItems = async () => {
+    const rawData = await apiClient("/v2/characters", "ids=all");
+    const tasks = [];
+    for (const char of rawData) {
+        let itemsInBags = char.bags
+            .map((bag) => bag.inventory)
+            .flat()
+            .filter((x) => x != null);
+        let equipment = char.equipment.flat().filter((x) => x != null);
+        let charItems = itemsInBags.concat(equipment);
+        let ids = charItems.map((x) => x.id);
+        let data = await expandItems(ids, charItems)
+        char._items = data;
+    };
+    console.log("characters", rawData);
+    return rawData;
+};
+
 const characters = async () => {
-    return apiClient("/v2/characters", "ids=all");
+    return await apiClient("/v2/characters", "ids=all");
 };
 
 const items = (x: string) => {
-    return apiClient("/v2/items", "ids="+x);
+    return apiClient("/v2/items", "ids=" + x);
 };
 
 const sharedInventory = async () => {
-    return apiClient("/v2/account/inventory", "");
+    // this endpoint returns null in "empty" slots and we don't want that
+    const rawData = await apiClient("/v2/account/inventory", "", {
+        transform: (data) => {
+            return data.filter((x) => x != null);
+        },
+    });
+    const ids = rawData.map((x) => x.id);
+    return expandItems(ids, rawData);
 };
 
 const bank = async () => {
-	// bank zwraca nulle w miejscach, gdzie jest pusto, a my ich nie chcemy
-    const rawData = await apiClient("/v2/account/bank", "", {transform: (data) =>{
-		return data.filter(x => x != null)
-	}});
-	const ids = rawData.map(x => x.id);
-	return expandItems(ids, rawData);
+    // this endpoint returns null in "empty" slots and we don't want that
+    const rawData = await apiClient("/v2/account/bank", "", {
+        transform: (data) => {
+            return data.filter((x) => x != null);
+        },
+    });
+    const ids = rawData.map((x) => x.id);
+    return expandItems(ids, rawData);
 };
 
 const init = (apiKey: string, options?: object) => {
@@ -116,59 +143,31 @@ const init = (apiKey: string, options?: object) => {
     fetchOptions = Object.assign({}, fetchOptions, options);
 };
 
-const expandItems = async (ids: Array<number>, collection) => {
-	const batches = [];
-	do {
-		let batch = ids.splice(0, 200);	
-		if (batch.length > 0) {
-			batches.push(batch.join(','))
-		}
-	} while (ids.length > 0);
-	if (batches.length) {
-		const tasks = batches.map(x => items(x));
-		const resp = (await Promise.all(tasks)).flat();
-		return resp.map(t1 => ({...t1, ...collection.find(t2 => t2.id === t1.id)}))
-	}
-	return null;
-}
+const mergeById = (a1, a2) => {
+    return a1.map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
+};
 
-const getItems = () => {
-    return Promise.all([characters(), sharedInventory(), bank()]).then((resp) => {
-        items.characters = resp[0].data.map((val) => {
-            return { __name: val };
-        });
-        items.shared = resp[1].data;
-        items.bank = resp[2].data;
-        const calls = [];
-        items.characters.forEach((char) => {
-            console.log("checking " + char.__name);
-            calls.push(getCharacterEquipment(char.__name));
-            calls.push(getCharacterInventory(char.__name));
-        });
-        Promise.all(calls)
-            .then((resp) => {
-                let idx = 0;
-                items.characters.forEach((char) => {
-                    char["__equipment"] = resp[2 * idx].data["equipment"];
-                    char["__inventory"] = resp[2 * idx + 1].data["bags"];
-                    idx++;
-                    console.log("char_equip", char);
-                    char["__equipment"].forEach((equip) => expandItemDef(equip.id, char["__equipment"]));
-                    char["__inventory"].forEach((inv) => expandItemDef(inv.id, char["__inventory"]));
-                });
-                items.shared.forEach((item) => expandItemDef(item.id, items.shared));
-                return Promise.resolve(items);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    });
+const expandItems = async (ids: Array<number>, collection) => {
+    const batches = [];
+    do {
+        let batch = ids.splice(0, 200);
+        if (batch.length > 0) {
+            batches.push(batch.join(","));
+        }
+    } while (ids.length > 0);
+    if (batches.length) {
+        const tasks = batches.map((ids) => items(ids));
+        const resp = (await Promise.all(tasks)).flat();
+        return mergeById(resp, collection);
+    }
+    return null;
 };
 
 export default {
     init,
     characters,
-	sharedInventory,
+    charactersItems,
+    sharedInventory,
     bank,
-	items,
+    items,
 };
