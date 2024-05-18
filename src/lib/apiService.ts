@@ -32,7 +32,6 @@ const notifyOnError = (req, error, options) => {
 
 const secondsBetween = (d1: Date, d2: Date): number => {
     const diff = Math.round(Math.abs(d1.getTime() - d2.getTime()) / 1000);
-    console.log(diff);
     return diff;
 };
 
@@ -100,10 +99,8 @@ const charactersItems = async () => {
         let equipment = char.equipment.flat().filter((x) => x != null);
         let charItems = itemsInBags.concat(equipment);
         let ids = charItems.map((x) => x.id);
-        let data = await expandItems(ids, charItems)
-        char._items = data;
+        char._items = await expandItems(ids, charItems);
     };
-    console.log("characters", rawData);
     return rawData;
 };
 
@@ -158,10 +155,26 @@ const expandItems = async (ids: Array<number>, collection) => {
     if (batches.length) {
         const tasks = batches.map((ids) => items(ids));
         const resp = (await Promise.all(tasks)).flat();
-        return mergeById(resp, collection);
+        let data = mergeById(resp, collection);
+        additionalMapping(data);
+        return data;
     }
+
     return null;
 };
+
+const additionalMapping = (data) => {
+    data.forEach(element => {
+        if (element.details){
+            if (element.details.type){
+                element.subtype = element.details.type;
+            }
+            if (element.details.description){
+                element.subdescr = element.details.description;
+            }
+        }
+    });
+}
 
 export default {
     init,
