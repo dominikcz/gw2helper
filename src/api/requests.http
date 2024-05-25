@@ -1,6 +1,7 @@
 
 @baseUrl = https://api.guildwars2.com/
 @key = C04B53EB-53F4-FD46-A87F-EA027535AD9FCC56F2C3-DD5D-4659-80FC-25F7847D07D0
+@vme=6DA74D30-68C3-4693-B3F4-8DA76AF12BAA
 
 ###
 GET {{baseUrl}}/v2/account/bank
@@ -15,6 +16,10 @@ GET {{baseUrl}}/v2/items
 Authorization: Bearer {{key}}
 
 ###
+GET {{baseUrl}}/v2/items/67367
+Authorization: Bearer {{key}}
+
+###
 GET {{baseUrl}}/v2/characters
 Authorization: Bearer {{key}}
 
@@ -25,3 +30,16 @@ Authorization: Bearer {{key}}
 ###
 GET {{baseUrl}}/v2/characters?ids=all
 Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/guild/{{vme}}/stash
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/guild/{{vme}}/treasury
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/account
+Authorization: Bearer {{key}}
+

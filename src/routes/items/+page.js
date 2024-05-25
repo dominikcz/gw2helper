@@ -6,5 +6,6 @@ export async function load({ fetch, parent }) {
 		bank: await apiService.bank(),
 		characters: await apiService.charactersItems(),
 		shared: await apiService.sharedInventory(),
+		guilds: await apiService.guildItems(),
 	};
 }

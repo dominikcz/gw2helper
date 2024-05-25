@@ -46,7 +46,7 @@ const tryCache = (req: string): object | undefined => {
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
-    const origReq = req+query;
+    const origReq = req + query;
     let cachedValue = tryCache(origReq);
     Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
@@ -100,8 +100,35 @@ const charactersItems = async () => {
         let charItems = itemsInBags.concat(equipment);
         let ids = charItems.map((x) => x.id);
         char._items = await expandItems(ids, charItems);
-    };
+    }
     return rawData;
+};
+
+const guildItems = async () => {
+    const account = await apiClient("/v2/account", "");
+    const _guilds = account.guild_leader || account.guilds;
+
+    const items = [];
+    let tasks = [];
+
+    for (const guild of _guilds) {
+        tasks.push(apiClient(`/v2/guild/${guild}`, ""));
+    }
+    const guilds = (await Promise.all(tasks)).flat();
+    // console.log('guilds', guilds);
+
+    for (const guild of guilds) {
+        const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, "")).map(x => x.inventory).flat().filter(x => x != null);
+        // console.log('stash of '+guild.name, stashRaw);
+        const ids = stashRaw.map(x => x.id);
+        items.push(
+            { 
+                name: guild.name, 
+                stash: await expandItems(ids, stashRaw)
+            });
+    }
+    // console.log("guildItems", items);
+    return items;
 };
 
 const characters = async () => {
@@ -110,6 +137,10 @@ const characters = async () => {
 
 const items = (x: string) => {
     return apiClient("/v2/items", "ids=" + x);
+};
+
+const account = () => {
+    return apiClient("/v2/account", "");
 };
 
 const sharedInventory = async () => {
@@ -164,17 +195,17 @@ const expandItems = async (ids: Array<number>, collection) => {
 };
 
 const additionalMapping = (data) => {
-    data.forEach(element => {
-        if (element.details){
-            if (element.details.type){
+    data.forEach((element) => {
+        if (element.details) {
+            if (element.details.type) {
                 element.subtype = element.details.type;
             }
-            if (element.details.description){
+            if (element.details.description) {
                 element.subdescr = element.details.description;
             }
         }
     });
-}
+};
 
 export default {
     init,
@@ -183,4 +214,6 @@ export default {
     sharedInventory,
     bank,
     items,
+    account,
+    guildItems,
 };

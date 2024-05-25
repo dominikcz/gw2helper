@@ -124,6 +124,20 @@
 	</article>
 </details>
 
+<h2>Guild items</h2>
+{#each data.guilds as guild}
+<details open>
+	<summary>{guild.name}</summary>
+	<article>
+		<div class="items">
+			{#each filterCollection(guild.stash, filter, sortBy) as item}
+				<Item {item} />
+			{/each}
+		</div>
+	</article>
+</details>
+{/each}
+
 <h2>Characters' items</h2>
 {#each data.characters as char}
 	<details open>
