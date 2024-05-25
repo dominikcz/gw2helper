@@ -1,5 +1,7 @@
 <script>
 	import { invalidateAll } from '$app/navigation';
+	import { base } from '$app/paths';
+
 	import utils from '$lib/utils.js';
 	import '$lib/scss/gw2.scss';
 
@@ -38,9 +40,9 @@
 </fieldset>
 
 <nav id="main-nav">
-	<a href="/">Home</a>
-	<a href="/characters/">Characters</a>
-	<a href="/items/">items</a>
+	<a href="{base}/">Home</a>
+	<a href="{base}/characters/">Characters</a>
+	<a href="{base}/items/">items</a>
 </nav>
 
 <main>
