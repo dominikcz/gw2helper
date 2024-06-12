@@ -1,15 +1,23 @@
 import Logger from "./logger";
+import wxjs_localstorage from "./wxjs_localstorage";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
+const REQUESTS_CACHE = "gw2helper.requests_cache";
+const ITEMS_CACHE = "gw2helper.items_cache";
+const INVALID_IDS = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 101651];
 
 interface CacheEntry {
-    time: Date;
+    time: Date | string;
     timeout: number;
     data: object;
 }
 
-const cache = new Map<string, CacheEntry>();
+const _items = wxjs_localstorage.getObject(ITEMS_CACHE, null);
+const itemsCache = _items ? new Map(_items) : new Map();
+
+const _req = wxjs_localstorage.getObject(REQUESTS_CACHE, null);
+const requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
 
 let _apiKey = "";
 let fetchOptions = {
@@ -30,19 +38,31 @@ const notifyOnError = (req, error, options) => {
     }
 };
 
-const secondsBetween = (d1: Date, d2: Date): number => {
+const secondsBetween = (d1: Date | string, d2: Date): number => {
+    if (typeof d1 == 'string') {
+        d1 = new Date(d1);
+    }
     const diff = Math.round(Math.abs(d1.getTime() - d2.getTime()) / 1000);
     return diff;
 };
 
 const tryCache = (req: string): object | undefined => {
-    if (cache.has(req)) {
-        let info = cache.get(req);
+    if (requestCache.has(req)) {
+        let info = requestCache.get(req);
         if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
             return info!.data;
-        }
+        } 
     }
     return undefined;
+};
+
+const cacheRequest = (req: string, value: any) => {
+    const obj = {
+        time: new Date(),
+        data: value,
+    };
+    requestCache.set(req, obj);
+    wxjs_localstorage.set(REQUESTS_CACHE, JSON.stringify([...requestCache.entries()]));
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
@@ -50,10 +70,10 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     let cachedValue = tryCache(origReq);
     Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
-        Logger.log("cache is valid");
+        Logger.log("requestCache is valid");
         return cachedValue;
     } else {
-        Logger.log("cache is INVALID, refreshing...");
+        Logger.log("requestCache is INVALID, refreshing...");
 
         const _options = Object.assign({}, fetchOptions, options);
         if (typeof req == "string") {
@@ -64,10 +84,10 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             Logger.log(`req: ${req}, options: `, _options);
         }
         const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options);
-        if (!response.ok) {
+        if (response.status >= 500) {
             console.warn("error", response);
             notifyOnError(req, new Error(`HTTP error, status = ${response.status}`), _options);
-        } else {
+        } else if (response.ok) {
             let data;
             if (_options.expectJson) {
                 data = await response.json();
@@ -78,11 +98,12 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
                 data = _options.transform(data);
             }
             cachedValue = data;
-            cache.set(origReq, {
-                time: new Date(),
-                data: cachedValue,
-            });
-            Logger.log(`cache for ${origReq} updated`, cachedValue);
+            cacheRequest(origReq, cachedValue);
+
+            Logger.log(`requestCache for ${origReq} updated`, cachedValue);
+        } else {
+            console.log(`got response.status = ${response.status}... ignoring`);
+            cachedValue = query ? [] : {};
         }
     }
     return cachedValue;
@@ -104,6 +125,12 @@ const charactersItems = async () => {
     return rawData;
 };
 
+const materials = async () => {
+    const rawData = await apiClient("/v2/account/materials", "");
+    let ids = rawData.map((x) => x.id);
+    return await expandItems(ids, rawData);
+};
+
 const guildItems = async () => {
     const account = await apiClient("/v2/account", "");
     const _guilds = account.guild_leader || account.guilds;
@@ -118,14 +145,16 @@ const guildItems = async () => {
     // console.log('guilds', guilds);
 
     for (const guild of guilds) {
-        const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, "")).map(x => x.inventory).flat().filter(x => x != null);
+        const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, ""))
+            .map((x) => x.inventory)
+            .flat()
+            .filter((x) => x != null);
         // console.log('stash of '+guild.name, stashRaw);
-        const ids = stashRaw.map(x => x.id);
-        items.push(
-            { 
-                name: guild.name, 
-                stash: await expandItems(ids, stashRaw)
-            });
+        const ids = stashRaw.map((x) => x.id);
+        items.push({
+            name: guild.name,
+            stash: await expandItems(ids, stashRaw),
+        });
     }
     // console.log("guildItems", items);
     return items;
@@ -172,26 +201,41 @@ const init = (apiKey: string, options?: object) => {
 };
 
 const mergeById = (a1, a2) => {
-    return a1.map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
+    return a1.filter((x) => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
 };
 
 const expandItems = async (ids: Array<number>, collection) => {
+    const knownIds = [...itemsCache.keys()];
+    ids = ids.filter((x) => !INVALID_IDS.includes(x));
+    const missingIds = ids.filter((x) => !knownIds.includes(x));
+    const knownFromReqest = ids.filter((x) => knownIds.includes(x)).map((x) => itemsCache.get(x));
+
+    const data = [];
     const batches = [];
     do {
-        let batch = ids.splice(0, 200);
+        let batch = missingIds.splice(0, 200);
         if (batch.length > 0) {
             batches.push(batch.join(","));
         }
-    } while (ids.length > 0);
+    } while (missingIds.length > 0);
     if (batches.length) {
         const tasks = batches.map((ids) => items(ids));
         const resp = (await Promise.all(tasks)).flat();
-        let data = mergeById(resp, collection);
-        additionalMapping(data);
-        return data;
+        console.log("resp", resp);
+        resp.forEach((x) => {
+            if (x) {
+                itemsCache.set(x.id, x);
+            }
+        });
+        wxjs_localstorage.set(ITEMS_CACHE, JSON.stringify([...itemsCache.entries()]));
+        data.push(...mergeById(resp, collection));
     }
+    if (knownFromReqest.length) {
+        data.push(...mergeById(knownFromReqest, collection));
+    }
+    additionalMapping(data);
 
-    return null;
+    return data;
 };
 
 const additionalMapping = (data) => {
@@ -216,4 +260,5 @@ export default {
     items,
     account,
     guildItems,
+    materials,
 };

@@ -1,8 +1,10 @@
 import wxtypes from '$lib/wxjs_types';
 
+const ls = typeof window != 'undefined' ? window.localStorage : { getItem: (key) => { return null}, setItem: (key, value) => {return null}, removeItem: (key) => {return null} }; 
+
 export default {
     get: function(key, defValue){
-        let val = window.localStorage.getItem(key);
+        let val = ls.getItem(key);
         if (val === null && defValue !== undefined){
             val = defValue;
         }
@@ -10,7 +12,7 @@ export default {
         return val;
     },
     getObject: function(key, defValue){
-        let val = JSON.parse(window.localStorage.getItem(key));
+        let val = JSON.parse(ls.getItem(key));
         if (val === null && defValue !== undefined){
             val = defValue;
         }
@@ -22,9 +24,9 @@ export default {
             value = JSON.stringify(value);
         }
         // console.log('wxls set', key, value);
-        window.localStorage.setItem(key, value);
+        ls.setItem(key, value);
     },
     delete: function(key){
-        window.localStorage.removeItem(key);
+        ls.removeItem(key);
     }
 }

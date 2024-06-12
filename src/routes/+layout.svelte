@@ -41,8 +41,9 @@
 
 <nav id="main-nav">
 	<a href="{base}/">Home</a>
-	<a href="{base}/characters/">Characters</a>
-	<a href="{base}/items/">items</a>
+	<a href="{base}/characters/" data-sveltekit-preload-data="tap">Characters</a>
+	<a href="{base}/items/" data-sveltekit-preload-data="tap">Items</a>
+	<a href="{base}/materials/" data-sveltekit-preload-data="tap">Materials</a>
 </nav>
 
 <main>
