@@ -8,7 +8,8 @@ input, button {
 }
 
 input.apikey {
-  width: 40rem;
+  width: 80%;
+  max-width: 36rem;
   font-family: monospace;
 }
 
@@ -42,4 +43,8 @@ button:disabled {
 	color: #ffffff;
 	border-color: #c8ccd1;
 	cursor: default;
+}
+
+fieldset{
+	margin: 1rem 0;
 }
