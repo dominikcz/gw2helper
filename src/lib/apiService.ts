@@ -47,7 +47,7 @@ const secondsBetween = (d1: Date | string, d2: Date): number => {
 };
 
 const tryCache = (req: string): object | undefined => {
-    if (requestCache.has(req)) {
+    if (_apiKey && requestCache.has(req)) {
         let info = requestCache.get(req);
         if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
             return info!.data;
@@ -66,6 +66,10 @@ const cacheRequest = (req: string, value: any) => {
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
+    if (!_apiKey) {
+        Logger.error('not initialized, please provide api key from https://account.arena.net');
+        return;
+    }
     const origReq = req + query;
     let cachedValue = tryCache(origReq);
     Logger.log(`cached value for ${origReq}`, cachedValue);
@@ -194,6 +198,10 @@ const bank = async () => {
     return expandItems(ids, rawData);
 };
 
+const tokenInfo = async () => {
+    return await apiClient("/v2/tokeninfo", "");
+};
+
 const init = (apiKey: string, options?: object) => {
     Logger.log("init", apiKey);
     _apiKey = apiKey;
@@ -261,4 +269,5 @@ export default {
     account,
     guildItems,
     materials,
+    tokenInfo,
 };

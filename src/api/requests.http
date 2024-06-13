@@ -4,6 +4,10 @@
 @vme=6DA74D30-68C3-4693-B3F4-8DA76AF12BAA
 
 ###
+GET {{baseUrl}}/v2/tokeninfo
+Authorization: Bearer {{key}}
+
+###
 GET {{baseUrl}}/v2/account/bank
 Authorization: Bearer {{key}}
 
@@ -55,3 +59,6 @@ Authorization: Bearer {{key}}
 GET {{baseUrl}}/v2/account/materials
 Authorization: Bearer {{key}}
 
+###
+GET {{baseUrl}}/v2/account/achievements
+Authorization: Bearer {{key}}
