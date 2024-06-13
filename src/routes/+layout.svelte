@@ -49,15 +49,23 @@
 	{#if tokenInfo}
 	<nav id="main-nav">
 		<a href="{base}/">Home</a>
+		
 		{#if tokenInfo.permissions.includes('characters')}
 		<a href="{base}/characters/" data-sveltekit-preload-data="tap">Characters</a>
 		{/if}
+		
 		{#if tokenInfo.permissions.includes('account')}
 		<a href="{base}/items/" data-sveltekit-preload-data="tap">Items</a>
 		{/if}
+		
 		{#if tokenInfo.permissions.includes('inventories')}
 		<a href="{base}/materials/" data-sveltekit-preload-data="tap">Materials</a>
 		{/if}
+
+		{#if tokenInfo.permissions.includes('progression')}
+		<a href="{base}/achievements/" data-sveltekit-preload-data="tap">Achievements</a>
+		{/if}
+
 	</nav>
 	{/if}
 </header>

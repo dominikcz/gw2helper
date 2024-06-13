@@ -202,6 +202,14 @@ const tokenInfo = async () => {
     return await apiClient("/v2/tokeninfo", "");
 };
 
+const achievements = async (all: boolean = false) => {
+    let data =  await apiClient("/v2/account/achievements", "");
+    if (!all) {
+        data =  data.filter(x => !x.done)
+    }
+    return data;
+};
+
 const init = (apiKey: string, options?: object) => {
     Logger.log("init", apiKey);
     _apiKey = apiKey;
@@ -270,4 +278,5 @@ export default {
     guildItems,
     materials,
     tokenInfo,
+    achievements,
 };
