@@ -51,7 +51,7 @@ function filterCollection(collection, filter, sortBy) {
     // } else {
     // 	console.log('not sorting...');
     // }
-    document.body.querySelectorAll('details').forEach((e) => {
+    document.body.querySelectorAll('details.searchable').forEach((e) => {
         e.setAttribute('open', true);
     });
     return filtered;

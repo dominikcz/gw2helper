@@ -12,6 +12,10 @@ GET {{baseUrl}}/v2/account/bank
 Authorization: Bearer {{key}}
 
 ###
+GET {{baseUrl}}/v2/account/wallet
+Authorization: Bearer {{key}}
+
+###
 GET {{baseUrl}}/v2/account/inventory
 Authorization: Bearer {{key}}
 

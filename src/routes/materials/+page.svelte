@@ -37,38 +37,3 @@
 		</div>
 	</article>
 </details>
-
-<style lang="scss" global>
-	details {
-		margin: 1em 0;
-		display: flex;
-		&[open] {
-			background-color: #ddd;
-			padding-bottom: 1em;
-		}
-		p {
-			margin: 0 1em;
-		}
-		ul {
-			margin: 1em 0;
-		}
-		article {
-			width: 100%;
-			padding: 1em;
-		}
-	}
-
-	summary {
-		padding: 1em;
-		border-radius: 5px;
-		font-size: 110%;
-		// font-weight: bold;
-		font-family: Menomonia, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	}
-
-	.items {
-		display: flex;
-		flex-flow: row wrap;
-		gap: 10px;
-	}
-</style>

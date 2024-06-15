@@ -8,7 +8,6 @@ export default {
         if (val === null && defValue !== undefined){
             val = defValue;
         }
-        // console.log('wxls get', key, val);
         return val;
     },
     getObject: function(key, defValue){
@@ -16,14 +15,12 @@ export default {
         if (val === null && defValue !== undefined){
             val = defValue;
         }
-        // console.log('wxls getObject', key, val);
         return val;
     },
     set: function(key, value){
         if (wxtypes.isObjectOrArray(value)){
             value = JSON.stringify(value);
         }
-        // console.log('wxls set', key, value);
         ls.setItem(key, value);
     },
     delete: function(key){

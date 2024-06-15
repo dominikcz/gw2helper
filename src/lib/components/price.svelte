@@ -1,6 +1,6 @@
 <script>
     export let value;
-    const s = (Math.round(value * 100) / 100).toFixed(2);
+    const s = (value / 100).toFixed(2);
     const [decimal, copper] = s.split('.'); 
     const silver = decimal.slice(-2);
     const gold = decimal.slice(0, -2);

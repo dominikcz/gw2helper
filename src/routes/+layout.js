@@ -6,12 +6,25 @@ import apiService from "$lib/apiService.ts";
 
 export async function load( { fetch } ) {
 	const key = utils.readApiKey();
-	apiService.init(key, {fetchFunction: fetch });
-	const tokenInfo = await apiService.tokenInfo();
-	console.log('tokenInfo', tokenInfo);
-	return {
-		apiKey: key,
-		'tokenInfo': tokenInfo,
-		'apiService': apiService,
-	};
+	if (key){
+		apiService.init(key, {fetchFunction: fetch });
+		const [tokenInfo, wallet] = await Promise.all([
+			apiService.tokenInfo(),
+			apiService.wallet()
+		]);
+		return {
+			apiKey: key,
+			'tokenInfo': tokenInfo,
+			'apiService': apiService,
+			'wallet': wallet,
+		};
+	} else {
+		return {
+			apiKey: '',
+			'tokenInfo': {
+				name: null,
+				permissions: [],
+			},
+		};
+	}
 }

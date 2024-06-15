@@ -7,6 +7,11 @@ const REQUESTS_CACHE = "gw2helper.requests_cache";
 const ITEMS_CACHE = "gw2helper.items_cache";
 const INVALID_IDS = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 101651];
 
+const ignoreCache =
+	typeof window != 'undefined'
+		? new URLSearchParams(window.location.search).get('ignore-cache') == '1'
+		: false;
+
 interface CacheEntry {
     time: Date | string;
     timeout: number;
@@ -15,9 +20,6 @@ interface CacheEntry {
 
 const _items = wxjs_localstorage.getObject(ITEMS_CACHE, null);
 const itemsCache = _items ? new Map(_items) : new Map();
-
-const _req = wxjs_localstorage.getObject(REQUESTS_CACHE, null);
-const requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
 
 let _apiKey = "";
 let fetchOptions = {
@@ -31,6 +33,12 @@ let fetchOptions = {
     fetchFunction: fetch,
     debug: false,
 };
+
+const requestCacheName = (): string => {
+    return `${REQUESTS_CACHE}.${_apiKey}`;
+}
+
+let requestCache: Map<string, CacheEntry>;
 
 const notifyOnError = (req, error, options) => {
     if (fetchOptions.onError) {
@@ -52,7 +60,7 @@ const tryCache = (req: string): object | undefined => {
         if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
             return info!.data;
         } 
-    }
+    } 
     return undefined;
 };
 
@@ -62,16 +70,17 @@ const cacheRequest = (req: string, value: any) => {
         data: value,
     };
     requestCache.set(req, obj);
-    wxjs_localstorage.set(REQUESTS_CACHE, JSON.stringify([...requestCache.entries()]));
+    wxjs_localstorage.set(requestCacheName(), JSON.stringify([...requestCache.entries()]));
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
     if (!_apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
-        return;
+        return null;
     }
     const origReq = req + query;
-    let cachedValue = tryCache(origReq);
+    const _options = Object.assign({}, fetchOptions, options);
+    let cachedValue = !ignoreCache ? tryCache(origReq): undefined;
     Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
         Logger.log("requestCache is valid");
@@ -79,7 +88,6 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     } else {
         Logger.log("requestCache is INVALID, refreshing...");
 
-        const _options = Object.assign({}, fetchOptions, options);
         if (typeof req == "string") {
             req = _options.baseURL + req;
         }
@@ -106,7 +114,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
 
             Logger.log(`requestCache for ${origReq} updated`, cachedValue);
         } else {
-            console.log(`got response.status = ${response.status}... ignoring`);
+            Logger.log(`got response.status = ${response.status}... ignoring`);
             cachedValue = query ? [] : {};
         }
     }
@@ -135,37 +143,71 @@ const materials = async () => {
     return await expandItems(ids, rawData);
 };
 
-const guildItems = async () => {
+const _getGuilds = async (full: boolean = false) => {
     const account = await apiClient("/v2/account", "");
     const _guilds = account.guild_leader || account.guilds;
 
-    const items = [];
     let tasks = [];
-
     for (const guild of _guilds) {
         tasks.push(apiClient(`/v2/guild/${guild}`, ""));
     }
-    const guilds = (await Promise.all(tasks)).flat();
-    // console.log('guilds', guilds);
+    let _rawData = (await Promise.all(tasks)).flat();
+    if (full) {
+        const _emblems = _rawData.map(x => x.emblem).filter(x => x != null);
+        const fgs = [];
+        const bgs = [];
+        let clrs = [];
+    
+        // console.log('emblems', _emblems);
+        for (const emblem of _emblems) {
+            bgs.push(emblem.background.id);
+            fgs.push(emblem.foreground.id);
+            clrs.push(...emblem.background.colors);
+            clrs.push(...emblem.foreground.colors);
+        }
+        clrs = [...new Set(clrs)];
+        
+        const [colors, foregrounds, backgrounds] = await Promise.all([
+            apiClient('/v2/colors', "ids="+clrs.join(',')),
+            apiClient('/v2/emblem/foregrounds', "ids="+fgs.join(',')),
+            apiClient('/v2/emblem/backgrounds', "ids="+bgs.join(','))
+        ]);
+        for (const item of _rawData) {
+            if (item.emblem) {
+                addPropertiesById(item.emblem.foreground, foregrounds);
+                addPropertiesById(item.emblem.background, backgrounds);
+                item.emblem.foreground.colors = item.emblem.foreground.colors.map(color => colors.find(x => color == x.id));
+                item.emblem.background.colors = item.emblem.background.colors.map(color => colors.find(x => color == x.id));
+            }
+        }
+        // console.log('emblems', {bgs, fgs, clrs});
+    }
+    return _rawData;
+}
 
+const guildItems = async () => {
+    const items = [];
+    const guilds = await _getGuilds(false);
     for (const guild of guilds) {
         const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, ""))
             .map((x) => x.inventory)
             .flat()
             .filter((x) => x != null);
-        // console.log('stash of '+guild.name, stashRaw);
         const ids = stashRaw.map((x) => x.id);
         items.push({
             name: guild.name,
             stash: await expandItems(ids, stashRaw),
         });
     }
-    // console.log("guildItems", items);
     return items;
 };
 
 const characters = async () => {
     return await apiClient("/v2/characters", "ids=all");
+};
+
+const guilds = async () => {
+    return _getGuilds(true);
 };
 
 const items = (x: string) => {
@@ -210,15 +252,39 @@ const achievements = async (all: boolean = false) => {
     return data;
 };
 
+const currencies = async () => {
+    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 55, 56]
+    return (await apiClient("/v2/currencies", "ids=all")).filter(x => !depreciated.includes(x.id));
+}
+
+const wallet = async () => {
+    const [_curr, _wallet] = await Promise.all([currencies(), apiClient("/v2/account/wallet", "")]);    
+    return mergeById(_curr, _wallet);
+}
+
 const init = (apiKey: string, options?: object) => {
     Logger.log("init", apiKey);
     _apiKey = apiKey;
     fetchOptions = Object.assign({}, fetchOptions, options);
+    const _req = wxjs_localstorage.getObject(requestCacheName(), null);
+
+    requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();    
 };
 
 const mergeById = (a1, a2) => {
     return a1.filter((x) => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
 };
+
+const addPropertiesById = (base: object, details: array) => {
+    const clone = JSON.parse(JSON.stringify(base));
+    const match = details.find(x => x.id == base.id);
+    // console.log('addPropertiesById', {clone, details})
+    for (const key of Object.keys(match)) {
+        if (key != 'id'){
+            base[key] = match[key];
+        }
+    }
+}
 
 const expandItems = async (ids: Array<number>, collection) => {
     const knownIds = [...itemsCache.keys()];
@@ -237,7 +303,6 @@ const expandItems = async (ids: Array<number>, collection) => {
     if (batches.length) {
         const tasks = batches.map((ids) => items(ids));
         const resp = (await Promise.all(tasks)).flat();
-        console.log("resp", resp);
         resp.forEach((x) => {
             if (x) {
                 itemsCache.set(x.id, x);
@@ -279,4 +344,7 @@ export default {
     materials,
     tokenInfo,
     achievements,
+    guilds,
+    currencies,
+    wallet,
 };

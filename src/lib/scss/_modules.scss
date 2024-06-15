@@ -1,0 +1,33 @@
+details {
+    margin: 1em 0;
+    display: flex;
+    &[open] {
+        background-color: var(--gw2helper-module);
+        padding-bottom: 1em;
+    }
+    p {
+        margin: 1rem 0;
+    }
+    ul {
+        margin: 1rem 0;
+    }
+    article {
+        width: 100%;
+        padding: 1em;
+    }
+}
+
+summary {
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 110%;
+    // font-weight: bold;
+    font-family: Menomonia, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+}
+
+.items {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+}

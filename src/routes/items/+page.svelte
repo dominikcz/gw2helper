@@ -45,7 +45,7 @@
 
 <h1>Common items</h1>
 
-<details open>
+<details class="searchable" open>
 	<summary>Bank</summary>
 	<article>
 		<div class="items">
@@ -56,7 +56,7 @@
 	</article>
 </details>
 
-<details open>
+<details class="searchable" open>
 	<summary>Shared inventory</summary>
 	<article>
 		<div class="items">
@@ -69,7 +69,7 @@
 
 <h2>Guild items</h2>
 {#each data.guilds as guild}
-<details open>
+<details class="searchable" open>
 	<summary>{guild.name}</summary>
 	<article>
 		<div class="items">
@@ -83,7 +83,7 @@
 
 <h2>Characters' items</h2>
 {#each data.characters as char}
-	<details open>
+	<details class="searchable" open>
 		<summary>{char.name}</summary>
 		<article>
 			<div class="items">
@@ -95,37 +95,3 @@
 	</details>
 {/each}
 
-<style lang="scss" global>
-	details {
-		margin: 1em 0;
-		display: flex;
-		&[open] {
-			background-color: #ddd;
-			padding-bottom: 1em;
-		}
-		p {
-			margin: 0 1em;
-		}
-		ul {
-			margin: 1em 0;
-		}
-		article {
-			width: 100%;
-			padding: 1em;
-		}
-	}
-
-	summary {
-		padding: 1em;
-		border-radius: 5px;
-		font-size: 110%;
-		// font-weight: bold;
-		font-family: Menomonia, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	}
-
-	.items {
-		display: flex;
-		flex-flow: row wrap;
-		gap: 10px;
-	}
-</style>

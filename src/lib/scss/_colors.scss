@@ -6,6 +6,7 @@ $rare: #fcd00b;
 $exotic: #ffa405;
 $ascended: #fb3e8d;
 $legendary: #4c139d;
+$module: #dcdcdc;
 
 .rarity-junk {
     color: $junk
@@ -35,12 +36,19 @@ $legendary: #4c139d;
 :root {
 	/* Colors */
 
-	--rarity-junk: $junk;
-	--rarity-basic: $basic;
-	--rarity-fine: $fine;
-	--rarity-masterwork: $masterwork;
-	--rarity-rare: $rare;
-	--rarity-exotic: $exotic;
-	--rarity-ascended: $ascended;
-	--rarity-legendary: $legendary;
+	--rarity-junk: #{$junk};
+	--rarity-basic: #{$basic};
+	--rarity-fine: #{$fine};
+	--rarity-masterwork: #{$masterwork};
+	--rarity-rare: #{$rare};
+	--rarity-exotic: #{$exotic};
+	--rarity-ascended: #{$ascended};
+	--rarity-legendary: #{$legendary};
+	
+	--gw2helper-module: #{$module};
 }
+
+.karma {
+	color: #d93cd9;
+}
+

@@ -1,3 +1,5 @@
+$shadow: 1px 1px 1px rgba(0,0,0, 0.6);
+
 .price{
     text-wrap: nowrap;
     display: inline-block;
@@ -15,6 +17,7 @@
 }
 
 .gold{
+    text-shadow: $shadow;
     color: #e0b930;
     i {
         margin: 0 .2em 0 .1em;
@@ -23,6 +26,7 @@
 }
 
 .silver{
+    text-shadow: $shadow;
     color: #aeaeae;
     i {
         margin: 0 .2em 0 .1em;
@@ -31,6 +35,7 @@
 }
 
 .copper{
+    text-shadow: $shadow;
     color: #d59f61;
     i {
         margin: 0 .2em 0 .1em;

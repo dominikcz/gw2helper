@@ -1,13 +1,16 @@
 <script>
 	import { invalidateAll } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { page } from "$app/stores";
 
 	import utils from '$lib/utils.js';
 	import '$lib/scss/gw2.scss';
 
 	export let data;
+	const defaultTitle = "GW2 Helper";
 	let apiKey = data.apiKey;
 	$: tokenInfo = data.tokenInfo;
+	$: title = [defaultTitle, $page.url.pathname.replace(base, '').replaceAll('/', '')].filter(Boolean).join(" - ");
 
 	function saveApiKey() {
 		utils.saveApiKey(apiKey);
@@ -25,30 +28,37 @@
 	}
 </script>
 
+<svelte:head>
+    <title>{title}</title> 
+</svelte:head>
+
 <header>
 	<h1>GW2 Helper</h1>
-	<fieldset>
-		<legend>API settings</legend>
-		<p>
-			In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
-				href="https://account.arena.net/applications">https://account.arena.net/applications.</a
-			>.
-		</p>
-		<label for="api-key">Your API key:</label>
-		<input type="text" name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} />
-		<button on:click={() => saveApiKey()}>Apply</button>
-		<button on:click={() => deleteApiKey()}>Forget stored key</button>
-		<button on:click={refresh}>refresh</button>
-		{#if tokenInfo}
-		<br />
-		Successfully loaded key "{tokenInfo.name}".
-		{/if}
-	
-	</fieldset>
+	<details open={!tokenInfo.name}>
+		<summary>API Settings</summary>
+		<fieldset>
+			<legend>API settings</legend>
+			<p>In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a href="https://account.arena.net/applications">https://account.arena.net/applications.</a>.</p>
+			<label for="api-key">Your API key:</label>
+			<input type="text" name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} />
+			<button on:click={() => saveApiKey()}>Apply</button>
+			<button on:click={() => deleteApiKey()}>Forget stored key</button>
+			<button on:click={refresh}>refresh</button>
+			{#if tokenInfo.name}
+			<br />
+			Successfully loaded key "{tokenInfo.name}".
+			{/if}
+		
+		</fieldset>
+	</details>
 	
 	{#if tokenInfo}
 	<nav id="main-nav">
 		<a href="{base}/">Home</a>
+		
+		{#if tokenInfo.permissions.includes('guilds')}
+		<a href="{base}/guilds/" data-sveltekit-preload-data="tap">Guilds</a>
+		{/if}
 		
 		{#if tokenInfo.permissions.includes('characters')}
 		<a href="{base}/characters/" data-sveltekit-preload-data="tap">Characters</a>
