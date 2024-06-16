@@ -17,27 +17,28 @@
 	.nav-container{
 		display: block;
 		max-width: 800px;
+        background-color: #222;
 	}
 	nav {
-		margin: 0.5rem 1rem;
+		margin: 0 1rem;
 		display: flex;
 		flex-flow: row nowrap;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		gap: 2rem;
+        height: 100%;
 		padding-bottom: 0.5rem;
 		a {
 			padding: 0.3rem 1rem;
-			border: 1px solid #ccc;
-			background-color: #fff;
+            color: #aaa;
 			text-decoration: none;
-			border-radius: 5px;
+			// border-radius: 5px;
 			&:hover{
-				background-color: #555;
+				border-bottom: 4px dotted #fff;
 				color: #fff;
 			}
 			&.active{
-				background-color: #333;
+				border-bottom: 4px solid #fff;
 				color: #fff;
                 cursor: auto;
 			}

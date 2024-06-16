@@ -44,7 +44,14 @@
 </svelte:head>
 
 <header>
+	<img src="{base}/assets/heart.png" alt="logo" />
 	<h1>GW2 Helper</h1>
+</header>
+{#if tokenInfo}
+<Navigation items={navigation} {active} />
+{/if}
+
+<section>
 	<details open={!tokenInfo.name}>
 		<summary>API Settings</summary>
 		<fieldset>
@@ -62,12 +69,7 @@
 		
 		</fieldset>
 	</details>
-	
-	{#if tokenInfo}
-	<Navigation items={navigation} {active} />
-	{/if}
-
-</header>
+</section>
 
 <main>
 	<slot />
@@ -75,7 +77,22 @@
 
 <style lang="scss" global>
 	header{
-		margin: 0 1rem;
+		margin: 0;
+		background-color: #222;
+		color: rgb(214, 211, 205);
+		min-height: 54px;
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: center;
+		h1{
+			margin: 0;
+			padding-left: 0.5rem;
+			text-wrap: nowrap;
+		}
+		img{
+			margin-left: 10px;
+			float: left;
+		}
 	}
 	main{
 		margin: 0 1rem;
