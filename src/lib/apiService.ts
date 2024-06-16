@@ -1,5 +1,6 @@
 import Logger from "./logger";
 import wxjs_localstorage from "./wxjs_localstorage";
+import wx from "./wxjs_types";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
@@ -162,13 +163,12 @@ const _getGuilds = async (full: boolean = false) => {
         for (const emblem of _emblems) {
             bgs.push(emblem.background.id);
             fgs.push(emblem.foreground.id);
-            clrs.push(...emblem.background.colors);
-            clrs.push(...emblem.foreground.colors);
+            clrs.push(...emblem.background.colors.map(x => wx.isObject(x) ? x.id : x));
+            clrs.push(...emblem.foreground.colors.map(x => wx.isObject(x) ? x.id : x));
         }
-        clrs = [...new Set(clrs)];
-        
+        clrs = [...new Set(clrs)].filter(x => x != null);
         const [colors, foregrounds, backgrounds] = await Promise.all([
-            apiClient('/v2/colors', "ids="+clrs.join(',')),
+            clrs.length ? apiClient('/v2/colors', "ids="+clrs.join(',')) : [],
             apiClient('/v2/emblem/foregrounds', "ids="+fgs.join(',')),
             apiClient('/v2/emblem/backgrounds', "ids="+bgs.join(','))
         ]);
@@ -253,7 +253,7 @@ const achievements = async (all: boolean = false) => {
 };
 
 const currencies = async () => {
-    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 55, 56]
+    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 52, 55, 56]
     return (await apiClient("/v2/currencies", "ids=all")).filter(x => !depreciated.includes(x.id));
 }
 

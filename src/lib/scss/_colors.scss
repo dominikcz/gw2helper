@@ -7,6 +7,7 @@ $exotic: #ffa405;
 $ascended: #fb3e8d;
 $legendary: #4c139d;
 $module: #dcdcdc;
+$notimportant: #888;
 
 .rarity-junk {
     color: $junk
@@ -46,6 +47,7 @@ $module: #dcdcdc;
 	--rarity-legendary: #{$legendary};
 	
 	--gw2helper-module: #{$module};
+	--gw2helper-no-results: #{$notimportant};
 }
 
 .karma {

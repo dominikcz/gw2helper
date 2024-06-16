@@ -1,16 +1,27 @@
 <script>
+    import { base } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { page } from "$app/stores";
 
 	import utils from '$lib/utils.js';
 	import '$lib/scss/gw2.scss';
+	import Navigation from '$lib/components/navigation.svelte';
 
 	export let data;
 	const defaultTitle = "GW2 Helper";
 	let apiKey = data.apiKey;
 	$: tokenInfo = data.tokenInfo;
-	$: title = [defaultTitle, $page.url.pathname.replace(base, '').replaceAll('/', '')].filter(Boolean).join(" - ");
+	$: active = $page.url.pathname;
+	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(" - ");
+
+	$: navigation = [
+		{ slug: `${base}/`, label: 'Home', visible: true },
+		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds')},
+		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters')},
+		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account')},
+		{ slug: `${base}/materials/`, label: 'Materials', visible: tokenInfo.permissions.includes('inventories')},
+		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression')},
+	];
 
 	function saveApiKey() {
 		utils.saveApiKey(apiKey);
@@ -53,31 +64,9 @@
 	</details>
 	
 	{#if tokenInfo}
-	<nav id="main-nav">
-		<a href="{base}/">Home</a>
-		
-		{#if tokenInfo.permissions.includes('guilds')}
-		<a href="{base}/guilds/" data-sveltekit-preload-data="tap">Guilds</a>
-		{/if}
-		
-		{#if tokenInfo.permissions.includes('characters')}
-		<a href="{base}/characters/" data-sveltekit-preload-data="tap">Characters</a>
-		{/if}
-		
-		{#if tokenInfo.permissions.includes('account')}
-		<a href="{base}/items/" data-sveltekit-preload-data="tap">Items</a>
-		{/if}
-		
-		{#if tokenInfo.permissions.includes('inventories')}
-		<a href="{base}/materials/" data-sveltekit-preload-data="tap">Materials</a>
-		{/if}
-
-		{#if tokenInfo.permissions.includes('progression')}
-		<a href="{base}/achievements/" data-sveltekit-preload-data="tap">Achievements</a>
-		{/if}
-
-	</nav>
+	<Navigation items={navigation} {active} />
 	{/if}
+
 </header>
 
 <main>
@@ -88,13 +77,11 @@
 	header{
 		margin: 0 1rem;
 	}
-	nav {
-		margin: 0.5rem 1rem;
-		a {
-			padding: 0.3rem 1rem;
-		}
-	}
 	main{
 		margin: 0 1rem;
+		display: flex;
+		flex-flow: column nowrap;
+		row-gap: 1rem;		
 	}
+
 </style>

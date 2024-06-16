@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	import Item from '$lib/components/item.svelte';
+	import ItemsList from '$lib/components/itemsList.svelte';
 	import helperUtils from '$lib/utils/helper-utils.ts';
 	let filter = '';
 	let timer;
@@ -27,13 +27,4 @@
 	</details>
 </section>
 
-<details open>
-	<summary>Materials</summary>
-	<article>
-		<div class="items">
-			{#each helperUtils.filterCollection(data.materials, filter) as item}
-				<Item {item} />
-			{/each}
-		</div>
-	</article>
-</details>
+<ItemsList summary="Materials" items={helperUtils.filterCollection(data.materials, filter)} />

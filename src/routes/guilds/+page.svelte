@@ -45,14 +45,15 @@
 	.guild-header {
 		background-color: var(--gw2helper-module);
 		display: flex;
-		flex-flow: row wrap;
-		height: 128px;
+		flex-flow: column wrap;
+		align-items: center;
 		gap: 1rem;
 	}
 	.guild-h {
 		display: flex;
 		flex-flow: column nowrap;
 		justify-content: space-evenly;
+		align-items: center;
 		blockquote {
 			text-indent: 0;
 			hanging-punctuation: first;
@@ -69,5 +70,15 @@
 		.details {
 			height: 4rem;
 		}
+		.guild-header {
+			flex-flow: row nowrap;
+			height: 128px;
+			gap: 1rem;
+		}
+		.guild-h{
+			justify-content: space-evenly;
+			align-items: flex-start;
+		}
 	}
+
 </style>

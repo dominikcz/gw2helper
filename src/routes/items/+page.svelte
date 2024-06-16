@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Item from '$lib/components/item.svelte';
+	import ItemsList from '$lib/components/itemsList.svelte';
 	import helperUtils from '$lib/utils/helper-utils.ts';
 
 	export let data;
@@ -23,14 +23,13 @@
 		clearTimeout(timer);
 		timer = setTimeout(() => (filter = e.target.value), 300);
 	};
-
 </script>
 
 <section>
 	<label for="filter">Search:</label>
 	<input type="text" name="filter" id="filter" placeholder="what you are looking for?" value={filter} on:input={debounceFilter} />
-	<button on:click={sortAsIs}>original sort order</button>
-	<button on:click={sortBySlots}>sort by quantity</button>
+	<!-- <button on:click={sortAsIs}>original sort order</button>
+	<button on:click={sortBySlots}>sort by quantity</button> -->
 	<details>
 		<summary>Search help</summary>
 		<p>Knock yourself out with queries like:</p>
@@ -43,55 +42,17 @@
 	</details>
 </section>
 
-<h1>Common items</h1>
+<h3>Common items</h3>
 
-<details class="searchable" open>
-	<summary>Bank</summary>
-	<article>
-		<div class="items">
-			{#each helperUtils.filterCollection(data.bank, filter, sortBy) as item}
-				<Item {item} />
-			{/each}
-		</div>
-	</article>
-</details>
+<ItemsList summary="Bank" items={helperUtils.filterCollection(data.bank, filter, sortBy)} />
+<ItemsList summary="Shared inventory" items={helperUtils.filterCollection(data.shared, filter, sortBy)} />
 
-<details class="searchable" open>
-	<summary>Shared inventory</summary>
-	<article>
-		<div class="items">
-			{#each helperUtils.filterCollection(data.shared, filter, sortBy) as item}
-				<Item {item} />
-			{/each}
-		</div>
-	</article>
-</details>
-
-<h2>Guild items</h2>
+<h3>Guild items</h3>
 {#each data.guilds as guild}
-<details class="searchable" open>
-	<summary>{guild.name}</summary>
-	<article>
-		<div class="items">
-			{#each helperUtils.filterCollection(guild.stash, filter, sortBy) as item}
-				<Item {item} />
-			{/each}
-		</div>
-	</article>
-</details>
+	<ItemsList summary={guild.name} items={helperUtils.filterCollection(guild.stash, filter, sortBy)} />
 {/each}
 
-<h2>Characters' items</h2>
+<h3>Characters' items</h3>
 {#each data.characters as char}
-	<details class="searchable" open>
-		<summary>{char.name}</summary>
-		<article>
-			<div class="items">
-				{#each helperUtils.filterCollection(char._items, filter, sortBy) as item}
-					<Item {item} />
-				{/each}
-			</div>
-		</article>
-	</details>
+	<ItemsList summary={char.name} items={helperUtils.filterCollection(char._items, filter, sortBy)} />
 {/each}
-
