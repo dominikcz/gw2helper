@@ -1,8 +1,9 @@
 <script lang="ts">
 	import ItemsList from '$lib/components/itemsList.svelte';
-	import helperUtils from '$lib/utils/helper-utils.ts';
+	import Awaiter from '$lib/components/awaiter.svelte';
 
 	export let data;
+
 	let filter = '';
 	enum SortType {
 		AsIs,
@@ -44,15 +45,19 @@
 
 <h3>Common items</h3>
 
-<ItemsList summary="Bank" items={helperUtils.filterCollection(data.bank, filter, sortBy)} />
-<ItemsList summary="Shared inventory" items={helperUtils.filterCollection(data.shared, filter, sortBy)} />
+<ItemsList summary="Bank" items={data.bank} {filter} />
+<ItemsList summary="Shared inventory" items={data.shared} {filter} />
 
 <h3>Guild items</h3>
-{#each data.guilds as guild}
-	<ItemsList summary={guild.name} items={helperUtils.filterCollection(guild.stash, filter, sortBy)} />
-{/each}
+<Awaiter promise={data.guildItems} let:result>
+	{#each result as guild}
+		<ItemsList summary={guild.name} items={guild.stash} {filter} />
+	{/each}
+</Awaiter>
 
 <h3>Characters' items</h3>
-{#each data.characters as char}
-	<ItemsList summary={char.name} items={helperUtils.filterCollection(char._items, filter, sortBy)} />
-{/each}
+<Awaiter promise={data.characterItems} let:result>
+	{#each result as char}
+		<ItemsList summary={char.name} items={char._items} {filter} />
+	{/each}
+</Awaiter>

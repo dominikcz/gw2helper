@@ -8,15 +8,11 @@ export async function load( { fetch } ) {
 	const key = utils.readApiKey();
 	if (key){
 		apiService.init(key, {fetchFunction: fetch });
-		const [tokenInfo, wallet] = await Promise.all([
-			apiService.tokenInfo(),
-			apiService.wallet()
-		]);
 		return {
 			apiKey: key,
-			'tokenInfo': tokenInfo,
 			'apiService': apiService,
-			'wallet': wallet,
+			'wallet': apiService.wallet(),
+			'tokenInfo': await apiService.tokenInfo(),
 		};
 	} else {
 		return {

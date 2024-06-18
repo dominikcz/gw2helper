@@ -33,6 +33,7 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
 }
 
 function filterCollection(collection, filter, sortBy) {
+    console.log('filterCollection', filter)
     let filtered = collection.filter((x) => {
         return fullTextSearch(filter, x, ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity']);
     });

@@ -1,7 +1,6 @@
 <script>
 	export let data;
 	import ItemsList from '$lib/components/itemsList.svelte';
-	import helperUtils from '$lib/utils/helper-utils.ts';
 	let filter = '';
 	let timer;
 
@@ -27,4 +26,4 @@
 	</details>
 </section>
 
-<ItemsList summary="Materials" items={helperUtils.filterCollection(data.materials, filter)} />
+<ItemsList summary="Materials" items={data.materials} {filter} />

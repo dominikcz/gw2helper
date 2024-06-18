@@ -1,8 +1,8 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import Price from '$lib/components/price.svelte';
+	import Awaiter from '$lib/components/awaiter.svelte';
 	export let data;
-	$: wallet = data.wallet.filter((x) => x.name);
 	let filter = '';
 	let timer;
 
@@ -14,12 +14,6 @@
 	function formatValue(v: number) {
 		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
 	}
-
-	function filteredList(filter) {
-		return wallet.filter((x) => {
-			return helperUtils.fullTextSearch(filter, x, ['name', 'description']);
-		});
-	}
 </script>
 
 <h1>Home - Your wallet</h1>
@@ -29,23 +23,29 @@
 		<label for="filter">Filter:</label>
 		<input type="text" name="filter" id="filter" placeholder="too much data?" value={filter} on:input={debounceFilter} />
 	</section>
-	<section class="wallet">
-		{#each filteredList(filter) as currency}
-			<a href={`https://wiki.guildwars2.com/wiki/${currency.name}`} target="_blank" title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`} >
-				<div class="currency">
-					<span class="currency-name">{currency.name}</span>
-					<div class="currency-value">
-						{#if currency.id == 1}
-							<Price value={currency.value} />
-						{:else}
-							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-							<img src={currency.icon} alt={currency.name} />
-						{/if}
+	<Awaiter promise={data.wallet} let:result>
+		<section class="wallet">
+			{#each helperUtils.filterCollection(result, filter) as currency}
+				<a
+					href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
+					target="_blank"
+					title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`}
+				>
+					<div class="currency">
+						<span class="currency-name">{currency.name}</span>
+						<div class="currency-value">
+							{#if currency.id == 1}
+								<Price value={currency.value} />
+							{:else}
+								<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
+								<img src={currency.icon} alt={currency.name} />
+							{/if}
+						</div>
 					</div>
-				</div>
-			</a>
-		{/each}
-	</section>
+				</a>
+			{/each}
+		</section>
+	</Awaiter>
 </main>
 
 <style lang="scss">
@@ -54,9 +54,9 @@
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 0.2rem;
-        a{
-            text-decoration: none;
-        }
+		a {
+			text-decoration: none;
+		}
 	}
 	.currency {
 		height: 2rem;

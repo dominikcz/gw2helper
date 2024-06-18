@@ -13,7 +13,7 @@
     </nav>
 </div>
 
-<style lang="scss">
+<style lang="scss" global>
 	.nav-container{
 		display: block;
 		max-width: 800px;
@@ -32,6 +32,7 @@
 			padding: 0.3rem 1rem;
             color: #aaa;
 			text-decoration: none;
+			transition: border 0.4s ease-in-out;
 			// border-radius: 5px;
 			&:hover{
 				border-bottom: 4px dotted #fff;
