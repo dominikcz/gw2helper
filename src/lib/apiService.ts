@@ -253,7 +253,7 @@ const achievements = async (all: boolean = false) => {
 };
 
 const currencies = async () => {
-    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 52, 55, 56]
+    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 52, 55, 56, 74]
     return (await apiClient("/v2/currencies", "ids=all")).filter(x => !depreciated.includes(x.id));
 }
 

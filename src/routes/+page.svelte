@@ -59,13 +59,13 @@
 		}
 	}
 	.currency {
-		height: 2rem;
+		min-height: 2rem;
 		background-color: var(--gw2helper-module);
 		color: #000;
 		padding: 0 0.4rem;
 		gap: 1rem;
 		display: flex;
-		flex-flow: row wrap;
+		flex-flow: row nowrap;
 		justify-content: space-between;
 		align-items: center;
 		img {

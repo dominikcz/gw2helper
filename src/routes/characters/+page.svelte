@@ -66,9 +66,9 @@
 	{/each}
 </Awaiter>
 
-<style lang="scss">
-	article {
-		margin: 10px 0;
+<style lang="scss" >
+	.character {
+		margin: 0;
 		padding: 10px;
 		display: flex;
 		flex-flow: row wrap;
@@ -106,7 +106,7 @@
 	}
 
 	@media (min-width: 900px) {
-		article {
+		.character {
 			width: 900px;
 			h2 {
 				text-align: left;
