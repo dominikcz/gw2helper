@@ -36,6 +36,11 @@
 	function iconPosition(createdAt) {
 		return (128 - iconScale(createdAt)) / 2;
 	}
+
+	function deathsPerHour(char){
+		return ((char.deaths | 0) / hoursPlayed(char.age)).toFixed(2);
+	}
+
 </script>
 
 <h1>Characters</h1>
@@ -61,6 +66,7 @@
 				<div class="info">died</div>
 				<div class="counter">{char.deaths}</div>
 				<div class="info">times</div>
+				<div class="info">({deathsPerHour(char)}/h)</div>
 			</section>
 		</article>
 	{/each}
