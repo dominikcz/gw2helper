@@ -71,9 +71,11 @@
 	</details>
 </section>
 
+{#if tokenInfo.name}
 <main>
 	<slot />
 </main>
+{/if}
 
 <style lang="scss" global>
 	header{

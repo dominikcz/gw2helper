@@ -18,35 +18,33 @@
 
 <h1>Home - Your wallet</h1>
 
-<main>
-	<section>
-		<label for="filter">Filter:</label>
-		<input type="text" name="filter" id="filter" placeholder="too much data?" value={filter} on:input={debounceFilter} />
-	</section>
-	<Awaiter promise={data.wallet} let:result>
-		<section class="wallet">
-			{#each helperUtils.filterCollection(result, filter) as currency}
-				<a
-					href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
-					target="_blank"
-					title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`}
-				>
-					<div class="currency">
-						<span class="currency-name">{currency.name}</span>
-						<div class="currency-value">
-							{#if currency.id == 1}
-								<Price value={currency.value} />
-							{:else}
-								<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-								<img src={currency.icon} alt={currency.name} />
-							{/if}
-						</div>
+<section>
+	<label for="filter">Filter:</label>
+	<input type="text" name="filter" id="filter" placeholder="too much data?" value={filter} on:input={debounceFilter} />
+</section>
+<Awaiter promise={data.wallet} let:result>
+	<section class="wallet">
+		{#each helperUtils.filterCollection(result, filter) as currency}
+			<a
+				href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
+				target="_blank"
+				title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`}
+			>
+				<div class="currency">
+					<span class="currency-name">{currency.name}</span>
+					<div class="currency-value">
+						{#if currency.id == 1}
+							<Price value={currency.value} />
+						{:else}
+							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
+							<img src={currency.icon} alt={currency.name} />
+						{/if}
 					</div>
-				</a>
-			{/each}
-		</section>
-	</Awaiter>
-</main>
+				</div>
+			</a>
+		{/each}
+	</section>
+</Awaiter>
 
 <style lang="scss">
 	.wallet {

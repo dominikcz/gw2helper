@@ -21,6 +21,7 @@ export async function load( { fetch } ) {
 				name: null,
 				permissions: [],
 			},
+			'wallet': []
 		};
 	}
 }
