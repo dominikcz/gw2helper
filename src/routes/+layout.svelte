@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import BackToTop from '$lib/components/backToTop.svelte';
 
 	import utils from '$lib/utils.js';
 	import '$lib/scss/gw2.scss';
@@ -83,8 +84,12 @@
 	</main>
 {/if}
 
+<BackToTop>
+	<h1>🔝</h1>
+</BackToTop>
+
 <style lang="scss" global>
-	.line{
+	.line {
 		display: flex;
 		flex-flow: row nowrap;
 		column-gap: 1rem;
@@ -113,5 +118,13 @@
 		display: flex;
 		flex-flow: column nowrap;
 		row-gap: 1rem;
+	}
+	.back-to-top h1{
+		background-color: rgba(255,255,255, 0.7);
+		padding: 1rem 0.5rem;
+		border-radius: 10px;
+		&:hover{
+			background-color: rgba(255,255,255, 1);
+		}
 	}
 </style>
