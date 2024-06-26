@@ -123,6 +123,7 @@
 		background-color: rgba(255,255,255, 0.7);
 		padding: 1rem 0.5rem;
 		border-radius: 10px;
+		margin: 0;
 		&:hover{
 			background-color: rgba(255,255,255, 1);
 		}

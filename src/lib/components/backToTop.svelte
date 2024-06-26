@@ -30,8 +30,10 @@
 		background-color: transparent;
 		border: none;
 		padding: 0;
-        &:focus{
-            border:none;
+        &:focus, &:active{
+            border:none !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
 		&:hover {
 			transform: translateY(-10px);
