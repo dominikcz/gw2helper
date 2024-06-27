@@ -11,9 +11,9 @@ const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 3
 const INVALID_ACHIEVES_IDS: number[] = [];
 
 const ignoreCache =
-	typeof window != 'undefined'
-		? new URLSearchParams(window.location.search).get('ignore-cache') == '1'
-		: false;
+    typeof window != 'undefined'
+        ? new URLSearchParams(window.location.search).get('ignore-cache') == '1'
+        : false;
 
 interface CacheEntry {
     time: Date | string;
@@ -64,8 +64,8 @@ const tryCache = (req: string): object | undefined => {
         let info = requestCache.get(req);
         if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
             return info!.data;
-        } 
-    } 
+        }
+    }
     return undefined;
 };
 
@@ -85,7 +85,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     }
     const origReq = req + query;
     const _options = Object.assign({}, fetchOptions, options);
-    let cachedValue = !ignoreCache ? tryCache(origReq): undefined;
+    let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
     Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
         Logger.log("requestCache is valid");
@@ -131,6 +131,7 @@ const charactersItems = async () => {
     const tasks = [];
     for (const char of rawData) {
         let itemsInBags = char.bags
+            .filter(x => x != null)
             .map((bag) => bag.inventory)
             .flat()
             .filter((x) => x != null);
@@ -162,7 +163,7 @@ const _getGuilds = async (full: boolean = false) => {
         const fgs = [];
         const bgs = [];
         let clrs = [];
-    
+
         // console.log('emblems', _emblems);
         for (const emblem of _emblems) {
             bgs.push(emblem.background.id);
@@ -172,9 +173,9 @@ const _getGuilds = async (full: boolean = false) => {
         }
         clrs = [...new Set(clrs)].filter(x => x != null);
         const [colors, foregrounds, backgrounds] = await Promise.all([
-            clrs.length ? apiClient('/v2/colors', "ids="+clrs.join(',')) : [],
-            apiClient('/v2/emblem/foregrounds', "ids="+fgs.join(',')),
-            apiClient('/v2/emblem/backgrounds', "ids="+bgs.join(','))
+            clrs.length ? apiClient('/v2/colors', "ids=" + clrs.join(',')) : [],
+            apiClient('/v2/emblem/foregrounds', "ids=" + fgs.join(',')),
+            apiClient('/v2/emblem/backgrounds', "ids=" + bgs.join(','))
         ]);
         for (const item of _rawData) {
             if (item.emblem) {
@@ -249,16 +250,16 @@ const tokenInfo = async () => {
 };
 
 const achievements = async (all: boolean = false) => {
-    let data =  await apiClient("/v2/account/achievements", "");
+    let data = await apiClient("/v2/account/achievements", "");
     if (!all) {
-        data =  data.filter(x => !x.done)
+        data = data.filter(x => !x.done)
     }
     expandAchieves(data)
     return data;
 };
 
 const achievementsInfo = async (ids: string) => {
-    let data =  await apiClient("/v2/achievements", "ids="+ids);
+    let data = await apiClient("/v2/achievements", "ids=" + ids);
     return data;
 };
 
@@ -268,7 +269,7 @@ const currencies = async () => {
 }
 
 const wallet = async () => {
-    const [_curr, _wallet] = await Promise.all([currencies(), apiClient("/v2/account/wallet", "")]);    
+    const [_curr, _wallet] = await Promise.all([currencies(), apiClient("/v2/account/wallet", "")]);
     return mergeById(_curr, _wallet);
 }
 
@@ -278,7 +279,7 @@ const init = (apiKey: string, options?: object) => {
     fetchOptions = Object.assign({}, fetchOptions, options);
     const _req = wxjs_localstorage.getObject(requestCacheName(), null);
 
-    requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();    
+    requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
 };
 
 const mergeById = (a1, a2) => {
@@ -290,7 +291,7 @@ const addPropertiesById = (base: object, details: array) => {
     const match = details.find(x => x.id == base.id);
     // console.log('addPropertiesById', {clone, details})
     for (const key of Object.keys(match)) {
-        if (key != 'id'){
+        if (key != 'id') {
             base[key] = match[key];
         }
     }
