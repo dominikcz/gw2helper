@@ -6,7 +6,9 @@ const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
 const REQUESTS_CACHE = "gw2helper.requests_cache";
 const ITEMS_CACHE = "gw2helper.items_cache";
-const INVALID_IDS = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 101651];
+const ACHIEVES_CACHE = "gw2helper.achieves_cache";
+const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
+const INVALID_ACHIEVES_IDS: number[] = [];
 
 const ignoreCache =
 	typeof window != 'undefined'
@@ -20,7 +22,9 @@ interface CacheEntry {
 }
 
 const _items = wxjs_localstorage.getObject(ITEMS_CACHE, null);
+const _achievs = wxjs_localstorage.getObject(ACHIEVES_CACHE, null);
 const itemsCache = _items ? new Map(_items) : new Map();
+const achievesCache = _achievs ? new Map(_items) : new Map();
 
 let _apiKey = "";
 let fetchOptions = {
@@ -249,6 +253,12 @@ const achievements = async (all: boolean = false) => {
     if (!all) {
         data =  data.filter(x => !x.done)
     }
+    expandAchieves(data)
+    return data;
+};
+
+const achievementsInfo = async (ids: string) => {
+    let data =  await apiClient("/v2/achievements", "ids="+ids);
     return data;
 };
 
@@ -316,6 +326,38 @@ const expandItems = async (ids: Array<number>, collection) => {
     }
     additionalMapping(data);
 
+    return data;
+};
+
+const expandAchieves = async (accountAchieves) => {
+    const knownIds = [...achievesCache.keys()];
+    const ids = accountAchieves.map(x => x.id).filter((x) => !INVALID_ACHIEVES_IDS.includes(x));
+    const missingIds = ids.filter((x) => !knownIds.includes(x));
+    const knownFromReqest = ids.filter((x) => knownIds.includes(x)).map((x) => achievesCache.get(x));
+
+    const data = [];
+    const batches = [];
+    do {
+        let batch = missingIds.splice(0, 200);
+        if (batch.length > 0) {
+            batches.push(batch.join(","));
+        }
+    } while (missingIds.length > 0);
+    console.log('batches', batches)
+    if (batches.length) {
+        const tasks = batches.map((ids) => achievementsInfo(ids));
+        const resp = (await Promise.all(tasks)).flat();
+        resp.forEach((x) => {
+            if (x) {
+                achievesCache.set(x.id, x);
+            }
+        });
+        wxjs_localstorage.set(ACHIEVES_CACHE, JSON.stringify([...achievesCache.entries()]));
+        data.push(...mergeById(resp, accountAchieves));
+    }
+    if (knownFromReqest.length) {
+        data.push(...mergeById(knownFromReqest, accountAchieves));
+    }
     return data;
 };
 
