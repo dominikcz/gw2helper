@@ -13,7 +13,7 @@
 
 {#if showGotoTop}
 	<button class="back-to-top" on:click={gotoTop}>
-		<slot>back to top</slot>
+		<slot><h1>🔝</h1></slot>
 	</button>
 {/if}
 

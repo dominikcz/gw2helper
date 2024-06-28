@@ -33,59 +33,79 @@
 		return 28 + ((365 - tillBirthday(createdAt)) / 365) * 100;
 	}
 
-	function iconPosition(createdAt) {
-		return (128 - iconScale(createdAt)) / 2;
+	function deathsPerHour(char) {
+		return (char.age > 3600 ? (char.deaths | 0) / hoursPlayed(char.age) : char.deaths | 0).toFixed(2);
 	}
-
-	function deathsPerHour(char){
-		return ((char.deaths | 0) / hoursPlayed(char.age)).toFixed(2);
-	}
-
 </script>
 
 <h1>Characters</h1>
-<Awaiter promise={data.characters} let:result >
+<Awaiter promise={data.characters} let:result>
 	{#each result.sort((a, b) => -1 * (a.age - b.age)) as char}
 		<article class="character">
 			<h2>{char.name}</h2>
-			<section style="background-image: url({icon(char.profession + '_icon.png')});">
-				<h4>{char.profession}</h4>
-				<div class="info">hours played</div>
-				<div class="counter">{hoursPlayed(char.age)}</div>
+			<section>
+				<div class="sect-img" style="background-image: url({icon(char.profession + '_icon.png')});"></div>
+				<div class="sect-info">
+					<h4>{char.profession}</h4>
+					<div class="info">hours played</div>
+					<div class="counter">{hoursPlayed(char.age)}</div>
+				</div>
 			</section>
-			<section
-				style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(
-					char.created
-				)}px; background-position: {iconPosition(char.created)}px top;"
-			>
-				<div class="counter">{age(char.created)} years</div>
-				<div class="info">next birthday in</div>
-				<div class="counter">{tillBirthday(char.created)}<span class="info">&nbsp;days</span></div>
+			<section>
+				<div
+					class="sect-img"
+					style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(
+						char.created
+					)}px;"
+				></div>
+				<div class="sect-info">
+					<div class="counter">{age(char.created)} years</div>
+					<div class="info">next birthday in</div>
+					<div class="counter">{tillBirthday(char.created)} <span class="info">days</span></div>
+				</div>
 			</section>
-			<section style="background-image: url({icon('Grave_Finisher.png')});">
-				<div class="info">died</div>
-				<div class="counter">{char.deaths}</div>
-				<div class="info">times</div>
-				<div class="info">({deathsPerHour(char)}/h)</div>
+			<section>
+				<div class="sect-img" style="background-image: url({icon('Grave_Finisher.png')});"></div>
+				<div class="sect-info">
+					<div class="info">died</div>
+					<div class="counter">{char.deaths} <span class="info">times</span></div>
+					<div class="info">({deathsPerHour(char)}/h)</div>
+				</div>
 			</section>
 		</article>
 	{/each}
 </Awaiter>
 
-<style lang="scss" >
+<style lang="scss">
 	.character {
 		margin: 0;
 		padding: 10px;
 		display: flex;
-		flex-flow: row wrap;
+		flex-flow: column nowrap;
 		justify-content: space-around;
-		column-gap: 20px;
+		gap: 1rem;
 		background-color: #dcdcdc;
 		h2 {
 			width: 100%;
-			margin: 0.2rem 0 1rem 0;
+			margin: 0;
 			padding: 0;
 			text-align: center;
+		}
+		.sect-img{
+			width: 128px;
+			height: 128px;
+			background-repeat: no-repeat;
+			background-position: bottom center;
+		}
+		.sect-info{
+			display: flex;
+			flex-flow: column nowrap;
+			align-items: center;
+			justify-content: center;
+			row-gap: 0.5rem;
+			h4{
+				margin: 0;
+			}
 		}
 		section {
 			min-width: 150px;
@@ -97,8 +117,7 @@
 			background-repeat: no-repeat;
 			justify-content: center;
 			align-items: center;
-			padding: 120px 0 0 0;
-			background-position: top center;
+			padding: 0;
 		}
 		.counter {
 			padding: 0.5rem 0;
@@ -111,19 +130,28 @@
 		}
 	}
 
-	@media (min-width: 900px) {
+	@media (min-width: 400px) {
 		.character {
-			width: 900px;
+			width: 100%;
+			flex-flow: row wrap;
+			gap: 1rem;
+			padding-bottom: 1rem;
 			h2 {
 				text-align: left;
 			}
-			section {
-				width: 280px;
-				height: 150px;
-				padding: 0 0 0 140px;
-				background-position: left center;
-				flex-flow: column nowrap;
+			.sect-info{
 				align-items: flex-start;
+			}
+			.sect-img{
+				background-position-y: center;
+			}
+			section {
+				width: 260px;
+				height: 128px;
+				flex-flow: row nowrap;
+				align-items: center;
+				column-gap: 0.5rem;
+				justify-content: flex-start;
 			}
 			.counter {
 				padding: 0.5rem 0;

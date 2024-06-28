@@ -85,7 +85,7 @@
 {/if}
 
 <BackToTop>
-	<h1>🔝</h1>
+	<div class="waypoint" title="back to top"></div>
 </BackToTop>
 
 <style lang="scss" global>
@@ -119,13 +119,15 @@
 		flex-flow: column nowrap;
 		row-gap: 1rem;
 	}
-	.back-to-top h1{
-		background-color: rgba(255,255,255, 0.7);
+	.waypoint{
+		width: 64px;
+		height: 64px;
+		background: url(/gw2helper/assets/waypoint.png) no-repeat center center;
 		padding: 1rem 0.5rem;
 		border-radius: 10px;
 		margin: 0;
 		&:hover{
-			background-color: rgba(255,255,255, 1);
+			background-image: url(/gw2helper/assets/waypoint-hover.png);
 		}
 	}
 </style>
