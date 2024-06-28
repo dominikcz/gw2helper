@@ -36,7 +36,10 @@
 	}
 
 	function refresh() {
-		invalidateAll();
+		if (data.apiService) {
+			data.apiService.clearCache();
+		}
+		location.reload(true);
 	}
 </script>
 
@@ -69,7 +72,7 @@
 			<input type="text" name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} />
 			<button on:click={() => saveApiKey()}>Apply</button>
 			<button on:click={() => deleteApiKey()}>Forget stored key</button>
-			<button on:click={refresh}>refresh</button>
+			<button on:click={refresh}>Clear cache & reload</button>
 			{#if tokenInfo.name}
 				<br />
 				Successfully loaded key "{tokenInfo.name}".

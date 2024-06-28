@@ -1,12 +1,10 @@
 import Logger from "./logger";
-import wxjs_localstorage from "./wxjs_localstorage";
+import ls from "./wxjs_localstorage";
 import wx from "./wxjs_types";
+import {ACHIEVES_CACHE, ITEMS_CACHE, REQUESTS_CACHE} from "$lib/consts";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
-const REQUESTS_CACHE = "gw2helper.requests_cache";
-const ITEMS_CACHE = "gw2helper.items_cache";
-const ACHIEVES_CACHE = "gw2helper.achieves_cache";
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
 const INVALID_ACHIEVES_IDS: number[] = [];
 
@@ -21,8 +19,8 @@ interface CacheEntry {
     data: object;
 }
 
-const _items = wxjs_localstorage.getObject(ITEMS_CACHE, null);
-const _achievs = wxjs_localstorage.getObject(ACHIEVES_CACHE, null);
+const _items = ls.getObject(ITEMS_CACHE, null);
+const _achievs = ls.getObject(ACHIEVES_CACHE, null);
 const itemsCache = _items ? new Map(_items) : new Map();
 const achievesCache = _achievs ? new Map(_items) : new Map();
 
@@ -75,7 +73,7 @@ const cacheRequest = (req: string, value: any) => {
         data: value,
     };
     requestCache.set(req, obj);
-    wxjs_localstorage.set(requestCacheName(), JSON.stringify([...requestCache.entries()]));
+    ls.set(requestCacheName(), JSON.stringify([...requestCache.entries()]));
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
@@ -277,7 +275,7 @@ const init = (apiKey: string, options?: object) => {
     Logger.log("init", apiKey);
     _apiKey = apiKey;
     fetchOptions = Object.assign({}, fetchOptions, options);
-    const _req = wxjs_localstorage.getObject(requestCacheName(), null);
+    const _req = ls.getObject(requestCacheName(), null);
 
     requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
 };
@@ -319,7 +317,7 @@ const expandItems = async (ids: Array<number>, collection) => {
                 itemsCache.set(x.id, x);
             }
         });
-        wxjs_localstorage.set(ITEMS_CACHE, JSON.stringify([...itemsCache.entries()]));
+        ls.set(ITEMS_CACHE, JSON.stringify([...itemsCache.entries()]));
         data.push(...mergeById(resp, collection));
     }
     if (knownFromReqest.length) {
@@ -353,7 +351,7 @@ const expandAchieves = async (accountAchieves) => {
                 achievesCache.set(x.id, x);
             }
         });
-        wxjs_localstorage.set(ACHIEVES_CACHE, JSON.stringify([...achievesCache.entries()]));
+        ls.set(ACHIEVES_CACHE, JSON.stringify([...achievesCache.entries()]));
         data.push(...mergeById(resp, accountAchieves));
     }
     if (knownFromReqest.length) {
@@ -375,6 +373,16 @@ const additionalMapping = (data) => {
     });
 };
 
+const clearCache = () => {
+    console.log('clearing cache...');
+    ls.set(requestCacheName(), '[]');
+    ls.set(ITEMS_CACHE, '[]');
+    ls.set(ACHIEVES_CACHE, '[]');
+    itemsCache.clear();
+    achievesCache.clear();
+    requestCache.clear();
+}
+
 export default {
     init,
     characters,
@@ -390,4 +398,5 @@ export default {
     guilds,
     currencies,
     wallet,
+    clearCache,
 };
