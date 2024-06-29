@@ -5,6 +5,7 @@
 	import BackToTop from '$lib/components/backToTop.svelte';
 
 	import utils from '$lib/utils.js';
+
 	import '$lib/scss/gw2.scss';
 	import Navigation from '$lib/components/navigation.svelte';
 
@@ -17,6 +18,7 @@
 
 	$: navigation = [
 		{ slug: `${base}/`, label: 'Home', visible: true },
+		// { slug: `${base}/events/`, label: 'Event timers', visible: true },
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
 		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account') },
