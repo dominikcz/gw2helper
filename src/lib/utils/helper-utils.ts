@@ -34,7 +34,7 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
 
 function filterCollection(collection, filter, sortBy) {
     let filtered = collection.filter((x) => {
-        return fullTextSearch(filter, x, ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity']);
+        return x.count > 0 && fullTextSearch(filter, x, ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity']);
     });
     // if (sortBy == SortType.Slots) {
     // 	console.log('sorting by slots...');
