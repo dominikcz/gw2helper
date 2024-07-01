@@ -90,7 +90,7 @@
 {/if}
 
 <BackToTop>
-	<div class="waypoint" title="back to top"></div>
+	<div class="waypoint" title="waypoint to top"></div>
 </BackToTop>
 
 <style lang="scss" global>
