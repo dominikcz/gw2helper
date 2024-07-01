@@ -17,7 +17,7 @@
 			{#await items}
 				<Spinner />
 			{:then items}
-			{#each helperUtils.filterCollection(items, filter) as item}
+			{#each helperUtils.filterCollection(items, filter, true, 'count') as item}
 				<Item {item} />
 			{:else}
                 <slot name="no-results">
