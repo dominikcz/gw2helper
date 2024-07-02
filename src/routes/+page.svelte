@@ -20,7 +20,7 @@
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, filter) as currency}
-			<a
+			<a 
 				href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
 				target="_blank"
 				title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`}

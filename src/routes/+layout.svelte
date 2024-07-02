@@ -3,6 +3,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import BackToTop from '$lib/components/backToTop.svelte';
+	import SearchInput from '$lib/components/searchInput.svelte';
 
 	import utils from '$lib/utils.js';
 
@@ -71,13 +72,12 @@
 				>.
 			</p>
 			<label for="api-key">Your API key:</label>
-			<input type="text" name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} />
+			<SearchInput name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} options={utils.getKeyHist()} />
 			<button on:click={() => saveApiKey()}>Apply</button>
 			<button on:click={() => deleteApiKey()}>Forget stored key</button>
 			<button on:click={refresh}>Clear cache & reload</button>
 			{#if tokenInfo.name}
-				<br />
-				Successfully loaded key "{tokenInfo.name}".
+				<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
 			{/if}
 		</fieldset>
 	</details>
@@ -99,6 +99,12 @@
 		flex-flow: row nowrap;
 		column-gap: 1rem;
 		align-items: baseline;
+	}
+	#api-key {
+		margin: 0.4rem 0;
+	}
+	em {
+		color: var(--gw2helper-not-important);
 	}
 	header {
 		margin: 0;
@@ -124,14 +130,14 @@
 		flex-flow: column nowrap;
 		row-gap: 1rem;
 	}
-	.waypoint{
+	.waypoint {
 		width: 64px;
 		height: 64px;
 		background: url(/gw2helper/assets/waypoint.png) no-repeat center center;
 		padding: 1rem 0.5rem;
 		border-radius: 10px;
 		margin: 0;
-		&:hover{
+		&:hover {
 			background-image: url(/gw2helper/assets/waypoint-hover.png);
 		}
 	}

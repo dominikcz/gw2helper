@@ -1,7 +1,7 @@
 import Logger from "./logger";
 import ls from "./wxjs_localstorage";
 import wx from "./wxjs_types";
-import {ACHIEVES_CACHE, ITEMS_CACHE, REQUESTS_CACHE} from "$lib/consts";
+import {ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE} from "$lib/consts";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
@@ -375,9 +375,10 @@ const additionalMapping = (data) => {
 
 const clearCache = () => {
     console.log('clearing cache...');
-    ls.set(requestCacheName(), '[]');
-    ls.set(ITEMS_CACHE, '[]');
-    ls.set(ACHIEVES_CACHE, '[]');
+    ls.delete(requestCacheName());
+    ls.delete(ITEMS_CACHE);
+    ls.delete(ACHIEVES_CACHE);
+    ls.delete(KEY_HIST);
     itemsCache.clear();
     achievesCache.clear();
     requestCache.clear();
