@@ -6,44 +6,58 @@
 	export let height = 128;
 	export let background = '#000';
 
-	let canvas;
-	let ctx;
+	let canvas: HTMLCanvasElement;
+	let ctx: CanvasRenderingContext2D | null;
+
+	interface LayerData {
+		img: HTMLImageElement;
+		flipH: boolean;
+		flipV: boolean;
+	}
 
 	$: {
 		prepareEmblem();
 	}
 
-	function renderImage(url: string, flipH: boolean = false, flipV: boolean = false) {
-		return new Promise((resolve, reject) => {
-			const img = new Image();
-			img.addEventListener('load', () => {
-				const scaleH = flipH ? -1 : 1;
-				const scaleV = flipV ? -1 : 1;
-				const posX = flipH ? width * -1 : 0;
-				const posY = flipV ? height * -1 : 0;
+	function renderImages(images: Array<LayerData>) {
+		images.forEach((item) => {
+			const scaleH = item.flipH ? -1 : 1;
+			const scaleV = item.flipV ? -1 : 1;
+			const posX = item.flipH ? width * -1 : 0;
+			const posY = item.flipV ? height * -1 : 0;
 
+			if (ctx) {
 				ctx.save();
 				ctx.scale(scaleH, scaleV);
-				ctx.drawImage(img, posX, posY, width, height);
+				ctx.drawImage(item.img, posX, posY, width, height);
 				ctx.restore();
+			}
+		});
+	}
 
-				return resolve(img)
+	function loadImage(url: string, flipH: boolean = false, flipV: boolean = false) {
+		return new Promise<LayerData>((resolve) => {
+			const img = new Image();
+			img.addEventListener('load', () => {
+				resolve({ img, flipH, flipV });
 			});
-			img.addEventListener('error', (err) => reject(err));
 			img.src = url;
-		})
-	};
+		});
+	}
 
-	function prepareEmblem() {
+	async function prepareEmblem() {
 		if (ctx && emblem) {
 			ctx.fillStyle = background;
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			emblem.background.layers.forEach(async (layer) => {
-				await renderImage(layer, emblem.flags.includes('FlipBackgroundHorizontal'), emblem.flags.includes('FlipBackgroundVertical'));
+			const tasks = Array<Promise<LayerData>>();
+			emblem.background.layers.forEach((layer: string) => {
+				tasks.push(loadImage(layer, emblem.flags.includes('FlipBackgroundHorizontal'), emblem.flags.includes('FlipBackgroundVertical')));
 			});
-			emblem.foreground.layers.forEach(async (layer) => {
-				await renderImage(layer, emblem.flags.includes('FlipForegroundHorizontal'), emblem.flags.includes('FlipForegroundVertical'));
+
+			emblem.foreground.layers.forEach((layer: string) => {
+				tasks.push(loadImage(layer, emblem.flags.includes('FlipForegroundHorizontal'), emblem.flags.includes('FlipForegroundVertical')));
 			});
+			renderImages(await Promise.all(tasks));
 		}
 	}
 

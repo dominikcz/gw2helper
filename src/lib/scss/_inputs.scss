@@ -1,3 +1,8 @@
+*:focus{
+	box-shadow: inset 0 0 5px #c1c1c1, 0 0 5px #999;
+	outline: 1px solid #999;
+}
+
 input, button {
 	margin: 0;
 	padding: 0.6em 1em;

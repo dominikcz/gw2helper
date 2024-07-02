@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ItemsList from '$lib/components/itemsList.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
+	import SearchInput from '$lib/components/searchInput.svelte';
 
 	export let data;
 
@@ -10,7 +11,6 @@
 		Slots,
 	}
 	let sortBy: SortType = SortType.AsIs;
-	let timer;
 
 	function sortAsIs() {
 		sortBy = SortType.AsIs;
@@ -20,15 +20,11 @@
 		sortBy = SortType.Slots;
 	}
 
-	const debounceFilter = (e) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => (filter = e.target.value), 300);
-	};
 </script>
 
 <section>
 	<label for="filter">Search:</label>
-	<input type="text" name="filter" id="filter" placeholder="what you are looking for?" value={filter} on:input={debounceFilter} />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 	<button on:click={sortBySlots}>sort by quantity</button> -->
 	<details>

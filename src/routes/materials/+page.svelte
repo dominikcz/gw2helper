@@ -1,19 +1,14 @@
 <script>
 	export let data;
 	import ItemsList from '$lib/components/itemsList.svelte';
+	import SearchInput from '$lib/components/searchInput.svelte';
 	let filter = '';
-	let timer;
-
-	const debounceFilter = (e) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => (filter = e.target.value), 300);
-	};
 
 </script>
 
 <section>
 	<label for="filter">Search:</label>
-	<input type="text" name="filter" id="filter" placeholder="what you are looking for?" value={filter} on:input={debounceFilter} />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />
 	<details>
 		<summary>Search help</summary>
 		<p>Knock yourself out with queries like:</p>

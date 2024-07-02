@@ -2,14 +2,9 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import Price from '$lib/components/price.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
+	import SearchInput from '$lib/components/searchInput.svelte';
 	export let data;
 	let filter = '';
-	let timer;
-
-	const debounceFilter = (e) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => (filter = e.target.value), 300);
-	};
 
 	function formatValue(v: number) {
 		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -20,7 +15,7 @@
 
 <section>
 	<label for="filter">Filter:</label>
-	<input type="text" name="filter" id="filter" placeholder="too much data?" value={filter} on:input={debounceFilter} />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 </section>
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
