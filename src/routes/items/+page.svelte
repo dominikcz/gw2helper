@@ -22,6 +22,8 @@
 
 </script>
 
+<h1>Items</h1>
+
 <section>
 	<label for="filter">Search:</label>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />

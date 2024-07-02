@@ -30,6 +30,7 @@
 		background-color: transparent;
 		border: none;
 		padding: 0;
+		height: fit-content;
         &:focus, &:active{
             border:none !important;
             box-shadow: none !important;
