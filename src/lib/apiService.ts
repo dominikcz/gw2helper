@@ -1,7 +1,7 @@
 import Logger from "./logger";
 import ls from "./wxjs_localstorage";
 import wx from "./wxjs_types";
-import {ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE} from "$lib/consts";
+import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
@@ -156,8 +156,24 @@ const _getGuilds = async (full: boolean = false) => {
         tasks.push(apiClient(`/v2/guild/${guild}`, ""));
     }
     let _rawData = (await Promise.all(tasks)).flat();
+    const defEmblem = {
+        background: {
+            id: 1,
+            colors: [0]
+        },
+        foreground: {
+            id: 60,
+            colors: [443]
+        },
+        flags: []
+    };
     if (full) {
-        const _emblems = _rawData.map(x => x.emblem).filter(x => x != null);
+        _rawData.forEach(x => {
+            if (!x.emblem) {
+                x.emblem = defEmblem
+            }
+        });
+        const _emblems = _rawData.map(x => x.emblem);
         const fgs = [];
         const bgs = [];
         let clrs = [];
@@ -184,6 +200,7 @@ const _getGuilds = async (full: boolean = false) => {
             }
         }
         // console.log('emblems', {bgs, fgs, clrs});
+        console.log('emblems data', _rawData)
     }
     return _rawData;
 }
@@ -206,7 +223,7 @@ const guildItems = async () => {
 };
 
 const characters = async () => {
-    return await apiClient("/v2/characters", "ids=all");
+    return (await apiClient("/v2/characters", "ids=all")).map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
 };
 
 const guilds = async () => {
@@ -262,8 +279,26 @@ const achievementsInfo = async (ids: string) => {
 };
 
 const currencies = async () => {
-    const depreciated = [5, 6, 9, 10, 11, 12, 13, 14, 52, 55, 56, 74]
-    return (await apiClient("/v2/currencies", "ids=all")).filter(x => !depreciated.includes(x.id));
+    const depreciated = [
+        {
+            reason: 'Replaced by "Tales of Dungeon Delving"',
+            ids: [5, 6, 9, 10, 11, 12, 13, 14]
+        },
+        {
+            reason: 'Replaced by "Blue Prophet Shard"',
+            ids: [52, 53]
+        },
+        {
+            reason: 'Replaced by "Blue Prophet Crystal"',
+            ids: [55, 56]
+        },
+    ];
+    // denormalize
+    const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id })));
+    const ignored = [74];
+    const _rawData = (await apiClient("/v2/currencies", "ids=all"))
+        .filter(x => !ignored.includes(x.id));
+    return mergeById(_rawData, _dep);
 }
 
 const wallet = async () => {

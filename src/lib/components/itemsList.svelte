@@ -7,6 +7,7 @@
     export let summary: string;
     export let items;
 	export let filter: string = '';
+	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity'];
 </script>
 
 <details class="searchable" open>
@@ -17,7 +18,7 @@
 			{#await items}
 				<Spinner />
 			{:then items}
-			{#each helperUtils.filterCollection(items, filter, true, 'count') as item}
+			{#each helperUtils.filterCollection(items, fields, filter, true, 'count') as item}
 				<Item {item} />
 			{:else}
                 <slot name="no-results">

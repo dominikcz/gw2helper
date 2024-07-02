@@ -32,9 +32,9 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
     return words.every((x) => match(x, obj, properties));
 }
 
-function filterCollection(collection, filter, nonZero, nonZeroField = 'count', sortBy) {
+function filterCollection(collection, fields: Array<string>, filter: string, nonZero: boolean, nonZeroField = 'count', sortBy) {
     let filtered = collection.filter((x) => {
-        return (!nonZero || x[nonZeroField] > 0) && fullTextSearch(filter, x, ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity']);
+        return (!nonZero || x[nonZeroField] > 0) && fullTextSearch(filter, x, fields);
     });
     // if (sortBy == SortType.Slots) {
     // 	console.log('sorting by slots...');

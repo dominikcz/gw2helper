@@ -5,6 +5,7 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	export let data;
 	let filter = '';
+	const fields = ['name', 'description'];
 
 	function formatValue(v: number) {
 		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -19,13 +20,13 @@
 </section>
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
-		{#each helperUtils.filterCollection(result, filter) as currency}
+		{#each helperUtils.filterCollection(result, fields, filter) as currency}
 			<a 
 				href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
 				target="_blank"
-				title={`${currency.name} (${currency.id})- Click for wiki\r\n\r\n${currency.description}`}
+				title={`${currency.name} (${currency.id})- Click for wiki\r\n${currency.depreciated? '\r\nDEPRECIATED: '+currency.depreciationReason+'\r\n': ''}\r\n${currency.description}`}
 			>
-				<div class="currency">
+				<div class="currency" class:depreciated={currency.depreciated}>
 					<span class="currency-name">{currency.name}</span>
 					<div class="currency-value">
 						{#if currency.id == 1}
@@ -61,6 +62,9 @@
 		flex-flow: row nowrap;
 		justify-content: space-between;
 		align-items: center;
+		&.depreciated{
+			color: var(--gw2helper-not-important);
+		}
 		img {
 			height: 2rem;
 		}

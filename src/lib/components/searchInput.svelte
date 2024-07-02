@@ -19,7 +19,6 @@
 	const toggleDropdown = () => (showDropdown = !showDropdown);
 
 	const hndClick = (ev: MouseEvent) => {
-		console.log('clicked', { ref, target: ev.target });
 		if (showDropdown && !(inputRef == ev?.target)) {
 			showDropdown = false;
 		}

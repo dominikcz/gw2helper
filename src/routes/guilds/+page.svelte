@@ -10,7 +10,7 @@
 	{#each result as guild (guild.id)}
 		<section class="guild-info">
 			<div class="guild-header">
-				<GuildEmblem emblem={guild.emblem} background="#fff" />
+				<GuildEmblem emblem={guild.emblem} background="#777" />
 				<div class="guild-h">
 					<h2>{guild.name} [{guild.tag}]</h2>
 					<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>
