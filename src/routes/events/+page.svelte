@@ -3,9 +3,6 @@
 	import { eventData } from "./metas";
 </script>
 
+<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" />
+
 <EventTimers wikiData={eventData} />
-
-<pre>
-    {JSON.stringify(eventData, null, 4)}
-</pre>
-
