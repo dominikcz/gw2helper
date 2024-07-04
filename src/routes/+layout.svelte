@@ -19,7 +19,8 @@
 
 	$: navigation = [
 		{ slug: `${base}/`, label: 'Home', visible: true },
-		// { slug: `${base}/events/`, label: 'Event timers', visible: true },
+		{ slug: `${base}/daily/`, label: 'Daily', visible: true },
+		{ slug: `${base}/events/`, label: 'Event timers', visible: true },
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
 		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account') },
@@ -64,7 +65,7 @@
 <section>
 	<details open={!tokenInfo.name}>
 		<summary>API Settings</summary>
-		<fieldset>
+		<fieldset id="settings">
 			<legend>API settings</legend>
 			<p>
 				In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
@@ -140,5 +141,8 @@
 		&:hover {
 			background-image: url(/gw2helper/assets/waypoint-hover.png);
 		}
+	}
+	#settings{
+		background: url(/gw2helper/assets/150px-construction.png) center right no-repeat;
 	}
 </style>

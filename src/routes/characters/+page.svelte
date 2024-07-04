@@ -8,37 +8,18 @@
 	let filter = '';
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
-	function diff(createdAt) {
-		const dt = new Date(createdAt);
-		return Math.floor((new Date().getTime() - dt.getTime()) / (1000 * 3600 * 24));
-	}
-	function tillBirthday(createdAt) {
-		return 365 - (diff(createdAt) % 365);
-	}
-
-	function age(createdAt) {
-		return Math.floor(diff(createdAt) / 365);
-	}
-
-	function hoursPlayed(time) {
-		return Math.trunc(time / 3600);
-	}
-
 	function icon(name) {
 		return `${base}/assets/${name}`;
 	}
 
 	function iconScale(createdAt) {
-		return 28 + ((365 - tillBirthday(createdAt)) / 365) * 100;
+		return 28 + ((365 - helperUtils.tillBirthday(createdAt)) / 365) * 100;
 	}
 
 	function deathsPerHour(char) {
-		return (char.age > 3600 ? (char.deaths | 0) / hoursPlayed(char.age) : char.deaths | 0).toFixed(2);
+		return (char.age > 3600 ? (char.deaths | 0) / helperUtils.hoursPlayed(char.age) : char.deaths | 0).toFixed(2);
 	}
 
-	function craftingCompact(craft) {
-		return craft.map((x) => `${x.discipline} - ${x.rating}`).join(', ');
-	}
 </script>
 
 <h1>Characters</h1>
@@ -60,14 +41,14 @@
 					</ul>
 				{/if}
 				<div class="info">hours played</div>
-				<div class="counter">{hoursPlayed(char.age)}</div>
+				<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
 			</section>
 			<section>
 				<div class="sect-img" style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"></div>
 				<div class="sect-info">
-					<div class="counter">{age(char.created)} years</div>
+					<div class="counter">{helperUtils.age(char.created)} years</div>
 					<div class="info">next birthday in</div>
-					<div class="counter">{tillBirthday(char.created)} <span class="info">days</span></div>
+					<div class="counter">{helperUtils.tillBirthday(char.created)} <span class="info">days</span></div>
 				</div>
 			</section>
 			<section>

@@ -67,10 +67,30 @@ function generateId(len: number | undefined): string {
     return Array.from(arr, dec2hex).join('')
 }
 
+function diff(createdAt) {
+    const dt = new Date(createdAt);
+    return Math.floor((new Date().getTime() - dt.getTime()) / (1000 * 3600 * 24));
+}
+function tillBirthday(createdAt) {
+    return 365 - (diff(createdAt) % 365);
+}
+
+function age(createdAt) {
+    return Math.floor(diff(createdAt) / 365);
+}
+
+function hoursPlayed(time) {
+    return Math.trunc(time / 3600);
+}
+
 export default {
     match,
     filterCollection,
     fullTextSearch,
     generateId,
     dec2hex,
+    diff,
+    tillBirthday,
+    age,
+    hoursPlayed,
 }

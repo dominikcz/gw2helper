@@ -3,6 +3,11 @@
 	import Price from '$lib/components/price.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
+	import WidgetInfo from '$lib/components/widgetInfo.svelte';
+	import WidgetsGroup from '$lib/components/widgetsGroup.svelte';
+	import WidgetImg from '$lib/components/widgetImg.svelte';
+	import { base } from '$app/paths';
+	import Linkable from '$lib/components/linkable.svelte';
 	export let data;
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -10,10 +15,83 @@
 	function formatValue(v: number) {
 		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
 	}
+
+	function timeSpent(account) {
+		const hours = helperUtils.hoursPlayed(account.age);
+		const days = helperUtils.diff(account.created);
+		const hoursPerDay = (days / hours).toFixed(2);
+		return `${hours} hours over the past ${days} days (avg ${hoursPerDay}h per day)`;
+	}
+
+	function has(account, content: string): boolean {
+		return account.access.includes(content);
+	}
 </script>
 
-<h1>Home - Your wallet</h1>
+<h1>Home</h1>
 
+<h2>Account info</h2>
+<Awaiter promise={data.account} let:result>
+	<h3>{result.name}</h3>
+	<span>Created at <span>{result.created}</span></span>
+
+	<WidgetsGroup name="Time spent">
+		<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
+		<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}h`} />
+		<WidgetInfo title="Average" value={`${(helperUtils.diff(result.created) / helperUtils.hoursPlayed(result.age)).toFixed(2)}h/day`} />
+	</WidgetsGroup>
+
+	<WidgetsGroup name="Accessible content">
+		{#if has(result, 'PlayForFree')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki">
+				<WidgetImg title="Play for free" url={`${base}/assets/400px-GW2Logo_new.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'GuildWars2')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki">
+				<WidgetImg title="Base game" url={`${base}/assets/400px-GW2Logo_new.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'HeartOfThorns')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki">
+				<WidgetImg title="Heart Of Thorns" url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'PathOfFire')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki">
+				<WidgetImg title="Path Of Fire" url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'EndOfDragons')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki">
+				<WidgetImg title="End Of Dragons" url={`${base}/assets/400px-EoD_Texture_Trans.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'SecretsOfTheObscure')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki">
+				<WidgetImg title="Secrets Of the Obscure" url={`${base}/assets/Secrets_of_the_Obscure_logo.png`} />
+			</Linkable>
+		{/if}
+
+		{#if has(result, 'JanthirWilds')}
+			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki">
+				<WidgetImg title="Janthir Wilds" url={`${base}/assets/400px-Janthir_Wilds_logo.png`} />
+			</Linkable>
+		{/if}
+	</WidgetsGroup>
+
+	<WidgetsGroup name="Levels">
+		<WidgetInfo title="Fractas" value={result.fractal_level} />
+		<WidgetInfo title="WvW" value={result.wvw_rank} />
+	</WidgetsGroup>
+</Awaiter>
+
+<h2>Your wallet</h2>
 <section>
 	<label for="filter">Filter:</label>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
@@ -21,10 +99,10 @@
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
-			<a 
+			<a
 				href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
 				target="_blank"
-				title={`${currency.name} (${currency.id})- Click for wiki\r\n${currency.depreciated? '\r\nDEPRECIATED: '+currency.depreciationReason+'\r\n': ''}\r\n${currency.description}`}
+				title={`${currency.name} (${currency.id})- Click for wiki\r\n${currency.depreciated ? '\r\nDEPRECIATED: ' + currency.depreciationReason + '\r\n' : ''}\r\n${currency.description}`}
 			>
 				<div class="currency" class:depreciated={currency.depreciated}>
 					<span class="currency-name">{currency.name}</span>
@@ -62,7 +140,7 @@
 		flex-flow: row nowrap;
 		justify-content: space-between;
 		align-items: center;
-		&.depreciated{
+		&.depreciated {
 			color: var(--gw2helper-not-important);
 		}
 		img {

@@ -2,7 +2,14 @@ import ls from "$lib/wxjs_localstorage";
 import { KEY_NAME, KEY_HIST } from "$lib/consts";
 
 function readApiKey() {
-    return ls.get(KEY_NAME, '');
+    let key = '';
+    if (typeof window != 'undefined') {
+        key = new URLSearchParams(window.location.search).get('key') || ''
+    }
+    if (!key) {
+        key = ls.get(KEY_NAME, '');
+    }
+    return key;
 }
 
 function saveApiKey(value) {
@@ -18,7 +25,7 @@ function deleteApiKey() {
     ls.delete(KEY_NAME)
 }
 
-function getKeyHist(){
+function getKeyHist() {
     return ls.getObject(KEY_HIST, []);
 }
 

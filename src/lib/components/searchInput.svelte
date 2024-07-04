@@ -1,9 +1,10 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
+	import wxjs_types from '$lib/wxjs_types';
 	export let debounceTime: number = 300;
 	export let value: string = '';
 	export let id = helperUtils.generateId(20);
-	export let options = {};
+	export let options: string[] = [];
 	let ref: HTMLElement;
 	let inputRef: HTMLElement;
 
@@ -29,7 +30,7 @@
 
 <div bind:this={ref}>
 	<input type="search" {id} {value} bind:this={inputRef} on:input={debounceFilter} {...$$restProps} />
-	{#if Object.keys(options).length}
+	{#if options.length}
 		<button class="inside" on:click|stopPropagation={toggleDropdown}>
 			<svg width="100%" height="100%" viewBox="0 0 20 20" focusable="false" aria-hidden="true" class="svelte-qbd276"
 				><path
@@ -46,7 +47,7 @@
 
 	{#if showDropdown}
 		<ul class="search-input-list" role="listbox" id="{id}-items">
-			{#each Object.entries(options) as [key, label]}
+			{#each options as key}
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<li
 					role="option"
@@ -56,8 +57,8 @@
 						value = key;
 					}}
 				>
-					<slot {key} {label}>
-						{@html label}
+					<slot {key}>
+						{@html key}
 					</slot>
 				</li>
 			{/each}

@@ -149,7 +149,8 @@ const materials = async () => {
 
 const _getGuilds = async (full: boolean = false) => {
     const account = await apiClient("/v2/account", "");
-    const _guilds = account.guild_leader || account.guilds;
+    // concat and remove duplicates
+    const _guilds = [...new Set([...account.guild_leader ,...account.guilds])];
 
     let tasks = [];
     for (const guild of _guilds) {
@@ -200,7 +201,7 @@ const _getGuilds = async (full: boolean = false) => {
             }
         }
         // console.log('emblems', {bgs, fgs, clrs});
-        console.log('emblems data', _rawData)
+        // console.log('emblems data', _rawData)
     }
     return _rawData;
 }
