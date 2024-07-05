@@ -1,5 +1,6 @@
 <script>
-	import wxdates from '$lib/wxjs_dates';
+	import helperUtils from '$lib/utils/helper-utils';
+import wxdates from '$lib/wxjs_dates';
 	export let wikiData;
 
 	const et = new Map();
@@ -17,7 +18,7 @@
 			});
 		}
 	}
-	console.log('et', et);
+	// console.log('et', et);
 
 	function getCurrentWindow(segments, hours = 2) {
 		const currTime = new Date();
@@ -82,7 +83,7 @@
 		<div class="category">
 			<h3>{cat}</h3>
 			{#each eventsList as event}
-				<a class="heading" href="https://wiki.guildwars2.com/wiki/{event.link}">{event.name}</a>
+				<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank">{event.name}</a>
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
 						<div
@@ -91,7 +92,7 @@
 							style="width: {(segment.duration * 100) / 120}%; background-color: rgb({segment.bg.join(',')});"
 						>
 							{#if segment.name}
-								<a href="https://wiki.guildwars2.com/wiki/{segment.link}">{segment.name}</a>
+								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
 								<span class="chatlink">{segment.chatlink}</span>
 							{/if}
 						</div>

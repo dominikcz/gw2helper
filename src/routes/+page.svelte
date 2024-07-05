@@ -28,10 +28,11 @@
 	}
 
 	function getTitle(currency) {
-		return `<h4>${currency.name} (${currency.id})<small> - Click for wiki</small></h4>
+		return `<h4>${currency.name} (${currency.id}) - <a class="tooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">Click for wiki</a></h4>
 			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
 			<p>${currency.description}</p>`;
 	}
+
 </script>
 
 <h1>Home</h1>
@@ -110,7 +111,7 @@
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
-			<a href={`https://wiki.guildwars2.com/wiki/${currency.name}`} target="_blank">
+			<a href={helperUtils.wikiLink(currency.name)} target="_blank">
 				<div class="currency" class:depreciated={currency.depreciated} title={getTitle(currency)}>
 					<span class="currency-name" title={getTitle(currency)}>{currency.name}</span>
 					<div class="currency-value">

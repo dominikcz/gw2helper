@@ -1,13 +1,16 @@
 <script lang="ts">
-	import { stringify } from 'yaml'
+	import helperUtils from '$lib/utils/helper-utils';
+	import { stringify } from 'yaml';
 	export let item: object;
-	function debugInfo(){
+	function debugInfo() {
 		return stringify(item);
 	}
 </script>
 
 <figure class="rarity-{item.rarity.toLowerCase()}">
-	<a href={`https://wiki.guildwars2.com/wiki/${item.name}`} target="_blank"><img alt={item.name} title={`${item.name}. Click for wiki\r\n\r\n${debugInfo()}` } src={item.icon} /></a>
+	<a href={helperUtils.wikiLink(item.name)} target="_blank">
+		<img alt={item.name} title={`<h4>${item.name}  - <a class="tooltip-link" target="_blank" href="${helperUtils.wikiLink(item.name)}">Click for wiki</a></h4><pre>${debugInfo()}</pre>`} src={item.icon} />
+	</a>
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>
 
@@ -23,7 +26,7 @@
 		img {
 			width: 60px;
 			height: 60px;
-            cursor: pointer;
+			cursor: pointer;
 		}
 		figcaption {
 			position: absolute;

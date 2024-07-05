@@ -83,6 +83,10 @@ function hoursPlayed(time) {
     return Math.trunc(time / 3600);
 }
 
+function wikiLink(name){
+    return `https://wiki.guildwars2.com/wiki/${name}`;
+}
+
 export default {
     match,
     filterCollection,
@@ -93,4 +97,5 @@ export default {
     tillBirthday,
     age,
     hoursPlayed,
+    wikiLink,
 }

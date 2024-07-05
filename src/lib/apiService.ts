@@ -8,7 +8,7 @@ const CACHE_TIMEOUT = 15 * 60;
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
 const INVALID_ACHIEVES_IDS: number[] = [];
 
-const SCHEMA_VERSION='2019-12-19T00:00:00.000Z'; // or 'latest'?
+const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 
 const ignoreCache =
     typeof window != 'undefined'
@@ -100,10 +100,13 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         if (_options.debug) {
             Logger.log(`req: ${req}, options: `, _options);
         }
-        const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options);
-        if (response.status >= 500) {
-            console.warn("error", response);
+        const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options).catch(error => {
+            Logger.error('error', error);
+        });
+        if (response.status >= 400) {
+            Logger.warn('error loading data', { status: response.status, url: response.url });
             notifyOnError(req, new Error(`HTTP error, status = ${response.status}`), _options);
+            cachedValue = [];
         } else if (response.ok) {
             let data;
             if (_options.expectJson) {
@@ -152,7 +155,7 @@ const materials = async () => {
 const _getGuilds = async (full: boolean = false) => {
     const account = await apiClient("/v2/account", "");
     // concat and remove duplicates
-    const _guilds = [...new Set([...account.guild_leader ,...account.guilds])];
+    const _guilds = [...new Set([...account.guild_leader, ...account.guilds])];
 
     let tasks = [];
     for (const guild of _guilds) {
@@ -245,18 +248,18 @@ const account = () => {
             _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
 
             // temporary fix for missing keys in API
-            if (!_acc.access.includes('SecretsOfTheObscure')){
-                if (_wal.find(x => [72, 73, 75].includes(x.id) && x.value > 0)){
+            if (!_acc.access.includes('SecretsOfTheObscure')) {
+                if (_wal.find(x => [72, 73, 75].includes(x.id) && x.value > 0)) {
                     _acc.access.push('SecretsOfTheObscure')
                 }
             }
             // total guess ;)
-            if (!_acc.access.includes('JanthirWilds')){
-                if (_wal.find(x => (x.id> 75) && x.value > 0)){
+            if (!_acc.access.includes('JanthirWilds')) {
+                if (_wal.find(x => (x.id > 75) && x.value > 0)) {
                     _acc.access.push('JanthirWilds')
                 }
             }
-            
+
             resolve(_acc)
         });
     });
@@ -401,7 +404,7 @@ const expandAchieves = async (accountAchieves) => {
             batches.push(batch.join(","));
         }
     } while (missingIds.length > 0);
-    console.log('batches', batches)
+    // console.log('batches', batches)
     if (batches.length) {
         const tasks = batches.map((ids) => achievementsInfo(ids));
         const resp = (await Promise.all(tasks)).flat();
@@ -433,7 +436,7 @@ const additionalMapping = (data) => {
 };
 
 const clearCache = () => {
-    console.log('clearing cache...');
+    Logger.log('clearing cache...');
     ls.delete(requestCacheName());
     ls.delete(ITEMS_CACHE);
     ls.delete(ACHIEVES_CACHE);
