@@ -2,16 +2,20 @@ details {
     margin: 0 0 1rem 0;
 
     display: flex;
+
     &[open] {
         background-color: var(--gw2helper-module);
         padding-bottom: 1em;
     }
+
     p {
         margin: 1rem 0;
     }
+
     ul {
         margin: 1rem 0;
     }
+
     article {
         width: 100%;
         padding: 1rem;
@@ -33,8 +37,37 @@ summary {
     gap: 10px;
 }
 
-.no-results{
+.no-results {
     color: var(--gw2helper-not-important);
     font-style: italic;
     font-weight: normal;
+}
+
+.widget {
+    border-radius: 5px;
+    background-color: var(--gw2helper-module-white);
+    box-shadow: var(--gw2helper-module-shadow);
+    color: #000;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 10px;
+    width: 200px;
+
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        align-self: center;
+    }
+
+    .value {
+        font-size: x-large;
+        text-align: right;
+        margin-top: 0.6rem;
+    }
+
+    a &:hover {
+        box-shadow: var(--gw2helper-module-shadow-hover);
+    }
+
 }
