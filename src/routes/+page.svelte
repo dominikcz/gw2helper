@@ -26,6 +26,12 @@
 	function has(account, content: string): boolean {
 		return account.access.includes(content);
 	}
+
+	function getTitle(currency) {
+		return `<h4>${currency.name} (${currency.id})<small> - Click for wiki</small></h4>
+			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
+			<p>${currency.description}</p>`;
+	}
 </script>
 
 <h1>Home</h1>
@@ -104,19 +110,15 @@
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
-			<a
-				href={`https://wiki.guildwars2.com/wiki/${currency.name}`}
-				target="_blank"
-				title={`${currency.name} (${currency.id})- Click for wiki\r\n${currency.depreciated ? '\r\nDEPRECIATED: ' + currency.depreciationReason + '\r\n' : ''}\r\n${currency.description}`}
-			>
-				<div class="currency" class:depreciated={currency.depreciated}>
-					<span class="currency-name">{currency.name}</span>
+			<a href={`https://wiki.guildwars2.com/wiki/${currency.name}`} target="_blank">
+				<div class="currency" class:depreciated={currency.depreciated} title={getTitle(currency)}>
+					<span class="currency-name" title={getTitle(currency)}>{currency.name}</span>
 					<div class="currency-value">
 						{#if currency.id == 1}
 							<Price value={currency.value} />
 						{:else}
 							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-							<img src={currency.icon} alt={currency.name} />
+							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} />
 						{/if}
 					</div>
 				</div>

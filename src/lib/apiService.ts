@@ -240,7 +240,7 @@ const items = (x: string) => {
 const account = () => {
     return new Promise((resolve) => {
         Promise.all([apiClient("/v2/account", `v=${SCHEMA_VERSION}`), wallet()]).then(([_acc, _wal]) => {
-            console.log('acc', {_acc, _wal})
+            // console.log('acc', {_acc, _wal})
             _acc.created_local = new Date(_acc.created).toLocaleString();
             _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
 
