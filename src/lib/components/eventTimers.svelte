@@ -106,6 +106,7 @@
 	.event-timer {
 		display: flex;
 		flex-flow: column nowrap;
+		overflow-x: scroll;
 		.category {
 			width: 100%;
 			h3 {
@@ -115,7 +116,8 @@
 		.event-bar {
 			display: flex;
 			flex-flow: row nowrap;
-			height: 3rem;
+			min-height: 3rem;
+			min-width: 1200px;
 			.event {
 				display: flex;
 				flex-flow: column nowrap;

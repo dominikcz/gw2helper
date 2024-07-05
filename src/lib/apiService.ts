@@ -8,6 +8,8 @@ const CACHE_TIMEOUT = 15 * 60;
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
 const INVALID_ACHIEVES_IDS: number[] = [];
 
+const SCHEMA_VERSION='2019-12-19T00:00:00.000Z'; // or 'latest'?
+
 const ignoreCache =
     typeof window != 'undefined'
         ? new URLSearchParams(window.location.search).get('ignore-cache') == '1'
@@ -236,7 +238,28 @@ const items = (x: string) => {
 };
 
 const account = () => {
-    return apiClient("/v2/account", "");
+    return new Promise((resolve) => {
+        Promise.all([apiClient("/v2/account", `v=${SCHEMA_VERSION}`), wallet()]).then(([_acc, _wal]) => {
+            console.log('acc', {_acc, _wal})
+            _acc.created_local = new Date(_acc.created).toLocaleString();
+            _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
+
+            // temporary fix for missing keys in API
+            if (!_acc.access.includes('SecretsOfTheObscure')){
+                if (_wal.find(x => [72, 73, 75].includes(x.id) && x.value > 0)){
+                    _acc.access.push('SecretsOfTheObscure')
+                }
+            }
+            // total guess ;)
+            if (!_acc.access.includes('JanthirWilds')){
+                if (_wal.find(x => (x.id> 75) && x.value > 0)){
+                    _acc.access.push('JanthirWilds')
+                }
+            }
+            
+            resolve(_acc)
+        });
+    });
 };
 
 const sharedInventory = async () => {

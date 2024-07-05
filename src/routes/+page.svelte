@@ -33,7 +33,8 @@
 <h2>Account info</h2>
 <Awaiter promise={data.account} let:result>
 	<h3>{result.name}</h3>
-	<span>Created at <span>{result.created}</span></span>
+	<span>Created at <span>{result.created_local}</span></span>
+	<span>Last change <span>{result.last_modified_local}</span></span>
 
 	<WidgetsGroup name="Time spent">
 		<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
@@ -74,7 +75,7 @@
 
 		{#if has(result, 'SecretsOfTheObscure')}
 			<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki">
-				<WidgetImg title="Secrets Of the Obscure" url={`${base}/assets/Secrets_of_the_Obscure_logo.png`} />
+				<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/Secrets_of_the_Obscure_logo.png`} />
 			</Linkable>
 		{/if}
 
@@ -86,7 +87,7 @@
 	</WidgetsGroup>
 
 	<WidgetsGroup name="Levels">
-		<WidgetInfo title="Fractas" value={result.fractal_level} />
+		<WidgetInfo title="Fractals" value={result.fractal_level} />
 		<WidgetInfo title="WvW" value={result.wvw_rank} />
 	</WidgetsGroup>
 </Awaiter>
