@@ -6,5 +6,5 @@
 - trading post
 - colors (dyes)
 
-- handle 403 errors
++ handle 403 errors
 - pvp
