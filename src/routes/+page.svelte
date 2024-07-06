@@ -28,7 +28,7 @@
 	}
 
 	function getTitle(currency) {
-		return `<h4>${currency.name} (${currency.id}) - <a class="tooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">Click for wiki</a></h4>
+		return `<h4>${currency.name} (${currency.id}) - <a class="autotooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">Click for wiki</a></h4>
 			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
 			<p>${currency.description}</p>`;
 	}
@@ -53,43 +53,43 @@
 
 			<WidgetsGroup name="Accessible content">
 				{#if has(result, 'PlayForFree')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Play for free" url={`${base}/assets/400px-GW2Logo_new.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'GuildWars2')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Base game" url={`${base}/assets/400px-GW2Logo_new.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'HeartOfThorns')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Heart Of Thorns" url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'PathOfFire')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Path Of Fire" url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'EndOfDragons')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="End Of Dragons" url={`${base}/assets/400px-EoD_Texture_Trans.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'SecretsOfTheObscure')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/Secrets_of_the_Obscure_logo.png`} />
 					</Linkable>
 				{/if}
 
 				{#if has(result, 'JanthirWilds')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki">
+					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki" class="autotooltip">
 						<WidgetImg title="Janthir Wilds" url={`${base}/assets/400px-Janthir_Wilds_logo.png`} />
 					</Linkable>
 				{/if}
@@ -111,15 +111,15 @@
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
-			<a href={helperUtils.wikiLink(currency.name)} target="_blank">
-				<div class="currency" class:depreciated={currency.depreciated} title={getTitle(currency)}>
-					<span class="currency-name" title={getTitle(currency)}>{currency.name}</span>
+			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
+				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)}>
+					<span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
 					<div class="currency-value">
 						{#if currency.id == 1}
 							<Price value={currency.value} />
 						{:else}
 							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} />
+							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip"/>
 						{/if}
 					</div>
 				</div>

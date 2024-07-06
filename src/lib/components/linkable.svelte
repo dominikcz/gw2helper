@@ -4,7 +4,7 @@
 </script>
 
 {#if link}
-	<a href={link} title={linkTitle || ''} target="_blank">
+	<a href={link} title={linkTitle || ''} target="_blank" {...$$restProps}>
 		<slot />
 	</a>
 {:else}

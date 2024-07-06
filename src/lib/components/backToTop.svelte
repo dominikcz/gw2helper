@@ -26,7 +26,7 @@
 		bottom: 1rem;
 		cursor: pointer;
 		transition-duration: 300ms;
-		z-index: 999;
+		z-index: 9999;
 		background-color: transparent;
 		border: none;
 		padding: 0;

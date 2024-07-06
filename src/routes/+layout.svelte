@@ -9,7 +9,7 @@
 
 	import '$lib/scss/gw2.scss';
 	import Navigation from '$lib/components/navigation.svelte';
-	import Tooltip from '$lib/components/tooltip.svelte';
+	import AutoTooltip from '$lib/components/autoTooltip.svelte';
 
 	export let data;
 	const defaultTitle = 'GW2 Helper';
@@ -52,7 +52,7 @@
 	<title>{title}</title>
 </svelte:head>
 
-<Tooltip />
+<AutoTooltip />
 
 <header>
 	<img src="{base}/assets/heart.png" alt="logo" />
