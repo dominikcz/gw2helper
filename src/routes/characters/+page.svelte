@@ -8,8 +8,16 @@
 	let filter = '';
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
+	function professionIcon(name) {
+		return `${base}/assets/professions/${name}_icon.png`;
+	}
+
 	function icon(name) {
 		return `${base}/assets/${name}`;
+	}
+
+	function craftIcon(name){
+		return `${base}/assets/craft/${name}_tango_icon_48px.png`;
 	}
 
 	function iconScale(createdAt) {
@@ -30,13 +38,13 @@
 			<h2>{char.name}</h2>
 			<section>
 				<h4>{char.profession} lvl. {char.level}</h4>
-				<div class="sect-img" style="background-image: url({icon(char.profession + '_icon.png')});"></div>
+				<div class="sect-img" style="background-image: url({professionIcon(char.profession)});"></div>
 				<div class="sect-info">
 					<div class="info">{char.gender} {char.race}</div>
 					{#if char.crafting}
 						<ul class="info icons">
 							{#each char.crafting as craft}
-								<li><img src="{base}/assets/icons/{craft.discipline}_tango_icon_48px.png" />{craft.discipline}: {craft.rating}</li>
+								<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
 							{/each}
 						</ul>
 					{/if}
@@ -73,6 +81,7 @@
 		justify-content: space-around;
 		gap: 1rem;
 		background-color: #dcdcdc;
+		height: fit-content;
 		h2 {
 			width: 100%;
 			margin: 0;
@@ -90,7 +99,7 @@
 			flex-flow: column nowrap;
 			align-items: center;
 			justify-content: center;
-			row-gap: 0.2rem;
+			row-gap: 0.6rem;
 			ul{
 				margin: 0.2rem 0;
 			}
@@ -108,10 +117,11 @@
 			background-repeat: no-repeat;
 			justify-content: center;
 			align-items: center;
-			padding: 0;
+			gap: 0.6rem;
 
 			h4 {
 				width: 128px;
+				margin: 0;
 			}
 			ul {
 				margin: 1rem 0;
@@ -120,7 +130,7 @@
 				padding: 0;
 				&.icons {
 					img {
-						height: 1.6rem;
+						height: 1.4rem;
 						vertical-align: middle;
 						margin: 2px 5px 2px 0;
 					}
@@ -154,13 +164,12 @@
 
 			.sect-img {
 				background-position-y: center;
-				width: 100px;
 			}
 			section {
-				min-width: 400px;
+				min-width: 370px;
 				flex-flow: column wrap;
 				column-gap: 0.5rem;
-				max-height: 180px;
+				max-height: 220px;
 				align-items: flex-start;
 				justify-content: center;
 			}

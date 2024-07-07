@@ -112,7 +112,7 @@
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
 			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
-				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)}>
+				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
 					<span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
 					<div class="currency-value">
 						{#if currency.id == 1}

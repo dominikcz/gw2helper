@@ -148,4 +148,7 @@
 	#settings{
 		background: url(/gw2helper/assets/150px-construction.png) center right no-repeat;
 	}
+	.autotooltip-wide{
+		width: 300px;
+	}
 </style>

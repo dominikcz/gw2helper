@@ -5,6 +5,7 @@
 	let x;
 	let y;
 	let ref;
+	let autotooltipClass = '';
 
 	$: visible = title != '';
 
@@ -15,16 +16,23 @@
 	function mouseOver(event) {
 		let elem = event.target;
 		let _title = '';
+		let _class = '';
+		let __class = '';
 		// looking up hierarchy
 		do {
 			_title = elem.getAttribute('data-autotooltip');
+			__class = elem.getAttribute('data-autotooltip-class');
+			if (__class) {
+				_class = __class;
+			}
 			if (!_title) {
 				elem = elem.parentElement;
 			}
 		} while (!_title && elem != null);
 
 		title = _title ? _title : '';
-		updateXY(event.pageX, event.pageY);
+		autotooltipClass = _class;
+		mouseMove(event);
 		event.stopPropagation();
 	}
 
@@ -35,7 +43,8 @@
 
 			const rect = event.target.getBoundingClientRect();
 			x = event.layerX + rect.x + 40;
-			y = event.layerY + rect.y - 5;
+			y = event.layerY + rect.y + 5;
+			updateXY()
 		}
 	}
 
@@ -48,7 +57,9 @@
 	}
 
 	function mouseMove(event) {
-		updateXY(event.pageX, event.pageY);
+		x = event.pageX + 15;
+		y = event.pageY + 5;
+		updateXY();
 	}
 
 	function mouseLeave() {
@@ -68,28 +79,30 @@
 		console.log('autotooltip', count);
 	}
 
-	async function updateXY(evX, evY) {
+	async function updateXY() {
 		if (ref) {
 			const rect = ref.getBoundingClientRect();
 
-			x = evX + 10;
-			y = evY - 5;
-			
-			//nice, but flickers :(
-			// if (rect.x + rect.width + 5 > window.innerWidth) {
-			// 	x = window.innerWidth - rect.width - 10;
-			// }
-			// if (rect.y + rect.height + 5 > window.innerHeight){
-			// 	y = evY - rect.height - 10; 
-			// }
+			let newX = x;
+			let newY = y;
+			// console.log('updateXY', [evY, window.innerHeight, ])
+			if (newX + rect.width > window.innerWidth) {
+				newX = window.innerWidth - rect.width - 10;
+				// console.log(newX, [evX, window.innerWidth])
+			}
+			if (newY + rect.height > window.innerHeight + window.scrollY){
+				newY = y - rect.height - 10; 
+			}
+			ref.style.left = `${newX}px`;
+			ref.style.top = `${newY}px`;
 		}
 	}
 </script>
 
-<svelte:window on:mouseover|capture={mouseOver} on:mouseleave={mouseLeave} on:mousemove|capture={mouseMove} on:touchstart={touchStart} />
+<svelte:window on:mouseover|capture={mouseOver} on:mouseleave={mouseLeave} on:mousemove|capture={mouseMove} on:touchstart|nonpassive={touchStart} />
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-<div bind:this={ref} on:touchstart={tooltipTouchStart} class:visible style="top: {y}px; left: {x}px;">
+<div bind:this={ref} on:touchstart={tooltipTouchStart} class:visible class={autotooltipClass} >
 	{@html title}
 </div>
 
