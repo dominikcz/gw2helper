@@ -32,8 +32,8 @@ let fetchOptions = {
     baseURL: apiUrl,
     timeout: 10000,
     expectJson: true,
-    onError({ request, error, options }) {
-        Logger.error(`apiClient response error ${error.code}: ${error.message} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`);
+    onError(request, response, options) {
+        Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: '+response.status+')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
     },
     fetchFunction: fetch,
     debug: false,
@@ -105,7 +105,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         });
         if (response.status >= 400) {
             Logger.warn('error loading data', { status: response.status, url: response.url });
-            notifyOnError(req, new Error(`HTTP error, status = ${response.status}`), _options);
+            // notifyOnError(req, response, _options);
             cachedValue = [];
         } else if (response.ok) {
             let data;
