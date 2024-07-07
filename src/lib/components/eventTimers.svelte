@@ -1,12 +1,13 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
-import wxdates from '$lib/wxjs_dates';
+	import wxdates from '$lib/wxjs_dates';
 	export let wikiData;
 
 	const et = new Map();
 
 	for (const [key, value] of Object.entries(wikiData)) {
 		let category = value['category'] || '';
+		console.log('category', category)
 		if (category) {
 			if (!et.has(category)) {
 				et.set(category, []);
@@ -14,29 +15,39 @@ import wxdates from '$lib/wxjs_dates';
 			let list = et.get(category);
 			list.push({
 				name: value.name,
-				segments: getCurrentWindow(fill24h(value.segments, value.sequences)),
-			});
+				segments: getCurrentWindow(
+					fillCalendar(value.segments, value.sequences, 48)
+					, 2, value.name == 'World bosses'),
+			}
+		  );
 		}
 	}
 	// console.log('et', et);
 
-	function getCurrentWindow(segments, hours = 2) {
+	function getCurrentWindow(segments, hours = 2, log = false) {
 		const currTime = new Date();
 		const dt0 = new Date(currTime);
-		dt0.setUTCMilliseconds(0);
-		dt0.setUTCSeconds(0);
-		dt0.setUTCMinutes(0);
-		dt0.setUTCHours(Math.floor(dt0.getUTCHours() / hours) * hours);
+		dt0.setUTCHours(Math.floor(dt0.getUTCHours() / hours) * hours, 0, 0, 0);
 		const dt1 = wxdates.dateAdd(dt0, 'hours', hours);
 		const dt0t = dt0.getTime();
 		const dt1t = dt1?.getTime();
-		// console.log('filtering', [dt0.toLocaleTimeString(), dt1.toLocaleTimeString(), hours]);
+		if (log) {
+			console.log('filtering', [dt0.toLocaleTimeString(), dt1.toLocaleTimeString(), hours]);
+
+		}
 
 		return segments.filter(
-			(x) =>
-				(x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
-				(x.start.getTime() < dt0t && x.stop.getTime() > dt0t) ||
-				(x.start.getTime() < dt1t && x.stop.getTime() > dt1t)
+			(x) => {
+				const ok = (x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
+				(x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||
+				(x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||
+				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t) ;
+				if (log) {
+					console.log('filter', [x.name, x.start, ok])
+				}
+				return ok;				
+			}
+				
 		);
 	}
 
@@ -49,11 +60,10 @@ import wxdates from '$lib/wxjs_dates';
 		return { ...ev, start: t0, stop: t1, duration };
 	}
 
-	function fill24h(segments, sequences) {
-		const t0 = new Date();
-		let t = new Date(t0);
-		const tmax = wxdates.dateAdd(t0, 'hours', 24);
-		t.setUTCHours(0, 0, 0, 0); // Time 00:00:00.000 UTC
+	function fillCalendar(segments, sequences, hours = 24) {
+		const t = new Date();
+		t.setUTCHours(0, 0, 0, 0); // reset time part to 00:00:00.000 UTC
+		const tmax = wxdates.dateAdd(t, 'hours', hours);
 		const sched = [];
 
 		for (const def of sequences.partial) {
@@ -72,7 +82,7 @@ import wxdates from '$lib/wxjs_dates';
 				//     break;
 				// }
 			}
-		} while (t.getTime() < tmax?.getTime() && i < 240);
+		} while (t.getTime() < tmax?.getTime() && i < 10*hours);
 		// console.log('repeated', i);
 		return sched;
 	}
@@ -94,6 +104,7 @@ import wxdates from '$lib/wxjs_dates';
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
 								<span class="chatlink">{segment.chatlink}</span>
+								<span>{`${segment.start.toLocaleString()} - ${segment.stop.toLocaleString()}`}</span>
 							{/if}
 						</div>
 					{/each}
@@ -105,7 +116,7 @@ import wxdates from '$lib/wxjs_dates';
 
 <style lang="scss">
 	.event-timer {
-		display: flex;
+		// display: flex;
 		flex-flow: column nowrap;
 		overflow-x: scroll;
 		.category {
