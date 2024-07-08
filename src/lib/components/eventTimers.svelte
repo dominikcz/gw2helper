@@ -1,13 +1,28 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
+	import { onDestroy } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
 	export let wikiData;
+	let currentTimePos = 0;
+	let currTime = new Date();
+	let interval = setInterval(() => {
+		currTime = new Date();
+		const dt0 = new Date();
+		dt0.setHours(dt0.getHours(), 0, 0, 0);
+		const diff = wxdates.minutesBetween(dt0, currTime);
+		console.log('interval', [getHour(dt0), getHour(currTime), diff]);
+		currentTimePos = (diff * 100) / 120;
+	}, 1000);
+
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 
 	const et = new Map();
 
 	for (const [key, value] of Object.entries(wikiData)) {
 		let category = value['category'] || '';
-		console.log('category', category)
+		console.log('category', category);
 		if (category) {
 			if (!et.has(category)) {
 				et.set(category, []);
@@ -15,40 +30,28 @@
 			let list = et.get(category);
 			list.push({
 				name: value.name,
-				segments: getCurrentWindow(
-					fillCalendar(value.segments, value.sequences, 48)
-					, 2, value.name == 'World bosses'),
-			}
-		  );
+				segments: getCurrentWindow(fillCalendar(value.segments, value.sequences, 48), 2),
+			});
 		}
 	}
 	// console.log('et', et);
 
-	function getCurrentWindow(segments, hours = 2, log = false) {
-		const currTime = new Date();
-		const dt0 = new Date(currTime);
-		dt0.setUTCHours(Math.floor(dt0.getUTCHours() / hours) * hours, 0, 0, 0);
+	function getCurrentWindow(segments, hours = 2) {
+		const dt0 = new Date();
+		dt0.setUTCHours(dt0.getUTCHours(), 0, 0, 0);
 		const dt1 = wxdates.dateAdd(dt0, 'hours', hours);
 		const dt0t = dt0.getTime();
 		const dt1t = dt1?.getTime();
-		if (log) {
-			console.log('filtering', [dt0.toLocaleTimeString(), dt1.toLocaleTimeString(), hours]);
 
-		}
-
-		return segments.filter(
-			(x) => {
-				const ok = (x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
+		return segments.filter((x) => {
+			const ok =
+				(x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
 				(x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||
 				(x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||
-				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t) ;
-				if (log) {
-					console.log('filter', [x.name, x.start, ok])
-				}
-				return ok;				
-			}
-				
-		);
+				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t);
+			// console.log('filter', [x.name, x.start, ok])
+			return ok;
+		});
 	}
 
 	function getEventData(ev, duration, time) {
@@ -82,13 +85,44 @@
 				//     break;
 				// }
 			}
-		} while (t.getTime() < tmax?.getTime() && i < 10*hours);
+		} while (t.getTime() < tmax?.getTime() && i < 10 * hours);
 		// console.log('repeated', i);
+		return sched;
+	}
+
+	function getHour(dt) {
+		return dt.toLocaleTimeString('pl-PL').slice(0, 5);
+	}
+
+	function getTimeSegments(hours = 2) {
+		let dt = new Date();
+		const sched = [];
+		const duration = 15;
+		dt.setUTCHours(dt.getUTCHours(), 0, 0, 0);
+		for (let i = 0; i < hours * 4; i++) {
+			let dt1 = wxdates.dateAdd(dt, 'minutes', duration);
+			sched.push({ name: getHour(dt), start: dt, stop: dt1, duration });
+			dt = new Date(dt1);
+		}
 		return sched;
 	}
 </script>
 
 <main class="event-timer">
+	<div class="event-bar compact">
+		<div class="event-pointer" title="Current time" style="left: {currentTimePos}%;">
+			<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
+		</div>
+	</div>
+	<div class="event-bar compact time">
+		{#each getTimeSegments() as segment}
+			<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
+				{#if segment.name}
+					<span>{segment.name}</span>
+				{/if}
+			</div>
+		{/each}
+	</div>
 	{#each et.entries() as [cat, eventsList]}
 		<div class="category">
 			<h3>{cat}</h3>
@@ -103,9 +137,11 @@
 						>
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
-								<span class="chatlink">{segment.chatlink}</span>
-								<span>{`${segment.start.toLocaleString()} - ${segment.stop.toLocaleString()}`}</span>
 							{/if}
+							{#if segment.chatlink}
+								<span class="chatlink">{segment.chatlink}</span>
+							{/if}
+							<span>{`${getHour(segment.start)} - ${getHour(segment.stop)}`}</span>
 						</div>
 					{/each}
 				</div>
@@ -116,6 +152,7 @@
 
 <style lang="scss">
 	.event-timer {
+		position: relative;
 		// display: flex;
 		flex-flow: column nowrap;
 		overflow-x: scroll;
@@ -123,18 +160,57 @@
 			width: 100%;
 			h3 {
 				background-color: var(--gw2helper-module);
+				padding: 0.3rem 0.6rem;
+				margin: 0;
 			}
+		}
+		.heading {
+			padding: 0.3rem 0.6rem;
+			display: inline-block;
 		}
 		.event-bar {
 			display: flex;
 			flex-flow: row nowrap;
 			min-height: 3rem;
 			min-width: 1200px;
+			&.compact {
+				min-height: auto;
+				.event {
+					margin: 0;
+					padding: 0.3rem 0 0.3rem 0.4rem;
+				}
+			}
 			.event {
 				display: flex;
 				flex-flow: column nowrap;
 				padding: 5px;
 			}
+			&.time {
+				.event {
+					border-left: 1px solid #333;
+				}
+			}
 		}
+	}
+
+	.event-pointer {
+		position: absolute;
+		z-index: 2;
+		height: 101%;
+		border-left: 2px solid red;
+		margin-left: -1px;
+		top: 0;
+		transition: left 1s ease-in-out;
+		cursor: help;
+	}
+
+	.event-pointer-time {
+		position: absolute;
+		background: red;
+		color: white;
+		font-weight: bold;
+		padding: 2px 6px;
+		margin-left: -2px;
+		white-space: nowrap;
 	}
 </style>
