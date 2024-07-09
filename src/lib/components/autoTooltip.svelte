@@ -117,7 +117,7 @@
 		min-width: 100px;
 		max-width: 300px;
 		z-index: 1000;
-		overflow: scroll;
+		overflow: clip;
 		display: none;
 		&.visible {
 			display: block;

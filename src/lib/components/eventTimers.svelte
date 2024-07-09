@@ -10,7 +10,7 @@
 		const dt0 = new Date();
 		dt0.setHours(dt0.getHours(), 0, 0, 0);
 		const diff = wxdates.minutesBetween(dt0, currTime);
-		console.log('interval', [getHour(dt0), getHour(currTime), diff]);
+		// console.log('interval', [getHour(dt0), getHour(currTime), diff]);
 		currentTimePos = (diff * 100) / 120;
 	}, 1000);
 
@@ -22,7 +22,6 @@
 
 	for (const [key, value] of Object.entries(wikiData)) {
 		let category = value['category'] || '';
-		console.log('category', category);
 		if (category) {
 			if (!et.has(category)) {
 				et.set(category, []);
@@ -43,15 +42,30 @@
 		const dt0t = dt0.getTime();
 		const dt1t = dt1?.getTime();
 
-		return segments.filter((x) => {
-			const ok =
+		const filtered = segments.filter(
+			(x) =>
 				(x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
 				(x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||
 				(x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||
-				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t);
-			// console.log('filter', [x.name, x.start, ok])
-			return ok;
+				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t)
+		);
+
+		filtered.forEach((x) => {
+			// for presentation purposes we have to adjust length of segments that start before dt0
+			if (x.start.getTime() < dt0t) {
+				const diff = wxdates.minutesBetween(x.start, dt0);
+				// we keep original start hour in x.start and adjust duration
+				x.duration -= diff;
+			}
+
+			// similarly for events that span outside our window
+			if (x.stop.getTime() > dt1t) {
+				const diff = wxdates.minutesBetween(x.start, dt1);
+				// we keep original start hour in x.stop and adjust duration
+				x.duration = diff;
+			}
 		});
+		return filtered;
 	}
 
 	function getEventData(ev, duration, time) {
@@ -108,7 +122,7 @@
 	}
 </script>
 
-<main class="event-timer">
+<div class="event-timer">
 	<div class="event-bar compact">
 		<div class="event-pointer" title="Current time" style="left: {currentTimePos}%;">
 			<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
@@ -148,47 +162,53 @@
 			{/each}
 		</div>
 	{/each}
-</main>
+</div>
 
 <style lang="scss">
 	.event-timer {
 		position: relative;
-		// display: flex;
+		display: flex;
 		flex-flow: column nowrap;
+		overflow-y: hidden;
 		overflow-x: scroll;
-		.category {
-			width: 100%;
-			h3 {
-				background-color: var(--gw2helper-module);
-				padding: 0.3rem 0.6rem;
-				margin: 0;
-			}
-		}
-		.heading {
+	}
+
+	.category {
+		width: 100%;
+		h3 {
+			background-color: var(--gw2helper-module);
 			padding: 0.3rem 0.6rem;
-			display: inline-block;
+			margin: 0;
 		}
-		.event-bar {
-			display: flex;
-			flex-flow: row nowrap;
-			min-height: 3rem;
-			min-width: 1200px;
-			&.compact {
-				min-height: auto;
-				.event {
-					margin: 0;
-					padding: 0.3rem 0 0.3rem 0.4rem;
-				}
-			}
+	}
+	.heading {
+		padding: 0.3rem 0.6rem;
+		display: inline-block;
+	}
+	.event-bar {
+		display: flex;
+		flex-flow: row nowrap;
+		min-height: 3rem;
+		min-width: 1200px;
+		&.compact {
+			min-height: auto;
 			.event {
-				display: flex;
-				flex-flow: column nowrap;
-				padding: 5px;
+				margin: 0;
+				padding: 0.3rem 0 0.3rem 0.4rem;
 			}
-			&.time {
-				.event {
-					border-left: 1px solid #333;
-				}
+		}
+		.event {
+			display: flex;
+			flex-flow: column nowrap;
+			padding: 5px;
+		}
+		&.time {
+			position: sticky;
+			top: 0;
+			background-color: #fff;
+			z-index: 1;
+			.event {
+				border-left: 1px solid #333;
 			}
 		}
 	}
@@ -212,5 +232,6 @@
 		padding: 2px 6px;
 		margin-left: -2px;
 		white-space: nowrap;
+		top: -1.4rem;
 	}
 </style>
