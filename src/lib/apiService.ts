@@ -329,8 +329,11 @@ const currencies = async () => {
 }
 
 const wallet = async () => {
-    const [_curr, _wallet] = await Promise.all([currencies(), apiClient("/v2/account/wallet", "")]);
-    return mergeById(_curr, _wallet);
+    return new Promise((resolve) => {
+        Promise.all([currencies(), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
+            resolve(mergeById(_curr, _wallet))
+        });
+    });
 }
 
 const init = (apiKey: string, options?: object) => {
