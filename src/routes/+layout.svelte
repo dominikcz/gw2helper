@@ -97,6 +97,11 @@
 	<div class="waypoint" title="waypoint to top"></div>
 </BackToTop>
 
+<footer>
+	<p>This unofficial site includes art and other assets that are © 2015 ArenaNet, Inc. All rights reserved. All other trademarks are the property of their respective owners. This site uses also images and data from <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a></p>
+	<p>© ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire, Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure and all associated logos, designs, and composite marks are trademarks or registered trademarks of NCSOFT Corporation.</p>
+</footer>
+
 <style lang="scss" global>
 	.line {
 		display: flex;
@@ -150,5 +155,10 @@
 	}
 	.autotooltip-wide{
 		width: 300px;
+	}
+	footer{
+		background-color: #aaa;
+		font-size: smaller;
+		padding: 0.3rem 1rem;
 	}
 </style>

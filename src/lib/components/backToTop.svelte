@@ -23,7 +23,7 @@
 	.back-to-top {
 		position: fixed;
 		right: 1rem;
-		bottom: 1rem;
+		bottom: 2rem;
 		cursor: pointer;
 		transition-duration: 300ms;
 		z-index: 9999;

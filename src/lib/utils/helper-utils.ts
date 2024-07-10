@@ -84,7 +84,7 @@ function hoursPlayed(time) {
 }
 
 function wikiLink(name){
-    return `https://wiki.guildwars2.com/wiki/${name}`;
+    return name ? `https://wiki.guildwars2.com/wiki/${name}` : '#';
 }
 
 export default {

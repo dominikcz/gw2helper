@@ -26,7 +26,7 @@
 
 <section>
 	<label for="filter">Search:</label>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what are you looking for?" />
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 	<button on:click={sortBySlots}>sort by quantity</button> -->
 	<details>

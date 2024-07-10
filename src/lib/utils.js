@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_localstorage";
-import { KEY_NAME, KEY_HIST } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS } from "$lib/consts";
 
 function readApiKey() {
     let key = '';
@@ -29,9 +29,19 @@ function getKeyHist() {
     return ls.getObject(KEY_HIST, []);
 }
 
+function readEventTimerSettings(){
+    return ls.getObject(EVENT_TIMER_SETTINGS, {});
+}
+
+function saveEventTimerSettings(settings){
+    return ls.set(EVENT_TIMER_SETTINGS, settings);
+}
+
 export default {
     readApiKey,
     saveApiKey,
     deleteApiKey,
     getKeyHist,
+    readEventTimerSettings,
+    saveEventTimerSettings,
 }

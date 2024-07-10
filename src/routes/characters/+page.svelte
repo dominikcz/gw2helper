@@ -30,7 +30,7 @@
 </script>
 
 <h1>Characters</h1>
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what are you looking for?" />
 
 <Awaiter promise={data.characters} let:result>
 	{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}

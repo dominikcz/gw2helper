@@ -1,8 +1,58 @@
 <script>
-	import EventTimers from "$lib/components/eventTimers.svelte";
-	import { eventData } from "./metas";
+	import EventTimers from '$lib/components/eventTimers.svelte';
+	import { eventData } from './metas';
+	import utils from '$lib/utils';
+
+	const settings = utils.readEventTimerSettings();
+
+	let showChatLinks = settings.showChatLinks == undefined ? true : settings.showChatLinks;
+	let showEventTimes = settings.showEventTimes == undefined ? true : settings.showEventTimes;
+	let showCategories = settings.showCategories == undefined ? true : settings.showCategories;
+	let showHeadings = settings.showHeadings == undefined ? true : settings.showHeadings;
+
+	function saveSettings() {
+		utils.saveEventTimerSettings({
+			showChatLinks,
+			showEventTimes,
+			showCategories,
+			showHeadings,
+		});
+	}
 </script>
 
-<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction"/>
+<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
 
-<EventTimers wikiData={eventData} />
+<fieldset>
+	<legend>Settings</legend>
+
+	<label><input type="checkbox" id="chat-links" bind:checked={showChatLinks} /> Show chat links</label>
+	<label><input type="checkbox" id="event-times" bind:checked={showEventTimes} /> Show event times</label>
+	<label><input type="checkbox" id="categories" bind:checked={showCategories} /> Show categories</label>
+	<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> Show headings</label>
+	<button on:click={saveSettings}>Save settings</button>
+</fieldset>
+
+<EventTimers wikiData={eventData} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} />
+
+<style lang="scss">
+	fieldset {
+		margin: 0;
+		display: flex;
+		flex-flow: column nowrap;
+		row-gap: 0.2rem;
+	}
+	button{
+		margin-top: 0.5rem;
+	}
+
+	@media (min-width: 420px) {
+		fieldset {
+			flex-flow: row wrap;
+			column-gap: 0.5rem;
+			align-items: center;
+		}
+		button{
+			margin: 0 0 0 0.5rem;
+		}
+	}
+</style>

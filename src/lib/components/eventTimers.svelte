@@ -3,6 +3,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
 	export let wikiData;
+	export let showEventTimes = true;
+	export let showChatLinks = true;
+	export let showCategories = true;
+	export let showHeadings = true;
 
 	let eventsRef;
 
@@ -22,6 +26,7 @@
 			if (dt0.getHours() != currTime.getHours()) {
 				console.log('reset.');
 				currentTimePos = 0;
+				eventsRef.scrollLeft = 0;
 				init();
 			} else {
 				currentTimePos = (diff / 120) * width;
@@ -53,6 +58,7 @@
 				let list = et.get(category);
 				list.push({
 					name: value.name,
+					link: value.link,
 					segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 48), 2),
 				});
 			}
@@ -142,7 +148,6 @@
 		let scroll = eventsRef.scrollLeftMax;
 		width = rect.width + scroll;
 	}
-
 </script>
 
 <svelte:window on:resize={hndResize} />
@@ -167,9 +172,17 @@
 
 	{#each et.entries() as [cat, eventsList]}
 		<div class="category">
-			<h3>{cat}</h3>
+			{#if showCategories}
+				<h3>{cat}</h3>
+			{/if}
 			{#each eventsList as event}
-				<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank">{event.name}</a>
+				{#if showHeadings}
+					{#if event.link}
+						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank">{event.name}</a>
+					{:else}
+						<span class="heading">{event.name}</span>
+					{/if}
+				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
 						<div
@@ -179,11 +192,13 @@
 						>
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
+								{#if showChatLinks && segment.chatlink}
+									<span class="chatlink">{segment.chatlink}</span>
+								{/if}
+								{#if showEventTimes}
+									<span>{`${getHour(segment.start)} - ${getHour(segment.stop)}`}</span>
+								{/if}
 							{/if}
-							{#if segment.chatlink}
-								<span class="chatlink">{segment.chatlink}</span>
-							{/if}
-							<span>{`${getHour(segment.start)} - ${getHour(segment.stop)}`}</span>
 						</div>
 					{/each}
 				</div>
@@ -199,20 +214,22 @@
 		flex-flow: column nowrap;
 		overflow-y: hidden;
 		overflow-x: scroll;
-		height: 2000px;
 	}
 
 	.category {
 		width: 100%;
 		h3 {
-			background-color: var(--gw2helper-module);
+			background-color: var(--gw2helper-module-dark);
 			padding: 0.3rem 0.6rem;
 			margin: 0;
 		}
 	}
 	.heading {
-		padding: 0.3rem 0.6rem;
+		padding: 0.6rem 0.6rem;
 		display: inline-block;
+		background-color: var(--gw2helper-module);
+		width: 100%;
+		// font-weight: bold;
 	}
 	.event-bar {
 		display: flex;
@@ -231,7 +248,8 @@
 			display: flex;
 			flex-flow: column nowrap;
 			padding: 5px;
-			word-break: break-all;
+			// word-break: break-all;
+			overflow-wrap: break-word;
 		}
 		&.time {
 			position: sticky;

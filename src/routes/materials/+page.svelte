@@ -10,7 +10,7 @@
 
 <section>
 	<label for="filter">Search:</label>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what you are looking for?" />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what are you looking for?" />
 	<details>
 		<summary>Search help</summary>
 		<p>Knock yourself out with queries like:</p>

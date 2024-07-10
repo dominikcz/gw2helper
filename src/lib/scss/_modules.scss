@@ -1,15 +1,15 @@
 details {
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.5rem 0;
 
     display: flex;
 
     &[open] {
         background-color: var(--gw2helper-module);
-        padding-bottom: 1em;
+        padding-bottom: 1rem;
     }
 
     p {
-        margin: 1rem 0;
+        margin: 1rem;
     }
 
     ul {

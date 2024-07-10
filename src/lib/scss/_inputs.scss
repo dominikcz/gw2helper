@@ -24,6 +24,11 @@ input, button {
 	}
 }
 
+input[type=checkbox]{
+	height: 1.2rem;
+	outline-offset: 2px;
+}
+
 input.apikey {
   width: 80%;
   max-width: 36rem;

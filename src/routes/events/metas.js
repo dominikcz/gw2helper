@@ -20,6 +20,7 @@ export const eventData = {
     dn: {
         category: "Core Tyria",
         name: "Day and night",
+        link: "Day and night",
         segments: {
             1: { name: "Day", link: "Day and night", bg: [255,255,255] },
             2: { name: "Dusk", link: "Day and night", bg: [[255,255,255], [122,134,171]] },
