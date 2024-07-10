@@ -1,6 +1,11 @@
 <script>
-	import Awaiter from '$lib/components/awaiter.svelte';
+    import helperUtils from '$lib/utils/helper-utils';
+	import SearchInput from '$lib/components/searchInput.svelte';
+    import Awaiter from '$lib/components/awaiter.svelte';
 	export let data;
+
+    let filter = '';
+    const fields = ['name', 'description'];
 </script>
 
 <img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" />
@@ -54,18 +59,25 @@ bits (array of objects, optional) - Contains a number of objects, each correspon
     text (string, optional) - The text for the bit, if type is Text.
 point_cap (number, optional) - The maximum number of AP that can be rewarded by an achievement flagged as Repeatable. -->
 
+<section>
+	<label for="filter">Filter:</label>
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
+</section>
+
 <Awaiter promise={data.achievements} let:result>
 	<div class="achiev-list">
-		{#each result as achiev (achiev.id)}
+		{#each helperUtils.filterCollection(result, fields, filter) as achiev (achiev.id)}
 			<div class="achiev">
-				<div>{achiev.name}</div>
-				<div>{achiev.description}</div>
-				<div>{achiev.type}</div>
-				<div>{achiev.tiers}</div>
-				<div>{achiev.rewards}</div>
-				<div>{achiev.point_cap}</div>
-				<div>{achiev.bits}</div>
-				<div>{achiev.current} / {achiev.max}</div>
+                {#if achiev.icon}<img src={achiev.icon} />{/if}
+				<h3>{achiev.name} <small>({achiev.id})</small></h3>
+				{#if achiev.description}<span>{achiev.description}</span>{/if}
+				{#if achiev.type != "Default"}<div>{achiev.type}</div>{/if}
+				{#if achiev.tiers}<div>TIERS: {JSON.stringify(achiev.tiers)}</div>{/if}
+                {#if achiev.rewards}<div>REWARDS: {JSON.stringify(achiev.rewards)}</div>{/if}
+				{#if achiev.point_cap}<div>{achiev.point_cap}</div>{/if}
+                {#if achiev.bits}<div>BITS: {JSON.stringify(achiev.bits)}</div>{/if}
+                {#if achiev.bits_done}<div>BITS_DONE: {JSON.stringify(achiev.bits_done)}</div>{/if}
+				{#if achiev.current}<div>{achiev.current} / {achiev.max}</div>{/if}
 			</div>
 		{/each}
 	</div>
@@ -75,8 +87,18 @@ point_cap (number, optional) - The maximum number of AP that can be rewarded by 
 	.achiev-list {
 		display: flex;
         flex-flow: column nowrap;
+        gap: 1rem;
+        margin: 0 0 1rem 0;
 	}
 	.achiev {
 		display: flex;
+        flex-flow: column nowrap;
+        background-color: var(--gw2helper-module);
+        padding: 0.5rem;
+        gap: 0.2rem;
+        img{
+            width: 48px;
+            height: 48px;
+        }
 	}
 </style>

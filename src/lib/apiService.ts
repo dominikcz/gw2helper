@@ -22,9 +22,9 @@ interface CacheEntry {
 }
 
 const _items = ls.getObject(ITEMS_CACHE, null);
-const _achievs = ls.getObject(ACHIEVES_CACHE, null);
+const _achieves = ls.getObject(ACHIEVES_CACHE, null);
 const itemsCache = _items ? new Map(_items) : new Map();
-const achievesCache = _achievs ? new Map(_items) : new Map();
+const achievesCache = _achieves ? new Map(_achieves) : new Map();
 
 let _apiKey = "";
 let fetchOptions = {
@@ -33,7 +33,7 @@ let fetchOptions = {
     timeout: 10000,
     expectJson: true,
     onError(request, response, options) {
-        Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: '+response.status+')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
+        Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: ' + response.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
     },
     fetchFunction: fetch,
     debug: false,
@@ -292,17 +292,19 @@ const tokenInfo = async () => {
 };
 
 const achievements = async (all: boolean = false) => {
-    let data = await apiClient("/v2/account/achievements", "");
-    if (!all) {
-        data = data.filter(x => !x.done)
-    }
-    expandAchieves(data)
-    return data;
+    return new Promise((resolve) => {
+        Promise.all([apiClient("/v2/account/achievements", ""), apiClient("/v2/achievements", "")]).then(([_mine, _allIds]) => {
+            _mine.forEach(x => {
+                x.bits_done = x.bits;
+                delete x.bits;
+            });
+            resolve(expandAchieves(_mine, _allIds));
+        });
+    });
 };
 
 const achievementsInfo = async (ids: string) => {
-    let data = await apiClient("/v2/achievements", "ids=" + ids);
-    return data;
+    return apiClient("/v2/achievements", "ids=" + ids);
 };
 
 const currencies = async () => {
@@ -393,11 +395,15 @@ const expandItems = async (ids: Array<number>, collection) => {
     return data;
 };
 
-const expandAchieves = async (accountAchieves) => {
+const expandAchieves = async (accountAchieves, allIds) => {
     const knownIds = [...achievesCache.keys()];
-    const ids = accountAchieves.map(x => x.id).filter((x) => !INVALID_ACHIEVES_IDS.includes(x));
-    const missingIds = ids.filter((x) => !knownIds.includes(x));
-    const knownFromReqest = ids.filter((x) => knownIds.includes(x)).map((x) => achievesCache.get(x));
+    const _doneIds = accountAchieves.filter(x => x.done).map(x => x.id);
+    const _notDone = allIds.filter(x => !_doneIds.includes(x));
+    const missingIds = _notDone.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
+
+    const knownFromReqest = knownIds.map((x) => achievesCache.get(x));
+
+    // console.log('ids', [missingIds, achievesCache])
 
     const data = [];
     const batches = [];
@@ -407,10 +413,12 @@ const expandAchieves = async (accountAchieves) => {
             batches.push(batch.join(","));
         }
     } while (missingIds.length > 0);
-    // console.log('batches', batches)
+    // console.log('batches', batches.length)
+
     if (batches.length) {
         const tasks = batches.map((ids) => achievementsInfo(ids));
         const resp = (await Promise.all(tasks)).flat();
+        // console.log('resp', resp)
         resp.forEach((x) => {
             if (x) {
                 achievesCache.set(x.id, x);
@@ -422,6 +430,7 @@ const expandAchieves = async (accountAchieves) => {
     if (knownFromReqest.length) {
         data.push(...mergeById(knownFromReqest, accountAchieves));
     }
+    // console.log('expandAchieves', data);
     return data;
 };
 

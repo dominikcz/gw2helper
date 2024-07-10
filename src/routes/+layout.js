@@ -14,8 +14,6 @@ export async function load( { fetch } ) {
 			version: __VERSION__,
 			apiKey: key,
 			'apiService': apiService,
-			'account': apiService.account(),
-			'wallet': apiService.wallet(),
 			'tokenInfo': await apiService.tokenInfo(),
 		};
 	} else {
@@ -26,8 +24,6 @@ export async function load( { fetch } ) {
 				name: null,
 				permissions: [],
 			},
-			'account': {},
-			'wallet': []
 		};
 	}
 }
