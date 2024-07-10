@@ -46,6 +46,9 @@
 		flex-flow: column wrap;
 		align-items: center;
 		gap: 1rem;
+		:global(canvas) {
+			align-self: flex-start;
+		}
 	}
 	.guild-h {
 		display: flex;
@@ -64,13 +67,14 @@
 		flex-flow: column wrap;
 		gap: 0.3rem;
 	}
+
 	@media (min-width: 900px) {
 		.details {
 			height: 4rem;
 		}
 		.guild-header {
 			flex-flow: row nowrap;
-			height: 128px;
+			min-height: 128px;
 			gap: 1rem;
 		}
 		.guild-h {

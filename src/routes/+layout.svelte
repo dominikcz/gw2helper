@@ -134,7 +134,7 @@
 		}
 	}
 	main {
-		margin: 0 1rem;
+		margin: 0 1rem 1rem 1rem;
 		display: flex;
 		flex-flow: column nowrap;
 		row-gap: 1rem;
