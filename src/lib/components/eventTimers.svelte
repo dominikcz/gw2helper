@@ -7,6 +7,8 @@
 	export let showChatLinks = true;
 	export let showCategories = true;
 	export let showHeadings = true;
+	export let autoScroll = false;
+	export let updateInterval = 10;
 
 	let eventsRef;
 
@@ -20,6 +22,19 @@
 	init();
 
 	interval = setInterval(() => {
+		updatePointerPos();
+	}, updateInterval * 1000);
+
+	onMount(() => {
+		hndResize();
+	});
+
+	onDestroy(() => {
+		console.log('cleaning up');
+		clearInterval(interval);
+	});
+
+	function updatePointerPos(){
 		if (dt0) {
 			currTime = new Date();
 			const diff = wxdates.minutesBetween(dt0, currTime);
@@ -30,18 +45,18 @@
 				init();
 			} else {
 				currentTimePos = (diff / 120) * width;
+				// scroll to center if out of view:
+				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
+
+				// keep pointer positioned at center and scroll background
+				if (autoScroll && (currentTimePos != window.innerWidth - 16)) {
+					// console.log('autoscrolling...');
+					const elem = document.querySelector('.event-pointer');
+					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+				}
 			}
 		}
-	}, 1000);
-
-	onMount(() => {
-		hndResize();
-	});
-
-	onDestroy(() => {
-		console.log('cleaning up');
-		clearInterval(interval);
-	});
+	}
 
 	function init() {
 		et.clear();
@@ -147,6 +162,7 @@
 		const rect = eventsRef.getBoundingClientRect();
 		let scroll = eventsRef.scrollLeftMax;
 		width = rect.width + scroll;
+		updatePointerPos();		
 	}
 </script>
 
@@ -281,6 +297,7 @@
 		top: 0;
 		transition: left 1s ease-in-out;
 		cursor: help;
+		scroll-margin-top: 210px;
 	}
 
 	.event-pointer-time {
