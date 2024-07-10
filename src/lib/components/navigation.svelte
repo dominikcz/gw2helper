@@ -1,5 +1,7 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount } from 'svelte';
+	import ArrowBack from './arrowBack.svelte';
+	import ArrowForward from './arrowForward.svelte';
 	export let items = [];
 	export let active;
 	export let showScrollButtons = true;
@@ -8,61 +10,93 @@
 	let navRightVisible = showScrollButtons;
 
 	let navRef;
-	onMount(() =>{
+	onMount(() => {
 		hndScroll();
-	})
+	});
 
 	function hndScroll() {
 		const rect = navRef.getBoundingClientRect();
 		navLeftVisible = navRef.scrollLeft > 50;
-		navRightVisible = navRef.scrollLeft < rect.width - 50;
+		navRightVisible = navRef.scrollLeftMax > navRef.scrollLeft + 50;
+	}
+
+	function scrollLeft() {
+		// scroll to last elem with left < 0
+		let pos = 0;
+		let i = 0;
+		for (const child of navRef.children) {
+			const rect = child.getBoundingClientRect();
+			if (i > 0 && rect.left > 0) {
+				break;
+			} else {
+				pos = Math.abs(rect.left);
+			}
+			i++;
+		}
+		if (i >= 1) {
+			pos += 48;
+		}
+		navRef.scrollLeft -= pos;
+	}
+
+	function scrollRight() {
+		// scroll to 2nd elem with left > 0
+		let pos = 50;
+		let i = 0;
+		for (const child of navRef.children) {
+			const rect = child.getBoundingClientRect();
+			if (rect.left > pos) {
+				pos = rect.left;
+				break;
+			}
+			i++;
+		}
+		if (i >= 1) {
+			pos -= 48;
+		}
+		navRef.scrollLeft += pos;
 	}
 
 	function navLeft() {
 		if (navRef) {
-			navRef.scrollLeft -= 100;
+			scrollLeft();
 		}
 	}
 
 	function navRight() {
 		if (navRef) {
-			navRef.scrollLeft += 100;
+			scrollRight();
 		}
 	}
 
 </script>
 
-<div class="nav-container">
-	<nav id="main-nav" bind:this={navRef} on:scroll={hndScroll}>
-		{#if showScrollButtons && navLeftVisible}
-			<button class="left" on:click={navLeft}>&lt;</button>
+<svelte:window on:resize={hndScroll} />
+
+<nav id="main-nav" bind:this={navRef} on:scroll={hndScroll} >
+	{#if showScrollButtons && navLeftVisible}
+		<a class="nav-btn left" href={'#'} on:click={navLeft} on:keydown={navLeft} role="button" tabindex="0"><ArrowBack /></a>
+	{/if}
+	{#each items as item, i}
+		{#if !!item.visible}
+			<a href={item.slug} data-sveltekit-preload-data="tap" class:active={active == item.slug}>{item.label}</a>
 		{/if}
-		{#each items as item, i}
-			{#if !!item.visible}
-				<a href={item.slug} data-sveltekit-preload-data="tap" class:active={active == item.slug}>{item.label}</a>
-			{/if}
-		{/each}
-		{#if showScrollButtons && navRightVisible}
-			<button class="right" on:click={navRight}>&gt;</button>
-		{/if}
-	</nav>
-</div>
+	{/each}
+	{#if showScrollButtons && navRightVisible}
+		<a class="nav-btn right" href={'#'} on:click={navRight} on:keydown={navRight} role="button" tabindex="0"><ArrowForward /></a>
+	{/if}
+</nav>
 
 <style lang="scss" global>
-	.nav-container {
-		display: block;
-		max-width: 800px;
-		background-color: var(--nav-bg, #222);
-	}
 	nav {
-		margin: 0 1rem;
+		background-color: var(--nav-bg, #222);
+		padding: 0 0.6rem 0.9rem 0.6rem;
 		display: flex;
 		flex-flow: row nowrap;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		gap: 2rem;
-		height: 100%;
-		padding-bottom: 0.5rem;
+		height: 3rem;
 
 		&.css-scroll-indicators {
 			background:
@@ -80,23 +114,12 @@
 			background-attachment: local, local, scroll, scroll;
 		}
 
-		button {
-			position: fixed;
-			width: 30px;
-			padding: 0;
-			&.left {
-				left: 5px;
-			}
-			&.right {
-				left: calc(100% - 30px);
-			}
-		}
-
 		a {
 			padding: 0.3rem 1rem;
 			color: var(--nav-fg, #aaa);
 			text-decoration: none;
 			transition: border 0.4s ease-in-out;
+			white-space: nowrap;
 			// border-radius: 5px;
 			&:hover {
 				border-bottom: 4px dotted var(--nav-active, #fff);
@@ -107,6 +130,34 @@
 				color: var(--nav-active, #fff);
 				cursor: auto;
 			}
+		}
+	}
+
+	.nav-btn {
+		position: absolute;
+		background: var(--nav-bg, #222);
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: auto;
+		padding: 0.3rem 1rem;
+		color: var(--nav-fg);
+		&:hover {
+			color: var(--nav-active);
+			border: none;
+		}
+		// background-position: center;
+		// background-repeat: no-repeat;
+		// background-size: 24px 24px;
+		&.left {
+			left: 0px;
+			// background-image: url(/gw2helper/icons/arrow_back.svg);
+		}
+		&.right {
+			left: calc(100% - 48px);
+			// background-image: url(/gw2helper/icons/arrow_forward.svg);
 		}
 	}
 

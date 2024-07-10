@@ -1,43 +1,65 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
-	import { onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
 	export let wikiData;
+
+	let eventsRef;
+
 	let currentTimePos = 0;
 	let currTime = new Date();
-	let interval = setInterval(() => {
-		currTime = new Date();
-		const dt0 = new Date();
-		dt0.setHours(dt0.getHours(), 0, 0, 0);
-		const diff = wxdates.minutesBetween(dt0, currTime);
-		// console.log('interval', [getHour(dt0), getHour(currTime), diff]);
-		currentTimePos = (diff * 100) / 120;
+	let dt0;
+	let width = 0;
+	let interval;
+	const et = new Map();
+
+	init();
+
+	interval = setInterval(() => {
+		if (dt0) {
+			currTime = new Date();
+			const diff = wxdates.minutesBetween(dt0, currTime);
+			if (dt0.getHours() != currTime.getHours()) {
+				console.log('reset.');
+				currentTimePos = 0;
+				init();
+			} else {
+				currentTimePos = (diff / 120) * width;
+			}
+		}
 	}, 1000);
 
+	onMount(() => {
+		hndResize();
+	});
+
 	onDestroy(() => {
+		console.log('cleaning up');
 		clearInterval(interval);
 	});
 
-	const et = new Map();
+	function init() {
+		et.clear();
+		const _dt0 = new Date();
+		_dt0.setHours(_dt0.getHours(), 0, 0, 0);
+		dt0 = new Date(_dt0);
 
-	for (const [key, value] of Object.entries(wikiData)) {
-		let category = value['category'] || '';
-		if (category) {
-			if (!et.has(category)) {
-				et.set(category, []);
+		for (const [key, value] of Object.entries(wikiData)) {
+			let category = value['category'] || '';
+			if (category) {
+				if (!et.has(category)) {
+					et.set(category, []);
+				}
+				let list = et.get(category);
+				list.push({
+					name: value.name,
+					segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 48), 2),
+				});
 			}
-			let list = et.get(category);
-			list.push({
-				name: value.name,
-				segments: getCurrentWindow(fillCalendar(value.segments, value.sequences, 48), 2),
-			});
 		}
 	}
-	// console.log('et', et);
 
-	function getCurrentWindow(segments, hours = 2) {
-		const dt0 = new Date();
-		dt0.setUTCHours(dt0.getUTCHours(), 0, 0, 0);
+	function getCurrentWindow(dt0, segments, hours = 2) {
 		const dt1 = wxdates.dateAdd(dt0, 'hours', hours);
 		const dt0t = dt0.getTime();
 		const dt1t = dt1?.getTime();
@@ -84,7 +106,6 @@
 		const sched = [];
 
 		for (const def of sequences.partial) {
-			// console.log('   - part:', def);
 			let ev = segments[def.r];
 			sched.push(getEventData(ev, def.d, t));
 		}
@@ -92,15 +113,10 @@
 		do {
 			i++;
 			for (const def of sequences.pattern) {
-				// console.log('   - patern:', def);
 				let ev = segments[def.r];
 				sched.push(getEventData(ev, def.d, t));
-				// if (t.getTime() >= tmax?.getTime()) {
-				//     break;
-				// }
 			}
 		} while (t.getTime() < tmax?.getTime() && i < 10 * hours);
-		// console.log('repeated', i);
 		return sched;
 	}
 
@@ -108,8 +124,8 @@
 		return dt.toLocaleTimeString('pl-PL').slice(0, 5);
 	}
 
-	function getTimeSegments(hours = 2) {
-		let dt = new Date();
+	function getTimeSegments(dt0, hours = 2) {
+		let dt = new Date(dt0);
 		const sched = [];
 		const duration = 15;
 		dt.setUTCHours(dt.getUTCHours(), 0, 0, 0);
@@ -120,23 +136,35 @@
 		}
 		return sched;
 	}
+
+	function hndResize() {
+		const rect = eventsRef.getBoundingClientRect();
+		let scroll = eventsRef.scrollLeftMax;
+		width = rect.width + scroll;
+	}
+
 </script>
 
-<div class="event-timer">
-	<div class="event-bar compact">
-		<div class="event-pointer" title="Current time" style="left: {currentTimePos}%;">
-			<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
+<svelte:window on:resize={hndResize} />
+
+<div class="event-timer" bind:this={eventsRef}>
+	<div class="time-container">
+		<div class="event-bar compact">
+			<div class="event-pointer" title="Current time" style="left: {currentTimePos}px;">
+				<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
+			</div>
+		</div>
+		<div class="event-bar compact time">
+			{#each getTimeSegments(dt0) as segment}
+				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
+					{#if segment.name}
+						<span>{segment.name}</span>
+					{/if}
+				</div>
+			{/each}
 		</div>
 	</div>
-	<div class="event-bar compact time">
-		{#each getTimeSegments() as segment}
-			<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
-				{#if segment.name}
-					<span>{segment.name}</span>
-				{/if}
-			</div>
-		{/each}
-	</div>
+
 	{#each et.entries() as [cat, eventsList]}
 		<div class="category">
 			<h3>{cat}</h3>
@@ -171,6 +199,7 @@
 		flex-flow: column nowrap;
 		overflow-y: hidden;
 		overflow-x: scroll;
+		height: 2000px;
 	}
 
 	.category {
@@ -192,6 +221,7 @@
 		min-width: 1200px;
 		&.compact {
 			min-height: auto;
+			height: 1.6rem;
 			.event {
 				margin: 0;
 				padding: 0.3rem 0 0.3rem 0.4rem;
@@ -201,6 +231,7 @@
 			display: flex;
 			flex-flow: column nowrap;
 			padding: 5px;
+			word-break: break-all;
 		}
 		&.time {
 			position: sticky;
@@ -208,14 +239,24 @@
 			background-color: #fff;
 			z-index: 1;
 			.event {
-				border-left: 1px solid #333;
+				border-left: 1px solid #aaa;
 			}
 		}
 	}
 
+	.time-container {
+		top: 0;
+		min-width: 1200px;
+		width: 100%;
+		// position: static;
+		// margin: 0 1rem;
+		z-index: 10;
+		background-color: #fff;
+	}
+
 	.event-pointer {
 		position: absolute;
-		z-index: 2;
+		z-index: 11;
 		height: 101%;
 		border-left: 2px solid red;
 		margin-left: -1px;
@@ -232,6 +273,7 @@
 		padding: 2px 6px;
 		margin-left: -2px;
 		white-space: nowrap;
-		top: -1.4rem;
+		top: 0;
+		z-index: 11;
 	}
 </style>

@@ -85,10 +85,8 @@
 
 			let newX = x;
 			let newY = y;
-			// console.log('updateXY', [evY, window.innerHeight, ])
 			if (newX + rect.width > window.innerWidth) {
 				newX = window.innerWidth - rect.width - 10;
-				// console.log(newX, [evX, window.innerWidth])
 			}
 			if (newY + rect.height > window.innerHeight + window.scrollY){
 				newY = y - rect.height - 10; 
