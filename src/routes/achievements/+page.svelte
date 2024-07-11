@@ -228,8 +228,9 @@ point_cap (number, optional) - The maximum number of AP that can be rewarded by 
 		flex-flow: row wrap;
 		align-items: center;
         justify-content: flex-end;
-		column-gap: 1rem;
+		column-gap: 0.6rem;
 		row-gap: 0.2rem;
+        // font-family: monospace;
 	}
 
 	.reward-item {
