@@ -41,11 +41,11 @@
 
 	function mouseMove(event) {
 		if (!handlingTouch(event)) {
-			console.log('mouseMove', event);
+			// console.log('mouseMove', event);
 			if (event.type.startsWith('touch') && event.touches.length) {
 				x = event.touches[0].pageX;
 				y = event.touches[0].pageY;
-				console.log('move', [x, y]);
+				// console.log('move', [x, y]);
 			} else {
 				x = event.pageX + 15;
 				y = event.pageY + 5;
@@ -69,34 +69,34 @@
 		touchEventIsTap = true;
 		touchLayerX = event.layerX;
 		touchLayerY = event.layerY;
-		console.log(event);
+		// console.log(event);
 	}
 
 	function touchMove(event) {
 		event.preventDefault();
-		console.log(event);
+		// console.log(event);
 		touchEventIsTap = false;
 	}
 
 	function touchEnd(event) {
-		console.log(event);
+		// console.log(event);
 		if (touchEventIsTap) {
 			let touchTimeLength = new Date().getTime() - touchStartTime;
-			console.log('dur', [touchTimeLength, event]);
-			if (touchTimeLength < 200) {
-				console.log('Short tap');
-			} else {
-				console.log('Long press');
-			}
+			// console.log('dur', [touchTimeLength, event]);
+			// if (touchTimeLength < 200) {
+			// 	console.log('Short tap');
+			// } else {
+			// 	console.log('Long press');
+			// }
 			if (event.target.classList.contains('autotooltip')) {
-				console.log('touchended');
+				// console.log('touchended');
 				event.preventDefault();
 
 				const rect = event.target.getBoundingClientRect();
 				findTitle(event.target);
 				x = touchLayerX + rect.x + 40;
 				y = touchLayerY + rect.y + 5;
-				console.log('ttt', [x, y, title]);
+				// console.log('ttt', [x, y, title]);
 				updateXY();
 			}
 		}

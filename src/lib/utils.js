@@ -37,6 +37,10 @@ function saveEventTimerSettings(settings){
     return ls.set(EVENT_TIMER_SETTINGS, settings);
 }
 
+export function sum(array, property) {
+    return array.reduce((acc, cur) => acc + cur[property], 0)
+}
+
 export default {
     readApiKey,
     saveApiKey,

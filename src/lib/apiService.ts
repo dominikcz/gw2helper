@@ -2,6 +2,7 @@ import Logger from "./logger";
 import ls from "./wxjs_localstorage";
 import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
+import { sum } from "./utils";
 
 const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
@@ -293,13 +294,17 @@ const tokenInfo = async () => {
 
 const achievements = async (all: boolean = false) => {
     return new Promise((resolve) => {
-        Promise.all([apiClient("/v2/account/achievements", ""), apiClient("/v2/achievements", "")]).then(([_mine, _allIds]) => {
-            _mine.forEach(x => {
-                x.bits_done = x.bits;
-                delete x.bits;
+        Promise.all([
+            apiClient("/v2/achievements/categories", "ids=all&v=2022-03-23T19:00:00.000Z"),
+            apiClient("/v2/account/achievements", ""),
+            apiClient("/v2/achievements", "")])
+            .then(([categories, mine, allIds]) => {
+                mine.forEach(x => {
+                    x.bits_done = x.bits;
+                    delete x.bits;
+                });
+                resolve(expandAchieves(categories, mine, allIds));
             });
-            resolve(expandAchieves(_mine, _allIds));
-        });
     });
 };
 
@@ -366,7 +371,7 @@ const expandItems = async (ids: Array<number>, collection) => {
     const knownIds = [...itemsCache.keys()];
     ids = ids.filter((x) => !INVALID_IDS.includes(x));
     const missingIds = ids.filter((x) => !knownIds.includes(x));
-    const knownFromReqest = ids.filter((x) => knownIds.includes(x)).map((x) => itemsCache.get(x));
+    const alreadyKnown = ids.filter((x) => knownIds.includes(x)).map((x) => itemsCache.get(x));
 
     const data = [];
     const batches = [];
@@ -387,25 +392,28 @@ const expandItems = async (ids: Array<number>, collection) => {
         ls.set(ITEMS_CACHE, JSON.stringify([...itemsCache.entries()]));
         data.push(...mergeById(resp, collection));
     }
-    if (knownFromReqest.length) {
-        data.push(...mergeById(knownFromReqest, collection));
+    if (alreadyKnown.length) {
+        data.push(...mergeById(alreadyKnown, collection));
     }
     additionalMapping(data);
 
     return data;
 };
 
-const expandAchieves = async (accountAchieves, allIds) => {
+const expandAchieves = async (categories, accountAchieves, allIds) => {
     const knownIds = [...achievesCache.keys()];
     const _doneIds = accountAchieves.filter(x => x.done).map(x => x.id);
     const _notDone = allIds.filter(x => !_doneIds.includes(x));
     const missingIds = _notDone.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
 
-    const knownFromReqest = knownIds.map((x) => achievesCache.get(x));
+    // remove completed from categories
+    categories.forEach(cat => {
+        cat.achievements = cat.achievements.filter(x => !_doneIds.includes(x.id))
+    })
+    // and remove those with noachievements left to do
+    categories = categories.filter(x => x.achievements.length)
 
-    // console.log('ids', [missingIds, achievesCache])
-
-    const data = [];
+    // prepare list of ids to request in batches of 200 max
     const batches = [];
     do {
         let batch = missingIds.splice(0, 200);
@@ -413,25 +421,64 @@ const expandAchieves = async (accountAchieves, allIds) => {
             batches.push(batch.join(","));
         }
     } while (missingIds.length > 0);
-    // console.log('batches', batches.length)
 
     if (batches.length) {
+        // and make requests in parallel
         const tasks = batches.map((ids) => achievementsInfo(ids));
         const resp = (await Promise.all(tasks)).flat();
-        // console.log('resp', resp)
         resp.forEach((x) => {
             if (x) {
                 achievesCache.set(x.id, x);
             }
         });
+        // store updated achievs in localStorage for future
         ls.set(ACHIEVES_CACHE, JSON.stringify([...achievesCache.entries()]));
         data.push(...mergeById(resp, accountAchieves));
     }
-    if (knownFromReqest.length) {
-        data.push(...mergeById(knownFromReqest, accountAchieves));
+
+    categories.forEach(cat => {
+        cat.achievements = cat.achievements.map(x => {
+            let achiev = achievesCache.get(x.id);
+            if (!achiev) {
+                console.warn('achiev Id not found', x.id);
+                achiev = x;
+            }
+            const mine = accountAchieves.find(acc => acc.id == x.id);
+            const _current = mine ? mine.current : 0;
+            let points_total: number | null = null;
+            let points_done: number | null = null;
+            let points_to_get: number | null = null;
+
+            if (achiev.tiers) {
+                const tiers_done = achiev.tiers.filter(t => t.count <= _current);
+                const tiers_todo = achiev.tiers.filter(t => t.count > _current);
+                points_total = sum(achiev.tiers, 'points');
+                points_done = sum(tiers_done, 'points');
+                points_to_get = sum(tiers_todo, 'points');
+            }
+
+            return {
+                ...achiev,
+                ...mine,
+                points_total,
+                points_done,
+                points_to_get,
+            }
+        });
+        cat.points_to_get = sum(cat.achievements, 'points_to_get');
+        cat.points_done = sum(cat.achievements, 'points_done');
+        // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
+        cat.rewards = Object.groupBy(cat.achievements.filter(x => x.rewards).flatMap(x => x.rewards), x => x.type.toLowerCase())
+    })
+    // get all masteries for dev purposes
+    // const tmp = categories.map(c => c.rewards.mastery).filter(x => x != undefined).flat(true).map((x => x.region))
+    // console.log('masteries', [... new Set(tmp)])
+
+    return {
+        completed: _doneIds.length,
+        todo: _notDone.length,
+        categories
     }
-    // console.log('expandAchieves', data);
-    return data;
 };
 
 const additionalMapping = (data) => {
