@@ -1,3 +1,17 @@
+export type FilterCallback = (item: object, filter: string, filterResult: boolean) => boolean;
+export type FilterOptions = {
+    nonZero?: boolean,
+    nonZeroField?: string,
+    filterCallback?: FilterCallback,
+    callbackOnly?: boolean,
+}
+
+const DEFAULT_FILTER_OPTIONS: FilterOptions = {
+    nonZero: false,
+    nonZeroField: 'count',
+    callbackOnly: false,
+}
+
 function match(word: string, obj: object, properties: Array<string>) {
     // at least one property has to match
     return properties.some((x) => {
@@ -32,10 +46,21 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
     return words.every((x) => match(x, obj, properties));
 }
 
-function filterCollection(collection, fields: Array<string>, filter: string, nonZero: boolean, nonZeroField = 'count', sortBy) {
+function filterCollection(collection, fields: Array<string>, filter: string, options: FilterOptions = DEFAULT_FILTER_OPTIONS) {
     let filtered = collection.filter((x) => {
-        return (!nonZero || x[nonZeroField] > 0) && fullTextSearch(filter, x, fields);
+        let filterRes = false;
+        if (!options.callbackOnly) {
+            filterRes = (!options.nonZero || x[options.nonZeroField] > 0) && fullTextSearch(filter, x, fields);
+            // console.log('filterCollection base', filterRes)
+        }
+        if (options.filterCallback != undefined) {
+            filterRes = options.filterCallback(x, filter, filterRes);
+            // console.log('filterCollection callback', filterRes)
+        }
+
+        return filterRes;
     });
+
     // if (sortBy == SortType.Slots) {
     // 	console.log('sorting by slots...');
     // 	let map = filtered.reduce(function (acc, curr) {
@@ -57,7 +82,7 @@ function filterCollection(collection, fields: Array<string>, filter: string, non
     return filtered;
 }
 
-function dec2hex (dec: number): string {
+function dec2hex(dec: number): string {
     return dec.toString(16).padStart(2, "0")
 }
 
@@ -83,7 +108,7 @@ function hoursPlayed(time) {
     return Math.trunc(time / 3600);
 }
 
-function wikiLink(name){
+function wikiLink(name) {
     return name ? `https://wiki.guildwars2.com/wiki/${name}` : '#';
 }
 

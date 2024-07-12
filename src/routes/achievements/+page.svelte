@@ -28,6 +28,30 @@
 		notCompleted,
 	};
 
+	function filterCallback(item, filter, filterResult) {
+		return (
+			item.achievements.findIndex((achiev) => {
+				const mastery = achiev.rewardsObj.mastery || [];
+				const masteryRequired = withMasteryCentral || withMasteryHoT || withMasteryPoF || withMasteryIce || withMasteryEoD || withMasterySofO;
+				return (
+					(!notCompleted || !achiev.done) &&
+					(!withPoints || achiev.points_to_get > 0) &&
+					// (!masteryRequired && mastery.length > 0) &&
+					mastery.find(
+						(x) =>
+							(!withMasteryCentral || x.region == 'Tyria') &&
+							(!withMasteryHoT || x.region == 'Maguuma') &&
+							(!withMasteryPoF || x.region == 'Desert') &&
+							(!withMasteryIce || x.region == 'Tundra') &&
+							(!withMasteryEoD || x.region == 'Jade') &&
+							(!withMasterySofO || x.region == 'Sky')
+					) &&
+					helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirements'])
+				);
+			}) >= 0
+		);
+	}
+
 	function saveSettings() {
 		utils.saveEventTimerSettings({
 			notCompleted,
@@ -41,8 +65,7 @@
 		});
 	}
 
-	function filteredAchieves(data, notCompleted) {
-		console.log('filteredAchieves');
+	function filteredAchieves(data, params) {
 		let obj = {
 			completed: data.completed,
 			todo: data.todo,
@@ -50,33 +73,11 @@
 			monthly_ap: data.monthly_ap,
 		};
 
-		// 1. filter categories by name and description
-		obj.categories = helperUtils.filterCollection(data.categories, ['name', 'description'], filter);
-		// 1. clone categories without achievements
-		obj.categories = obj.categories
-			.map(({ achievements, ...rest }) => {
-				let cat = { ...rest };
-				// 2. filter achievements
-				cat.achievements = achievements.filter((x) => {
-					if (notCompleted && x.done === false) return true;
-
-					// ...else
-					if (
-						!notCompleted &&
-						!withPoints &&
-						!withMasteryCentral &&
-						!withMasteryHoT &&
-						!withMasteryPoF &&
-						!withMasteryIce &&
-						!withMasteryEoD &&
-						!withMasterySofO
-					)
-						return true;
-					return false;
-				});
-				return cat;
-			})
-			.filter((x) => x.achievements.length);
+		obj.categories = helperUtils.filterCollection(data.categories, ['name', 'description'], filter, {
+			nonZero: false,
+			filterCallback,
+			callbackOnly: false,
+		});
 
 		return obj;
 	}
@@ -106,25 +107,39 @@
 </section>
 
 <Awaiter promise={data.achievements} let:result>
-	{@const _result = filteredAchieves(result, notCompleted)}
+	{@const _result = filteredAchieves(result, [
+		notCompleted,
+		withPoints,
+		withMasteryCentral,
+		withMasteryHoT,
+		withMasteryPoF,
+		withMasteryIce,
+		withMasteryEoD,
+		withMasterySofO,
+	])}
 	<WidgetsGroup name="Achievements' completed">
-		<WidgetInfo title="Achieves completed" value={_result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
-		<WidgetInfo title="Daily points" value={_result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
-		<WidgetInfo title="Monthly points" value={_result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title="Achieves completed" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
+		<WidgetInfo title="Daily points" value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title="Monthly points" value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
 		<WidgetInfo title="Points from achieves" value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
-		<!-- <WidgetInfo title="Points total" value={_result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
+		<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
 	</WidgetsGroup>
 	<WidgetsGroup name="Achievements' to do">
-		<WidgetInfo title="Achieves to do" value={_result.todo} image={`${base}/assets/rewards/Daily_Achievement.png`} />
+		<WidgetInfo title="Achieves to do" value={result.todo} image={`${base}/assets/rewards/Daily_Achievement.png`} />
 		<WidgetInfo title="Points to get" value={sum(result.categories, 'points_to_get')} image={`${base}/assets/rewards/AP.png`} />
 	</WidgetsGroup>
+	<span>showing {_result.categories.length} categories out of {result.categories.length}</span>
 	<div class="achiev-container">
 		{#each _result.categories as category (category.id)}
+			{@const cat_mastery = category.rewards.mastery || []}
 			<details class="achiev-group">
 				<summary>
 					<img src={category.icon} alt={category.name} />
 					<div class="descr">
-						<span>{category.name}</span>
+						<span
+							>{category.name}
+							<small><a href="https://api.guildwars2.com/v2/achievements/{category.id}" target="_blank">id: {category.id}</a></small></span
+						>
 						<div class="rewards">
 							{#if category.rewards.title}
 								<div class="reward-item">
@@ -141,8 +156,8 @@
 									<img src="{base}/assets/rewards/Achievement_Chest_(interface_icon).png" alt="item" title="This category rewards items" />
 								</div>
 							{/if}
-							{#if category.rewards.mastery}
-								{#if category.rewards.mastery.find((x) => x.region == 'Tyria')}
+							{#if cat_mastery}
+								{#if cat_mastery.find((x) => x.region == 'Tyria')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(Central_Tyria).png"
@@ -151,7 +166,7 @@
 										/>
 									</div>
 								{/if}
-								{#if category.rewards.mastery.find((x) => x.region == 'Maguuma')}
+								{#if cat_mastery.find((x) => x.region == 'Maguuma')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(Heart_of_Thorns).png"
@@ -160,7 +175,7 @@
 										/>
 									</div>
 								{/if}
-								{#if category.rewards.mastery.find((x) => x.region == 'Desert')}
+								{#if cat_mastery.find((x) => x.region == 'Desert')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(Path_of_Fire).png"
@@ -169,7 +184,7 @@
 										/>
 									</div>
 								{/if}
-								{#if category.rewards.mastery.find((x) => x.region == 'Tundra')}
+								{#if cat_mastery.find((x) => x.region == 'Tundra')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(Icebrood_Saga).png"
@@ -178,7 +193,7 @@
 										/>
 									</div>
 								{/if}
-								{#if category.rewards.mastery.find((x) => x.region == 'Jade')}
+								{#if cat_mastery.find((x) => x.region == 'Jade')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(End_of_Dragons).png"
@@ -187,7 +202,7 @@
 										/>
 									</div>
 								{/if}
-								{#if category.rewards.mastery.find((x) => x.region == 'Sky')}
+								{#if cat_mastery.find((x) => x.region == 'Sky')}
 									<div class="reward-item">
 										<img
 											src="{base}/assets/rewards/Mastery_point_(Secrets_of_the_Obscure).png"

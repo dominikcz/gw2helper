@@ -301,7 +301,7 @@ const achievements = async (all: boolean = false) => {
             apiClient("/v2/achievements", "")])
             .then(([categories, account, account_achieves, allIds]) => {
                 account_achieves.forEach(x => {
-                    x.bits_done = x.bits;
+                    x.bits_done = x.bits || [];
                     delete x.bits;
                 });
                 resolve(expandAchieves(account, categories, account_achieves, allIds));
@@ -461,9 +461,6 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_per_tier = sum(achiev.tiers, 'points');
                 points_done = points_per_tier * mine.repeated + sum(tiers_done, 'points');
                 points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
-                if (x.id == 129) {
-                    console.log(x.name, { points_per_tier, points_done, points_to_get, rep: mine.repeated, cap: achiev.point_cap })
-                }
             }
             achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
 
