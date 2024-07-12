@@ -444,24 +444,33 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchieves.find(acc => acc.id == x.id);
-            const _current = mine ? mine.current : 0;
-            let points_total: number | null = null;
+            const mine = accountAchieves.find(acc => acc.id == x.id) || {
+                id: x.id,
+                current: 0,
+                repeated: 0,
+                bits_done: [],
+                done: false
+            };
+            let points_per_tier: number | null = null;
             let points_done: number | null = null;
             let points_to_get: number | null = null;
 
             if (achiev.tiers) {
-                const tiers_done = achiev.tiers.filter(t => t.count <= _current);
-                const tiers_todo = achiev.tiers.filter(t => t.count > _current);
-                points_total = sum(achiev.tiers, 'points');
-                points_done = sum(tiers_done, 'points');
-                points_to_get = sum(tiers_todo, 'points');
+                const tiers_done = achiev.tiers.filter(t => t.count <= mine.current);
+                const tiers_todo = achiev.tiers.filter(t => t.count > mine.current);
+                points_per_tier = sum(achiev.tiers, 'points');
+                points_done = points_per_tier * mine.repeated + sum(tiers_done, 'points');
+                points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
+                if (x.id == 129) {
+                    console.log(x.name, { points_per_tier, points_done, points_to_get, rep: mine.repeated, cap: achiev.point_cap })
+                }
             }
+            achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
 
             return {
                 ...achiev,
                 ...mine,
-                points_total,
+                points_per_tier,
                 points_done,
                 points_to_get,
             }

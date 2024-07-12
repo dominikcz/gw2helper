@@ -233,6 +233,7 @@
 	}
 
 	.category {
+		margin-bottom: 1rem;
 		width: 100%;
 		h3 {
 			background-color: var(--gw2helper-module-dark);

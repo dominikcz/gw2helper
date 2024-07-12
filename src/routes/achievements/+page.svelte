@@ -53,10 +53,11 @@
 		// 1. filter categories by name and description
 		obj.categories = helperUtils.filterCollection(data.categories, ['name', 'description'], filter);
 		// 1. clone categories without achievements
-		obj.categories = obj.categories.map(({ achievements, ...rest }) => {
-			let cat = { ...rest };
-			// 2. filter achievements
-			cat.achievements = achievements.filter((x) => {
+		obj.categories = obj.categories
+			.map(({ achievements, ...rest }) => {
+				let cat = { ...rest };
+				// 2. filter achievements
+				cat.achievements = achievements.filter((x) => {
 					if (notCompleted && x.done === false) return true;
 
 					// ...else
@@ -73,8 +74,9 @@
 						return true;
 					return false;
 				});
-			return cat;
-		}).filter((x) => x.achievements.length);
+				return cat;
+			})
+			.filter((x) => x.achievements.length);
 
 		return obj;
 	}
@@ -219,6 +221,7 @@
 				{#if category.description}<p>{category.description}</p>{/if}
 				<div class="achiev-list">
 					{#each helperUtils.filterCollection(category.achievements, fields, filter) as achiev (achiev.id)}
+						{@const mastery = achiev.rewardsObj.mastery}
 						<div class="achiev">
 							<div class="head">
 								{#if achiev.icon}
@@ -231,105 +234,127 @@
 									<progress value={achiev.current} max={achiev.max} />
 									<span>{achiev.current} / {achiev.max}</span>
 								{/if}
+								{#if achiev.flags && achiev.flags.includes('Hidden')}
+									<img
+										class="icon"
+										src="{base}/assets/rewards/Achievements_Watch_List.png"
+										alt="hidden achievement"
+										title="This is a hidden achievement"
+									/>
+								{/if}
+								<small><a href="https://api.guildwars2.com/v2/achievements/{achiev.id}" target="_blank">id: {achiev.id}</a></small>
 							</div>
 							<div class="body">
 								<h3>{achiev.name}</h3>
 								{#if achiev.description}<span>{achiev.description}</span>{/if}
-								<small>({achiev.id})</small>
-								{#if achiev.type != 'Default'}<div>{achiev.type}</div>{/if}
-								{#if achiev.rewards}<div>REWARDS: {JSON.stringify(achiev.rewards)}</div>{/if}
-
+								{#if achiev.requirement}<span>{achiev.requirement}</span>{/if}
 
 								<div class="rewards small">
-									{#if category.rewards.title}
+									{#if achiev.type == 'ItemSet'}
 										<div class="reward-item">
-											<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This category rewards a title" />
+											<img
+												src="{base}/assets/rewards/Talk_collection_option.png"
+												alt="title"
+												title="This achievement is linked to a collection"
+											/>
 										</div>
 									{/if}
-									{#if category.rewards.coins}
+
+									{#if achiev.rewardsObj.title}
 										<div class="reward-item">
-											<img src="{base}/assets/rewards/Gold_coin_(highres).png" alt="gold" title="This category rewards gold" />
+											<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This achievement rewards a title" />
 										</div>
 									{/if}
-									{#if category.rewards.item}
+									{#if achiev.rewardsObj.coins}
 										<div class="reward-item">
-											<img src="{base}/assets/rewards/Achievement_Chest_(interface_icon).png" alt="item" title="This category rewards items" />
+											<img src="{base}/assets/rewards/Gold_coin_(highres).png" alt="gold" title="This achievement rewards gold" />
 										</div>
 									{/if}
-									{#if category.rewards.mastery}
-										{#if category.rewards.mastery.find((x) => x.region == 'Tyria')}
+									{#if achiev.rewardsObj.item}
+										<div class="reward-item">
+											<img
+												src="{base}/assets/rewards/Achievement_Chest_(interface_icon).png"
+												alt="item"
+												title="This achievement rewards items"
+											/>
+										</div>
+									{/if}
+									{#if mastery}
+										{#if mastery.find((x) => x.region == 'Tyria')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(Central_Tyria).png"
 													alt="mastery points Central Tyria"
-													title="This category rewards Central Tyria mastery points"
+													title="This achievement rewards Central Tyria mastery points"
 												/>
 											</div>
 										{/if}
-										{#if category.rewards.mastery.find((x) => x.region == 'Maguuma')}
+										{#if mastery.find((x) => x.region == 'Maguuma')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(Heart_of_Thorns).png"
 													alt="mastery points Heart of Thorns"
-													title="This category rewards Heart of Thorns mastery points"
+													title="This achievement rewards Heart of Thorns mastery points"
 												/>
 											</div>
 										{/if}
-										{#if category.rewards.mastery.find((x) => x.region == 'Desert')}
+										{#if mastery.find((x) => x.region == 'Desert')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(Path_of_Fire).png"
 													alt="mastery points Path of Fire"
-													title="This category rewards Path of Fire mastery points"
+													title="This achievement rewards Path of Fire mastery points"
 												/>
 											</div>
 										{/if}
-										{#if category.rewards.mastery.find((x) => x.region == 'Tundra')}
+										{#if mastery.find((x) => x.region == 'Tundra')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(Icebrood_Saga).png"
 													alt="mastery points Icebrood Saga"
-													title="This category rewards Icebrood Saga mastery points"
+													title="This achievement rewards Icebrood Saga mastery points"
 												/>
 											</div>
 										{/if}
-										{#if category.rewards.mastery.find((x) => x.region == 'Jade')}
+										{#if mastery.find((x) => x.region == 'Jade')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(End_of_Dragons).png"
 													alt="mastery points End of Dragons"
-													title="This category rewards End of Dragons mastery points"
+													title="This achievement rewards End of Dragons mastery points"
 												/>
 											</div>
 										{/if}
-										{#if category.rewards.mastery.find((x) => x.region == 'Sky')}
+										{#if mastery.find((x) => x.region == 'Sky')}
 											<div class="reward-item">
 												<img
 													src="{base}/assets/rewards/Mastery_point_(Secrets_of_the_Obscure).png"
 													alt="mastery points Secrets of the Obscure"
-													title="This category rewards Secrets of the Obscure mastery points"
+													title="This achievement rewards Secrets of the Obscure mastery points"
 												/>
 											</div>
 										{/if}
 									{/if}
-									{#if category.points_to_get}
+									{#if achiev.points_to_get}
 										<div class="reward-item">
-											<span>{category.points_to_get}</span>
+											<span>{achiev.points_to_get}</span>
 											<img
 												src="{base}/assets/rewards/AP.png"
 												alt="achievement points"
-												title="You can get {category.points_to_get} achievement points from this category"
+												title="You can get {achiev.points_to_get} achievement points from this achievement"
 											/>
 										</div>
 									{/if}
-									<div class="reward-item">
-										<span>{category.achievements.length}</span>
-										<img
-											src="{base}/assets/rewards/Achievements_Summary.png"
-											alt="achieves"
-											title="There are {category.achievements.length} achievements left to do"
-										/>
-									</div>
+									{#if achiev.bits}
+										<div class="reward-item">
+											<span>{achiev.bits_done.length} / {achiev.bits.length}</span>
+											<img
+												src="{base}/assets/rewards/Achievements_Summary.png"
+												alt="achieves"
+												title="There are {achiev.bits.length - achiev.bits_done.length} tasks left to do"
+											/>
+										</div>
+									{/if}
 								</div>
 							</div>
 						</div>
@@ -400,7 +425,7 @@
 		background-color: var(--gw2helper-module-white);
 		box-shadow: var(--gw2helper-module-shadow);
 		color: #000;
-		flex: 1 1 auto;
+		flex: 0 1 auto;
 		&:hover {
 			box-shadow: var(--gw2helper-module-shadow-hover);
 		}
@@ -416,7 +441,20 @@
 				width: 100%;
 			}
 			span {
-				font-size: smaller;
+				font-size: x-small;
+				overflow-wrap: break-word;
+			}
+			small {
+				font-size: xx-small;
+			}
+			img {
+				width: 48px;
+				height: 48px;
+				&.icon {
+					cursor: help;
+					width: 24px;
+					height: 24px;
+				}
 			}
 		}
 		.body {
@@ -424,13 +462,13 @@
 			flex-flow: column nowrap;
 			row-gap: 0.6rem;
 			width: 100%;
+			min-height: 120px;
+			justify-content: space-between;
+			font-size: small;
 			h3 {
 				margin: 0;
+				font-size: medium;
 			}
-		}
-		img {
-			width: 48px;
-			height: 48px;
 		}
 	}
 
@@ -443,8 +481,15 @@
 		column-gap: 0.6rem;
 		row-gap: 0.2rem;
 		// font-family: monospace;
-		&.small{
+		&.small {
 			font-size: smaller;
+			span {
+				font-size: small;
+			}
+			img {
+				width: 24px;
+				height: 24px;
+			}
 		}
 	}
 

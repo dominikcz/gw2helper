@@ -121,7 +121,6 @@
 			gap: 0.6rem;
 
 			h4 {
-				width: 128px;
 				margin: 0;
 			}
 			ul {
