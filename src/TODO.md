@@ -11,3 +11,4 @@
 
 + handle 403 errors
 - pvp
+- indexedDB zamiast localstorage - quota
