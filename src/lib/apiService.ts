@@ -296,14 +296,15 @@ const achievements = async (all: boolean = false) => {
     return new Promise((resolve) => {
         Promise.all([
             apiClient("/v2/achievements/categories", "ids=all&v=2022-03-23T19:00:00.000Z"),
+            apiClient("/v2/account", ""),
             apiClient("/v2/account/achievements", ""),
             apiClient("/v2/achievements", "")])
-            .then(([categories, mine, allIds]) => {
-                mine.forEach(x => {
+            .then(([categories, account, account_achieves, allIds]) => {
+                account_achieves.forEach(x => {
                     x.bits_done = x.bits;
                     delete x.bits;
                 });
-                resolve(expandAchieves(categories, mine, allIds));
+                resolve(expandAchieves(account, categories, account_achieves, allIds));
             });
     });
 };
@@ -400,18 +401,18 @@ const expandItems = async (ids: Array<number>, collection) => {
     return data;
 };
 
-const expandAchieves = async (categories, accountAchieves, allIds) => {
+const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     const knownIds = [...achievesCache.keys()];
-    const _doneIds = accountAchieves.filter(x => x.done).map(x => x.id);
+    const _doneIds = accountAchieves.filter(x => x.done === true).map(x => x.id);
     const _notDone = allIds.filter(x => !_doneIds.includes(x));
-    const missingIds = _notDone.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
+    const missingIds = allIds.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
 
-    // remove completed from categories
-    categories.forEach(cat => {
-        cat.achievements = cat.achievements.filter(x => !_doneIds.includes(x.id))
-    })
-    // and remove those with noachievements left to do
-    categories = categories.filter(x => x.achievements.length)
+    // // remove completed from categories
+    // categories.forEach(cat => {
+    //     cat.achievements = cat.achievements.filter(x => !_doneIds.includes(x.id));
+    // })
+    // // and remove those with noachievements left to do
+    // categories = categories.filter(x => x.achievements.length);
 
     // prepare list of ids to request in batches of 200 max
     const batches = [];
@@ -477,6 +478,8 @@ const expandAchieves = async (categories, accountAchieves, allIds) => {
     return {
         completed: _doneIds.length,
         todo: _notDone.length,
+        daily_ap: account.daily_ap,
+        monthly_ap: account.monthly_ap,
         categories
     }
 };

@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_localstorage";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS } from "$lib/consts";
 
 function readApiKey() {
     let key = '';
@@ -37,9 +37,18 @@ function saveEventTimerSettings(settings){
     return ls.set(EVENT_TIMER_SETTINGS, settings);
 }
 
+function readAchievesSettings(){
+    return ls.getObject(ACHIEVES_SETTINGS, {});
+}
+
+function saveAchievesSettings(settings){
+    return ls.set(ACHIEVES_SETTINGS, settings);
+}
+
 export function sum(array, property) {
     return array.reduce((acc, cur) => acc + cur[property], 0)
 }
+
 
 export default {
     readApiKey,
@@ -48,4 +57,6 @@ export default {
     getKeyHist,
     readEventTimerSettings,
     saveEventTimerSettings,
+    readAchievesSettings,
+    saveAchievesSettings,
 }

@@ -48,7 +48,7 @@
 			<WidgetsGroup name="Time spent">
 				<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
 				<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}h`} />
-				<WidgetInfo title="Average" value={`${(helperUtils.diff(result.created) / helperUtils.hoursPlayed(result.age)).toFixed(2)}h/day`} />
+				<WidgetInfo title="Average time per day" value={`${(helperUtils.diff(result.created) / helperUtils.hoursPlayed(result.age)).toFixed(2)}h/day`} />
 			</WidgetsGroup>
 
 			<WidgetsGroup name="Accessible content">
@@ -84,7 +84,7 @@
 
 				{#if has(result, 'SecretsOfTheObscure')}
 					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/Secrets_of_the_Obscure_logo.png`} />
+						<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`} />
 					</Linkable>
 				{/if}
 
@@ -96,7 +96,7 @@
 			</WidgetsGroup>
 
 			<WidgetsGroup name="Levels">
-				<WidgetInfo title="Fractals" value={result.fractal_level} />
+				<WidgetInfo title="Fractals" value={result.fractal_level} image="{base}/assets/"/>
 				<WidgetInfo title="WvW" value={result.wvw_rank} />
 			</WidgetsGroup>
 		</Awaiter>

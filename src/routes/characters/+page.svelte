@@ -17,7 +17,8 @@
 	}
 
 	function craftIcon(name){
-		return `${base}/assets/craft/${name}_tango_icon_48px.png`;
+		// return `${base}/assets/craft/${name}_tango_icon_48px.png`;
+		return `${base}/assets/craft/map_crafting_${name.toLowerCase()}.png`;
 	}
 
 	function iconScale(createdAt) {
@@ -130,7 +131,7 @@
 				padding: 0;
 				&.icons {
 					img {
-						height: 1.4rem;
+						width: 32px;
 						vertical-align: middle;
 						margin: 2px 5px 2px 0;
 					}

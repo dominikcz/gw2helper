@@ -1,17 +1,19 @@
-%focus{
+%focus {
 	box-shadow: inset 0 0 3px #c1c1c1, 0 0 3px #999;
 	outline: 1px solid #999;
 	background-color: #fff;
 }
-.focusable:focus{
-	@extend %focus;
-}	
 
-*:focus{
+.focusable:focus {
+	@extend %focus;
+}
+
+*:focus {
 	outline: 1px dashed #999;
 }
 
-input, button {
+input,
+button {
 	margin: 0;
 	padding: 0.6em 1em;
 	border: 1px solid #a2a9b1;
@@ -19,20 +21,21 @@ input, button {
 	vertical-align: middle;
 	font-family: sans-serif;
 	height: 2rem;
-	&:focus{
+
+	&:focus {
 		@extend %focus;
 	}
 }
 
-input[type=checkbox]{
+input[type=checkbox] {
 	height: 1.2rem;
 	outline-offset: 2px;
 }
 
 input.apikey {
-  width: 80%;
-  max-width: 36rem;
-  font-family: monospace;
+	width: 80%;
+	max-width: 36rem;
+	font-family: monospace;
 }
 
 button {
@@ -47,6 +50,7 @@ button {
 	text-align: center;
 	transition: 0.3s;
 	cursor: pointer;
+
 	&:hover {
 		background-color: #fff;
 	}
@@ -59,6 +63,29 @@ button:disabled {
 	cursor: default;
 }
 
-fieldset{
+fieldset {
 	margin: 1rem 1rem 0 1rem;
+
+	&.settings {
+		margin: 0;
+		display: flex;
+		flex-flow: column nowrap;
+		row-gap: 0.2rem;
+
+		button {
+			margin-top: 0.5rem;
+		}
+	}
+}
+
+@media (min-width: 420px) {
+	fieldset.settings {
+		flex-flow: row wrap;
+		column-gap: 0.5rem;
+		align-items: center;
+
+		button {
+			margin: 0 0 0 0.5rem;
+		}
+	}
 }
