@@ -53,51 +53,37 @@
 
 			<WidgetsGroup name="Accessible content">
 				{#if has(result, 'PlayForFree')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Play for free" url={`${base}/assets/400px-GW2Logo_new.png`} />
-					</Linkable>
+					<WidgetImg title="Play for free" url="{base}/assets/400px-GW2Logo_new.png" link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip" />
 				{/if}
 
 				{#if has(result, 'GuildWars2')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Base game" url={`${base}/assets/400px-GW2Logo_new.png`} />
-					</Linkable>
+					<WidgetImg title="Base game" url={`${base}/assets/400px-GW2Logo_new.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip"/>
 				{/if}
 
 				{#if has(result, 'HeartOfThorns')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Heart Of Thorns" url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`} />
-					</Linkable>
+					<WidgetImg title="Heart Of Thorns" url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki" class="autotooltip" />
 				{/if}
 
 				{#if has(result, 'PathOfFire')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Path Of Fire" url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`} />
-					</Linkable>
+					<WidgetImg title="Path Of Fire" url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki" class="autotooltip" />
 				{/if}
 
 				{#if has(result, 'EndOfDragons')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="End Of Dragons" url={`${base}/assets/400px-EoD_Texture_Trans.png`} />
-					</Linkable>
+					<WidgetImg title="End Of Dragons" url={`${base}/assets/400px-EoD_Texture_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki" class="autotooltip"/>
 				{/if}
 
 				{#if has(result, 'SecretsOfTheObscure')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`} />
-					</Linkable>
+					<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki" class="autotooltip" />
 				{/if}
 
 				{#if has(result, 'JanthirWilds')}
-					<Linkable link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki" class="autotooltip">
-						<WidgetImg title="Janthir Wilds" url={`${base}/assets/400px-Janthir_Wilds_logo.png`} />
-					</Linkable>
+					<WidgetImg title="Janthir Wilds" url={`${base}/assets/400px-Janthir_Wilds_logo.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki" class="autotooltip" />
 				{/if}
 			</WidgetsGroup>
 
 			<WidgetsGroup name="Levels">
-				<WidgetInfo title="Fractals" value={result.fractal_level} image="{base}/assets/"/>
-				<WidgetInfo title="WvW" value={result.wvw_rank} />
+				<WidgetInfo title="Fractals" value={result.fractal_level} image="{base}/assets/rewards/Daily_Fractals.png" />
+				<WidgetInfo title="WvW" value={result.wvw_rank} image="{base}/assets/rewards/WvW_Ability_Point.png" />
 			</WidgetsGroup>
 		</Awaiter>
 	</article>

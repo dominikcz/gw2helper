@@ -198,10 +198,10 @@
 		z-index: 1000;
 		overflow: clip;
 		display: none;
+		cursor: default;
 		&.visible {
 			display: block;
 		}
-		cursor: default;
 	}
 	:global(.autotooltip-link) {
 		font-size: smaller;
