@@ -1,5 +1,5 @@
 import Logger from "./logger";
-import ls from "./wxjs_localstorage";
+import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum } from "./utils";
@@ -22,10 +22,11 @@ interface CacheEntry {
     data: object;
 }
 
-const _items = ls.getObject(ITEMS_CACHE, null);
-const _achieves = ls.getObject(ACHIEVES_CACHE, null);
-const itemsCache = _items ? new Map(_items) : new Map();
-const achievesCache = _achieves ? new Map(_achieves) : new Map();
+let _items;
+let _achieves;
+let itemsCache;
+let achievesCache;
+let requestCache: Map<string, CacheEntry>;
 
 let _apiKey = "";
 let fetchOptions = {
@@ -43,8 +44,6 @@ let fetchOptions = {
 const requestCacheName = (): string => {
     return `${REQUESTS_CACHE}.${_apiKey}`;
 }
-
-let requestCache: Map<string, CacheEntry>;
 
 const notifyOnError = (req, error, options) => {
     if (fetchOptions.onError) {
@@ -70,13 +69,13 @@ const tryCache = (req: string): object | undefined => {
     return undefined;
 };
 
-const cacheRequest = (req: string, value: any) => {
+const cacheRequest = async (req: string, value: any) => {
     const obj = {
         time: new Date(),
         data: value,
     };
     requestCache.set(req, obj);
-    ls.set(requestCacheName(), JSON.stringify([...requestCache.entries()]));
+    await ls.set(requestCacheName(), [...requestCache.entries()]);
 };
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
@@ -344,13 +343,19 @@ const wallet = async () => {
     });
 }
 
-const init = (apiKey: string, options?: object) => {
+const init = async (apiKey: string, options?: object) => {
+    console.log('init', apiKey);
+    _items = await ls.getObject(ITEMS_CACHE, []);
+    _achieves = await ls.getObject(ACHIEVES_CACHE, []);
+    itemsCache = _items ? new Map(_items) : new Map();
+    achievesCache = _achieves ? new Map(_achieves) : new Map();
+    
     Logger.log("init", apiKey);
     _apiKey = apiKey;
     fetchOptions = Object.assign({}, fetchOptions, options);
-    const _req = ls.getObject(requestCacheName(), null);
+    const _req = await ls.getObject(requestCacheName(), []);
 
-    requestCache = _req ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
+    requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
 };
 
 const mergeById = (a1, a2) => {
@@ -390,7 +395,7 @@ const expandItems = async (ids: Array<number>, collection) => {
                 itemsCache.set(x.id, x);
             }
         });
-        ls.set(ITEMS_CACHE, JSON.stringify([...itemsCache.entries()]));
+        await ls.set(ITEMS_CACHE, [...itemsCache.entries()]);
         data.push(...mergeById(resp, collection));
     }
     if (alreadyKnown.length) {
@@ -441,7 +446,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
             }
         });
         // store updated achievs in localStorage for future
-        ls.set(ACHIEVES_CACHE, JSON.stringify([...achievesCache.entries()]));
+        await ls.set(ACHIEVES_CACHE, [...achievesCache.entries()]);
         data.push(...mergeById(resp, accountAchieves));
     }
 
@@ -529,12 +534,12 @@ const additionalMapping = (data) => {
     });
 };
 
-const clearCache = () => {
+const clearCache = async () => {
     Logger.log('clearing cache...');
-    ls.delete(requestCacheName());
-    ls.delete(ITEMS_CACHE);
-    ls.delete(ACHIEVES_CACHE);
-    ls.delete(KEY_HIST);
+    await ls.delete(requestCacheName());
+    await ls.delete(ITEMS_CACHE);
+    await ls.delete(ACHIEVES_CACHE);
+    await ls.delete(KEY_HIST);
     itemsCache.clear();
     achievesCache.clear();
     requestCache.clear();

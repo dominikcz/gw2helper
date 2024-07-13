@@ -8,27 +8,41 @@
 	import utils from '$lib/utils';
 	import { base } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
+	import { onMount } from 'svelte';
 	export let data;
 
 	let filter = '';
 
 	const fields = ['name', 'category', 'description'];
 
-	const settings = utils.readAchievesSettings();
+	let notCompleted = true;
+	let withPoints = false;
+	let withMasteryCentral = false;
+	let withMasteryHoT = false;
+	let withMasteryPoF = false;
+	let withMasteryIce = false;
+	let withMasteryEoD = false;
+	let withMasterySofO = false;
+	let withTitles = false;
+	let withItems = false;
+	let withCoins = false;
+	let sortBy = 'ap';
 
-	let notCompleted = settings.notCompleted == undefined ? true : settings.notCompleted;
-	let withPoints = settings.withPoints == undefined ? false : settings.withPoints;
-	let withMasteryCentral = settings.withMasteryCentral == undefined ? false : settings.withMasteryCentral;
-	let withMasteryHoT = settings.withMasteryHoT == undefined ? false : settings.withMasteryHoT;
-	let withMasteryPoF = settings.withMasteryPoF == undefined ? false : settings.withMasteryPoF;
-	let withMasteryIce = settings.withMasteryIce == undefined ? false : settings.withMasteryIce;
-	let withMasteryEoD = settings.withMasteryEoD == undefined ? false : settings.withMasteryEoD;
-	let withMasterySofO = settings.withMasterySofO == undefined ? false : settings.withMasterySofO;
-	let withTitles = settings.withTitles == undefined ? false : settings.withTitles;
-	let withItems = settings.withItems == undefined ? false : settings.withItems;
-	let withCoins = settings.withCoins == undefined ? false : settings.withCoins;
-
-	let sortBy = settings.sortBy == undefined ? 'ap' : settings.sortBy;
+	onMount(async () => {
+		const settings = await utils.readAchievesSettings();
+		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
+		if (settings.withPoints !== undefined) withPoints = settings.withPoints;
+		if (settings.withMasteryCentral !== undefined) withMasteryCentral = settings.withMasteryCentral;
+		if (settings.withMasteryHoT !== undefined) withMasteryHoT = settings.withMasteryHoT;
+		if (settings.withMasteryPoF !== undefined) withMasteryPoF = settings.withMasteryPoF;
+		if (settings.withMasteryIce !== undefined) withMasteryIce = settings.withMasteryIce;
+		if (settings.withMasteryEoD !== undefined) withMasteryEoD = settings.withMasteryEoD;
+		if (settings.withMasterySofO !== undefined) withMasterySofO = settings.withMasterySofO;
+		if (settings.withTitles !== undefined) withTitles = settings.withTitles;
+		if (settings.withItems !== undefined) withItems = settings.withItems;
+		if (settings.withCoins !== undefined) withCoins = settings.withCoins;
+		if (settings.sortBy !== undefined) sortBy = settings.sortBy;
+	});
 
 	function achievFilterCallback(achiev) {
 		const mastery = achiev.rewardsObj.mastery || [];
@@ -75,7 +89,7 @@
 	}
 
 	function filteredAchieves(data, params) {
-		console.log('filtering...')
+		console.log('filtering...');
 		// clone base properties, but no categories
 		let _data = {
 			completed: data.completed,
@@ -110,8 +124,8 @@
 
 		return _data;
 	}
-	function sort(collection, sortBy){
-		console.log('sorting...')
+	function sort(collection, sortBy) {
+		console.log('sorting...');
 		switch (sortBy) {
 			case 'ap': {
 				collection.sort((a, b) => {
@@ -127,7 +141,6 @@
 		}
 		return collection;
 	}
-
 </script>
 
 <img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />

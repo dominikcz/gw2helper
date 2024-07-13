@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"idb-keyval": "^6.2.1",
 		"yaml": "^2.4.5"
 	}
 }

@@ -2,15 +2,23 @@
 	import EventTimers from '$lib/components/eventTimers.svelte';
 	import { eventData } from './metas';
 	import utils from '$lib/utils';
+	import { onMount } from 'svelte';
 
-	const settings = utils.readEventTimerSettings();
+	let showChatLinks = true;
+	let showEventTimes = true
+	let showCategories = true;
+	let showHeadings = true;
+	let autoScroll = false;
 
-	let showChatLinks = settings.showChatLinks == undefined ? true : settings.showChatLinks;
-	let showEventTimes = settings.showEventTimes == undefined ? true : settings.showEventTimes;
-	let showCategories = settings.showCategories == undefined ? true : settings.showCategories;
-	let showHeadings = settings.showHeadings == undefined ? true : settings.showHeadings;
-	let autoScroll = settings.autoScroll == undefined ? false : settings.autoScroll;
-
+	onMount(async () =>{
+		const settings = await utils.readEventTimerSettings();
+		showChatLinks = settings.showChatLinks;
+		showEventTimes = settings.showEventTimes;
+		showCategories = settings.showCategories;
+		showHeadings = settings.showHeadings;
+		autoScroll = settings.autoScroll;
+	})
+	
 	function saveSettings() {
 		utils.saveEventTimerSettings({
 			showChatLinks,

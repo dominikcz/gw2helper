@@ -2,7 +2,7 @@ import utils from "$lib/utils";
 
 export async function load({ fetch, parent }) {
     const { apiService } = await parent();
-	const key = utils.readApiKey();
+	const key = await utils.readApiKey();
 	if (key){
 		return {
 			'account': apiService.account(),

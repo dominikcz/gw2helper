@@ -1,7 +1,7 @@
-import ls from "$lib/wxjs_localstorage";
+import ls from "$lib/wxjs_idb";
 import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS } from "$lib/consts";
 
-function readApiKey() {
+async function readApiKey() {
     let key = '';
     if (typeof window != 'undefined') {
         key = new URLSearchParams(window.location.search).get('key') || ''
@@ -12,37 +12,37 @@ function readApiKey() {
     return key;
 }
 
-function saveApiKey(value) {
-    const hist = getKeyHist();
+async function saveApiKey(value) {
+    const hist = await getKeyHist();
     if (!hist.includes(value)) {
         hist.push(value);
-        ls.set(KEY_HIST, hist);
+        await ls.set(KEY_HIST, hist);
     }
-    return ls.set(KEY_NAME, value);
+    return await ls.set(KEY_NAME, value);
 }
 
-function deleteApiKey() {
-    ls.delete(KEY_NAME)
+async function deleteApiKey() {
+    await ls.delete(KEY_NAME)
 }
 
-function getKeyHist() {
-    return ls.getObject(KEY_HIST, []);
+async function getKeyHist() {
+    return await ls.getObject(KEY_HIST, []);
 }
 
-function readEventTimerSettings(){
-    return ls.getObject(EVENT_TIMER_SETTINGS, {});
+async function readEventTimerSettings(){
+    return await ls.getObject(EVENT_TIMER_SETTINGS, {});
 }
 
-function saveEventTimerSettings(settings){
-    return ls.set(EVENT_TIMER_SETTINGS, settings);
+async function saveEventTimerSettings(settings){
+    return await ls.set(EVENT_TIMER_SETTINGS, settings);
 }
 
-function readAchievesSettings(){
-    return ls.getObject(ACHIEVES_SETTINGS, {});
+async function readAchievesSettings(){
+    return await ls.getObject(ACHIEVES_SETTINGS, {});
 }
 
-function saveAchievesSettings(settings){
-    return ls.set(ACHIEVES_SETTINGS, settings);
+async function saveAchievesSettings(settings){
+    return await ls.set(ACHIEVES_SETTINGS, settings);
 }
 
 export function sum(array, property) {
