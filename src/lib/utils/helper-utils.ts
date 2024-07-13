@@ -1,15 +1,11 @@
-export type FilterCallback = (item: object, filter: string, filterResult: boolean) => boolean;
 export type FilterOptions = {
     nonZero?: boolean,
     nonZeroField?: string,
-    filterCallback?: FilterCallback,
-    callbackOnly?: boolean,
 }
 
 const DEFAULT_FILTER_OPTIONS: FilterOptions = {
     nonZero: false,
     nonZeroField: 'count',
-    callbackOnly: false,
 }
 
 function match(word: string, obj: object, properties: Array<string>) {
@@ -46,20 +42,8 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
     return words.every((x) => match(x, obj, properties));
 }
 
-function filterCollection(collection, fields: Array<string>, filter: string, options: FilterOptions = DEFAULT_FILTER_OPTIONS) {
-    let filtered = collection.filter((x) => {
-        let filterRes = false;
-        if (!options.callbackOnly) {
-            filterRes = (!options.nonZero || x[options.nonZeroField] > 0) && fullTextSearch(filter, x, fields);
-            // console.log('filterCollection base', filterRes)
-        }
-        if (options.filterCallback != undefined) {
-            filterRes = options.filterCallback(x, filter, filterRes);
-            // console.log('filterCollection callback', filterRes)
-        }
-
-        return filterRes;
-    });
+function filterCollection(collection: Array<object>, fields: Array<string>, filter: string, options: FilterOptions = DEFAULT_FILTER_OPTIONS) {
+    let filtered = collection.filter((x) => (!options.nonZero || x[options.nonZeroField] > 0) && fullTextSearch(filter, x, fields));
 
     // if (sortBy == SortType.Slots) {
     // 	console.log('sorting by slots...');

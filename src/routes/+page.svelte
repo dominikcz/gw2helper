@@ -146,6 +146,7 @@
 			justify-content: flex-end;
 			align-items: center;
 			column-gap: 0.5rem;
+			font-size: 120%;
 		}
 	}
 </style>

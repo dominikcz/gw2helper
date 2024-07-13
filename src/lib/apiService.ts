@@ -401,6 +401,14 @@ const expandItems = async (ids: Array<number>, collection) => {
     return data;
 };
 
+const sumRewards = (rewardsToGet, rewards) => {
+    rewards.forEach(x => {
+        const key = (x.region ? `${x.type}_${x.region}` : x.type).toLowerCase();
+        const old = rewardsToGet.get(key) || 0;
+        rewardsToGet.set(key, old + (x.count || 1))
+      });
+}
+
 const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     const knownIds = [...achievesCache.keys()];
     const _doneIds = accountAchieves.filter(x => x.done === true).map(x => x.id);
@@ -451,6 +459,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 bits_done: [],
                 done: false
             };
+            if (!mine.repeated) {
+                mine.repeated = 0;
+            }
             let points_per_tier: number | null = null;
             let points_done: number | null = null;
             let points_to_get: number | null = null;
@@ -472,21 +483,36 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_to_get,
             }
         });
+
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
+        cat._rewards_to_get = cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)
         // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
-        cat.rewards = Object.groupBy(cat.achievements.filter(x => x.rewards).flatMap(x => x.rewards), x => x.type.toLowerCase())
+        // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
+        // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
+        // cat.items_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.item).length;
+
+        cat.rewards_to_get = new Map();
+        sumRewards(cat.rewards_to_get, cat._rewards_to_get);
+        // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
     })
     // get all masteries for dev purposes
     // const tmp = categories.map(c => c.rewards.mastery).filter(x => x != undefined).flat(true).map((x => x.region))
     // console.log('masteries', [... new Set(tmp)])
 
+    const rewards_to_get = new Map();
+    
+    categories.forEach(x => {
+        sumRewards(rewards_to_get, x._rewards_to_get)
+    });
+    
     return {
         completed: _doneIds.length,
         todo: _notDone.length,
         daily_ap: account.daily_ap,
         monthly_ap: account.monthly_ap,
-        categories
+        categories,
+        rewards_to_get,
     }
 };
 
