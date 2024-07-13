@@ -186,6 +186,7 @@
 		withTitles,
 		withItems,
 		withCoins,
+		filter,
 	])}
 	<WidgetsGroup name="Achievements' completed">
 		<WidgetInfo title="Achieves completed" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
@@ -341,6 +342,7 @@
 									/>
 								{/if}
 								<small><a href="https://api.guildwars2.com/v2/achievements/{achiev.id}" target="_blank">id: {achiev.id}</a></small>
+								<small><a href="{helperUtils.wikiLink(achiev.name)}" target="_blank"><img src="{base}/assets/wiki.svg" alt="wiki logo" height="24px" title="Read more on GW2 Wiki" /></a></small>
 							</div>
 							<div class="body">
 								<h3>{achiev.name}</h3>
@@ -544,6 +546,10 @@
 			}
 			small {
 				font-size: xx-small;
+				img{
+					width: 24px;
+					height: 24px;
+				}
 			}
 			img {
 				width: 48px;
