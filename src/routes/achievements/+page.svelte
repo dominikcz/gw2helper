@@ -227,17 +227,17 @@
 				<fieldset class="settings">
 					<legend>Settings</legend>
 
-					<label><input type="checkbox" bind:checked={notCompleted} /> Hide completed</label>
-					<label><input type="checkbox" bind:checked={withPoints} /> with points to get</label>
-					<label><input type="checkbox" bind:checked={withMasteryCentral} /> with Central Tyria mastery</label>
-					<label><input type="checkbox" bind:checked={withMasteryHoT} /> with HoT mastery</label>
-					<label><input type="checkbox" bind:checked={withMasteryPoF} /> with PoF mastery</label>
-					<label><input type="checkbox" bind:checked={withMasteryIce} /> with Icebrood Saga mastery</label>
-					<label><input type="checkbox" bind:checked={withMasteryEoD} /> with EoD mastery</label>
-					<label><input type="checkbox" bind:checked={withMasterySofO} /> with SofO mastery</label>
-					<label><input type="checkbox" bind:checked={withTitles} /> with titles to get</label>
-					<label><input type="checkbox" bind:checked={withItems} /> with items to get</label>
-					<label><input type="checkbox" bind:checked={withCoins} /> with coins to get</label>
+					<label><input type="checkbox" bind:checked={notCompleted} /> Not completed</label>
+					<label><input type="checkbox" bind:checked={withPoints} /> Points to get</label>
+					<label><input type="checkbox" bind:checked={withMasteryCentral} /> Central Tyria mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryHoT} /> HoT mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryPoF} /> PoF mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryIce} /> Icebrood Saga mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryEoD} /> EoD mastery</label>
+					<label><input type="checkbox" bind:checked={withMasterySofO} /> SofO mastery</label>
+					<label><input type="checkbox" bind:checked={withTitles} /> Titles to get</label>
+					<label><input type="checkbox" bind:checked={withItems} /> Items to get</label>
+					<label><input type="checkbox" bind:checked={withCoins} /> Coins to get</label>
 
 					<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
 					<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>

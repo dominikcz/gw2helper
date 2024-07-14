@@ -54,53 +54,70 @@
 
 <AutoTooltip />
 
-<header>
-	<img src="{base}/assets/heart.png" alt="logo" />
-	<div class="line">
-		<h1>GW2 Helper</h1>
-		<small>v{data.version}</small>
+<div id="content-wrapper">
+	<div id="content">
+		<header>
+			<img src="{base}/assets/heart.png" alt="logo" />
+			<div class="line">
+				<h1>GW2 Helper</h1>
+				<small>v{data.version}</small>
+			</div>
+		</header>
+		{#if tokenInfo}
+			<Navigation items={navigation} {active} />
+		{/if}
+
+		<section>
+			<details open={!tokenInfo.name}>
+				<summary>API Settings</summary>
+				<fieldset id="settings">
+					<legend>API settings</legend>
+					<p>
+						In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
+							href="https://account.arena.net/applications">https://account.arena.net/applications.</a
+						>.
+					</p>
+					<label for="api-key">Your API key:</label>
+					<SearchInput
+						name="api-key"
+						id="api-key"
+						class="apikey"
+						placeholder="Paste your API key here"
+						bind:value={apiKey}
+						options={data.apiKeyHist}
+					/>
+					<button on:click={() => saveApiKey()}>Apply</button>
+					<button on:click={() => deleteApiKey()}>Forget stored key</button>
+					<button on:click={refresh}>Clear cache & reload</button>
+					{#if tokenInfo.name}
+						<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
+					{/if}
+				</fieldset>
+			</details>
+		</section>
+
+		{#if tokenInfo.name}
+			<main>
+				<slot />
+			</main>
+		{/if}
+
+		<BackToTop>
+			<div class="waypoint" title="waypoint to top"></div>
+		</BackToTop>
 	</div>
-</header>
-{#if tokenInfo}
-	<Navigation items={navigation} {active} />
-{/if}
-
-<section>
-	<details open={!tokenInfo.name}>
-		<summary>API Settings</summary>
-		<fieldset id="settings">
-			<legend>API settings</legend>
-			<p>
-				In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
-					href="https://account.arena.net/applications">https://account.arena.net/applications.</a
-				>.
-			</p>
-			<label for="api-key">Your API key:</label>
-			<SearchInput name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} options={data.apiKeyHist} />
-			<button on:click={() => saveApiKey()}>Apply</button>
-			<button on:click={() => deleteApiKey()}>Forget stored key</button>
-			<button on:click={refresh}>Clear cache & reload</button>
-			{#if tokenInfo.name}
-				<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
-			{/if}
-		</fieldset>
-	</details>
-</section>
-
-{#if tokenInfo.name}
-	<main>
-		<slot />
-	</main>
-{/if}
-
-<BackToTop>
-	<div class="waypoint" title="waypoint to top"></div>
-</BackToTop>
-
-<footer>
-	<p>This unofficial site includes art and other assets that are © 2015 ArenaNet, Inc. All rights reserved. All other trademarks are the property of their respective owners. This site uses also images and data from <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a></p>
-	<p>© ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire, Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure and all associated logos, designs, and composite marks are trademarks or registered trademarks of NCSOFT Corporation.</p>
-</footer>
+	<footer>
+		<p>
+			This unofficial site includes art and other assets that are © 2015 ArenaNet, Inc. All rights reserved. All other trademarks are the property of
+			their respective owners. This site uses also images and data from <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+		</p>
+		<p>
+			© ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire,
+			Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure and all associated logos, designs, and composite marks are trademarks or
+			registered trademarks of NCSOFT Corporation.
+		</p>
+	</footer>
+</div>
 
 <style lang="scss" global>
 	.line {
@@ -150,15 +167,24 @@
 			background-image: url(/gw2helper/assets/waypoint-hover.png);
 		}
 	}
-	#settings{
+	#settings {
 		background: url(/gw2helper/assets/150px-construction.png) center right no-repeat;
 	}
-	.autotooltip-wide{
+	.autotooltip-wide {
 		width: 300px;
 	}
-	footer{
+
+	#content-wrapper {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: space-between;
+		min-height: 100vh;
+		gap: 0;
+	}
+	footer {
 		background-color: #aaa;
 		font-size: smaller;
 		padding: 0.3rem 1rem;
+		width: 100%;
 	}
 </style>
