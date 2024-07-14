@@ -78,6 +78,10 @@ const cacheRequest = async (req: string, value: any) => {
     await ls.set(requestCacheName(), [...requestCache.entries()]);
 };
 
+const getFromAchievesCache = (key: string): object => {
+    return achievesCache.get(key);
+}
+
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
     if (!_apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
@@ -479,6 +483,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
             }
             achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
+            if (!achiev.icon) achiev.icon = cat.icon;
 
             return {
                 ...achiev,
@@ -561,4 +566,5 @@ export default {
     currencies,
     wallet,
     clearCache,
+    getFromAchievesCache,
 };

@@ -9,9 +9,13 @@
 	import { base } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
 	import { onMount } from 'svelte';
+	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
+	import AchievList from '$lib/components/achievements/achievList.svelte';
+
 	export let data;
 
 	let filter = '';
+	let todoList = [];
 
 	const fields = ['name', 'category', 'description'];
 
@@ -29,7 +33,7 @@
 	let sortBy = 'ap';
 
 	onMount(async () => {
-		const settings = await utils.readAchievesSettings();
+		const settings = await data.settings;
 		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
 		if (settings.withPoints !== undefined) withPoints = settings.withPoints;
 		if (settings.withMasteryCentral !== undefined) withMasteryCentral = settings.withMasteryCentral;
@@ -42,6 +46,9 @@
 		if (settings.withItems !== undefined) withItems = settings.withItems;
 		if (settings.withCoins !== undefined) withCoins = settings.withCoins;
 		if (settings.sortBy !== undefined) sortBy = settings.sortBy;
+
+		todoList = await data.todo;
+		// console.log('todo', todoList);
 	});
 
 	function achievFilterCallback(achiev) {
@@ -124,6 +131,7 @@
 
 		return _data;
 	}
+
 	function sort(collection, sortBy) {
 		console.log('sorting...');
 		switch (sortBy) {
@@ -141,37 +149,33 @@
 		}
 		return collection;
 	}
+
+	async function hndToggleTodo(event) {
+		const obj = event.detail;
+		if (obj.todo) {
+			todoList.push(obj.id);
+			todoList = todoList;
+		} else {
+			todoList = todoList.filter((x) => x !== obj.id);
+		}
+		await utils.saveAchievesToDo(todoList);
+	}
+
+	function expandToDoList(list) {
+		const api = data.apiService;
+		const _data = list.map((x) => {
+			const achiev = api?.getFromAchievesCache(x);
+			achiev.todo = true;
+			return achiev;
+		});
+		// console.log('expanded', _data)
+		return _data;
+	}
 </script>
 
 <img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
 
 <h1>Achievements</h1>
-
-<fieldset class="settings">
-	<legend>Settings</legend>
-
-	<label><input type="checkbox" bind:checked={notCompleted} /> Hide completed</label>
-	<label><input type="checkbox" bind:checked={withPoints} /> with points to get</label>
-	<label><input type="checkbox" bind:checked={withMasteryCentral} /> with Central Tyria mastery</label>
-	<label><input type="checkbox" bind:checked={withMasteryHoT} /> with HoT mastery</label>
-	<label><input type="checkbox" bind:checked={withMasteryPoF} /> with PoF mastery</label>
-	<label><input type="checkbox" bind:checked={withMasteryIce} /> with Icebrood Saga mastery</label>
-	<label><input type="checkbox" bind:checked={withMasteryEoD} /> with EoD mastery</label>
-	<label><input type="checkbox" bind:checked={withMasterySofO} /> with SofO mastery</label>
-	<label><input type="checkbox" bind:checked={withTitles} /> with titles to get</label>
-	<label><input type="checkbox" bind:checked={withItems} /> with items to get</label>
-	<label><input type="checkbox" bind:checked={withCoins} /> with coins to get</label>
-
-	<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
-	<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
-
-	<button on:click={saveSettings}>Save settings</button>
-</fieldset>
-
-<section>
-	<label for="filter">Filter:</label>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
-</section>
 
 <Awaiter promise={data.achievements} let:result>
 	{@const _result = filteredAchieves(result, [
@@ -204,265 +208,171 @@
 			<Price {value} />
 		</WidgetInfo>
 	</WidgetsGroup>
-	<span>showing {_result.categories.length} categories out of {result.categories.length}</span>
-	<div class="achiev-container">
-		{#each sort(_result.categories, sortBy) as category (category.id)}
-			<details class="achiev-group">
-				<summary>
-					<img src={category.icon} alt={category.name} />
-					<div class="descr">
-						<span
-							>{category.name}
-							<small><a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank">id: {category.id}</a></small
-							></span
-						>
-						<div class="rewards large">
-							{#if category.rewards_to_get.has('title')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('title')}</span>
-									<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This category rewards a title" />
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('coins')}
-								<div class="reward-item">
-									<Price value={category.rewards_to_get.get('coins')} />
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('item')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('item')}</span>
-									<img src="{base}/assets/rewards/Achievement_Chest_interface_icon.png" alt="item" title="This category rewards items" />
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_tyria')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_tyria')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
-										alt="mastery points Central Tyria"
-										title="This category rewards Central Tyria mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_maguuma')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_maguuma')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
-										alt="mastery points Heart of Thorns"
-										title="This category rewards Heart of Thorns mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_desert')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_desert')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
-										alt="mastery points Path of Fire"
-										title="This category rewards Path of Fire mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_tundra')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_tundra')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
-										alt="mastery points Icebrood Saga"
-										title="This category rewards Icebrood Saga mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_jade')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_jade')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
-										alt="mastery points End of Dragons"
-										title="This category rewards End of Dragons mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.rewards_to_get.has('mastery_sky')}
-								<div class="reward-item">
-									<span>{category.rewards_to_get.get('mastery_sky')}</span>
-									<img
-										src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
-										alt="mastery points Secrets of the Obscure"
-										title="This category rewards Secrets of the Obscure mastery points"
-									/>
-								</div>
-							{/if}
-							{#if category.points_to_get}
-								<div class="reward-item">
-									<span>{category.points_to_get}</span>
-									<img
-										src="{base}/assets/rewards/AP.png"
-										alt="achievement points"
-										title="You can get {category.points_to_get} achievement points from this category"
-									/>
-								</div>
-							{/if}
-							<div class="reward-item">
-								<span>{category.achievements.length}</span>
-								<img
-									src="{base}/assets/rewards/Achievements_Summary.png"
-									alt="achieves"
-									title="There are {category.achievements.length} achievements left to do"
-								/>
-							</div>
-						</div>
-					</div>
-				</summary>
-				{#if category.description}<p>{category.description}</p>{/if}
-				<div class="achiev-list">
-					{#each sort(category.achievements, sortBy) as achiev (achiev.id)}
-						{@const mastery = achiev.rewardsObj.mastery}
-						{@const bits_done = achiev.bits ? (achiev.done ? achiev.bits.length : achiev.bits_done.length) : 0}
-						{@const bits = achiev.bits ? achiev.bits.length : 0}
-						<div class="achiev">
-							<div class="head">
-								{#if achiev.icon}
-									<img src={achiev.icon} alt={achiev.name} />
-								{:else}
-									<img src={category.icon} alt={achiev.name} />
-								{/if}
 
-								{#if achiev.current}
-									<progress value={achiev.current} max={achiev.max} />
-									<span>{achiev.current} / {achiev.max}</span>
-								{/if}
-								{#if achiev.flags && achiev.flags.includes('Hidden')}
-									<img
-										class="icon"
-										src="{base}/assets/rewards/Achievements_Watch_List.png"
-										alt="hidden achievement"
-										title="This is a hidden achievement"
-									/>
-								{/if}
-								<small><a href="https://api.guildwars2.com/v2/achievements/{achiev.id}" target="_blank">id: {achiev.id}</a></small>
-								<small><a href="{helperUtils.wikiLink(achiev.name)}" target="_blank"><img src="{base}/assets/wiki.svg" alt="wiki logo" height="24px" title="Read more on GW2 Wiki" /></a></small>
-							</div>
-							<div class="body">
-								<h3>{achiev.name}</h3>
-								{#if achiev.description}<span>{achiev.description}</span>{/if}
-								{#if achiev.requirement}<span>{achiev.requirement}</span>{/if}
+	<section class="tabs-container">
+		<Tabs>
+			<div class="tab-list">
+				<Tab>List</Tab>
+				<Tab>To dos</Tab>
+			</div>
 
-								<div class="rewards small">
-									{#if achiev.type == 'ItemSet'}
-										<div class="reward-item">
-											<img
-												src="{base}/assets/rewards/Talk_collection_option.png"
-												alt="title"
-												title="This achievement is linked to a collection"
-											/>
-										</div>
-									{/if}
+			<TabPanel>
+				<fieldset class="settings">
+					<legend>Settings</legend>
 
-									{#if achiev.rewardsObj.title}
-										<div class="reward-item">
-											<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This achievement rewards a title" />
-										</div>
-									{/if}
-									{#if achiev.rewardsObj.coins}
-										<div class="reward-item">
-											<Price value={achiev.rewardsObj.coins[0].count} />
-										</div>
-									{/if}
-									{#if achiev.rewardsObj.item}
-										<div class="reward-item">
-											<img
-												src="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
-												alt="item"
-												title="This achievement rewards items"
-											/>
-										</div>
-									{/if}
-									{#if mastery}
-										{#if mastery.find((x) => x.region == 'Tyria')}
+					<label><input type="checkbox" bind:checked={notCompleted} /> Hide completed</label>
+					<label><input type="checkbox" bind:checked={withPoints} /> with points to get</label>
+					<label><input type="checkbox" bind:checked={withMasteryCentral} /> with Central Tyria mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryHoT} /> with HoT mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryPoF} /> with PoF mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryIce} /> with Icebrood Saga mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryEoD} /> with EoD mastery</label>
+					<label><input type="checkbox" bind:checked={withMasterySofO} /> with SofO mastery</label>
+					<label><input type="checkbox" bind:checked={withTitles} /> with titles to get</label>
+					<label><input type="checkbox" bind:checked={withItems} /> with items to get</label>
+					<label><input type="checkbox" bind:checked={withCoins} /> with coins to get</label>
+
+					<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
+					<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
+
+					<button on:click={saveSettings}>Save settings</button>
+				</fieldset>
+
+				<section>
+					<label for="filter">Filter:</label>
+					<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
+				</section>
+
+				<span>showing {_result.categories.length} categories out of {result.categories.length}</span>
+				<div class="achiev-container">
+					{#each sort(_result.categories, sortBy) as category (category.id)}
+						<details class="achiev-group">
+							<summary>
+								<img src={category.icon} alt={category.name} />
+								<div class="descr">
+									<span
+										>{category.name}
+										<small
+											><a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank">id: {category.id}</a
+											></small
+										></span
+									>
+									<div class="rewards large">
+										{#if category.rewards_to_get.has('title')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('title')}</span>
+												<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This category rewards a title" />
+											</div>
+										{/if}
+										{#if category.rewards_to_get.has('coins')}
+											<div class="reward-item">
+												<Price value={category.rewards_to_get.get('coins')} />
+											</div>
+										{/if}
+										{#if category.rewards_to_get.has('item')}
+											<div class="reward-item">
+												<span>{category.rewards_to_get.get('item')}</span>
+												<img
+													src="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
+													alt="item"
+													title="This category rewards items"
+												/>
+											</div>
+										{/if}
+										{#if category.rewards_to_get.has('mastery_tyria')}
+											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_tyria')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
 													alt="mastery points Central Tyria"
-													title="This achievement rewards Central Tyria mastery points"
+													title="This category rewards Central Tyria mastery points"
 												/>
 											</div>
 										{/if}
-										{#if mastery.find((x) => x.region == 'Maguuma')}
+										{#if category.rewards_to_get.has('mastery_maguuma')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_maguuma')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
 													alt="mastery points Heart of Thorns"
-													title="This achievement rewards Heart of Thorns mastery points"
+													title="This category rewards Heart of Thorns mastery points"
 												/>
 											</div>
 										{/if}
-										{#if mastery.find((x) => x.region == 'Desert')}
+										{#if category.rewards_to_get.has('mastery_desert')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_desert')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
 													alt="mastery points Path of Fire"
-													title="This achievement rewards Path of Fire mastery points"
+													title="This category rewards Path of Fire mastery points"
 												/>
 											</div>
 										{/if}
-										{#if mastery.find((x) => x.region == 'Tundra')}
+										{#if category.rewards_to_get.has('mastery_tundra')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_tundra')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
 													alt="mastery points Icebrood Saga"
-													title="This achievement rewards Icebrood Saga mastery points"
+													title="This category rewards Icebrood Saga mastery points"
 												/>
 											</div>
 										{/if}
-										{#if mastery.find((x) => x.region == 'Jade')}
+										{#if category.rewards_to_get.has('mastery_jade')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_jade')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
 													alt="mastery points End of Dragons"
-													title="This achievement rewards End of Dragons mastery points"
+													title="This category rewards End of Dragons mastery points"
 												/>
 											</div>
 										{/if}
-										{#if mastery.find((x) => x.region == 'Sky')}
+										{#if category.rewards_to_get.has('mastery_sky')}
 											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_sky')}</span>
 												<img
 													src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
 													alt="mastery points Secrets of the Obscure"
-													title="This achievement rewards Secrets of the Obscure mastery points"
+													title="This category rewards Secrets of the Obscure mastery points"
 												/>
 											</div>
 										{/if}
-									{/if}
-									{#if achiev.points_to_get}
+										{#if category.points_to_get}
+											<div class="reward-item">
+												<span>{category.points_to_get}</span>
+												<img
+													src="{base}/assets/rewards/AP.png"
+													alt="achievement points"
+													title="You can get {category.points_to_get} achievement points from this category"
+												/>
+											</div>
+										{/if}
 										<div class="reward-item">
-											<span>{achiev.points_to_get}</span>
-											<img
-												src="{base}/assets/rewards/AP.png"
-												alt="achievement points"
-												title="You can get {achiev.points_to_get} achievement points from this achievement"
-											/>
-										</div>
-									{/if}
-									{#if achiev.bits}
-										<div class="reward-item">
-											<span>{bits_done} / {bits}</span>
+											<span>{category.achievements.length}</span>
 											<img
 												src="{base}/assets/rewards/Achievements_Summary.png"
 												alt="achieves"
-												title="There are {bits - bits_done} tasks left to do"
+												title="There are {category.achievements.length} achievements left to do"
 											/>
 										</div>
-									{/if}
+									</div>
 								</div>
-							</div>
-						</div>
+							</summary>
+							{#if category.description}<p>{category.description}</p>{/if}
+							<AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo={hndToggleTodo} />
+						</details>
 					{/each}
 				</div>
-			</details>
-		{/each}
-	</div>
+			</TabPanel>
+
+			<TabPanel>
+				<h2>TO DO</h2>
+				<AchievList items={expandToDoList(todoList)} {todoList} on:toggle-todo={hndToggleTodo} />
+			</TabPanel>
+		</Tabs>
+	</section>
 </Awaiter>
 
 <style lang="scss">
@@ -507,75 +417,6 @@
 			height: 48px;
 		}
 	}
-	.achiev-list {
-		display: flex;
-		flex-flow: row wrap;
-		gap: 1rem;
-		margin: 0 10px;
-	}
-	.achiev {
-		width: 335px;
-		display: flex;
-		flex-flow: row nowrap;
-		padding: 0.5rem;
-		row-gap: 0.2rem;
-		column-gap: 0.6rem;
-
-		border-radius: 5px;
-		background-color: var(--gw2helper-module-white);
-		box-shadow: var(--gw2helper-module-shadow);
-		color: #000;
-		flex: 0 1 auto;
-		&:hover {
-			box-shadow: var(--gw2helper-module-shadow-hover);
-		}
-		.head {
-			display: flex;
-			flex-flow: column nowrap;
-			row-gap: 0.6rem;
-			width: 25%;
-			min-width: 80px;
-			justify-content: center;
-			align-items: center;
-			progress {
-				width: 100%;
-			}
-			span {
-				font-size: x-small;
-				overflow-wrap: break-word;
-			}
-			small {
-				font-size: xx-small;
-				img{
-					width: 24px;
-					height: 24px;
-				}
-			}
-			img {
-				width: 48px;
-				height: 48px;
-				&.icon {
-					cursor: help;
-					width: 24px;
-					height: 24px;
-				}
-			}
-		}
-		.body {
-			display: flex;
-			flex-flow: column nowrap;
-			row-gap: 0.6rem;
-			width: 100%;
-			min-height: 120px;
-			justify-content: space-between;
-			font-size: small;
-			h3 {
-				margin: 0;
-				font-size: medium;
-			}
-		}
-	}
-
 	.rewards {
 		width: 100%;
 		display: flex;
@@ -587,10 +428,10 @@
 		// font-family: monospace;
 		&.large {
 			.reward-item {
-				font-size: x-large;
+				font-size: medium;
 				img {
-					width: 36px;
-					height: 36px;
+					width: 24px;
+					height: 24px;
 				}
 			}
 		}
@@ -621,6 +462,19 @@
 		}
 		.rewards {
 			width: auto;
+			&.large {
+				.reward-item {
+					font-size: large;
+					img {
+						width: 36px;
+						height: 36px;
+					}
+				}
+			}
 		}
+	}
+
+	.tabs-container {
+		margin-top: 4rem;
 	}
 </style>
