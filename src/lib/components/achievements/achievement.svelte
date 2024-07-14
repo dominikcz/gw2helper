@@ -22,6 +22,8 @@
 
 	const dispatch = createEventDispatcher();    
 
+    const showApiLinks = new URLSearchParams(window.location.search).get('show-api-links') == '1' ? true : false;    
+    
     $: todoState_icon = todo ? `${base}/assets/rewards/map_heart_full.png` : `${base}/assets/rewards/map_heart_empty.png`;
     $: todoState_state = todo ? 'on todo' : 'not on todo';
     $: todoState_title = todo ? 'Click to remove from TODO list' : 'Click to add to TODO list';
@@ -57,7 +59,9 @@
                 title="This is a hidden achievement"
             />
         {/if}
+        {#if showApiLinks}
         <small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
+        {/if}
         <small
             ><a href={helperUtils.wikiLink(name)} target="_blank"
                 ><img src="{base}/assets/wiki.svg" alt="wiki logo" height="24px" title="Read more on GW2 Wiki" /></a

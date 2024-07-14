@@ -16,6 +16,7 @@
 
 	let filter = '';
 	let todoList = [];
+	let showApiLinks = false;
 
 	const fields = ['name', 'category', 'description'];
 
@@ -33,6 +34,7 @@
 	let sortBy = 'ap';
 
 	onMount(async () => {
+		showApiLinks = new URLSearchParams(window.location.search).get('show-api-links') == '1' ? true : false;
 		const settings = await data.settings;
 		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
 		if (settings.withPoints !== undefined) withPoints = settings.withPoints;
@@ -138,9 +140,9 @@
 			case 'ap': {
 				collection.sort((a, b) => {
 					// done at the end, no matter how many points
-					const _a = (a.done ? -10000 : 0) + (a.points_to_get | 0); 
+					const _a = (a.done ? -10000 : 0) + (a.points_to_get | 0);
 					const _b = (b.done ? -10000 : 0) + (b.points_to_get | 0);
-					return (_b - _a); //desc
+					return _b - _a; //desc
 				});
 				break;
 			}
@@ -168,12 +170,12 @@
 		const api = data.apiService;
 		const _data = [];
 
-		all.categories.forEach(cat => {
-			cat.achievements.forEach(x => {
+		all.categories.forEach((cat) => {
+			cat.achievements.forEach((x) => {
 				if (list.includes(x.id)) {
-					_data.push({...x, todo: true});
+					_data.push({ ...x, todo: true });
 				}
-			})
+			});
 		});
 		// console.log('expanded', _data)
 		return _data;
@@ -259,11 +261,14 @@
 								<div class="descr">
 									<span
 										>{category.name}
-										<small
-											><a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank">id: {category.id}</a
-											></small
-										></span
-									>
+										{#if showApiLinks}
+											<small>
+												<a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank"
+													>id: {category.id}</a
+												>
+											</small>
+										{/if}
+									</span>
 									<div class="rewards large">
 										{#if category.rewards_to_get.has('title')}
 											<div class="reward-item">

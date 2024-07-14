@@ -51,7 +51,7 @@ summary {
 
 .widget {
     border-radius: 5px;
-    background: var(--gw2helper-module-white) no-repeat 0.6rem 2.4rem;
+    background: var(--gw2helper-module-white) no-repeat left 0.6rem bottom 0.6em;
     background-size: auto 32px;
     box-shadow: var(--gw2helper-module-shadow);
     color: #000;
@@ -60,6 +60,7 @@ summary {
     padding: 10px;
     width: 155px;
     flex: 1 1 auto;
+    justify-content: space-between;
 
     &.image {
         height: 155px;
