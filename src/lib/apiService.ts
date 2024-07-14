@@ -353,7 +353,7 @@ const init = async (apiKey: string, options?: object) => {
     _achieves = await ls.getObject(ACHIEVES_CACHE, []);
     itemsCache = _items ? new Map(_items) : new Map();
     achievesCache = _achieves ? new Map(_achieves) : new Map();
-    
+
     Logger.log("init", apiKey);
     _apiKey = apiKey;
     fetchOptions = Object.assign({}, fetchOptions, options);
@@ -415,7 +415,7 @@ const sumRewards = (rewardsToGet, rewards) => {
         const key = (x.region ? `${x.type}_${x.region}` : x.type).toLowerCase();
         const old = rewardsToGet.get(key) || 0;
         rewardsToGet.set(key, old + (x.count || 1))
-      });
+    });
 }
 
 const expandAchieves = async (account, categories, accountAchieves, allIds) => {
@@ -480,6 +480,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 const tiers_todo = achiev.tiers.filter(t => t.count > mine.current);
                 points_per_tier = sum(achiev.tiers, 'points');
                 points_done = points_per_tier * mine.repeated + sum(tiers_done, 'points');
+                if (achiev.point_cap && (achiev.point_cap < points_done)) {
+                    points_done = achiev.point_cap;
+                }
                 points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
             }
             achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
@@ -511,11 +514,11 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     // console.log('masteries', [... new Set(tmp)])
 
     const rewards_to_get = new Map();
-    
+
     categories.forEach(x => {
         sumRewards(rewards_to_get, x._rewards_to_get)
     });
-    
+
     return {
         completed: _doneIds.length,
         todo: _notDone.length,
