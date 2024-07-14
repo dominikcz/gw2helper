@@ -9,11 +9,13 @@ console.log(__NAME__, __VERSION__);
 export async function load( { fetch } ) {
 	// const apiService = await import("$lib/apiService.ts");
 	const key = await utils.readApiKey();
+	const apiKeyHist = await utils.getKeyHist();
 	if (key){
 		await apiService.init(key, {fetchFunction: fetch });
 		return {
 			version: __VERSION__,
 			apiKey: key,
+			apiKeyHist,
 			'apiService': apiService,
 			'tokenInfo': await apiService.tokenInfo(),
 		};
@@ -21,6 +23,7 @@ export async function load( { fetch } ) {
 		return {
 			version: __VERSION__,
 			apiKey: '',
+			apiKeyHist: [],
 			'tokenInfo': {
 				name: null,
 				permissions: [],

@@ -29,20 +29,20 @@
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
 	];
 
-	function saveApiKey() {
-		utils.saveApiKey(apiKey);
+	async function saveApiKey() {
+		await utils.saveApiKey(apiKey);
 		invalidateAll();
 	}
 
-	function deleteApiKey() {
+	async function deleteApiKey() {
 		apiKey = '';
-		utils.deleteApiKey();
+		await utils.deleteApiKey();
 		invalidateAll();
 	}
 
-	function refresh() {
+	async function refresh() {
 		if (data.apiService) {
-			data.apiService.clearCache();
+			await data.apiService.clearCache();
 		}
 		location.reload(true);
 	}
@@ -76,7 +76,7 @@
 				>.
 			</p>
 			<label for="api-key">Your API key:</label>
-			<SearchInput name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} options={utils.getKeyHist()} />
+			<SearchInput name="api-key" id="api-key" class="apikey" placeholder="Paste your API key here" bind:value={apiKey} options={data.apiKeyHist} />
 			<button on:click={() => saveApiKey()}>Apply</button>
 			<button on:click={() => deleteApiKey()}>Forget stored key</button>
 			<button on:click={refresh}>Clear cache & reload</button>

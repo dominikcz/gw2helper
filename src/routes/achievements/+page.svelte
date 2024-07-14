@@ -68,7 +68,7 @@
 
 		const withMasteryOK = !requiredRegions.length || mastery.find((x) => requiredRegions.includes(x.region));
 
-		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirements']);
+		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement']);
 
 		const achiev_res = notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && filterOK;
 
