@@ -3,7 +3,7 @@
     - przypominanie o eventach
 - achievs 
     - planowanie wg zysku/pracochłonności/kosztów
-    - sortowanie po ilości ap i postępie malejąco
+    - w todo sortowanie po ilości ap i postępie malejąco
     
 - trading post
 - colors (dyes)
@@ -12,3 +12,4 @@
 - pvp
 - przenieść ładowanie ustawień z poszczególnych stron do load w js
 - wydzielić więcej komponentów wizualnych
+- refaktoring apiservice by zajmowało się tylko api, a dodać nową warstwę do mapowania i zwracania obiektów dla frontu

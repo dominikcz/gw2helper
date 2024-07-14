@@ -38,15 +38,15 @@
 
 </script>
 
-<div class="achiev">
+<div class="achiev {done? 'done' : ''}">
     <div class="head">
         {#if icon}
             <img src={icon} alt={name} />
         {/if}
 
         {#if current}
-            <progress value={current} max={max} />
-            <span>{current} / {max}</span>
+            <progress value={current <= max ? current : max} max={max} />
+            <span>{current <= max ? current : max} / {max}</span>
         {/if}
 
         {#if flags && flags.includes('Hidden')}
@@ -202,6 +202,12 @@
 		box-shadow: var(--gw2helper-module-shadow);
 		color: #000;
 		flex: 0 1 auto;
+
+        &.done{
+            background: var(--gw2helper-module-white) url(/gw2helper/assets/rewards/done.png) top left;
+            background-repeat: no-repeat;
+            background-size: 24px 24px;
+        }
 		&:hover {
 			box-shadow: var(--gw2helper-module-shadow-hover);
 		}

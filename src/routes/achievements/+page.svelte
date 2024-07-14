@@ -137,7 +137,10 @@
 		switch (sortBy) {
 			case 'ap': {
 				collection.sort((a, b) => {
-					return -1 * ((a.points_to_get | 0) - (b.points_to_get | 0));
+					// done at the end, no matter how many points
+					const _a = (a.done ? -10000 : 0) + (a.points_to_get | 0); 
+					const _b = (b.done ? -10000 : 0) + (b.points_to_get | 0);
+					return (_b - _a); //desc
 				});
 				break;
 			}
@@ -161,12 +164,16 @@
 		await utils.saveAchievesToDo(todoList);
 	}
 
-	function expandToDoList(list) {
+	function expandToDoList(all, list) {
 		const api = data.apiService;
-		const _data = list.map((x) => {
-			const achiev = api?.getFromAchievesCache(x);
-			achiev.todo = true;
-			return achiev;
+		const _data = [];
+
+		all.categories.forEach(cat => {
+			cat.achievements.forEach(x => {
+				if (list.includes(x.id)) {
+					_data.push({...x, todo: true});
+				}
+			})
 		});
 		// console.log('expanded', _data)
 		return _data;
@@ -368,8 +375,8 @@
 			</TabPanel>
 
 			<TabPanel>
-				<h2>TO DO</h2>
-				<AchievList items={expandToDoList(todoList)} {todoList} on:toggle-todo={hndToggleTodo} />
+				<h2>Your list</h2>
+				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={hndToggleTodo} />
 			</TabPanel>
 		</Tabs>
 	</section>
