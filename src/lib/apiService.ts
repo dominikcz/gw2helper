@@ -137,14 +137,15 @@ const charactersItems = async () => {
     const rawData = await apiClient("/v2/characters", "ids=all");
     const tasks = [];
     for (const char of rawData) {
+        let bags = char.bags.map(x => ({id: x.id, size: x.size, count: 1}));
         let itemsInBags = char.bags
             .filter(x => x != null)
             .map((bag) => bag.inventory)
             .flat()
             .filter((x) => x != null);
-        let equipment = char.equipment.flat().filter((x) => x != null);
-        let charItems = itemsInBags.concat(equipment);
-        let ids = charItems.map((x) => x.id);
+        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({...x, count: 1}));
+        let charItems = bags.concat(itemsInBags).concat(equipment);
+        let ids = charItems.map(x => x.id);
         char._items = await expandItems(ids, charItems);
     }
     return rawData;
