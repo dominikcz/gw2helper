@@ -259,13 +259,13 @@
 							<summary>
 								<img src={category.icon} alt={category.name} />
 								<div class="descr">
-									<span
-										>{category.name}
+									<span>
+										{category.name}
 										{#if showApiLinks}
 											<small>
-												<a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank"
-													>id: {category.id}</a
-												>
+												<a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank">
+													id: {category.id}
+												</a>
 											</small>
 										{/if}
 									</span>
@@ -369,6 +369,9 @@
 												title="There are {category.achievements.length} achievements left to do"
 											/>
 										</div>
+										<a href={helperUtils.wikiLink(category.name)} target="_blank">
+											<img src="{base}/assets/wiki.svg" alt="wiki logo" class="small" height="24px" title="Read more on GW2 Wiki" />
+										</a>
 									</div>
 								</div>
 							</summary>
@@ -427,6 +430,11 @@
 		img {
 			width: 48px;
 			height: 48px;
+			&.small{
+				width: 24px;
+				height: 24px;
+				vertical-align: bottom;
+			}
 		}
 	}
 	.rewards {
