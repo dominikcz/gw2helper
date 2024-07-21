@@ -344,10 +344,10 @@ const currencies = async () => {
         },
     ];
     // denormalize
-    const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id })));
+    const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
     const _rawData = (await apiClient("/v2/currencies", "ids=all"))
-        .filter(x => !ignored.includes(x.id));
+        .filter(x => !ignored.includes(x.id)).map(x => ({...x, active: 1}));
     return mergeById(_rawData, _dep);
 }
 
@@ -361,9 +361,9 @@ const wallet = async () => {
 
 const delivery = async() =>{
     return new Promise((resolve) => {
-        apiClient("/v2/commerce/delivery", "").then(resp => {
+        apiClient("/v2/commerce/delivery", "").then(async (resp) => {
             const ids = resp.items.map(x => x.id);
-            expandItems(ids, resp.items);
+            resp.items = await expandItems(ids, resp.items);
             resolve(resp);
         });
     });    
@@ -520,10 +520,6 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_to_get,
             }
         });
-        if (cat.name == 'Rift Hunting') {
-            console.log('rifts', cat.achievements);
-        }
-
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
         cat._rewards_to_get = cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)

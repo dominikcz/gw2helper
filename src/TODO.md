@@ -6,7 +6,7 @@
     - w todo sortowanie po ilości ap i postępie malejąco
     
 - trading post
-    - trading post delivery
+    + trading post delivery
 
 - colors (dyes)
 
@@ -16,6 +16,7 @@
 - wydzielić więcej komponentów wizualnych
 - refaktoring apiservice by zajmowało się tylko api, a dodać nową warstwę do mapowania i zwracania obiektów dla frontu
 - autotooltip:
-    - nie inicjuje sieprawidłowo. Nie czeka na załadowanie całej strony. Część strony potrafi miec autotooltip, a reszta oryginalny. 
+    - nie inicjuje się prawidłowo. Nie czeka na załadowanie całej strony. Część strony potrafi miec autotooltip, a reszta oryginalny. 
     - przy filtrowaniu dochodzi do sytuacji, gdzie są da tooltipy do jednej pozycji pokazujące co innego (autotooltip pokazuje tooltip pozycji, która byłą w tym miejscu przed filtrowaniem)
 - brakuje achievs (np. rift hunting vs https://wiki.guildwars2.com/wiki/Rift_Hunting_(achievements))
+- sortowanie w /achievements  wywołuje się bez sensu dla każdej kategorii (czyli np. 188 razy...)

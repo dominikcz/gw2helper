@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Price from '$lib/components/price.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
@@ -8,9 +9,12 @@
 	import WidgetImg from '$lib/components/widgetImg.svelte';
 	import { base } from '$app/paths';
 	import ItemsList from '$lib/components/itemsList.svelte';
+	import utils from '$lib/utils';
 	export let data;
+
 	let filter = '';
 	const fields = ['name', 'description'];
+	let showDepreciated = false;
 
 	function formatValue(v: number) {
 		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -32,6 +36,17 @@
 			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
 			<p>${currency.description}</p>`;
 	}
+	function saveSettings() {
+		utils.saveWalletSettings({
+			showDepreciated,
+		});
+	}
+
+	onMount(async () =>{
+		const settings = await utils.readWalletSettings();
+		showDepreciated = settings.showDepreciated;
+	});
+
 </script>
 
 <h1>Home</h1>
@@ -133,27 +148,40 @@
 	</article>
 </details>
 
+<Awaiter promise={data.delivery} let:result>
+	{#if result.coins || result.items.length}
+		<details open>
+			<summary>Delivery Box</summary>
+			<div class="inner-content">
+				{#if result.coins}
+					<WidgetInfo title="Coins for pickup" value={result.coins} let:value>
+						<Price {value} />
+					</WidgetInfo>
+				{/if}
+				{#if result.items.length}
+					<ItemsList summary="Items for pickup" items={result.items} {filter} />
+				{/if}
+			</div>
+		</details>
+	{/if}
+</Awaiter>
+
 <h2>Your wallet</h2>
 <section>
 	<label for="filter">Filter:</label>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 </section>
 
-<Awaiter promise={data.delivery} let:result>
-	{#if result.coins || result.items.length}
-		<details open>
-			<summary>Trading post delivery</summary>
-			<WidgetInfo title="Coins to pickup" value={result.coins} image="{base}/assets/rewards/Merchant_crop.png" let:value>
-				<Price {value} />
-			</WidgetInfo>
-			<ItemsList summary="Items to pickup" items={result.items} {filter} />
-		</details>
-	{/if}
-</Awaiter>
+<fieldset class="settings">
+	<legend>Settings</legend>
+
+	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> Show depreciated currencies</label>
+	<button on:click={saveSettings}>Save settings</button>
+</fieldset>
 
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
-		{#each helperUtils.filterCollection(result, fields, filter) as currency}
+		{#each helperUtils.filterCollection(result, fields, filter, {nonZero: !showDepreciated, nonZeroField: 'active'}) as currency}
 			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
 				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
 					<span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
@@ -205,5 +233,9 @@
 			column-gap: 0.5rem;
 			font-size: 120%;
 		}
+	}
+
+	.inner-content {
+		margin: 0 0.6em;
 	}
 </style>
