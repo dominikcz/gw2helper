@@ -123,7 +123,7 @@
 		// new categories (1)
 		_data.categories = data.categories
 			.map(({ achievements, ...rest }) => {
-				let _cat = { ...rest }; // (1) clone categories without achievs
+				let _cat = { ...rest }; // (1) clone categories without achieves
 				// (2) filter achieves and attach them to this cloned category
 				_cat.achievements = achievements.filter(achievFilterCallback);
 				return _cat;

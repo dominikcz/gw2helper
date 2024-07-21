@@ -8,6 +8,17 @@ const apiUrl = "https://api.guildwars2.com";
 const CACHE_TIMEOUT = 15 * 60;
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
 const INVALID_ACHIEVES_IDS: number[] = [];
+const ACHIEVES_NOT_IN_API = {
+    // Rift Hunting
+    // TODO: will have to change to list of objects and get achieves' descriptions from wiki :(
+    361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
+}
+
+const unique = function(tab) {
+    return tab.filter(function (el, i, self) {
+        return self.indexOf(el) === i;
+    });
+};
 
 const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 
@@ -137,13 +148,13 @@ const charactersItems = async () => {
     const rawData = await apiClient("/v2/characters", "ids=all");
     const tasks = [];
     for (const char of rawData) {
-        let bags = char.bags.map(x => ({id: x.id, size: x.size, count: 1}));
+        let bags = char.bags.map(x => ({ id: x.id, size: x.size, count: 1 }));
         let itemsInBags = char.bags
             .filter(x => x != null)
             .map((bag) => bag.inventory)
             .flat()
             .filter((x) => x != null);
-        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({...x, count: 1}));
+        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1 }));
         let charItems = bags.concat(itemsInBags).concat(equipment);
         let ids = charItems.map(x => x.id);
         char._items = await expandItems(ids, charItems);
@@ -420,17 +431,14 @@ const sumRewards = (rewardsToGet, rewards) => {
 }
 
 const expandAchieves = async (account, categories, accountAchieves, allIds) => {
+    Object.keys(ACHIEVES_NOT_IN_API).forEach(x => {
+        allIds.push(...(ACHIEVES_NOT_IN_API[x]));
+    })
+
     const knownIds = [...achievesCache.keys()];
     const _doneIds = accountAchieves.filter(x => x.done === true).map(x => x.id);
     const _notDone = allIds.filter(x => !_doneIds.includes(x));
     const missingIds = allIds.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
-
-    // // remove completed from categories
-    // categories.forEach(cat => {
-    //     cat.achievements = cat.achievements.filter(x => !_doneIds.includes(x.id));
-    // })
-    // // and remove those with noachievements left to do
-    // categories = categories.filter(x => x.achievements.length);
 
     // prepare list of ids to request in batches of 200 max
     const batches = [];
@@ -452,17 +460,22 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
         });
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVES_CACHE, [...achievesCache.entries()]);
-        data.push(...mergeById(resp, accountAchieves));
+        mergeById(resp, accountAchieves);
     }
 
     categories.forEach(cat => {
+        if (ACHIEVES_NOT_IN_API[cat.id]){
+            const tmp = cat.achievements;
+            tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({id: x}))));
+            cat.achievements = unique(tmp);
+        }
         cat.achievements = cat.achievements.map(x => {
             let achiev = achievesCache.get(x.id);
             if (!achiev) {
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchieves.find(acc => acc.id == x.id) || {
+            const mine = accountAchieves.find(acv => acv.id == x.id) || {
                 id: x.id,
                 current: 0,
                 repeated: 0,
@@ -497,6 +510,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_to_get,
             }
         });
+        if (cat.name == 'Rift Hunting') {
+            console.log('rifts', cat.achievements);
+        }
 
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
