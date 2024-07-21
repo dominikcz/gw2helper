@@ -7,11 +7,13 @@ export async function load({ fetch, parent }) {
 		return {
 			'account': apiService.account(),
 			'wallet': apiService.wallet(),
+			'delivery': apiService.delivery(),
 		};
 	} else {
 		return {
 			'account': {},
 			'wallet': [],
+			'delivery': {},
 		};
 	}
 }

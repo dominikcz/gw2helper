@@ -7,7 +7,7 @@
 	import WidgetsGroup from '$lib/components/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgetImg.svelte';
 	import { base } from '$app/paths';
-	import Linkable from '$lib/components/linkable.svelte';
+	import ItemsList from '$lib/components/itemsList.svelte';
 	export let data;
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -32,7 +32,6 @@
 			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
 			<p>${currency.description}</p>`;
 	}
-
 </script>
 
 <h1>Home</h1>
@@ -48,36 +47,81 @@
 			<WidgetsGroup name="Time spent">
 				<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
 				<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}h`} />
-				<WidgetInfo title="Average time per day" value={`${(helperUtils.hoursPlayed(result.age) / helperUtils.diff(result.created)).toFixed(2)}h/day`} />
+				<WidgetInfo
+					title="Average time per day"
+					value={`${(helperUtils.hoursPlayed(result.age) / helperUtils.diff(result.created)).toFixed(2)}h/day`}
+				/>
 			</WidgetsGroup>
 
 			<WidgetsGroup name="Accessible content">
 				{#if has(result, 'PlayForFree')}
-					<WidgetImg title="Play for free" url="{base}/assets/400px-GW2Logo_new.png" link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip" />
+					<WidgetImg
+						title="Play for free"
+						url="{base}/assets/400px-GW2Logo_new.png"
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'GuildWars2')}
-					<WidgetImg title="Base game" url={`${base}/assets/400px-GW2Logo_new.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2" linkTitle="Read more on wiki" class="autotooltip"/>
+					<WidgetImg
+						title="Base game"
+						url={`${base}/assets/400px-GW2Logo_new.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'HeartOfThorns')}
-					<WidgetImg title="Heart Of Thorns" url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns" linkTitle="Read more on wiki" class="autotooltip" />
+					<WidgetImg
+						title="Heart Of Thorns"
+						url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'PathOfFire')}
-					<WidgetImg title="Path Of Fire" url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire" linkTitle="Read more on wiki" class="autotooltip" />
+					<WidgetImg
+						title="Path Of Fire"
+						url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'EndOfDragons')}
-					<WidgetImg title="End Of Dragons" url={`${base}/assets/400px-EoD_Texture_Trans.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons" linkTitle="Read more on wiki" class="autotooltip"/>
+					<WidgetImg
+						title="End Of Dragons"
+						url={`${base}/assets/400px-EoD_Texture_Trans.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'SecretsOfTheObscure')}
-					<WidgetImg title="Secrets of the Obscure" url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure" linkTitle="Read more on wiki" class="autotooltip" />
+					<WidgetImg
+						title="Secrets of the Obscure"
+						url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 
 				{#if has(result, 'JanthirWilds')}
-					<WidgetImg title="Janthir Wilds" url={`${base}/assets/400px-Janthir_Wilds_logo.png`} link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds" linkTitle="Read more on wiki" class="autotooltip" />
+					<WidgetImg
+						title="Janthir Wilds"
+						url={`${base}/assets/400px-Janthir_Wilds_logo.png`}
+						link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds"
+						linkTitle="Read more on wiki"
+						class="autotooltip"
+					/>
 				{/if}
 			</WidgetsGroup>
 
@@ -94,6 +138,19 @@
 	<label for="filter">Filter:</label>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 </section>
+
+<Awaiter promise={data.delivery} let:result>
+	{#if result.coins || result.items.length}
+		<details open>
+			<summary>Trading post delivery</summary>
+			<WidgetInfo title="Coins to pickup" value={result.coins} image="{base}/assets/rewards/Merchant_crop.png" let:value>
+				<Price {value} />
+			</WidgetInfo>
+			<ItemsList summary="Items to pickup" items={result.items} {filter} />
+		</details>
+	{/if}
+</Awaiter>
+
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
 		{#each helperUtils.filterCollection(result, fields, filter) as currency}
@@ -105,7 +162,7 @@
 							<Price value={currency.value} />
 						{:else}
 							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip"/>
+							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip" />
 						{/if}
 					</div>
 				</div>

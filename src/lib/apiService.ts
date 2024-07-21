@@ -359,6 +359,16 @@ const wallet = async () => {
     });
 }
 
+const delivery = async() =>{
+    return new Promise((resolve) => {
+        apiClient("/v2/commerce/delivery", "").then(resp => {
+            const ids = resp.items.map(x => x.id);
+            expandItems(ids, resp.items);
+            resolve(resp);
+        });
+    });    
+}
+
 const init = async (apiKey: string, options?: object) => {
     console.log('init', apiKey);
     _items = await ls.getObject(ITEMS_CACHE, []);
@@ -587,4 +597,5 @@ export default {
     wallet,
     clearCache,
     getFromAchievesCache,
+    delivery,
 };
