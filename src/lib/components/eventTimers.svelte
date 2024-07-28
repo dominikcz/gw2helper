@@ -34,7 +34,7 @@
 		clearInterval(interval);
 	});
 
-	function updatePointerPos(){
+	function updatePointerPos() {
 		if (dt0) {
 			currTime = new Date();
 			const diff = wxdates.minutesBetween(dt0, currTime);
@@ -49,7 +49,7 @@
 				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
 
 				// keep pointer positioned at center and scroll background
-				if (autoScroll && (currentTimePos != window.innerWidth - 16)) {
+				if (autoScroll && currentTimePos != window.innerWidth - 16) {
 					// console.log('autoscrolling...');
 					const elem = document.querySelector('.event-pointer');
 					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -162,14 +162,14 @@
 		const rect = eventsRef.getBoundingClientRect();
 		let scroll = eventsRef.scrollLeftMax;
 		width = rect.width + scroll;
-		updatePointerPos();		
+		updatePointerPos();
 	}
 </script>
 
 <svelte:window on:resize={hndResize} />
 
 <div class="event-timer" bind:this={eventsRef}>
-	<div class="time-container">
+	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
 			<div class="event-pointer" title="Current time" style="left: {currentTimePos}px;">
 				<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
@@ -187,7 +187,7 @@
 	</div>
 
 	{#each et.entries() as [cat, eventsList]}
-		<div class="category">
+		<div class="category" class:no-headings={!showHeadings}>
 			{#if showCategories}
 				<h3>{cat}</h3>
 			{/if}
@@ -221,6 +221,18 @@
 			{/each}
 		</div>
 	{/each}
+
+	<div class="category time-container bottom" class:no-headings={!showHeadings}>
+		<div class="event-bar compact time">
+			{#each getTimeSegments(dt0) as segment}
+				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
+					{#if segment.name}
+						<span>{segment.name}</span>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
@@ -238,7 +250,7 @@
 		h3 {
 			background-color: var(--gw2helper-module-dark);
 			padding: 0.3rem 0.6rem;
-			margin: 0;
+			margin: 0 0 5px 0;
 		}
 	}
 	.heading {
@@ -253,6 +265,7 @@
 		flex-flow: row nowrap;
 		min-height: 3rem;
 		min-width: 1200px;
+		margin-bottom: 5px;
 		&.compact {
 			min-height: auto;
 			height: 1.6rem;
@@ -287,6 +300,9 @@
 		// margin: 0 1rem;
 		z-index: 10;
 		background-color: #fff;
+		&.bottom {
+			z-index: 1;
+		}
 	}
 
 	.event-pointer {
@@ -311,5 +327,34 @@
 		white-space: nowrap;
 		top: 0;
 		z-index: 11;
+	}
+
+	@media (min-width: 1200px) {
+		.category {
+			display: grid;
+			grid-template-columns: 200px 1fr;
+			grid-template-rows: minmax(3rem, fit-content);
+			gap: 0px 0px;
+			grid-auto-rows: minmax(3rem, fit-content);
+			h3 {
+				grid-column: span 2;
+			}
+			.heading {
+				grid-column: 1;
+				margin-bottom: 5px;
+			}
+			.event-bar {
+				grid-column: 2;
+			}
+			&.no-headings {
+				grid-template-columns: 1fr;
+				.event-bar {
+					grid-column: 1;
+				}
+				h3 {
+					grid-column: 1;
+				}
+			}
+		}
 	}
 </style>

@@ -9,6 +9,9 @@
 	let showCategories = true;
 	let showHeadings = true;
 	let autoScroll = false;
+	let excludedSpecialEvents = ['lc', 'db', 'ha'];
+	// remove special events
+	excludedSpecialEvents.forEach(x => delete eventData[x]);
 
 	onMount(async () =>{
 		const settings = await utils.readEventTimerSettings();
@@ -17,6 +20,7 @@
 		showCategories = settings.showCategories;
 		showHeadings = settings.showHeadings;
 		autoScroll = settings.autoScroll;
+
 	})
 	
 	function saveSettings() {
@@ -43,5 +47,5 @@
 	<button on:click={saveSettings}>Save settings</button>
 </fieldset>
 
-<EventTimers wikiData={eventData} updateInterval={30} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll}/>
+<EventTimers wikiData={eventData} updateInterval={30} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} {excludedSpecialEvents}/>
 
