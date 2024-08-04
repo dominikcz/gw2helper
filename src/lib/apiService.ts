@@ -557,7 +557,6 @@ const toHtml = (text: string | null): string => {
     let descr = text || '';
     descr = descr.replace('<c=@flavor>', '<span class="flavor">');
     descr = descr.replace('</c>', '</span>');
-    console.log('toHtml', descr)
     return descr;
 }
 
