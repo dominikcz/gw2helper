@@ -148,6 +148,7 @@
 		img {
 			margin-left: 0.625em;
 			float: left;
+			height: 2em;
 		}
 	}
 	main {
