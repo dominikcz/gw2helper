@@ -20,7 +20,7 @@ button {
 	border-radius: 0.25em;
 	vertical-align: middle;
 	font-family: sans-serif;
-	height: 2rem;
+	height: 2em;
 
 	&:focus {
 		@extend %focus;
@@ -28,13 +28,13 @@ button {
 }
 
 input[type=checkbox] {
-	height: 1.2rem;
+	height: 1.2em;
 	outline-offset: 2px;
 }
 
 input.apikey {
 	width: 80%;
-	max-width: 36rem;
+	max-width: 36em;
 	font-family: monospace;
 }
 
@@ -43,9 +43,9 @@ button {
 	color: #202122;
 	display: inline-block;
 	box-sizing: border-box;
-	font-size: 0.9rem;
-	line-height: 1rem;
-	padding: 0 1rem;
+	font-size: 0.9em;
+	line-height: 1em;
+	padding: 0 1em;
 	font-weight: bold;
 	text-align: center;
 	transition: 0.3s;
@@ -64,16 +64,16 @@ button:disabled {
 }
 
 fieldset {
-	margin: 1rem 1rem 0 1rem;
+	margin: 1em 1em 0 1em;
 
 	&.settings {
 		margin: 0;
 		display: flex;
 		flex-flow: column nowrap;
-		row-gap: 0.2rem;
+		row-gap: 0.2em;
 
 		button {
-			margin-top: 0.5rem;
+			margin-top: 0.5em;
 		}
 	}
 }
@@ -81,11 +81,11 @@ fieldset {
 @media (min-width: 420px) {
 	fieldset.settings {
 		flex-flow: row wrap;
-		column-gap: 1rem;
+		column-gap: 1em;
 		align-items: center;
 
 		button {
-			margin: 0 0 0 0.5rem;
+			margin: 0 0 0 0.5em;
 		}
 	}
 }

@@ -394,22 +394,22 @@
 	.achiev-container {
 		display: flex;
 		flex-flow: column nowrap;
-		gap: 1rem;
-		margin: 0 0 1rem 0;
+		gap: 1em;
+		margin: 0 0 1em 0;
 	}
 	.achiev-group {
 		display: flex;
 		flex-flow: column wrap;
-		gap: 1rem;
+		gap: 1em;
 		margin: 0;
 		background-color: var(--gw2helper-module);
 		summary {
-			padding: 0.4rem 0.4rem;
+			padding: 0.4em 0.4em;
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: flex-start;
 			align-items: center;
-			gap: 0.6rem;
+			gap: 0.6em;
 			&::before {
 				content: '\25b6';
 				transition: 0.2s;
@@ -420,7 +420,7 @@
 				flex-flow: column nowrap;
 				justify-content: flex-start;
 				align-items: flex-start;
-				gap: 0.6rem;
+				gap: 0.6em;
 				width: 100%;
 			}
 		}
@@ -443,8 +443,8 @@
 		flex-flow: row wrap;
 		align-items: center;
 		justify-content: flex-end;
-		column-gap: 0.6rem;
-		row-gap: 0.2rem;
+		column-gap: 0.6em;
+		row-gap: 0.2em;
 		// font-family: monospace;
 		&.large {
 			.reward-item {
@@ -475,7 +475,7 @@
 					flex-flow: row nowrap;
 					justify-content: space-between;
 					align-items: center;
-					gap: 0.6rem;
+					gap: 0.6em;
 					width: 100%;
 				}
 			}
@@ -495,6 +495,6 @@
 	}
 
 	.tabs-container {
-		margin-top: 4rem;
+		margin-top: 4em;
 	}
 </style>

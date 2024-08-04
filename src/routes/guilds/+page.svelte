@@ -36,16 +36,16 @@
 		background-color: var(--gw2helper-module);
 		display: flex;
 		flex-flow: column nowrap;
-		gap: 1rem;
+		gap: 1em;
 		max-width: 50em;
-		padding: 1rem;
+		padding: 1em;
 	}
 	.guild-header {
 		background-color: var(--gw2helper-module);
 		display: flex;
 		flex-flow: column wrap;
 		align-items: center;
-		gap: 1rem;
+		gap: 1em;
 		:global(canvas) {
 			align-self: flex-start;
 		}
@@ -65,17 +65,17 @@
 	.details {
 		display: flex;
 		flex-flow: column wrap;
-		gap: 0.3rem;
+		gap: 0.3em;
 	}
 
 	@media (min-width: 900px) {
 		.details {
-			height: 4rem;
+			height: 4em;
 		}
 		.guild-header {
 			flex-flow: row nowrap;
 			min-height: 8em;
-			gap: 1rem;
+			gap: 1em;
 		}
 		.guild-h {
 			justify-content: space-evenly;

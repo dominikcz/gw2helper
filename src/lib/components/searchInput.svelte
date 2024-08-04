@@ -72,16 +72,16 @@
 	}
 
 	input {
-		padding-right: 2rem;
+		padding-right: 2em;
 	}
 
 	button.inside {
 		border: 1px solid #fff;
 		background: #fff;
 		color: white;
-		width: 1.5rem;
-		margin-left: -2rem;
-		height: 1.5rem;
+		width: 1.5em;
+		margin-left: -2em;
+		height: 1.5em;
 		padding: 0;
 		&:focus {
 			outline: none;
@@ -105,7 +105,7 @@
 
 	li {
 		cursor: pointer;
-		padding: 0.4rem 0.6rem;
+		padding: 0.4em 0.6em;
 	}
 
 	li:hover {

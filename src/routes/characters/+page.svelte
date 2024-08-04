@@ -82,7 +82,7 @@
 		display: flex;
 		flex-flow: column nowrap;
 		justify-content: space-around;
-		gap: 1rem;
+		gap: 1em;
 		background-color: #dcdcdc;
 		height: fit-content;
 		h2 {
@@ -102,9 +102,9 @@
 			flex-flow: column nowrap;
 			align-items: center;
 			justify-content: center;
-			row-gap: 0.6rem;
+			row-gap: 0.6em;
 			ul{
-				margin: 0.2rem 0;
+				margin: 0.2em 0;
 			}
 			h4 {
 				margin: 0;
@@ -120,13 +120,13 @@
 			background-repeat: no-repeat;
 			justify-content: center;
 			align-items: center;
-			gap: 0.6rem;
+			gap: 0.6em;
 
 			h4 {
 				margin: 0;
 			}
 			ul {
-				margin: 1rem 0;
+				margin: 1em 0;
 				list-style-type: none;
 				list-style-position: inside;
 				padding: 0;
@@ -140,12 +140,12 @@
 			}
 		}
 		.counter {
-			padding: 0.5rem 0;
+			padding: 0.5em 0;
 			font-size: x-large;
 			font-weight: bold;
 		}
 		.info {
-			font-size: 1rem;
+			font-size: 1em;
 			font-weight: normal;
 		}
 	}
@@ -153,8 +153,8 @@
 	@media (min-width: 420px) {
 		.character {
 			width: 100%;
-			gap: 1rem;
-			padding-bottom: 1rem;
+			gap: 1em;
+			padding-bottom: 1em;
 			flex-flow: row wrap;
 			h2 {
 				text-align: left;
@@ -170,18 +170,18 @@
 			section {
 				min-width: 23.125em;
 				flex-flow: column wrap;
-				column-gap: 0.5rem;
+				column-gap: 0.5em;
 				max-height: 13.75em;
 				align-items: flex-start;
 				justify-content: center;
 			}
 			.counter {
-				padding: 0.5rem 0;
+				padding: 0.5em 0;
 				font-size: x-large;
 				font-weight: bold;
 			}
 			.info {
-				font-size: 1rem;
+				font-size: 1em;
 				font-weight: normal;
 			}
 		}

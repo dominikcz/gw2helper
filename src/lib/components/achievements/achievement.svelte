@@ -169,12 +169,12 @@
 
 <style lang="scss">
 	.achiev {
-		width: 21rem;
+		width: 21em;
 		display: flex;
 		flex-flow: row nowrap;
-		padding: 0.5rem;
-		row-gap: 0.2rem;
-		column-gap: 0.6rem;
+		padding: 0.5em;
+		row-gap: 0.2em;
+		column-gap: 0.6em;
 
 		border-radius: 0.3125em;
 		background-color: var(--gw2helper-module-white);
@@ -193,7 +193,7 @@
 		.head {
 			display: flex;
 			flex-flow: column nowrap;
-			row-gap: 0.6rem;
+			row-gap: 0.6em;
 			width: 25%;
 			min-width: 5em;
 			justify-content: center;
@@ -224,7 +224,7 @@
 		.body {
 			display: flex;
 			flex-flow: column nowrap;
-			row-gap: 0.6rem;
+			row-gap: 0.6em;
 			width: 100%;
 			min-height: 7.5em;
 			justify-content: space-between;
@@ -253,8 +253,8 @@
 		flex-flow: row wrap;
 		align-items: center;
 		justify-content: flex-end;
-		column-gap: 0.6rem;
-		row-gap: 0.2rem;
+		column-gap: 0.6em;
+		row-gap: 0.2em;
 		// font-family: monospace;
 
 		.reward-item {

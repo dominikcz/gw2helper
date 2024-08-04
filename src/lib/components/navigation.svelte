@@ -90,13 +90,13 @@
 <style lang="scss" global>
 	nav {
 		background-color: var(--nav-bg, #222);
-		padding: 0 0.6rem 0.9rem 0.6rem;
+		padding: 0 0.6em 0.9em 0.6em;
 		display: flex;
 		flex-flow: row nowrap;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
-		gap: 2rem;
-		height: 3rem;
+		gap: 2em;
+		height: 3em;
 
 		&.css-scroll-indicators {
 			background:
@@ -115,7 +115,7 @@
 		}
 
 		a {
-			padding: 0.3rem 1rem;
+			padding: 0.3em 1em;
 			color: var(--nav-fg, #aaa);
 			text-decoration: none;
 			transition: border 0.4s ease-in-out;
@@ -142,7 +142,7 @@
 		justify-content: center;
 		width: 3em;
 		height: auto;
-		padding: 0.3rem 1rem;
+		padding: 0.3em 1em;
 		color: var(--nav-fg);
 		&:hover {
 			color: var(--nav-active);

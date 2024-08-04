@@ -123,11 +123,11 @@
 	.line {
 		display: flex;
 		flex-flow: row nowrap;
-		column-gap: 1rem;
+		column-gap: 1em;
 		align-items: baseline;
 	}
 	#api-key {
-		margin: 0.4rem 0;
+		margin: 0.4em 0;
 	}
 	em {
 		color: var(--gw2helper-not-important);
@@ -140,7 +140,7 @@
 		display: flex;
 		flex-flow: row nowrap;
 		align-items: center;
-		column-gap: 0.5rem;
+		column-gap: 0.5em;
 		h1 {
 			margin: 0;
 			text-wrap: nowrap;
@@ -151,16 +151,16 @@
 		}
 	}
 	main {
-		margin: 0 0.6rem 1rem 0.6rem;
+		margin: 0 0.6em 1em 0.6em;
 		display: flex;
 		flex-flow: column nowrap;
-		row-gap: 1rem;
+		row-gap: 1em;
 	}
 	.waypoint {
 		width: 4em;
 		height: 4em;
 		background: url(/gw2helper/assets/waypoint.png) no-repeat center center;
-		padding: 1rem 0.5rem;
+		padding: 1em 0.5em;
 		border-radius: 0.625em;
 		margin: 0;
 		&:hover {
@@ -184,7 +184,7 @@
 	footer {
 		background-color: #aaa;
 		font-size: smaller;
-		padding: 0.3rem 1rem;
+		padding: 0.3em 1em;
 		width: 100%;
 	}
 </style>

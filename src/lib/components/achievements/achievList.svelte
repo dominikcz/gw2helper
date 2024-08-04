@@ -36,7 +36,7 @@
 	.achiev-list {
 		display: flex;
 		flex-flow: row wrap;
-		gap: 1rem;
+		gap: 1em;
 		margin: 0 0.625em;
 	}
 </style>

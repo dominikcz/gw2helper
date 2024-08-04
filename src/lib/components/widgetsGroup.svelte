@@ -16,7 +16,7 @@
     flex-flow: column nowrap;
     gap: 0.625em;
     h3{
-        margin: 1rem 0 0 0;
+        margin: 1em 0 0 0;
     }
 }
 

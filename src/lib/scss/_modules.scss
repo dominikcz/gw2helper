@@ -1,24 +1,24 @@
 details {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.5em 0;
 
     display: flex;
 
     &[open] {
         background-color: var(--gw2helper-module);
-        padding-bottom: 1rem;
+        padding-bottom: 1em;
     }
 
     p {
-        margin: 1rem;
+        margin: 1em;
     }
 
     ul {
-        margin: 1rem 0;
+        margin: 1em 0;
     }
 
     article {
         width: 100%;
-        padding: 0.6rem;
+        padding: 0.6em;
     }
 }
 
@@ -51,7 +51,7 @@ summary {
 
 .widget {
     border-radius: 0.3125em;
-    background: var(--gw2helper-module-white) no-repeat left 0.6rem bottom 0.6em;
+    background: var(--gw2helper-module-white) no-repeat left 0.6em bottom 0.6em;
     background-size: auto 2em;
     box-shadow: var(--gw2helper-module-shadow);
     color: #000;
@@ -71,7 +71,7 @@ summary {
     .value {
         font-size: x-large;
         text-align: right;
-        margin-top: 0.6rem;
+        margin-top: 0.6em;
     }
 
     a &:hover {
