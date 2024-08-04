@@ -12,7 +12,7 @@
 	}
 </script>
 
-<figure class={rarityClass}>
+<figure class={rarityClass()}>
 	<a href={helperUtils.wikiLink(item.name)} target="_blank" >
 		<img alt={item.name} class="autotooltip" title={`<h4>${item.name}  - <a class="tooltip-link" target="_blank" href="${helperUtils.wikiLink(item.name)}">Click for wiki</a></h4><pre>${debugInfo()}</pre>`} src={item.icon} />
 	</a>

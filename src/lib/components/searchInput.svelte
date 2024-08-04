@@ -76,9 +76,9 @@
 	}
 
 	button.inside {
-		border: 1px solid #fff;
-		background: #fff;
-		color: white;
+		border: 1px solid var(--button-bg);
+		background: var(--button-bg);
+		color: var(--button-bg);
 		width: 1.5em;
 		margin-left: -2em;
 		height: 1.5em;
@@ -98,7 +98,7 @@
 		margin: 0.3125em 0;
 		padding: 0;
 		list-style: none;
-		background-color: var(--search-input-dropdown-bg, #fff);
+		background-color: var(--search-input-dropdown-bg);
 		box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
 		z-index: 1;
 	}
@@ -109,14 +109,17 @@
 	}
 
 	li:hover {
-		background-color: var(--search-input-bg-hover, #dcdcdc);
+		background-color: var(--search-input-hover-bg);
+		color: var(--search-input-selected-text);
 	}
 
 	.selected {
-		background-color: var(--search-input-bg-hover, #dcdcdc);
+		background-color: var(--search-input-selected-bg);
+		color: var(--search-input-selected-text);
 	}
 
 	.selected:hover {
-		background-color: var(--search-input-bg-hover, #dcdcdc);
+		background-color: var(--search-input-hover-bg);
+		color: var(--search-input-selected-text);
 	}
 </style>

@@ -20,4 +20,10 @@
 			background-position: -248em;
 		}
 	}
+
+	@media (prefers-color-scheme: dark) {
+		.spinner{
+			background: url('/gw2helper/assets/loading_gray.png') no-repeat 0 0/248em 4em;
+		}
+	}
 </style>

@@ -168,9 +168,6 @@
 			background-image: url(/gw2helper/assets/waypoint-hover.png);
 		}
 	}
-	#settings {
-		background: url(/gw2helper/assets/150px-construction.png) center right no-repeat;
-	}
 	.autotooltip-wide {
 		width: 18.75em;
 	}
@@ -183,7 +180,7 @@
 		gap: 0;
 	}
 	footer {
-		background-color: #aaa;
+		background-color: var(--gw2helper-module-dark);
 		font-size: smaller;
 		padding: 0.3em 1em;
 		width: 100%;

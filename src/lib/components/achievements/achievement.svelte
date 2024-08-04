@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import Wiki from '../wiki.svelte';
 
 	export let id;
 	export let icon;
@@ -56,8 +57,8 @@
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
 		{/if}
-		<a href={helperUtils.wikiLink(name)} target="_blank">
-			<img src="{base}/assets/wiki.svg" alt="wiki logo" title="Read more on GW2 Wiki" />
+		<a href={helperUtils.wikiLink(name)} target="_blank" title="Read more on GW2 Wiki" >
+			<Wiki width="1.5em" height="1.5em" />
 		</a>
 	</div>
 	<div class="body">
@@ -179,7 +180,7 @@
 		border-radius: 0.3125em;
 		background-color: var(--gw2helper-module-white);
 		box-shadow: var(--gw2helper-module-shadow);
-		color: #000;
+		color: var(--gw2helper-module-text);
 		flex: 0 1 auto;
 
 		&.done {
@@ -206,9 +207,9 @@
 				overflow-wrap: break-word;
 			}
 			a {
-				img {
-					width: 1.5em;
-					height: 1.5em;
+				color: var(--gw2helper-module-text);
+				svg{
+					cursor: pointer;
 				}
 			}
 			img {

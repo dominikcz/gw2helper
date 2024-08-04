@@ -10,32 +10,39 @@ $module: #dcdcdc;
 $module-dark: #aaa;
 $module-white: #fff;
 $notimportant: #999;
-$box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-$box-shadow-hover: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+$box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 .rarity-junk {
-    color: $junk
+	color: $junk
 }
+
 .rarity-basic {
-    color: $basic;
+	color: $basic;
 }
+
 .rarity-fine {
-    color: $fine;
+	color: $fine;
 }
+
 .rarity-masterwork {
-    color: $masterwork;
+	color: $masterwork;
 }
+
 .rarity-rare {
-    color: $rare;
+	color: $rare;
 }
+
 .rarity-exotic {
-    color: $exotic;
+	color: $exotic;
 }
+
 .rarity-ascended {
-    color: $ascended;
+	color: $ascended;
 }
+
 .rarity-legendary {
-    color: $legendary;
+	color: $legendary;
 }
 
 :root {
@@ -49,8 +56,9 @@ $box-shadow-hover: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 	--rarity-exotic: #{$exotic};
 	--rarity-ascended: #{$ascended};
 	--rarity-legendary: #{$legendary};
-	
+
 	--gw2helper-module: #{$module};
+	--gw2helper-module-text: #000;
 	--gw2helper-module-dark: #{$module-dark};
 	--gw2helper-module-white: #{$module-white};
 	--gw2helper-not-important: #{$notimportant};
@@ -66,10 +74,28 @@ $box-shadow-hover: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 	color: #d93cd9;
 }
 
-.flavor{
+.flavor {
 	color: deepskyblue;
 }
 
-.warning{
+.warning {
 	color: orange;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		/* Colors */	
+		--gw2helper-module: #484E51;
+		--gw2helper-module-text: rgb(232, 230, 227);
+		--gw2helper-module-dark: #2E3234;
+		--gw2helper-module-white: #181A1B;
+		--gw2helper-not-important: #{$notimportant};
+		--gw2helper-module-shadow: #{$box-shadow};
+		--gw2helper-module-shadow-hover: #{$box-shadow-hover};
+	
+		--nav-active: #e8e6e3;
+	}
+	body{
+		background-color: #2C2F31
+	}
 }

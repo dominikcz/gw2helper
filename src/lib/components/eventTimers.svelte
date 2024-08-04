@@ -288,10 +288,10 @@
 		&.time {
 			position: sticky;
 			top: 0;
-			background-color: #fff;
+			background-color: var(--gw2helper-module-white);;
 			z-index: 1;
 			.event {
-				border-left: 1px solid #aaa;
+				border-left: 1px solid var(--gw2helper-module-dark);
 			}
 		}
 	}
@@ -303,7 +303,7 @@
 		// position: static;
 		// margin: 0 1em;
 		z-index: 10;
-		background-color: #fff;
+		background-color: var(--gw2helper-module-white);
 		&.bottom {
 			z-index: 1;
 		}

@@ -43,7 +43,7 @@ summary {
     font-weight: normal;
 }
 
-.icon-small{
+.icon-small {
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -54,7 +54,7 @@ summary {
     background: var(--gw2helper-module-white) no-repeat left 0.6em bottom 0.6em;
     background-size: auto 2em;
     box-shadow: var(--gw2helper-module-shadow);
-    color: #000;
+    color: var(--gw2helper-module-text);
     display: flex;
     flex-flow: column nowrap;
     padding: 0.625em;
@@ -80,7 +80,7 @@ summary {
 }
 
 @media (min-width: 420px) {
-    .widget{
+    .widget {
         width: 13.75em;
         flex: 0 1 auto;
     }

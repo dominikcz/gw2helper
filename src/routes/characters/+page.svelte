@@ -83,7 +83,8 @@
 		flex-flow: column nowrap;
 		justify-content: space-around;
 		gap: 1em;
-		background-color: #dcdcdc;
+		background-color: var(--gw2helper-module);
+		color: var(--gw2helper-module-text);
 		height: fit-content;
 		h2 {
 			width: 100%;

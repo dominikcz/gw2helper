@@ -204,17 +204,17 @@
 		max-width: 37.5em;
 		display: flex;
 		flex-flow: column nowrap;
-		gap: 0.2rem;
+		gap: 0.2em;
 		a {
 			text-decoration: none;
 		}
 	}
 	.currency {
-		min-height: 2rem;
+		min-height: 2em;
 		background-color: var(--gw2helper-module);
-		color: #000;
-		padding: 0 0.4rem;
-		gap: 1rem;
+		color: var(--gw2helper-module-text);
+		padding: 0 0.4em;
+		gap: 1em;
 		display: flex;
 		flex-flow: row nowrap;
 		justify-content: space-between;
@@ -223,14 +223,14 @@
 			color: var(--gw2helper-not-important);
 		}
 		img {
-			height: 2rem;
+			height: 2em;
 		}
 		.currency-value {
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: flex-end;
 			align-items: center;
-			column-gap: 0.5rem;
+			column-gap: 0.5em;
 			font-size: 120%;
 		}
 	}
@@ -238,4 +238,10 @@
 	.inner-content {
 		margin: 0 0.6em;
 	}
+
+	// @media (prefers-color-scheme: dark) {
+	// 	.currency {
+
+	// 	}
+	// }
 </style>
