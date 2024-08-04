@@ -16,7 +16,7 @@
 	function runsDesktop(){
 		const browser = window.navigator.userAgent||window.opera;
 		const desktop = ['Windows', 'Linux', 'Macintosh'].some(v => browser.includes(v));
-		console.log('browser', {browser, desktop});
+		console.log('desktop', desktop);
 		return desktop;
 	}
 

@@ -65,6 +65,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--gw2helper-module-shadow: #{$box-shadow};
 	--gw2helper-module-shadow-hover: #{$box-shadow-hover};
 
+	--gw2helper-link-color: blue;
+
 	--nav-bg: #222;
 	--nav-fg: #aaa;
 	--nav-active: #fff;
@@ -93,6 +95,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		--gw2helper-module-shadow: #{$box-shadow};
 		--gw2helper-module-shadow-hover: #{$box-shadow-hover};
 	
+		--gw2helper-link-color: #fff;
+
 		--nav-active: #e8e6e3;
 	}
 	body{

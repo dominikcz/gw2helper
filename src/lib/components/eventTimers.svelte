@@ -18,6 +18,7 @@
 	let dt0;
 	let width = 0;
 	let interval;
+	let darkMode = false;
 	const et = new Map();
 
 	init();
@@ -27,13 +28,28 @@
 	}, updateInterval * 1000);
 
 	onMount(() => {
+		if (window.matchMedia) {
+			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				darkMode = true;
+			}
+			console.log('darkMode', darkMode);
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', hndColorPrefChange);
+		}
 		hndResize();
 	});
 
 	onDestroy(() => {
 		console.log('cleaning up');
 		clearInterval(interval);
+		if (window.matchMedia) {
+			window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', hndColorPrefChange);
+		}
 	});
+
+	function hndColorPrefChange(event) {
+		darkMode = event.matches;
+		console.log('darkMode change', darkMode);
+	}
 
 	function updatePointerPos() {
 		if (dt0) {
@@ -47,7 +63,7 @@
 				eventsRef.scrollLeft = 0;
 				init();
 			} else {
-				currentTimePos = 100 *  (diff / 120);
+				currentTimePos = 100 * (diff / 120);
 				// scroll to center if out of view:
 				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
 
@@ -167,6 +183,32 @@
 		width = rect.width + scroll;
 		updatePointerPos();
 	}
+
+	function darkerColor(p, c) {
+		var i = parseInt,
+			r = Math.round,
+			[a, b, c, d] = c.split(','),
+			P = p < 0,
+			t = P ? 0 : 255 * p,
+			P = P ? 1 + p : 1 - p;
+		return (
+			'rgb' + (d ? 'a(' : '(') + r(i(a[3] == 'a' ? a.slice(5) : a.slice(4)) * P + t) + ',' + r(i(b) * P + t) + ',' + r(i(c) * P + t) + (d ? ',' + d : ')')
+		);
+	}
+
+	function getColor(colors, darkMode) {
+		const output = [];
+		const _colors = colors.flat();
+		do {
+			const color = _colors.splice(0, 3);
+			const cstr = `rgb(${color.join(',')})`;
+			const c = darkMode ? darkerColor(-0.3, cstr) : cstr;
+			output.push(c);
+		} while (_colors.length > 0);
+		const sout = output.length > 1 ? `linear-gradient(90deg, ${output[0]} 0%, ${output[1]} 100%)` : output[0];
+		console.log('getColor', sout);
+		return sout;
+	}
 </script>
 
 <svelte:window on:resize={hndResize} />
@@ -204,11 +246,7 @@
 				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
-						<div
-							class="event"
-							title={segment.name}
-							style="width: {(segment.duration * 100) / 120}%; background-color: rgb({segment.bg.join(',')});"
-						>
+						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {getColor(segment.bg, darkMode)};">
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
 								{#if showChatLinks && segment.chatlink}
@@ -260,6 +298,7 @@
 		padding: 0.6em 0.6em;
 		display: inline-block;
 		background-color: var(--gw2helper-module);
+		color: var(--gw2helper-module-text);
 		width: 100%;
 		// font-weight: bold;
 	}
@@ -270,6 +309,7 @@
 		min-height: 3em;
 		// min-width: 1200px;
 		margin-bottom: 0.3125em;
+		color: #222;
 		&.compact {
 			min-height: auto;
 			height: 1.6em;
@@ -284,14 +324,18 @@
 			padding: 0.3125em;
 			// word-break: break-all;
 			overflow-wrap: break-word;
+			a {
+				color: var(--gw2helper-link-color);
+			}
 		}
 		&.time {
 			position: sticky;
 			top: 0;
-			background-color: var(--gw2helper-module-white);;
+			background-color: var(--gw2helper-module-white);
 			z-index: 1;
 			.event {
 				border-left: 1px solid var(--gw2helper-module-dark);
+				color: var(--gw2helper-module-text);
 			}
 		}
 	}
