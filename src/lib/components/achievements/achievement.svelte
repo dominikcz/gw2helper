@@ -56,11 +56,9 @@
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
 		{/if}
-		<small>
-			<a href={helperUtils.wikiLink(name)} target="_blank">
-				<img src="{base}/assets/wiki.svg" alt="wiki logo" height="24px" title="Read more on GW2 Wiki" />
-			</a>
-		</small>
+		<a href={helperUtils.wikiLink(name)} target="_blank">
+			<img src="{base}/assets/wiki.svg" alt="wiki logo" title="Read more on GW2 Wiki" />
+		</a>
 	</div>
 	<div class="body">
 		<div class="title-bar">
@@ -68,7 +66,7 @@
 			<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
 			<img src={todoState_icon} alt={todoState_state} title={todoState_title} on:click={toggleTodo} />
 		</div>
-		{#if description}<span>{description}</span>{/if}
+		{#if description}<span>{@html description}</span>{/if}
 		{#if requirement}<span>{requirement}</span>{/if}
 
 		<div class="rewards small">
@@ -171,14 +169,14 @@
 
 <style lang="scss">
 	.achiev {
-		width: 335px;
+		width: 21rem;
 		display: flex;
 		flex-flow: row nowrap;
 		padding: 0.5rem;
 		row-gap: 0.2rem;
 		column-gap: 0.6rem;
 
-		border-radius: 5px;
+		border-radius: 0.3125em;
 		background-color: var(--gw2helper-module-white);
 		box-shadow: var(--gw2helper-module-shadow);
 		color: #000;
@@ -187,7 +185,7 @@
 		&.done {
 			background: var(--gw2helper-module-white) url(/gw2helper/assets/rewards/done.png) top left;
 			background-repeat: no-repeat;
-			background-size: 24px 24px;
+			background-size: 1.5em 1.5em;
 		}
 		&:hover {
 			box-shadow: var(--gw2helper-module-shadow-hover);
@@ -197,7 +195,7 @@
 			flex-flow: column nowrap;
 			row-gap: 0.6rem;
 			width: 25%;
-			min-width: 80px;
+			min-width: 5em;
 			justify-content: center;
 			align-items: center;
 			progress {
@@ -207,20 +205,19 @@
 				font-size: x-small;
 				overflow-wrap: break-word;
 			}
-			small {
-				font-size: xx-small;
+			a {
 				img {
-					width: 24px;
-					height: 24px;
+					width: 1.5em;
+					height: 1.5em;
 				}
 			}
 			img {
-				width: 48px;
-				height: 48px;
+				width: 3em;
+				height: 3em;
 				&.icon {
 					cursor: help;
-					width: 24px;
-					height: 24px;
+					width: 1.5em;
+					height: 1.5em;
 				}
 			}
 		}
@@ -229,7 +226,7 @@
 			flex-flow: column nowrap;
 			row-gap: 0.6rem;
 			width: 100%;
-			min-height: 120px;
+			min-height: 7.5em;
 			justify-content: space-between;
 			font-size: small;
 			.title-bar {
@@ -239,8 +236,8 @@
 				align-items: center;
 				img {
 					cursor: pointer;
-					width: 24px;
-					height: 24px;
+					width: 1.5em;
+					height: 1.5em;
 				}
 			}
 			h3 {
@@ -266,8 +263,8 @@
 			align-items: center;
 			font-size: medium;
 			img {
-				width: 24px;
-				height: 24px;
+				width: 1.5em;
+				height: 1.5em;
 			}
 		}
 	}

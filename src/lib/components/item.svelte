@@ -21,16 +21,16 @@
 
 <style lang="scss" global>
 	figure {
-		width: 60px;
-		height: 60px;
-		outline-width: 3px;
+		width: 3.75em;
+		height: 3.75em;
+		outline-width: 0.1875em;
 		outline-style: solid;
 		position: relative;
 		margin: 0;
 		padding: 0;
 		img {
-			width: 60px;
-			height: 60px;
+			width: 3.75em;
+			height: 3.75em;
 			cursor: pointer;
 		}
 		figcaption {
@@ -40,7 +40,7 @@
 			color: #fff;
 			background: rgba(0, 0, 0, 0.5);
 			font-size: 80%;
-			padding: 0 0 0 0.2rem;
+			padding: 0 0 0 0.2em;
 		}
 	}
 </style>

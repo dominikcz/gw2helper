@@ -22,8 +22,8 @@
 <style lang="scss" global>
 	.back-to-top {
 		position: fixed;
-		right: 1rem;
-		bottom: 2rem;
+		right: 1em;
+		bottom: 2em;
 		cursor: pointer;
 		transition-duration: 300ms;
 		z-index: 9999;
@@ -37,7 +37,7 @@
             outline: none !important;
         }
 		&:hover {
-			transform: translateY(-10px);
+			transform: translateY(-0.625em);
 			background-color: transparent;
             * {
                 background-color: transparent;

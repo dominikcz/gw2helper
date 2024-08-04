@@ -4,23 +4,29 @@
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 
-	let showChatLinks = true;
-	let showEventTimes = true
+	let showChatLinks = runsDesktop();
+	let showEventTimes = false
 	let showCategories = true;
 	let showHeadings = true;
 	let autoScroll = false;
-	let excludedSpecialEvents = ['lc', 'db', 'ha'];
+	let excludedSpecialEvents = [/*'lc',*/ 'db', 'ha'];
 	// remove special events
 	excludedSpecialEvents.forEach(x => delete eventData[x]);
 
+	function runsDesktop(){
+		const browser = window.navigator.userAgent||window.opera;
+		const desktop = ['Windows', 'Linux', 'Macintosh'].some(v => browser.includes(v));
+		console.log('browser', {browser, desktop});
+		return desktop;
+	}
+
 	onMount(async () =>{
 		const settings = await utils.readEventTimerSettings();
-		showChatLinks = settings.showChatLinks;
-		showEventTimes = settings.showEventTimes;
-		showCategories = settings.showCategories;
-		showHeadings = settings.showHeadings;
-		autoScroll = settings.autoScroll;
-
+		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
+		if (settings.showEventTimes !== undefined) showEventTimes = settings.showEventTimes;
+		if (settings.showCategories !== undefined) showCategories = settings.showCategories;
+		if (settings.showHeadings !== undefined) showHeadings = settings.showHeadings;
+		if (settings.autoScroll !== undefined) autoScroll = settings.autoScroll;
 	})
 	
 	function saveSettings() {
@@ -47,5 +53,5 @@
 	<button on:click={saveSettings}>Save settings</button>
 </fieldset>
 
-<EventTimers wikiData={eventData} updateInterval={30} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} {excludedSpecialEvents}/>
+<EventTimers wikiData={eventData} updateInterval={30} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
 

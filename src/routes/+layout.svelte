@@ -1,4 +1,5 @@
 <script>
+	import '$lib/scss/gw2.scss';
 	import { base } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -7,7 +8,6 @@
 
 	import utils from '$lib/utils.js';
 
-	import '$lib/scss/gw2.scss';
 	import Navigation from '$lib/components/navigation.svelte';
 	import AutoTooltip from '$lib/components/autoTooltip.svelte';
 
@@ -136,7 +136,7 @@
 		margin: 0;
 		background-color: #222;
 		color: rgb(214, 211, 205);
-		min-height: 54px;
+		min-height: 3.375em;
 		display: flex;
 		flex-flow: row nowrap;
 		align-items: center;
@@ -146,7 +146,7 @@
 			text-wrap: nowrap;
 		}
 		img {
-			margin-left: 10px;
+			margin-left: 0.625em;
 			float: left;
 		}
 	}
@@ -157,11 +157,11 @@
 		row-gap: 1rem;
 	}
 	.waypoint {
-		width: 64px;
-		height: 64px;
+		width: 4em;
+		height: 4em;
 		background: url(/gw2helper/assets/waypoint.png) no-repeat center center;
 		padding: 1rem 0.5rem;
-		border-radius: 10px;
+		border-radius: 0.625em;
 		margin: 0;
 		&:hover {
 			background-image: url(/gw2helper/assets/waypoint-hover.png);
@@ -171,7 +171,7 @@
 		background: url(/gw2helper/assets/150px-construction.png) center right no-repeat;
 	}
 	.autotooltip-wide {
-		width: 300px;
+		width: 18.75em;
 	}
 
 	#content-wrapper {

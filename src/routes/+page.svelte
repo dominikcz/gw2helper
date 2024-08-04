@@ -201,7 +201,7 @@
 
 <style lang="scss">
 	.wallet {
-		max-width: 600px;
+		max-width: 37.5em;
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 0.2rem;

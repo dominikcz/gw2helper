@@ -465,6 +465,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
         const resp = (await Promise.all(tasks)).flat();
         resp.forEach((x) => {
             if (x) {
+                x.description = toHtml(x.description)
                 achievesCache.set(x.id, x);
             }
         });
@@ -552,14 +553,23 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     }
 };
 
+const toHtml = (text: string | null): string => {
+    let descr = text || '';
+    descr = descr.replace('<c=@flavor>', '<span class="flavor">');
+    descr = descr.replace('</c>', '</span>');
+    console.log('toHtml', descr)
+    return descr;
+}
+
 const additionalMapping = (data) => {
     data.forEach((element) => {
+        element.description = toHtml(element.description);
         if (element.details) {
             if (element.details.type) {
                 element.subtype = element.details.type;
             }
             if (element.details.description) {
-                element.subdescr = element.details.description;
+                element.subdescr = toHtml(element.details.description);
             }
         }
     });

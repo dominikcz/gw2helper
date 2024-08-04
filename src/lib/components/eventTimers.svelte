@@ -11,6 +11,7 @@
 	export let updateInterval = 10;
 
 	let eventsRef;
+	let pointerHeight = 0;
 
 	let currentTimePos = 0;
 	let currTime = new Date();
@@ -36,6 +37,8 @@
 
 	function updatePointerPos() {
 		if (dt0) {
+			const rect = eventsRef.getBoundingClientRect();
+			pointerHeight = rect.height;
 			currTime = new Date();
 			const diff = wxdates.minutesBetween(dt0, currTime);
 			if (dt0.getHours() != currTime.getHours()) {
@@ -44,7 +47,7 @@
 				eventsRef.scrollLeft = 0;
 				init();
 			} else {
-				currentTimePos = (diff / 120) * width;
+				currentTimePos = 100 *  (diff / 120);
 				// scroll to center if out of view:
 				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
 
@@ -171,7 +174,7 @@
 <div class="event-timer" bind:this={eventsRef}>
 	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
-			<div class="event-pointer" title="Current time" style="left: {currentTimePos}px;">
+			<div class="event-pointer" title="Current time" style="left: {currentTimePos}%; height: {pointerHeight}px">
 				<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
 			</div>
 		</div>
@@ -237,7 +240,7 @@
 
 <style lang="scss">
 	.event-timer {
-		position: relative;
+		// position: relative;
 		display: flex;
 		flex-flow: column nowrap;
 		overflow-y: hidden;
@@ -245,39 +248,40 @@
 	}
 
 	.category {
-		margin-bottom: 1rem;
+		margin-bottom: 1em;
 		width: 100%;
 		h3 {
 			background-color: var(--gw2helper-module-dark);
-			padding: 0.3rem 0.6rem;
-			margin: 0 0 5px 0;
+			padding: 0.3em 0.6em;
+			margin: 0 0 0.3125em 0;
 		}
 	}
 	.heading {
-		padding: 0.6rem 0.6rem;
+		padding: 0.6em 0.6em;
 		display: inline-block;
 		background-color: var(--gw2helper-module);
 		width: 100%;
 		// font-weight: bold;
 	}
 	.event-bar {
+		position: relative;
 		display: flex;
 		flex-flow: row nowrap;
-		min-height: 3rem;
-		min-width: 1200px;
-		margin-bottom: 5px;
+		min-height: 3em;
+		// min-width: 1200px;
+		margin-bottom: 0.3125em;
 		&.compact {
 			min-height: auto;
-			height: 1.6rem;
+			height: 1.6em;
 			.event {
 				margin: 0;
-				padding: 0.3rem 0 0.3rem 0.4rem;
+				padding: 0.3em 0 0.3em 0.4em;
 			}
 		}
 		.event {
 			display: flex;
 			flex-flow: column nowrap;
-			padding: 5px;
+			padding: 0.3125em;
 			// word-break: break-all;
 			overflow-wrap: break-word;
 		}
@@ -294,10 +298,10 @@
 
 	.time-container {
 		top: 0;
-		min-width: 1200px;
+		// min-width: 1200px;
 		width: 100%;
 		// position: static;
-		// margin: 0 1rem;
+		// margin: 0 1em;
 		z-index: 10;
 		background-color: #fff;
 		&.bottom {
@@ -308,13 +312,13 @@
 	.event-pointer {
 		position: absolute;
 		z-index: 11;
-		height: 101%;
+		// height: 101%;
 		border-left: 2px solid red;
 		margin-left: -1px;
 		top: 0;
 		transition: left 1s ease-in-out;
 		cursor: help;
-		scroll-margin-top: 210px;
+		scroll-margin-top: 13.125em;
 	}
 
 	.event-pointer-time {
@@ -322,7 +326,7 @@
 		background: red;
 		color: white;
 		font-weight: bold;
-		padding: 2px 6px;
+		padding: 0.125em 0.375em;
 		margin-left: -2px;
 		white-space: nowrap;
 		top: 0;
@@ -332,16 +336,16 @@
 	@media (min-width: 1200px) {
 		.category {
 			display: grid;
-			grid-template-columns: 200px 1fr;
-			grid-template-rows: minmax(3rem, fit-content);
-			gap: 0px 0px;
-			grid-auto-rows: minmax(3rem, fit-content);
+			grid-template-columns: 12.5em 1fr;
+			grid-template-rows: minmax(3em, fit-content);
+			gap: 0 0;
+			grid-auto-rows: minmax(3em, fit-content);
 			h3 {
 				grid-column: span 2;
 			}
 			.heading {
 				grid-column: 1;
-				margin-bottom: 5px;
+				margin-bottom: 0.3125em;
 			}
 			.event-bar {
 				grid-column: 2;

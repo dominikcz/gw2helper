@@ -37,7 +37,7 @@
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 1rem;
-		max-width: 800px;
+		max-width: 50em;
 		padding: 1rem;
 	}
 	.guild-header {
@@ -74,7 +74,7 @@
 		}
 		.guild-header {
 			flex-flow: row nowrap;
-			min-height: 128px;
+			min-height: 8em;
 			gap: 1rem;
 		}
 		.guild-h {

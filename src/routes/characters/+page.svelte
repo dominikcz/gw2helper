@@ -46,6 +46,8 @@
 						<ul class="info icons">
 							{#each char.crafting as craft}
 								<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
+							{:else}
+								<li class="no-results">no crafting professions</li>
 							{/each}
 						</ul>
 					{/if}
@@ -76,7 +78,7 @@
 <style lang="scss">
 	.character {
 		margin: 0;
-		padding: 10px;
+		padding: 0.625em;
 		display: flex;
 		flex-flow: column nowrap;
 		justify-content: space-around;
@@ -90,8 +92,8 @@
 			text-align: center;
 		}
 		.sect-img {
-			width: 128px;
-			height: 128px;
+			width: 8em;
+			height: 8em;
 			background-repeat: no-repeat;
 			background-position: bottom center;
 		}
@@ -109,7 +111,7 @@
 			}
 		}
 		section {
-			min-width: 150px;
+			min-width: 9.375em;
 			overflow: hidden;
 			margin: 0;
 			padding: 0;
@@ -130,9 +132,9 @@
 				padding: 0;
 				&.icons {
 					img {
-						width: 32px;
+						width: 2em;
 						vertical-align: middle;
-						margin: 2px 5px 2px 0;
+						margin: 0.125em 0.3125em 0.125em 0;
 					}
 				}
 			}
@@ -159,17 +161,17 @@
 			}
 			.sect-info {
 				align-items: flex-start;
-				min-width: 160px;
+				min-width: 10em;
 			}
 
 			.sect-img {
 				background-position-y: center;
 			}
 			section {
-				min-width: 370px;
+				min-width: 23.125em;
 				flex-flow: column wrap;
 				column-gap: 0.5rem;
-				max-height: 220px;
+				max-height: 13.75em;
 				align-items: flex-start;
 				justify-content: center;
 			}

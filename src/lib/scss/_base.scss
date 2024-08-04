@@ -1,5 +1,28 @@
-*{
-    box-sizing: border-box;
+@use "sass:math";
+
+// Font-Size
+$base-font-size: 1em;
+
+// Line-Height
+$base-line-height: 1.5;
+$header-line-height: 1.25;
+
+$browser-context: 16;
+
+@function em($pixels, $context: $browser-context) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return math.div($pixels, $context) * 1em;
+}
+
+* {
+	box-sizing: border-box;
 }
 
 body {
@@ -7,6 +30,15 @@ body {
 	background-color: #eee;
 	margin: 0;
 	padding: 0;
+
+	font-size: $base-font-size;
+	line-height: $base-line-height;
+
+	@media (min-width: 2000px),
+	(resolution: 2dppx) {
+		font-size: $base-font-size*1.7;
+		line-height: $base-line-height;
+	}
 }
 
 h1,
@@ -14,9 +46,9 @@ h2,
 h3,
 h4 {
 	font-family: Menomonia, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	margin: 0 0 1rem 0;
+	margin: 0 0 1em 0;
 }
 
-section{
-	margin: 0 0 1rem 0;
+section {
+	margin: 0 0 1em 0;
 }

@@ -94,12 +94,12 @@
 		position: absolute;
 		top: 100%;
 		left: 0;
-		min-width: 230px;
-		margin: 5px 0;
+		min-width: 14.375em;
+		margin: 0.3125em 0;
 		padding: 0;
 		list-style: none;
 		background-color: var(--search-input-dropdown-bg, #fff);
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
 		z-index: 1;
 	}
 

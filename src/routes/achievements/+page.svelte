@@ -370,7 +370,7 @@
 											/>
 										</div>
 										<a href={helperUtils.wikiLink(category.name)} target="_blank">
-											<img src="{base}/assets/wiki.svg" alt="wiki logo" class="small" height="24px" title="Read more on GW2 Wiki" />
+											<img src="{base}/assets/wiki.svg" alt="wiki logo" class="small" height="1.5em" title="Read more on GW2 Wiki" />
 										</a>
 									</div>
 								</div>
@@ -428,11 +428,11 @@
 			transform: rotate(90deg);
 		}
 		img {
-			width: 48px;
-			height: 48px;
+			width: 3em;
+			height: 3em;
 			&.small{
-				width: 24px;
-				height: 24px;
+				width: 1.5em;
+				height: 1.5em;
 				vertical-align: bottom;
 			}
 		}
@@ -450,8 +450,8 @@
 			.reward-item {
 				font-size: medium;
 				img {
-					width: 24px;
-					height: 24px;
+					width: 1.5em;
+					height: 1.5em;
 				}
 			}
 		}
@@ -462,8 +462,8 @@
 			align-items: center;
 			font-size: medium;
 			img {
-				width: 24px;
-				height: 24px;
+				width: 1.5em;
+				height: 1.5em;
 			}
 		}
 	}
@@ -486,8 +486,8 @@
 				.reward-item {
 					font-size: large;
 					img {
-						width: 36px;
-						height: 36px;
+						width: 2.25em;
+						height: 2.25em;
 					}
 				}
 			}

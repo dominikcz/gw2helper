@@ -37,6 +37,6 @@
 		display: flex;
 		flex-flow: row wrap;
 		gap: 1rem;
-		margin: 0 10px;
+		margin: 0 0.625em;
 	}
 </style>

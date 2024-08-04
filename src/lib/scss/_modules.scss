@@ -24,7 +24,7 @@ details {
 
 summary {
     padding: 1em;
-    border-radius: 5px;
+    border-radius: 0.3125em;
     font-size: 110%;
     // font-weight: bold;
     font-family: Menomonia, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -34,7 +34,7 @@ summary {
 .items {
     display: flex;
     flex-flow: row wrap;
-    gap: 10px;
+    gap: 0.625em;
 }
 
 .no-results {
@@ -44,28 +44,28 @@ summary {
 }
 
 .icon-small{
-    width: 24px;
-    height: 24px;
+    width: 1.5em;
+    height: 1.5em;
     vertical-align: middle;
 }
 
 .widget {
-    border-radius: 5px;
+    border-radius: 0.3125em;
     background: var(--gw2helper-module-white) no-repeat left 0.6rem bottom 0.6em;
-    background-size: auto 32px;
+    background-size: auto 2em;
     box-shadow: var(--gw2helper-module-shadow);
     color: #000;
     display: flex;
     flex-flow: column nowrap;
-    padding: 10px;
-    width: 155px;
+    padding: 0.625em;
+    width: 9.69em;
     flex: 1 1 auto;
     justify-content: space-between;
 
     &.image {
-        height: 155px;
+        height: 9.6875em;
         background: var(--gw2helper-module-white) no-repeat center bottom;
-        background-size: 135px;
+        background-size: 8.4375em;
     }
 
     .value {
@@ -81,7 +81,7 @@ summary {
 
 @media (min-width: 420px) {
     .widget{
-        width: 220px;
+        width: 13.75em;
         flex: 0 1 auto;
     }
 }

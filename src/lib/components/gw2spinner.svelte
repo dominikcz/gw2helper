@@ -3,9 +3,9 @@
 
 <style>
 	.spinner {
-		width: 64px;
-		height: 64px;
-		background: url('/gw2helper/assets/loading_gray_inv.png') no-repeat 0 0/3968px 64px;
+		width: 4em;
+		height: 4em;
+		background: url('/gw2helper/assets/loading_gray_inv.png') no-repeat 0 0/3968px 4em;
         animation: sprites 2.2s steps(62) infinite reverse;
 	}
 

@@ -107,10 +107,10 @@
 				url(/gw2helper/icons/arrow_forward.png) right calc(50% - 5px);
 			background-repeat: no-repeat;
 			background-size:
-				40px 24px,
-				40px 24px,
-				24px 24px,
-				24px 24px;
+				2.5em 1.5em,
+				2.5em 1.5em,
+				1.5em 1.5em,
+				1.5em 1.5em;
 			background-attachment: local, local, scroll, scroll;
 		}
 
@@ -122,11 +122,11 @@
 			white-space: nowrap;
 			// border-radius: 5px;
 			&:hover {
-				border-bottom: 4px dotted var(--nav-active, #fff);
+				border-bottom: 0.25em dotted var(--nav-active, #fff);
 				color: var(--nav-active, #fff);
 			}
 			&.active {
-				border-bottom: 4px solid var(--nav-active, #fff);
+				border-bottom: 0.25em solid var(--nav-active, #fff);
 				color: var(--nav-active, #fff);
 				cursor: auto;
 			}
@@ -140,7 +140,7 @@
 		flex-flow: column nowrap;
 		align-items: center;
 		justify-content: center;
-		width: 48px;
+		width: 3em;
 		height: auto;
 		padding: 0.3rem 1rem;
 		color: var(--nav-fg);
@@ -152,11 +152,11 @@
 		// background-repeat: no-repeat;
 		// background-size: 24px 24px;
 		&.left {
-			left: 0px;
+			left: 0;
 			// background-image: url(/gw2helper/icons/arrow_back.svg);
 		}
 		&.right {
-			left: calc(100% - 48px);
+			left: calc(100% - 3em);
 			// background-image: url(/gw2helper/icons/arrow_forward.svg);
 		}
 	}

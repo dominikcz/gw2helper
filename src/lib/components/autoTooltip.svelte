@@ -190,11 +190,11 @@
 		border: 1px solid #ddd;
 		box-shadow: var(--gw2helper-module-shadow);
 		background: white;
-		border-radius: 5px;
-		padding: 10px;
+		border-radius: 0.3125em;
+		padding: 0.625em;
 		position: absolute;
-		min-width: 100px;
-		max-width: 300px;
+		min-width: 6.25em;
+		max-width: 18.75em;
 		z-index: 1000;
 		overflow: clip;
 		display: none;

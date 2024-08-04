@@ -14,7 +14,7 @@
 .widgets-group{
     display: flex;
     flex-flow: column nowrap;
-    gap: 10px;
+    gap: 0.625em;
     h3{
         margin: 1rem 0 0 0;
     }
@@ -23,7 +23,7 @@
 .widgets {
     display: flex;
     flex-flow: row wrap;
-    gap: 10px;
+    gap: 0.625em;
     justify-content: flex-start;
 }
 
