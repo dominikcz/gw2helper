@@ -206,7 +206,6 @@
 			output.push(c);
 		} while (_colors.length > 0);
 		const sout = output.length > 1 ? `linear-gradient(90deg, ${output[0]} 0%, ${output[1]} 100%)` : output[0];
-		console.log('getColor', sout);
 		return sout;
 	}
 </script>
