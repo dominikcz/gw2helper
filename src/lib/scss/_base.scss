@@ -34,8 +34,7 @@ body {
 	font-size: $base-font-size;
 	line-height: $base-line-height;
 
-	@media (min-width: 2000px),
-	(resolution: 2dppx) {
+	@media screen and (min-width: 2000px) and (resolution: 2dppx) {
 		font-size: $base-font-size*1.7;
 		line-height: $base-line-height;
 	}

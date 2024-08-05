@@ -208,9 +208,6 @@
 			}
 			a {
 				color: var(--gw2helper-module-text);
-				svg{
-					cursor: pointer;
-				}
 			}
 			img {
 				width: 3em;
