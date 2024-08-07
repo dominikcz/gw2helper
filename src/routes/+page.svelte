@@ -42,11 +42,10 @@
 		});
 	}
 
-	onMount(async () =>{
+	onMount(async () => {
 		const settings = await utils.readWalletSettings();
 		showDepreciated = settings.showDepreciated;
 	});
-
 </script>
 
 <h1>Home</h1>
@@ -150,11 +149,11 @@
 
 <Awaiter promise={data.delivery} let:result>
 	{#if result.coins || result.items.length}
-		<details open>
+		<details open class="bltc">
 			<summary>Delivery Box</summary>
-			<div class="inner-content">
+			<div class="delivery-box">
 				{#if result.coins}
-					<WidgetInfo title="Coins for pickup" value={result.coins} let:value>
+					<WidgetInfo title="Coins for pickup" value={result.coins} let:value id="bltc-coins">
 						<Price {value} />
 					</WidgetInfo>
 				{/if}
@@ -181,7 +180,7 @@
 
 <Awaiter promise={data.wallet} let:result>
 	<section class="wallet">
-		{#each helperUtils.filterCollection(result, fields, filter, {nonZero: !showDepreciated, nonZeroField: 'active'}) as currency}
+		{#each helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as currency}
 			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
 				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
 					<span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
@@ -235,10 +234,24 @@
 		}
 	}
 
-	.inner-content {
+	.delivery-box {
 		margin: 0 0.6em;
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 0.625em;
+		align-items: normal;
 	}
 
+	.bltc {
+		summary {
+			background: url(/gw2helper/assets/Trading_Post.png) no-repeat center right 0.6em;
+			background-size: 3em;
+		}
+	}
+
+	:global(#bltc-coins .value) {
+		font-size: 1.4em;
+	}
 	// @media (prefers-color-scheme: dark) {
 	// 	.currency {
 

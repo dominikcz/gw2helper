@@ -160,12 +160,12 @@
 	.waypoint {
 		width: 4em;
 		height: 4em;
-		background: url(/gw2helper/assets/waypoint.png) no-repeat center center;
-		padding: 1em 0.5em;
-		border-radius: 0.625em;
+		background: url(/gw2helper/assets/waypoint-sprite.png) no-repeat top center;
+		padding: 0;
+		border-radius: 0;
 		margin: 0;
 		&:hover {
-			background-image: url(/gw2helper/assets/waypoint-hover.png);
+			background-position-y: -4em;
 		}
 	}
 	.autotooltip-wide {

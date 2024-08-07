@@ -4,7 +4,7 @@
 	export let image: string = '';
 
 	function getImageStyle() {
-		return image ? `background-image: url(${image});` : 'aqq';
+		return image ? `background-image: url(${image});` : '';
 	}
 
 </script>

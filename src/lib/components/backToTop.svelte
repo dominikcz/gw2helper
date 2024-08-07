@@ -31,6 +31,8 @@
 		border: none;
 		padding: 0;
 		height: fit-content;
+		font-size: 1em;
+
         &:focus, &:active{
             border:none !important;
             box-shadow: none !important;

@@ -58,7 +58,7 @@ summary {
     display: flex;
     flex-flow: column nowrap;
     padding: 0.625em;
-    width: 9.69em;
+    min-width: 12em;
     flex: 1 1 auto;
     justify-content: space-between;
 
@@ -69,7 +69,7 @@ summary {
     }
 
     .value {
-        font-size: x-large;
+        font-size: 1.5em;
         text-align: right;
         margin-top: 0.6em;
     }

@@ -54,7 +54,7 @@
 	function updatePointerPos() {
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
-			pointerHeight = rect.height;
+			pointerHeight = Math.trunc(rect.height);
 			currTime = new Date();
 			const diff = wxdates.minutesBetween(dt0, currTime);
 			if (dt0.getHours() != currTime.getHours()) {
@@ -287,6 +287,7 @@
 	.category {
 		margin-bottom: 1em;
 		width: 100%;
+		min-width: 75em;
 		h3 {
 			background-color: var(--gw2helper-module-dark);
 			padding: 0.3em 0.6em;
@@ -300,13 +301,14 @@
 		color: var(--gw2helper-module-text);
 		width: 100%;
 		// font-weight: bold;
+		min-width: 75em;
 	}
 	.event-bar {
 		position: relative;
 		display: flex;
 		flex-flow: row nowrap;
 		min-height: 3em;
-		// min-width: 1200px;
+		min-width: 75em;
 		margin-bottom: 0.3125em;
 		color: #222;
 		&.compact {
@@ -341,7 +343,7 @@
 
 	.time-container {
 		top: 0;
-		// min-width: 1200px;
+		min-width: 75em;
 		width: 100%;
 		// position: static;
 		// margin: 0 1em;
@@ -383,15 +385,18 @@
 			grid-template-rows: minmax(3em, fit-content);
 			gap: 0 0;
 			grid-auto-rows: minmax(3em, fit-content);
+			min-width: auto;
 			h3 {
 				grid-column: span 2;
 			}
 			.heading {
 				grid-column: 1;
 				margin-bottom: 0.3125em;
+				min-width: auto;
 			}
 			.event-bar {
 				grid-column: 2;
+				min-width: auto;
 			}
 			&.no-headings {
 				grid-template-columns: 1fr;
@@ -402,6 +407,9 @@
 					grid-column: 1;
 				}
 			}
+		}
+		.time-container {
+			min-width: auto;
 		}
 	}
 </style>
