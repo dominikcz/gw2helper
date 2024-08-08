@@ -20,7 +20,6 @@ export const eventData = {
     dn: {
         category: "Core Tyria",
         name: "Day and night",
-        link: "Day and night",
         segments: {
             1: { name: "Day", link: "Day and night", bg: [255,255,255] },
             2: { name: "Dusk", link: "Day and night", bg: [[255,255,255], [122,134,171]] },
@@ -87,9 +86,26 @@ export const eventData = {
         }
     },
 
-    pvpat: {
+    euat: {
         category: "Core Tyria",
-        name: "PvP Tournaments",
+        name: "EU PvP Tournaments",
+        link: "Automated Tournaments",
+        segments: {
+            0: { name: "", bg: [251,132,152] },
+            1: { name: "Automated Tournament: Balthazar's Brawl", link: "Automated Tournaments#Daily_tournaments", bg: [234, 98,121] },
+            2: { name: "Automated Tournament: Grenth's Game", link: "Automated Tournaments#Daily_tournaments", bg: [234, 98,121] },
+            3: { name: "Automated Tournament: Melandru's Matchup", link: "Automated Tournaments#Daily_tournaments", bg: [234, 98,121] },
+            4: { name: "Automated Tournament: Lyssa's Legions", link: "Automated Tournaments#Daily_tournaments", bg: [234, 98,121] }
+        },
+        sequences: {
+            partial: [{r:0,d:720}],
+            pattern: [{r:1,d:60},{r:0,d:120},{r:2,d:60},{r:0,d:120},{r:3,d:60},{r:0,d:120},{r:4,d:60},{r:0,d:840}]
+        }
+    },
+
+    naat: {
+        category: "Core Tyria",
+        name: "NA PvP Tournaments",
         link: "Automated Tournaments",
         segments: {
             0: { name: "", bg: [251,132,152] },
@@ -100,7 +116,7 @@ export const eventData = {
         },
         sequences: {
             partial: [],
-            pattern: [{r:1,d:60},{r:0,d:120},{r:2,d:60},{r:0,d:120},{r:3,d:60},{r:0,d:120},{r:4,d:60},{r:0,d:120}]
+            pattern: [{r:2,d:60},{r:0,d:120},{r:3,d:60},{r:0,d:300},{r:4,d:60},{r:0,d:660},{r:1,d:60},{r:0,d:120}]
         }
     },
 
@@ -526,14 +542,15 @@ export const eventData = {
         segments: {
             0: { name: "", bg: [138,234,244] },
             1: { name: "Skiff Race", link: "Labyrinthine Skiffs: A race is starting soon!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
-            2: { name: "Treasure Hunt", link: "Participate in the treasure hunt!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
-            3: { name: "Skimmer Race", link: "Skimmer Slalom: Reach the finish line!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
-            4: { name: "Fishing", link: "Fishing Tournament Sign-Up", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
-            5: { name: "Dolyak Race", link: "Flying Dolyak: Reach the finish line!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] }
+            2: { name: "Water Balloons", link: "Launch kite baskets full of water balloons", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
+            3: { name: "Treasure Hunt", link: "Participate in the treasure hunt!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
+            4: { name: "Skimmer Race", link: "Skimmer Slalom: Reach the finish line!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
+            5: { name: "Fishing", link: "Fishing Tournament Sign-Up", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] },
+            6: { name: "Dolyak Race", link: "Flying Dolyak: Reach the finish line!", chatlink: "[&BBwHAAA=]", bg: [ 66,200,215] }
         },
         sequences: {
             partial: [],
-            pattern: [{r:1,d:10},{r:0,d:20},{r:2,d:30},{r:0,d:15},{r:3,d:10},{r:0,d:5},{r:4,d:10},{r:0,d:5},{r:5,d:10},{r:0,d:5}]
+            pattern: [{r:1,d:10},{r:0,d:5},{r:2,d:10},{r:0,d:5},{r:3,d:30},{r:0,d:15},{r:4,d:10},{r:0,d:5},{r:5,d:10},{r:0,d:5},{r:6,d:10},{r:0,d:5}]
         }
     },
 

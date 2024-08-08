@@ -189,7 +189,8 @@
 	div {
 		border: 1px solid #ddd;
 		box-shadow: var(--gw2helper-module-shadow);
-		background: white;
+		background: var(--gw2helper-module-white);
+		color: var(--gw2helper-module-text);
 		border-radius: 0.3125em;
 		padding: 0.625em;
 		position: absolute;
