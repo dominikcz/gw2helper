@@ -166,7 +166,7 @@ const charactersItems = async () => {
 const materials = async () => {
     return promiseMe(apiClient("/v2/account/materials", ""), async (rawData) => {
         let ids = rawData.map((x) => x.id);
-        return await expandItems(ids, rawData);
+        return expandItems(ids, rawData);
     })
 };
 
@@ -381,7 +381,7 @@ const delivery = async () => {
     return promiseMe(apiClient("/v2/commerce/delivery", ""), async (resp) => {
         const ids = resp.items.map(x => x.id);
         resp.items = await expandItems(ids, resp.items);
-        resolve(resp);
+        return resp;
     });
 };
 
