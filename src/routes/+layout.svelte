@@ -29,9 +29,23 @@
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
 	];
 
+	console.log('tokenInfo', tokenInfo)
 	async function saveApiKey() {
-		await utils.saveApiKey(apiKey);
-		invalidateAll();
+		console.log('1');
+		if (data.apiService) {
+			console.log('2');
+				const _token = await data.apiService?.tokenInfo();
+				console.log('3');
+				_token.permissions = null;
+				console.log('aaaa', _token);
+			console.log('_token', _token);
+			if (_token.permissions.length) {
+				await utils.saveApiKey(apiKey);
+				invalidateAll();
+			} else {
+				tokenInfo.error = `Token "${_apiKey}" is invalid`;
+			}
+		}
 	}
 
 	async function deleteApiKey() {
@@ -91,6 +105,9 @@
 					<button on:click={refresh}>Clear cache & reload</button>
 					{#if tokenInfo.name}
 						<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
+					{/if}
+					{#if tokenInfo.error}
+						<p><em>{tokenInfo.error}</em></p>
 					{/if}
 				</fieldset>
 			</details>

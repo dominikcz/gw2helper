@@ -308,6 +308,7 @@ const bank = async () => {
 const tokenInfo = async () => {
     return apiClient("/v2/tokeninfo", "").catch(reason => {
         _apiKey = '';
+        console.log('reason', reason)
     });
 };
 

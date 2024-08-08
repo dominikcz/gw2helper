@@ -11,6 +11,7 @@ export async function load( { fetch } ) {
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
+		error: 'invalid token key',
 	};
 	const key = await utils.readApiKey();
 	const apiKeyHist = await utils.getKeyHist();
