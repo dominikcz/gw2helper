@@ -14,7 +14,7 @@ const ACHIEVES_NOT_IN_API = {
     361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
 
-const unique = function(tab) {
+const unique = function (tab) {
     return tab.filter(function (el, i, self) {
         return self.indexOf(el) === i;
     });
@@ -145,107 +145,113 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
 };
 
 const charactersItems = async () => {
-    const rawData = await apiClient("/v2/characters", "ids=all");
-    const tasks = [];
-    for (const char of rawData) {
-        let bags = char.bags.map(x => ({ id: x.id, size: x.size, count: 1 }));
-        let itemsInBags = char.bags
-            .filter(x => x != null)
-            .map((bag) => bag.inventory)
-            .flat()
-            .filter((x) => x != null);
-        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1 }));
-        let charItems = bags.concat(itemsInBags).concat(equipment);
-        let ids = charItems.map(x => x.id);
-        char._items = await expandItems(ids, charItems);
-    }
-    return rawData;
+    return promiseMe(apiClient("/v2/characters", "ids=all"), async (rawData) => {
+        const tasks = [];
+        for (const char of rawData) {
+            let bags = char.bags.map(x => ({ id: x.id, size: x.size, count: 1 }));
+            let itemsInBags = char.bags
+                .filter(x => x != null)
+                .map((bag) => bag.inventory)
+                .flat()
+                .filter((x) => x != null);
+            let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1 }));
+            let charItems = bags.concat(itemsInBags).concat(equipment);
+            let ids = charItems.map(x => x.id);
+            char._items = await expandItems(ids, charItems);
+        }
+        return rawData;
+    });
 };
 
 const materials = async () => {
-    const rawData = await apiClient("/v2/account/materials", "");
-    let ids = rawData.map((x) => x.id);
-    return await expandItems(ids, rawData);
+    return promiseMe(apiClient("/v2/account/materials", ""), async (rawData) => {
+        let ids = rawData.map((x) => x.id);
+        return await expandItems(ids, rawData);
+    })
 };
 
 const _getGuilds = async (full: boolean = false) => {
-    const account = await apiClient("/v2/account", "");
-    // concat and remove duplicates
-    const _guilds = [...new Set([...account.guild_leader, ...account.guilds])];
+    return promiseMe(apiClient("/v2/account", ""), async (account) => {
+        // concat and remove duplicates
+        const _guilds = [...new Set([...account.guild_leader, ...account.guilds])];
 
-    let tasks = [];
-    for (const guild of _guilds) {
-        tasks.push(apiClient(`/v2/guild/${guild}`, ""));
-    }
-    let _rawData = (await Promise.all(tasks)).flat();
-    const defEmblem = {
-        background: {
-            id: 1,
-            colors: [0]
-        },
-        foreground: {
-            id: 60,
-            colors: [443]
-        },
-        flags: []
-    };
-    if (full) {
-        _rawData.forEach(x => {
-            if (!x.emblem) {
-                x.emblem = defEmblem
-            }
-        });
-        const _emblems = _rawData.map(x => x.emblem);
-        const fgs = [];
-        const bgs = [];
-        let clrs = [];
+        let tasks = [];
+        for (const guild of _guilds) {
+            tasks.push(apiClient(`/v2/guild/${guild}`, ""));
+        }
+        let _rawData = (await Promise.all(tasks)).flat();
+        const defEmblem = {
+            background: {
+                id: 1,
+                colors: [0]
+            },
+            foreground: {
+                id: 60,
+                colors: [443]
+            },
+            flags: []
+        };
+        if (full) {
+            _rawData.forEach(x => {
+                if (!x.emblem) {
+                    x.emblem = defEmblem
+                }
+            });
+            const _emblems = _rawData.map(x => x.emblem);
+            const fgs = [];
+            const bgs = [];
+            let clrs = [];
 
-        // console.log('emblems', _emblems);
-        for (const emblem of _emblems) {
-            bgs.push(emblem.background.id);
-            fgs.push(emblem.foreground.id);
-            clrs.push(...emblem.background.colors.map(x => wx.isObject(x) ? x.id : x));
-            clrs.push(...emblem.foreground.colors.map(x => wx.isObject(x) ? x.id : x));
-        }
-        clrs = [...new Set(clrs)].filter(x => x != null);
-        const [colors, foregrounds, backgrounds] = await Promise.all([
-            clrs.length ? apiClient('/v2/colors', "ids=" + clrs.join(',')) : [],
-            apiClient('/v2/emblem/foregrounds', "ids=" + fgs.join(',')),
-            apiClient('/v2/emblem/backgrounds', "ids=" + bgs.join(','))
-        ]);
-        for (const item of _rawData) {
-            if (item.emblem) {
-                addPropertiesById(item.emblem.foreground, foregrounds);
-                addPropertiesById(item.emblem.background, backgrounds);
-                item.emblem.foreground.colors = item.emblem.foreground.colors.map(color => colors.find(x => color == x.id));
-                item.emblem.background.colors = item.emblem.background.colors.map(color => colors.find(x => color == x.id));
+            // console.log('emblems', _emblems);
+            for (const emblem of _emblems) {
+                bgs.push(emblem.background.id);
+                fgs.push(emblem.foreground.id);
+                clrs.push(...emblem.background.colors.map(x => wx.isObject(x) ? x.id : x));
+                clrs.push(...emblem.foreground.colors.map(x => wx.isObject(x) ? x.id : x));
             }
+            clrs = [...new Set(clrs)].filter(x => x != null);
+            const [colors, foregrounds, backgrounds] = await Promise.all([
+                clrs.length ? apiClient('/v2/colors', "ids=" + clrs.join(',')) : [],
+                apiClient('/v2/emblem/foregrounds', "ids=" + fgs.join(',')),
+                apiClient('/v2/emblem/backgrounds', "ids=" + bgs.join(','))
+            ]);
+            for (const item of _rawData) {
+                if (item.emblem) {
+                    addPropertiesById(item.emblem.foreground, foregrounds);
+                    addPropertiesById(item.emblem.background, backgrounds);
+                    item.emblem.foreground.colors = item.emblem.foreground.colors.map(color => colors.find(x => color == x.id));
+                    item.emblem.background.colors = item.emblem.background.colors.map(color => colors.find(x => color == x.id));
+                }
+            }
+            // console.log('emblems', {bgs, fgs, clrs});
+            // console.log('emblems data', _rawData)
         }
-        // console.log('emblems', {bgs, fgs, clrs});
-        // console.log('emblems data', _rawData)
-    }
-    return _rawData;
+        return _rawData;
+    })
 }
 
 const guildItems = async () => {
     const items = [];
-    const guilds = await _getGuilds(false);
-    for (const guild of guilds) {
-        const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, ""))
-            .map((x) => x.inventory)
-            .flat()
-            .filter((x) => x != null);
-        const ids = stashRaw.map((x) => x.id);
-        items.push({
-            name: guild.name,
-            stash: await expandItems(ids, stashRaw),
-        });
-    }
-    return items;
+    return promiseMe(_getGuilds(false), async (guilds) => {
+        for (const guild of guilds) {
+            const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, ""))
+                .map((x) => x.inventory)
+                .flat()
+                .filter((x) => x != null);
+            const ids = stashRaw.map((x) => x.id);
+            items.push({
+                name: guild.name,
+                stash: await expandItems(ids, stashRaw),
+            });
+        }
+        return items;
+    })
 };
 
 const characters = async () => {
-    return (await apiClient("/v2/characters", "ids=all")).map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
+    return promiseMe(apiClient("/v2/characters", "ids=all"), (resp) => {
+        return resp.map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
+    })
 };
 
 const guilds = async () => {
@@ -282,29 +288,27 @@ const account = () => {
 };
 
 const sharedInventory = async () => {
-    // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = await apiClient("/v2/account/inventory", "", {
-        transform: (data) => {
-            return data.filter((x) => x != null);
-        },
+    return promiseMe(apiClient("/v2/account/inventory", ""), (resp) => {
+        // this endpoint returns null in "empty" slots and we don't want that
+        const rawData = resp.filter((x) => x != null);
+        const ids = rawData.map((x) => x.id);
+        return expandItems(ids, rawData);
     });
-    const ids = rawData.map((x) => x.id);
-    return expandItems(ids, rawData);
 };
 
 const bank = async () => {
-    // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = await apiClient("/v2/account/bank", "", {
-        transform: (data) => {
-            return data.filter((x) => x != null);
-        },
+    return promiseMe(apiClient("/v2/account/bank", ""), (resp) => {
+        // this endpoint returns null in "empty" slots and we don't want that
+        const rawData = resp.filter((x) => x != null);
+        const ids = rawData.map((x) => x.id);
+        return expandItems(ids, rawData);
     });
-    const ids = rawData.map((x) => x.id);
-    return expandItems(ids, rawData);
 };
 
 const tokenInfo = async () => {
-    return await apiClient("/v2/tokeninfo", "");
+    return apiClient("/v2/tokeninfo", "").catch(reason => {
+        _apiKey = '';
+    });
 };
 
 const achievements = async (all: boolean = false) => {
@@ -346,9 +350,10 @@ const currencies = async () => {
     // denormalize
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
-    const _rawData = (await apiClient("/v2/currencies", "ids=all"))
-        .filter(x => !ignored.includes(x.id)).map(x => ({...x, active: 1}));
-    return mergeById(_rawData, _dep);
+    return promiseMe(apiClient("/v2/currencies", "ids=all"), (resp) => {
+        const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
+        return mergeById(_rawData, _dep);
+    })
 }
 
 const wallet = async () => {
@@ -359,15 +364,26 @@ const wallet = async () => {
     });
 }
 
-const delivery = async() =>{
-    return new Promise((resolve) => {
-        apiClient("/v2/commerce/delivery", "").then(async (resp) => {
-            const ids = resp.items.map(x => x.id);
-            resp.items = await expandItems(ids, resp.items);
-            resolve(resp);
+const promiseMe = async (APromise: Promise<any>, job) => {
+    return new Promise((resolve, reject) => {
+        APromise.then(async (resp) => {
+            const jobRes = job(resp);
+            if (jobRes) {
+                resolve(jobRes);
+            } else {
+                reject();
+            }
         });
-    });    
-}
+    });
+};
+
+const delivery = async () => {
+    return promiseMe(apiClient("/v2/commerce/delivery", ""), async (resp) => {
+        const ids = resp.items.map(x => x.id);
+        resp.items = await expandItems(ids, resp.items);
+        resolve(resp);
+    });
+};
 
 const init = async (apiKey: string, options?: object) => {
     console.log('init', apiKey);
@@ -475,9 +491,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     }
 
     categories.forEach(cat => {
-        if (ACHIEVES_NOT_IN_API[cat.id]){
+        if (ACHIEVES_NOT_IN_API[cat.id]) {
             const tmp = cat.achievements;
-            tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({id: x}))));
+            tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({ id: x }))));
             cat.achievements = unique(tmp);
         }
         cat.achievements = cat.achievements.map(x => {
