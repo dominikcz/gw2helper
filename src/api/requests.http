@@ -40,7 +40,7 @@ GET {{baseUrl}}/v2/characters
 Authorization: Bearer {{key}}
 
 ###
-GET {{baseUrl}}/v2/characters/Hoza Jagodka/equipment
+GET {{baseUrl}}/v2/characters/Mroczna Siwucha
 Authorization: Bearer {{key}}
 
 ###
@@ -66,3 +66,14 @@ Authorization: Bearer {{key}}
 ###
 GET {{baseUrl}}/v2/account/achievements
 Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/account/wizardsvault/daily
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/account/wizardsvault/weekly
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/items/100137
