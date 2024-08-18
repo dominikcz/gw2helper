@@ -14,13 +14,16 @@
 	export let data;
 	const defaultTitle = 'GW2 Helper';
 	let apiKey = data.apiKey;
+
+	$: debugMode = new URLSearchParams(window.location.search).get('debug-mode') == '1'
+
 	$: tokenInfo = data.tokenInfo;
 	$: active = $page.url.pathname;
 	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - ');
 
 	$: navigation = [
 		{ slug: `${base}/`, label: 'Home', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: 'Daily', visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: 'Daily', visible: false }, //tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/events/`, label: 'Event timers', visible: true },
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
@@ -29,7 +32,7 @@
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
 	];
 
-	$: currentPageVisible = navigation.find((x) => x.slug == active)?.visible || false;
+	$: currentPageVisible = (debugMode || navigation.find((x) => x.slug == active)?.visible || false);
 
 	async function saveApiKey() {
 		if (data.apiService) {
@@ -108,7 +111,7 @@
 			</details>
 		</section>
 
-		{#if tokenInfo.name || currentPageVisible}
+		{#if currentPageVisible}
 			<main>
 				<slot />
 			</main>
