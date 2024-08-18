@@ -101,9 +101,8 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     const origReq = req + query;
     const _options = Object.assign({}, fetchOptions, options);
     let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
-    Logger.log(`cached value for ${origReq}`, cachedValue);
     if (cachedValue !== undefined) {
-        Logger.log("requestCache is valid");
+        Logger.log("requestCache is valid, returning cached response");
         return cachedValue;
     } else {
         Logger.log("requestCache is INVALID, refreshing...");
@@ -119,9 +118,10 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             Logger.error('error', error);
         });
         if (response.status >= 400) {
-            Logger.warn('error loading data', { status: response.status, url: response.url });
+            const body = await response.text();
+            Logger.warn('error loading data', { status: response.status, url: response.url, body });
             // notifyOnError(req, response, _options);
-            cachedValue = [];
+            cachedValue = body || [];
         } else if (response.ok) {
             let data;
             if (_options.expectJson) {
@@ -387,7 +387,6 @@ const delivery = async () => {
 };
 
 const init = async (apiKey: string, options?: object) => {
-    console.log('init', apiKey);
     _items = await ls.getObject(ITEMS_CACHE, []);
     _achieves = await ls.getObject(ACHIEVES_CACHE, []);
     itemsCache = _items ? new Map(_items) : new Map();
@@ -604,6 +603,7 @@ const clearCache = async () => {
 }
 
 export default {
+    apiKey: _apiKey,
     init,
     characters,
     charactersItems,

@@ -1,6 +1,6 @@
 export async function load({ fetch, parent }) {
     const { apiService } = await parent();
 	return {
-		characters: apiService.characters(),
+		characters: apiService.apiKey ? apiService.characters() : [],
 	};
 }

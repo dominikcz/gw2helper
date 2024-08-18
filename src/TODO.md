@@ -24,3 +24,4 @@
     - przy filtrowaniu dochodzi do sytuacji, gdzie są da tooltipy do jednej pozycji pokazujące co innego (autotooltip pokazuje tooltip pozycji, która byłą w tym miejscu przed filtrowaniem)
 - podanie klucza powoduje jego natychmiastowy zapis, zamiast poczekać na potwierdzenie, że jest poprawny
 + jeśli w api zapiamiętany jest niepoprawny klucz (mógł zostać unieważniony), to aplikacja jest całkowicie nieużywalna. Można ją naprawić jedynie usuwając klucz z poziomu devTools
++ błędy 5xx z api

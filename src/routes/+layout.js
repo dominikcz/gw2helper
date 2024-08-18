@@ -15,25 +15,33 @@ export async function load( { fetch } ) {
 	};
 	const key = await utils.readApiKey();
 	const apiKeyHist = await utils.getKeyHist();
+	let tokenInfo = dummyTokenInfo;
+
+	const returnObj = {
+		version: __VERSION__,
+		apiKey: key,
+		apiKeyHist,
+		tokenInfo,
+		apiService,
+	};
+
+	console.log('key', key);
 	if (key){
 		await apiService.init(key, {fetchFunction: fetch });
-		let tokenInfo = await apiService.tokenInfo();
-		if (!tokenInfo.permissions) {
-			tokenInfo = dummyTokenInfo;
+		try {
+			const _tokenInfo = await apiService.tokenInfo();
+			console.log('_tokenInfo', _tokenInfo);
+			if (!_tokenInfo.permissions) {
+				if (_tokenInfo) {
+					tokenInfo.error = _tokenInfo;
+				}
+			} else {
+				returnObj.tokenInfo = _tokenInfo;
+				returnObj.apiService = apiService; 
+			}
+		} catch (error) {
+			console.log('Layout load error', error)
 		}
-		return {
-			version: __VERSION__,
-			apiKey: key,
-			apiKeyHist,
-			'apiService': apiService,
-			'tokenInfo': tokenInfo,
-		};
-	} else {
-		return {
-			version: __VERSION__,
-			apiKey: '',
-			apiKeyHist: [],
-			'tokenInfo': dummyTokenInfo
-		};
-	}
+	} 
+	return returnObj;
 }

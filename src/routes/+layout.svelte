@@ -19,8 +19,8 @@
 	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - ');
 
 	$: navigation = [
-		{ slug: `${base}/`, label: 'Home', visible: true },
-		{ slug: `${base}/daily/`, label: 'Daily', visible: true },
+		{ slug: `${base}/`, label: 'Home', visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: 'Daily', visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/events/`, label: 'Event timers', visible: true },
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
@@ -29,16 +29,13 @@
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
 	];
 
-	console.log('tokenInfo', tokenInfo)
+	$: currentPageVisible = navigation.find((x) => x.slug == active)?.visible || false;
+
 	async function saveApiKey() {
-		console.log('1');
 		if (data.apiService) {
-			console.log('2');
-				const _token = await data.apiService?.tokenInfo();
-				console.log('3');
-				_token.permissions = null;
-				console.log('aaaa', _token);
-			console.log('_token', _token);
+			const _token = await data.apiService?.tokenInfo();
+			_token.permissions = null;
+			console.log('aaaa', _token);
 			if (_token.permissions.length) {
 				await utils.saveApiKey(apiKey);
 				invalidateAll();
@@ -77,9 +74,7 @@
 				<small>v{data.version}</small>
 			</div>
 		</header>
-		{#if tokenInfo}
-			<Navigation items={navigation} {active} />
-		{/if}
+		<Navigation items={navigation} {active} />
 
 		<section>
 			<details open={!tokenInfo.name}>
@@ -107,13 +102,13 @@
 						<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
 					{/if}
 					{#if tokenInfo.error}
-						<p><em>{tokenInfo.error}</em></p>
+						<p><em>{@html tokenInfo.error}</em></p>
 					{/if}
 				</fieldset>
 			</details>
 		</section>
 
-		{#if tokenInfo.name}
+		{#if tokenInfo.name || currentPageVisible}
 			<main>
 				<slot />
 			</main>
