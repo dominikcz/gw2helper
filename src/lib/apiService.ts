@@ -193,9 +193,7 @@ const _getGuilds = async (full: boolean = false) => {
         };
         if (full) {
             _rawData.forEach(x => {
-                if (!x.emblem) {
-                    x.emblem = defEmblem
-                }
+                x.emblem ??= defEmblem
             });
             const _emblems = _rawData.map(x => x.emblem);
             const fgs = [];
@@ -509,9 +507,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 bits_done: [],
                 done: false
             };
-            if (!mine.repeated) {
-                mine.repeated = 0;
-            }
+            mine.repeated ??= 0;
             let points_per_tier: number | null = null;
             let points_done: number | null = null;
             let points_to_get: number | null = null;
@@ -527,7 +523,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
                 points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
             }
             achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
-            if (!achiev.icon) achiev.icon = cat.icon;
+            achiev.icon ??= cat.icon;
 
             return {
                 ...achiev,

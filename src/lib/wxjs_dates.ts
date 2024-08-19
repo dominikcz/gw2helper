@@ -33,6 +33,52 @@ Date.prototype.wxToFriendlyText = function () {
 	}
 };
 
+function setTime(dt, utc, atHour, atMinute, atSecond){
+	if (utc){
+		if (atHour !== null) {
+			dt.setUTCHours(atHour)
+		}
+		if (atMinute !== null) {
+			dt.setUTCMinutes(atMinute)
+		}
+		if (atSecond !== null) {
+			dt.setUTCSeconds(atSecond)
+		}
+	} else {
+		if (atHour !== null) {
+			dt.setHours(atHour)
+		}
+		if (atMinute !== null) {
+			dt.setMinutes(atMinute)
+		}
+		if (atSecond !== null) {
+			dt.setSeconds(atSecond)
+		}
+	}
+	dt.setMilliseconds(0);
+	return dt;
+}
+
+Date.prototype.wxTomorrow = function(utc, atHour, atMinute, atSecond){
+	const tomorrow = new Date();
+	tomorrow.setDate(tomorrow.getDate() + 1);
+	return setTime(tomorrow, utc, atHour, atMinute, atSecond);
+}
+
+Date.prototype.wxNextWeekDay = function(weekDay = 1, utc, atHour, atMinute, atSecond){
+	const d = new Date();
+	console.log('dd', d.getDay())
+	d.setDate(d.getDate() + weekDay + 7 - d.getDay());
+	return setTime(d, utc, atHour, atMinute, atSecond);
+}
+
+Date.prototype.wxNextQuarterOfYear = function(utc, atHour, atMinute, atSecond) {
+	const today = new Date();
+	const quarter = Math.floor((today.getMonth() + 3) / 3);
+	const nextq = (quarter == 4) ? new Date (today.getFullYear() + 1, 1, 1) : new Date (today.getFullYear(), quarter * 3, 1);
+	return setTime(nextq, utc, atHour, atMinute, atSecond);
+}
+
 Date.prototype.wxGetPeriodBegin = function (interval, units) {
 	const dt = new Date(this.getTime());
 	// without break statements!;
@@ -264,6 +310,7 @@ const wxdates = {
 		return this.friendlyDurationTill(d, new Date());
 	},
 	
+	setTime,
 };
 
 export default wxdates;

@@ -37,16 +37,16 @@ export const weekly = {
       "title": "Earn 10,000 WvW Experience",
       "track": "WvW",
       "acclaim": 50,
-      "progress_current": 10000,
+      "progress_current": 8000,
       "progress_complete": 10000,
-      "claimed": true
+      "claimed": false
     },
     {
       "id": 143,
       "title": "Defeat 100 Jade Mechs or Inquest",
       "track": "PvE",
       "acclaim": 50,
-      "progress_current": 2,
+      "progress_current": 12,
       "progress_complete": 100,
       "claimed": false
     },
