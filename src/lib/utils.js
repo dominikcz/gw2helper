@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_idb";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS } from "$lib/consts";
 
 async function readApiKey() {
     let key = '';
@@ -61,6 +61,10 @@ async function saveAchievesToDo(list){
     return ls.set(ACHIEVES_TODO, list);
 }
 
+async function saveWatchedEvents(list){
+    return ls.set(WATCHED_EVENTS, list);
+}
+
 async function readAchievesToDo(){
     return await ls.getObject(ACHIEVES_TODO, []);
 }
@@ -78,4 +82,5 @@ export default {
     saveAchievesToDo,
     readWalletSettings,
     saveWalletSettings,
+    saveWatchedEvents,
 }

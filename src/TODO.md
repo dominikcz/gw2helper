@@ -1,6 +1,8 @@
 # TODO
 - event timer 
     - przypominanie o eventach
+    - pomyśleć jednak o jakiejś formie sticky dla godzin
+    
 - achievs 
     - planowanie wg zysku/pracochłonności/kosztów
     - w todo sortowanie po ilości ap i postępie malejąco
@@ -9,7 +11,7 @@
     - dodać listę niestandardowych linków do wiki, np. w achieves często zamiast "xxx" mamy "xxx_(achievements)"
     - rozróżniać achiev czasowe, np. dragon bash, halloween itp. i je odpowiednio ukrywać
 
-- colors (dyes)
+- colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
 
 + handle 403 errors
 - pvp
@@ -19,4 +21,4 @@
 - autotooltip:
     - nie inicjuje się prawidłowo. Nie czeka na załadowanie całej strony. Część strony potrafi miec autotooltip, a reszta oryginalny. 
     - przy filtrowaniu dochodzi do sytuacji, gdzie są da tooltipy do jednej pozycji pokazujące co innego (autotooltip pokazuje tooltip pozycji, która byłą w tym miejscu przed filtrowaniem)
-- podanie klucza powoduje jego natychmiastowy zapis, zamiast poczekać na potwierdzenie, że jest poprawny
+? podanie klucza powoduje jego natychmiastowy zapis, zamiast poczekać na potwierdzenie, że jest poprawny

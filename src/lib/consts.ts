@@ -7,3 +7,4 @@ export const EVENT_TIMER_SETTINGS = 'dominikcz/gw2helper.event_timer_settings';
 export const ACHIEVES_SETTINGS = 'dominikcz/gw2helper.achieves_settings';
 export const ACHIEVES_TODO = 'dominikcz/gw2helper.achieves_todo';
 export const WALLET_SETTINGS = 'dominikcz/gw2helper.wallet_settings';
+export const WATCHED_EVENTS = 'dominikcz/gw2helper.watched_events';

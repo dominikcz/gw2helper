@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"howler": "^2.2.4",
 		"idb-keyval": "^6.2.1",
 		"yaml": "^2.5.0"
 	}

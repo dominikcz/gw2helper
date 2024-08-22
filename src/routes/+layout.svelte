@@ -24,12 +24,12 @@
 	$: navigation = [
 		{ slug: `${base}/`, label: 'Home', visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/daily/`, label: 'Daily', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/events/`, label: 'Event timers', visible: true },
-		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
-		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
+		{ slug: `${base}/events/`, label: 'Events', visible: true },
 		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/materials/`, label: 'Materials', visible: tokenInfo.permissions.includes('inventories') },
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
+		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
+		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
 	];
 
 	$: currentPageVisible = (devMode || navigation.find((x) => x.slug == active)?.visible || false);
