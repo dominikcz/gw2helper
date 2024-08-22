@@ -136,13 +136,13 @@
 			--gw2helper-wvw-progress: #d7b436;
 			--gw2helper-wvw-progress-bg: #594b16;
 
-			--gw2helper-pve-bg: #406c2a;
-			--gw2helper-pve-progress: #399709;
-			--gw2helper-pve-progress-bg: #35472d;
+			--gw2helper-pve-bg: #6F9867;
+			--gw2helper-pve-progress: #296d1b;
+			--gw2helper-pve-progress-bg: #5f8158;
 
-			--gw2helper-pvp-bg: #874546;
-			--gw2helper-pvp-progress: #9d1b1d;
-			--gw2helper-pvp-progress-bg: #5e3636;
+			--gw2helper-pvp-bg: #B05C6A;
+			--gw2helper-pvp-progress: #a33447;
+			--gw2helper-pvp-progress-bg: #8f6068;
 		}
 	}
 </style>

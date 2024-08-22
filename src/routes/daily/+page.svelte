@@ -12,22 +12,23 @@
 	}
 
 	function gw2NextQuarter() {
+    	// TODO: maybe it would be better to get end time from /v2/wizardsvault?
 		const today = new Date();
-		const m = today.getMonth();
-		let nextq;
 		const y = today.getFullYear();
-		if (m > 11) {
-			nextq = new Date(y + 1, 1, 21);
-		} else if (m > 8) {
-			nextq = new Date(y, 10, 21);
-		} else if (m > 5) {
-			nextq = new Date(y, 7, 21);
-		} else if (m > 3) {
-			nextq = new Date(y, 4, 21);
-		} else {
-			nextq = new Date(y, 2, 21);
-		}
-		return wxdates.setTime(nextq, true, 16, 0, 0);
+
+		const quarters = [
+			new Date(y, 1, 20),
+			new Date(y, 4, 20),
+			new Date(y, 7, 20),
+			new Date(y, 10, 20),
+			new Date(y + 1, 1, 20)
+		];
+		quarters.forEach(q => {
+			q = wxdates.setTime(q, true, 16, 0, 0); // 16:00 UTC
+		});
+		console.log('quarters', quarters.map(x => x.toLocaleString()))
+
+		return quarters.find(x => x > today);
 	}
 
 	function getTimerTarget(period: Period) {

@@ -14,7 +14,7 @@
 		return data.objectives.filter((x) => !x.claimed).length;
 	}
 
-	// console.log(`${title}: ${targetTime.toISOString()}`);
+	console.log(`${title}: ${targetTime.toISOString()}`);
 </script>
 
 <details>
@@ -74,9 +74,9 @@
 	progress[value] {
 		height: 1em;
 		width: 8em;
-		// width: 100%;
+		border: none;
 		color: var(--gw2helper-module-text) !important;
-		background-color: var(--gw2helper-module);
+		background-color: var(--gw2helper-module-dark);
 		&::-moz-progress-bar {
 			background: var(--gw2helper-module-text);
 		}
@@ -84,7 +84,7 @@
 			background: var(--gw2helper-module-text);
 		}
 		&::-webkit-progress-bar {
-			background: var(--gw2helper-module);
+			background: var(--gw2helper-module-dark);
 		}
 	}
 
