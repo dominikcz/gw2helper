@@ -55,7 +55,7 @@ let fetchOptions = {
         Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: ' + response.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
     },
     fetchFunction: fetch,
-    debug: true,
+    debug: false,
 };
 
 const requestCacheName = (): string => {
