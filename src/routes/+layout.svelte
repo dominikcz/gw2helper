@@ -15,7 +15,7 @@
 	const defaultTitle = 'GW2 Helper';
 	let apiKey = data.apiKey;
 
-	$: debugMode = new URLSearchParams(window.location.search).get('debug-mode') == '1'
+	$: devMode = new URLSearchParams(window.location.search).get('dev-mode') == '1'
 
 	$: tokenInfo = data.tokenInfo;
 	$: active = $page.url.pathname;
@@ -23,7 +23,7 @@
 
 	$: navigation = [
 		{ slug: `${base}/`, label: 'Home', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: 'Daily', visible: false }, //tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: 'Daily', visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/events/`, label: 'Event timers', visible: true },
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
@@ -32,18 +32,17 @@
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
 	];
 
-	$: currentPageVisible = (debugMode || navigation.find((x) => x.slug == active)?.visible || false);
+	$: currentPageVisible = (devMode || navigation.find((x) => x.slug == active)?.visible || false);
 
 	async function saveApiKey() {
 		if (data.apiService) {
+			await data.apiService.init(apiKey);
 			const _token = await data.apiService?.tokenInfo();
-			_token.permissions = null;
-			console.log('aaaa', _token);
-			if (_token.permissions.length) {
+			if (_token.name) {
 				await utils.saveApiKey(apiKey);
 				invalidateAll();
 			} else {
-				tokenInfo.error = `Token "${_apiKey}" is invalid`;
+				tokenInfo.error = `Token "${apiKey}" is invalid`;
 			}
 		}
 	}

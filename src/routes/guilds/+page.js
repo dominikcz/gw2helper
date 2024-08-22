@@ -1,6 +1,6 @@
 export async function load({ fetch, parent }) {
     const { apiService } = await parent();
 	return {
-		guilds: apiService.apiKey ? apiService.guilds() : [],
+		guilds: apiService.getApiKey() ? apiService.guilds() : [],
 	};
 }

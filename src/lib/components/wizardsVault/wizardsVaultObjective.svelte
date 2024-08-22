@@ -1,111 +1,148 @@
 <script lang="ts">
-    interface WizardsVaultObjective {
-      id: number,
-      title: string,
-      track: "WvW" | "PvE" | "PVP",
-      acclaim: number,
-      progress_current: number,
-      progress_complete: number,
-      claimed: boolean
-    }
+	interface WizardsVaultObjective {
+		id: number;
+		title: string;
+		track: 'WvW' | 'PvE' | 'PVP';
+		acclaim: number;
+		progress_current: number;
+		progress_complete: number;
+		claimed: boolean;
+	}
 
-    import helperUtils from '$lib/utils/helper-utils';
-    export let value: WizardsVaultObjective;
+	import helperUtils from '$lib/utils/helper-utils';
+	export let value: WizardsVaultObjective;
 
-    function getClasses(){
-        let cssClass = `category-${value.track}`;
-        if (value.claimed) {
-            cssClass += " claimed";
-        }
-        return cssClass;
-    }
-
+	function getClasses() {
+		let cssClass = `category-${value.track}`;
+		if (value.claimed) {
+			cssClass += ' claimed';
+		}
+		return cssClass;
+	}
 </script>
 
 <div class="category {getClasses()}">
-    <div class="main">
-        <span>{value.title}</span>
-        <progress value={value.progress_current <= value.progress_complete ? value.progress_current : value.progress_complete} max={value.progress_complete} /> 
-    </div>
-    <div class="reward">
-        {value.acclaim} 
-        <a class="tooltip-link" target="_blank" href="{helperUtils.wikiLink('Astral_Acclaim')}">
-            <img src="/gw2helper/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim" alt="Astral Acclaim"/>
-        </a>
-    </div>
+	<div class="main">
+		<span>{value.title}</span>
+		<progress value={value.progress_current <= value.progress_complete ? value.progress_current : value.progress_complete} max={value.progress_complete} />
+	</div>
+	<div class="reward">
+		{value.acclaim}
+		<a class="tooltip-link" target="_blank" href={helperUtils.wikiLink('Astral_Acclaim')}>
+			<img src="/gw2helper/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim" alt="Astral Acclaim" />
+		</a>
+	</div>
 </div>
 
-
 <style lang="scss">
-    .category{
-        display: flex;
-        flex-flow: row nowrap;
-        padding: 0.4em 0.5em 0.4em 3em;
-        column-gap: 1em;
-        align-items: center;
-        justify-content: space-between;
-        .main{
-            display: flex;
-            flex-flow: column nowrap;
-        }
-        .reward{
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            img{
-                width: 2em;
-            }
-        }
-        &.category-WvW{
-            background: #8d7624 url(/gw2helper/assets/rewards/Wizards_Vault_WvW.png) no-repeat 0.5em center;
-            progress[value]{
-                height: 1em;
-                color: #d7b436 !important;
-                background-color: #594b16;
-                &::-moz-progress-bar{
-                    background: #d7b436;	
-                }
-                &::-webkit-progress-value{
-                    background: #d7b436;	
-                }
-                &::-webkit-progress-bar{
-                    background: #594b16;
-                }
-            }
-        }
-        &.category-PvP{
-            background: #610b0c url(/gw2helper/assets/rewards/Wizards_Vault_PvP.png) no-repeat 0.5em center;
-            progress[value]{
-                height: 1em;
-                color: #801012 !important;
-                background-color: #4b090a;
-                &::-moz-progress-bar{
-                    background: #4b090a;	
-                }
-                &::-webkit-progress-value{
-                    background: #4b090a;	
-                }
-                &::-webkit-progress-bar{
-                    background: #801012;
-                }
-            }
-        }
-        &.category-PvE{
-            background: #2D710A url(/gw2helper/assets/rewards/Wizards_Vault_PvE.png) no-repeat 0.5em center;
-            progress[value]{
-                height: 1em;
-                color: #378a0e !important;
-                background-color: #235908;
-                &::-moz-progress-bar{
-                    background: #378a0e;	
-                }
-                &::-webkit-progress-value{
-                    background: #378a0e;	
-                }
-                &::-webkit-progress-bar{
-                    background: #235908;
-                }
-            }
-        }        
-    }
+	:root {
+		--gw2helper-wvw-bg: #e3d59e;
+		--gw2helper-wvw-progress: #debd39;
+		--gw2helper-wvw-progress-bg: #c9c489;
+
+		--gw2helper-pve-bg: #bae8a2;
+		--gw2helper-pve-progress: #5bc522;
+		--gw2helper-pve-progress-bg: #afd19d;
+
+		--gw2helper-pvp-bg: #fccccd;
+		--gw2helper-pvp-progress: #ff8688;
+		--gw2helper-pvp-progress-bg: #e6bebf;
+	}
+
+	.category {
+		display: flex;
+		flex-flow: row nowrap;
+		padding: 0.6em 0.5em 0.6em 3em;
+		column-gap: 1em;
+		align-items: center;
+		justify-content: space-between;
+		&.claimed{
+			filter: opacity(35%)
+		}
+		.main {
+			display: flex;
+			flex-flow: column nowrap;
+			row-gap: 0.4em;
+			flex-grow: 1;
+		}
+		.reward {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			justify-content: end;
+			width: 4em;
+			img {
+				width: 2em;
+			}
+		}
+		progress[value] {
+			height: 1em;
+			width: 100%;
+			border: none;
+		}
+		&.category-WvW {
+			background: var(--gw2helper-wvw-bg) url(/gw2helper/assets/rewards/Wizards_Vault_WvW.png) no-repeat 0.5em center;
+			progress[value] {
+				color: var(--gw2helper-wvw-progress) !important;
+				background-color: var(--gw2helper-wvw-progress-bg);
+				&::-moz-progress-bar {
+					background: var(--gw2helper-wvw-progress);
+				}
+				&::-webkit-progress-value {
+					background: var(--gw2helper-wvw-progress);
+				}
+				&::-webkit-progress-bar {
+					background: var(--gw2helper-wvw-progress-bg);
+				}
+			}
+		}
+		&.category-PvP {
+			background: var(--gw2helper-pvp-bg) url(/gw2helper/assets/rewards/Wizards_Vault_PvP.png) no-repeat 0.5em center;
+			progress[value] {
+				color: var(--gw2helper-pvp-progress) !important;
+				background-color: var(--gw2helper-pvp-progress-bg);
+				&::-moz-progress-bar {
+					background: var(--gw2helper-pvp-progress);
+				}
+				&::-webkit-progress-value {
+					background: var(--gw2helper-pvp-progress);
+				}
+				&::-webkit-progress-bar {
+					background: var(--gw2helper-pvp-progress-bg);
+				}
+			}
+		}
+		&.category-PvE {
+			background: var(--gw2helper-pve-bg) url(/gw2helper/assets/rewards/Wizards_Vault_PvE.png) no-repeat 0.5em center;
+			progress[value] {
+				color: var(--gw2helper-pve-progress) !important;
+				background-color: var(--gw2helper-pve-progress-bg);
+				&::-moz-progress-bar {
+					background: var(--gw2helper-pve-progress);
+				}
+				&::-webkit-progress-value {
+					background: var(--gw2helper-pve-progress);
+				}
+				&::-webkit-progress-bar {
+					background: var(--gw2helper-pve-progress-bg);
+				}
+			}
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--gw2helper-wvw-bg: #8e7a35;
+			--gw2helper-wvw-progress: #d7b436;
+			--gw2helper-wvw-progress-bg: #594b16;
+
+			--gw2helper-pve-bg: #406c2a;
+			--gw2helper-pve-progress: #399709;
+			--gw2helper-pve-progress-bg: #35472d;
+
+			--gw2helper-pvp-bg: #874546;
+			--gw2helper-pvp-progress: #9d1b1d;
+			--gw2helper-pvp-progress-bg: #5e3636;
+		}
+	}
 </style>

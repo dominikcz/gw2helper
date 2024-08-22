@@ -29,15 +29,14 @@ export async function load( { fetch } ) {
 	if (key){
 		await apiService.init(key, {fetchFunction: fetch });
 		try {
-			const _tokenInfo = await apiService.tokenInfo();
-			console.log('_tokenInfo', _tokenInfo);
-			if (!_tokenInfo.permissions) {
-				if (_tokenInfo) {
-					tokenInfo.error = _tokenInfo;
+			tokenInfo = await apiService.tokenInfo();
+			// console.log('tokenInfo', tokenInfo);
+			if (!tokenInfo.name) {
+				if (tokenInfo) {
+					returnObj.tokenInfo.error = tokenInfo;
 				}
 			} else {
-				returnObj.tokenInfo = _tokenInfo;
-				returnObj.apiService = apiService; 
+				returnObj.tokenInfo = tokenInfo;
 			}
 		} catch (error) {
 			console.log('Layout load error', error)

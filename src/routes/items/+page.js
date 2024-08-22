@@ -1,9 +1,10 @@
 export async function load({ fetch, parent }) {
     const { apiService } = await parent();
+	const key = apiService.getApiKey();
 	return {
-		bank: apiService.apiKey ? apiService.bank() : [],
-		shared: apiService.apiKey ? apiService.sharedInventory() : [],
-		characterItems: apiService.apiKey ? apiService.charactersItems() : [],
-		guildItems: apiService.apiKey ? apiService.guildItems() : [],
+		bank: key ? apiService.bank() : [],
+		shared: key ? apiService.sharedInventory() : [],
+		characterItems: key ? apiService.charactersItems() : [],
+		guildItems: key ? apiService.guildItems() : [],
 	};
 }

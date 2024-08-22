@@ -1,9 +1,9 @@
 <script lang="ts">
 	import WizardsVaultCategory from '$lib/components/wizardsVault/wizardsVaultCategory.svelte';
-	import { daily } from './daily';
-	import { weekly } from './weekly';
-	import { special } from './special';
 	import wxdates from '$lib/wxjs_dates';
+	import Awaiter from '$lib/components/awaiter.svelte';
+
+	export let data;
 
 	enum Period {
 		daily = 'daily',
@@ -13,20 +13,20 @@
 
 	function gw2NextQuarter() {
 		const today = new Date();
-        const m = today.getMonth();
-        let nextq;
-        const y = today.getFullYear();
-        if (m > 11) {
-            nextq = new Date(y + 1, 1, 21);
-        } else if (m > 8) {
-            nextq = new Date(y, 10, 21);
-        } else if (m > 5) {
-            nextq = new Date(y, 7, 21);
-        } else if (m > 3) {
-            nextq = new Date(y, 4, 21);
-        } else {
-            nextq = new Date(y, 2, 21);
-        }
+		const m = today.getMonth();
+		let nextq;
+		const y = today.getFullYear();
+		if (m > 11) {
+			nextq = new Date(y + 1, 1, 21);
+		} else if (m > 8) {
+			nextq = new Date(y, 10, 21);
+		} else if (m > 5) {
+			nextq = new Date(y, 7, 21);
+		} else if (m > 3) {
+			nextq = new Date(y, 4, 21);
+		} else {
+			nextq = new Date(y, 2, 21);
+		}
 		return wxdates.setTime(nextq, true, 16, 0, 0);
 	}
 
@@ -51,8 +51,14 @@
 
 <h1>Wizard's Vault</h1>
 
-<WizardsVaultCategory title="Daily" data={daily} targetTime={getTimerTarget(Period.daily)} />
+<Awaiter promise={data.daily} let:result>
+	<WizardsVaultCategory title="Daily" data={result} targetTime={getTimerTarget(Period.daily)} />
+</Awaiter>
 
-<WizardsVaultCategory title="Weekly" data={weekly} targetTime={getTimerTarget(Period.weekly)} />
+<Awaiter promise={data.weekly} let:result>
+	<WizardsVaultCategory title="Weekly" data={result} targetTime={getTimerTarget(Period.weekly)} />
+</Awaiter>
 
-<WizardsVaultCategory title="Special" data={special} targetTime={getTimerTarget(Period.special)} />
+<Awaiter promise={data.special} let:result>
+	<WizardsVaultCategory title="Special" data={result} targetTime={getTimerTarget(Period.special)} />
+</Awaiter>

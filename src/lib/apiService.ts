@@ -4,7 +4,8 @@ import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum } from "./utils";
 
-const apiUrl = "https://api.guildwars2.com";
+const defaultApiUrl = "https://api.guildwars2.com";
+const mocktApiUrl = "http://localhost:3000";
 const CACHE_TIMEOUT = 15 * 60;
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
 const INVALID_ACHIEVES_IDS: number[] = [];
@@ -33,6 +34,11 @@ interface CacheEntry {
     data: object;
 }
 
+const devMode =
+    typeof window != 'undefined'
+        ? new URLSearchParams(window.location.search).get('dev-mode') == '1'
+        : false;
+
 let _items;
 let _achieves;
 let itemsCache;
@@ -42,14 +48,14 @@ let requestCache: Map<string, CacheEntry>;
 let _apiKey = "";
 let fetchOptions = {
     method: "GET",
-    baseURL: apiUrl,
+    baseURL: devMode ? mocktApiUrl : defaultApiUrl,
     timeout: 10000,
     expectJson: true,
     onError(request, response, options) {
         Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: ' + response.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
     },
     fetchFunction: fetch,
-    debug: false,
+    debug: true,
 };
 
 const requestCacheName = (): string => {
@@ -305,7 +311,6 @@ const bank = async () => {
 
 const tokenInfo = async () => {
     return apiClient("/v2/tokeninfo", "").catch(reason => {
-        _apiKey = '';
         console.log('reason', reason)
     });
 };
@@ -384,14 +389,37 @@ const delivery = async () => {
     });
 };
 
-const init = async (apiKey: string, options?: object) => {
+const wizardVaultSorted = (APromise: Promise<any>, job) => {
+    return promiseMe(APromise, async (resp) => {
+        const byClaimed = Object.groupBy(resp.objectives, x => x.claimed);
+        byClaimed.false ??= [];
+        byClaimed.true ??= [];
+        resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
+        resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
+        return resp;
+    });
+}
+
+const wizardsVaultDaily = async () => {
+    return wizardVaultSorted(apiClient("/v2/account/wizardsvault/daily", ""));
+}
+
+const wizardsVaultWeekly = async () => {
+    return wizardVaultSorted(apiClient("/v2/account/wizardsvault/weekly", ""));
+}
+
+const wizardsVaultSpecial = async () => {
+    return wizardVaultSorted(apiClient("/v2/account/wizardsvault/special", ""));
+}
+
+const init = async (newApiKey: string, options?: object) => {
     _items = await ls.getObject(ITEMS_CACHE, []);
     _achieves = await ls.getObject(ACHIEVES_CACHE, []);
     itemsCache = _items ? new Map(_items) : new Map();
     achievesCache = _achieves ? new Map(_achieves) : new Map();
 
-    Logger.log("init", apiKey);
-    _apiKey = apiKey;
+    Logger.log("apiService.init", newApiKey);
+    _apiKey = newApiKey;
     fetchOptions = Object.assign({}, fetchOptions, options);
     const _req = await ls.getObject(requestCacheName(), []);
 
@@ -598,8 +626,12 @@ const clearCache = async () => {
     requestCache.clear();
 }
 
+const getApiKey = () => {
+    return _apiKey;
+}
+
 export default {
-    apiKey: _apiKey,
+    getApiKey,
     init,
     characters,
     charactersItems,
@@ -617,4 +649,7 @@ export default {
     clearCache,
     getFromAchievesCache,
     delivery,
+    wizardsVaultDaily,
+    wizardsVaultWeekly,
+    wizardsVaultSpecial,
 };
