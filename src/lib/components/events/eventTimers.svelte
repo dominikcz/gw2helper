@@ -2,7 +2,7 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import { onMount, onDestroy } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
-	export let wikiData;
+	import eventUtils from './eventsUtils';
 	export let showEventTimes = true;
 	export let showChatLinks = true;
 	export let showCategories = true;
@@ -15,17 +15,10 @@
 
 	let currentTimePos = 0;
 	let currTime = new Date();
-	let dt0;
 	let width = 0;
-	let interval;
+	let timer;
 	let darkMode = false;
-	const et = new Map();
-
-	init();
-
-	interval = setInterval(() => {
-		updatePointerPos();
-	}, updateInterval * 1000);
+	let dt0;
 
 	onMount(() => {
 		if (window.matchMedia) {
@@ -36,15 +29,24 @@
 			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', hndColorPrefChange);
 		}
 		hndResize();
+		timer = setTimeout(() => update(), 0)
 	});
 
 	onDestroy(() => {
 		console.log('cleaning up');
-		clearInterval(interval);
+		clearTimeout(timer);
 		if (window.matchMedia) {
 			window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', hndColorPrefChange);
 		}
 	});
+
+	function update(){
+		updatePointerPos();
+		const dt = new Date();
+		const msecLeft = 60000 - dt.getSeconds()* 1000 + dt.getMilliseconds();
+		const nextTick = Math.min(updateInterval * 1000, msecLeft);
+		timer = setTimeout(() => update(), nextTick);
+	}
 
 	function hndColorPrefChange(event) {
 		darkMode = event.matches;
@@ -52,6 +54,7 @@
 	}
 
 	function updatePointerPos() {
+		dt0 = eventUtils.getDt0();
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
 			pointerHeight = Math.trunc(rect.height);
@@ -61,7 +64,8 @@
 				console.log('reset.');
 				currentTimePos = 0;
 				eventsRef.scrollLeft = 0;
-				init();
+				eventUtils.init();
+				dt0 = eventUtils.getDt0();
 			} else {
 				currentTimePos = 100 * (diff / 120);
 				// scroll to center if out of view:
@@ -77,106 +81,6 @@
 		}
 	}
 
-	function init() {
-		et.clear();
-		const _dt0 = new Date();
-		_dt0.setHours(_dt0.getHours(), 0, 0, 0);
-		dt0 = new Date(_dt0);
-
-		for (const [key, value] of Object.entries(wikiData)) {
-			let category = value['category'] || '';
-			if (category) {
-				if (!et.has(category)) {
-					et.set(category, []);
-				}
-				let list = et.get(category);
-				list.push({
-					name: value.name,
-					link: value.link,
-					segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 48), 2),
-				});
-			}
-		}
-	}
-
-	function getCurrentWindow(dt0, segments, hours = 2) {
-		const dt1 = wxdates.dateAdd(dt0, 'hours', hours);
-		const dt0t = dt0.getTime();
-		const dt1t = dt1?.getTime();
-
-		const filtered = segments.filter(
-			(x) =>
-				(x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
-				(x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||
-				(x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||
-				(x.start.getTime() < dt0t && x.stop.getTime() >= dt1t)
-		);
-
-		filtered.forEach((x) => {
-			// for presentation purposes we have to adjust length of segments that start before dt0
-			if (x.start.getTime() < dt0t) {
-				const diff = wxdates.minutesBetween(x.start, dt0);
-				// we keep original start hour in x.start and adjust duration
-				x.duration -= diff;
-			}
-
-			// similarly for events that span outside our window
-			if (x.stop.getTime() > dt1t) {
-				const diff = wxdates.minutesBetween(x.start, dt1);
-				// we keep original start hour in x.stop and adjust duration
-				x.duration = diff;
-			}
-		});
-		return filtered;
-	}
-
-	function getEventData(ev, duration, time) {
-		// console.log('   - evData:', {duration, time});
-
-		let t1 = wxdates.dateAdd(time, 'minutes', duration);
-		let t0 = new Date(time);
-		time.setTime(t1.getTime());
-		return { ...ev, start: t0, stop: t1, duration };
-	}
-
-	function fillCalendar(segments, sequences, hours = 24) {
-		const t = new Date();
-		t.setUTCHours(0, 0, 0, 0); // reset time part to 00:00:00.000 UTC
-		const tmax = wxdates.dateAdd(t, 'hours', hours);
-		const sched = [];
-
-		for (const def of sequences.partial) {
-			let ev = segments[def.r];
-			sched.push(getEventData(ev, def.d, t));
-		}
-		let i = 0;
-		do {
-			i++;
-			for (const def of sequences.pattern) {
-				let ev = segments[def.r];
-				sched.push(getEventData(ev, def.d, t));
-			}
-		} while (t.getTime() < tmax?.getTime() && i < 10 * hours);
-		return sched;
-	}
-
-	function getHour(dt) {
-		return dt.toLocaleTimeString('pl-PL').slice(0, 5);
-	}
-
-	function getTimeSegments(dt0, hours = 2) {
-		let dt = new Date(dt0);
-		const sched = [];
-		const duration = 15;
-		dt.setUTCHours(dt.getUTCHours(), 0, 0, 0);
-		for (let i = 0; i < hours * 4; i++) {
-			let dt1 = wxdates.dateAdd(dt, 'minutes', duration);
-			sched.push({ name: getHour(dt), start: dt, stop: dt1, duration });
-			dt = new Date(dt1);
-		}
-		return sched;
-	}
-
 	function hndResize() {
 		const rect = eventsRef.getBoundingClientRect();
 		let scroll = eventsRef.scrollLeftMax;
@@ -184,30 +88,6 @@
 		updatePointerPos();
 	}
 
-	function darkerColor(p, c) {
-		var i = parseInt,
-			r = Math.round,
-			[a, b, c, d] = c.split(','),
-			P = p < 0,
-			t = P ? 0 : 255 * p,
-			P = P ? 1 + p : 1 - p;
-		return (
-			'rgb' + (d ? 'a(' : '(') + r(i(a[3] == 'a' ? a.slice(5) : a.slice(4)) * P + t) + ',' + r(i(b) * P + t) + ',' + r(i(c) * P + t) + (d ? ',' + d : ')')
-		);
-	}
-
-	function getColor(colors, darkMode) {
-		const output = [];
-		const _colors = colors.flat();
-		do {
-			const color = _colors.splice(0, 3);
-			const cstr = `rgb(${color.join(',')})`;
-			const c = darkMode ? darkerColor(-0.3, cstr) : cstr;
-			output.push(c);
-		} while (_colors.length > 0);
-		const sout = output.length > 1 ? `linear-gradient(90deg, ${output[0]} 0%, ${output[1]} 100%)` : output[0];
-		return sout;
-	}
 </script>
 
 <svelte:window on:resize={hndResize} />
@@ -216,11 +96,11 @@
 	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
 			<div class="event-pointer" title="Current time" style="left: {currentTimePos}%; height: {pointerHeight}px">
-				<span class="event-pointer-time" style="right: inherit;">{getHour(currTime)}</span>
+				<span class="event-pointer-time" style="right: inherit;">{eventUtils.getHour(currTime)}</span>
 			</div>
 		</div>
 		<div class="event-bar compact time">
-			{#each getTimeSegments(dt0) as segment}
+			{#each eventUtils.getTimeSegments(dt0) as segment}
 				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
 					{#if segment.name}
 						<span>{segment.name}</span>
@@ -230,7 +110,7 @@
 		</div>
 	</div>
 
-	{#each et.entries() as [cat, eventsList]}
+	{#each eventUtils.getET().entries() as [cat, eventsList]}
 		<div class="category" class:no-headings={!showHeadings}>
 			{#if showCategories}
 				<h3>{cat}</h3>
@@ -245,14 +125,14 @@
 				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
-						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {getColor(segment.bg, darkMode)};">
+						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventUtils.getColor(segment.bg, darkMode)};">
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
 								{#if showChatLinks && segment.chatlink}
 									<span class="chatlink">{segment.chatlink}</span>
 								{/if}
 								{#if showEventTimes}
-									<span>{`${getHour(segment.start)} - ${getHour(segment.stop)}`}</span>
+									<span>{`${eventUtils.getHour(segment.start)} - ${eventUtils.getHour(segment.stop)}`}</span>
 								{/if}
 							{/if}
 						</div>
@@ -264,7 +144,7 @@
 
 	<div class="category time-container bottom" class:no-headings={!showHeadings}>
 		<div class="event-bar compact time">
-			{#each getTimeSegments(dt0) as segment}
+			{#each eventUtils.getTimeSegments(dt0) as segment}
 				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
 					{#if segment.name}
 						<span>{segment.name}</span>

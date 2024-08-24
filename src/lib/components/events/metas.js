@@ -4,7 +4,7 @@
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
-export const eventData = {
+export const wikiData = {
     // Time
     t: {
         name: "",
@@ -598,8 +598,3 @@ export const eventData = {
         }
     }
 };
-
-export const short = {
-    wb: eventData.wb
-}
-

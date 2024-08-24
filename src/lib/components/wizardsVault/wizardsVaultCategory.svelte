@@ -2,13 +2,27 @@
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let data;
 	export let targetTime;
 	export let title;
 
-	function timeLeft(target) {
-		return wxdates.friendlyDurationTill(new Date(), target);
+	let timeLeft;
+	let timerId;
+
+	onMount(() => {
+		timerId = setTimeout(updateTime, 0);
+	});
+
+	onDestroy(() => {
+		clearTimeout(timerId);
+	});
+
+	function updateTime(){
+		timeLeft = wxdates.friendlyDurationTill(new Date(), targetTime);
+		const msec = new Date().getMilliseconds();
+		timerId = setTimeout(updateTime, 1000 - msec);
 	}
 
 	function notClaimed() {
@@ -29,7 +43,7 @@
 	<summary
 		>{title}
 		<div class="info">
-			<div class="timer">{timeLeft(targetTime)}</div>
+			<div class="timer">{timeLeft}</div>
 			{#if data.meta_progress_current}
 				<progress value={data.meta_progress_current} max={data.meta_progress_complete} />
 			{:else}

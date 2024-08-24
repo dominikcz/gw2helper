@@ -1,6 +1,5 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import wxjs_types from '$lib/wxjs_types';
 	export let debounceTime: number = 300;
 	export let value: string = '';
 	export let id = helperUtils.generateId(20);

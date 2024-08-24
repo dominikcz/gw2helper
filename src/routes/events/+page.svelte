@@ -1,50 +1,29 @@
 <script>
-	import EventTimers from '$lib/components/wizardsVault/events/eventTimers.svelte';
-	import EventReminders from '$lib/components/wizardsVault/events/eventReminders.svelte';
-	import { eventData } from './metas';
+	import EventTimers from '$lib/components/events/eventTimers.svelte';
+	import EventReminders from '$lib/components/events/eventReminders.svelte';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 	import Tabs from '$lib/components/tabs/tabs.svelte';
 	import Tab from '$lib/components/tabs/tab.svelte';
 	import { TabPanel } from '$lib/components/tabs/tabs';
+	import eventsUtils from '$lib/components/events/eventsUtils';
 
 	let showChatLinks = runsDesktop();
 	let showEventTimes = false;
 	let showCategories = true;
 	let showHeadings = true;
 	let autoScroll = false;
-	let excludedSpecialEvents = ['lc', 'db', 'ha'];
 	// remove special events
-	excludedSpecialEvents.forEach((x) => delete eventData[x]);
-	let allEvents = [];
-	let watchedEvents = [];
+	eventsUtils.excludeEvents(['lc', 'db', 'ha']);
+	
+	let allEvents = eventsUtils.prepareDailyCalendar(); // here we hold all events' data
+	let watchedEvents = []; // here we only save names of events
 
 	function runsDesktop() {
 		const browser = window.navigator.userAgent || window.opera;
 		const desktop = ['Windows', 'Linux', 'Macintosh'].some((v) => browser.includes(v));
 		console.log('desktop', desktop);
 		return desktop;
-	}
-
-	function prepareAllEvents() {
-		allEvents = [];
-		const ignored = ['t', 'dn'];
-		Object.keys(eventData).forEach((catKey) => {
-			if (!ignored.includes(catKey)) {
-				const cat = eventData[catKey];
-				const segments = Object.keys(cat.segments);
-				segments.forEach((x) => {
-					const ev = cat.segments[x];
-					if (ev.name) {
-						allEvents.push({
-							category: cat.category,
-							heading: cat.name,
-							name: ev.name,
-						});
-					}
-				});
-			}
-		});
 	}
 
 	onMount(async () => {
@@ -54,7 +33,6 @@
 		if (settings.showCategories !== undefined) showCategories = settings.showCategories;
 		if (settings.showHeadings !== undefined) showHeadings = settings.showHeadings;
 		if (settings.autoScroll !== undefined) autoScroll = settings.autoScroll;
-		prepareAllEvents();
 	});
 
 	async function hndToggleWatched(event) {
@@ -99,7 +77,7 @@
 	</div>
 
 	<TabPanel>
-		<EventTimers wikiData={eventData} updateInterval={30} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
+		<EventTimers updateInterval={15} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
 	</TabPanel>
 
 	<TabPanel>

@@ -6,7 +6,7 @@
 - achievs 
     - planowanie wg zysku/pracochłonności/kosztów
     - w todo sortowanie po ilości ap i postępie malejąco
-    - brakuje achievs (np. rift hunting vs https://wiki.guildwars2.com/wiki/Rift_Hunting_(achievements)). Napisać skrypcik do wyciągania różnic pomiędzy api a wiki i użyć wyniku do wypeniania luk
+    - brakuje achievs (np. rift hunting vs https://wiki.guildwars2.com/wiki/Rift_Hunting_(achievements)). Napisać skrypcik do wyciągania różnic pomiędzy api a wiki i użyć wyniku do wypeniania luk. Chyba już nie brakuje...
     - sortowanie w /achievements  wywołuje się bez sensu dla każdej kategorii (czyli np. 188 razy...)
     - dodać listę niestandardowych linków do wiki, np. w achieves często zamiast "xxx" mamy "xxx_(achievements)"
     - rozróżniać achiev czasowe, np. dragon bash, halloween itp. i je odpowiednio ukrywać
