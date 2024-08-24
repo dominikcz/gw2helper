@@ -39,13 +39,14 @@
 			<p>Notify me when the event starts</p>
 		{/if}
 		<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-        <h4>Alarm sound</h4>
-		{#each ['trumpet', 'squeeze'] as name}
-			<label>
-				<input type="radio" name="sounds" value={name} bind:group={sound} />
-				{name}
-			</label>
-		{/each}
+		<h4>Alarm sound</h4>
+		<div style="width: 100%">
+			{#each ['trumpet', 'squeeze'] as name}
+				<label>
+					<input type="radio" name="sounds" value={name} bind:group={sound} /> {name}
+				</label>
+			{/each}
+		</div>
 		<button on:click={playAlarm}>test alarm ({sound})</button>
 	</fieldset>
 	<h2>Watched:</h2>

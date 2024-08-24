@@ -63,6 +63,5 @@
 		&.watched {
 			background-position-y: -2em;
 		}
-
 	}
 </style>

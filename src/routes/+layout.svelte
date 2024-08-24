@@ -28,8 +28,8 @@
 		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/materials/`, label: 'Materials', visible: tokenInfo.permissions.includes('inventories') },
 		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
+		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 	];
 
 	$: currentPageVisible = (devMode || navigation.find((x) => x.slug == active)?.visible || false);

@@ -25,8 +25,7 @@
 
 	const showApiLinks = new URLSearchParams(window.location.search).get('show-api-links') == '1' ? true : false;
 
-	$: todoState_icon = todo ? `${base}/assets/rewards/map_heart_full.png` : `${base}/assets/rewards/map_heart_empty.png`;
-	$: todoState_state = todo ? 'on todo' : 'not on todo';
+	$: todoState_class = todo ? 'todo' : '';
 	$: todoState_title = todo ? 'Click to remove from TODO list' : 'Click to add to TODO list';
 	$: _bits = bits ? bits.length : 0;
 	$: _bitsDone = bits ? (done ? bits.length : (bitsDone || []).length) : 0;
@@ -57,7 +56,7 @@
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
 		{/if}
-		<a href={helperUtils.wikiLink(name)} target="_blank" title="Read more on GW2 Wiki" >
+		<a href={helperUtils.wikiLink(name)} target="_blank" title="Read more on GW2 Wiki">
 			<Wiki width="1.5em" height="1.5em" />
 		</a>
 	</div>
@@ -65,7 +64,7 @@
 		<div class="title-bar">
 			<h3>{name}</h3>
 			<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-			<img src={todoState_icon} alt={todoState_state} title={todoState_title} on:click={toggleTodo} />
+			<div class={`todo-state ${todoState_class}`} title={todoState_title} on:click={toggleTodo} />
 		</div>
 		{#if description}<span>{@html description}</span>{/if}
 		{#if requirement}<span>{requirement}</span>{/if}
@@ -144,6 +143,15 @@
 							src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
 							alt="mastery points Secrets of the Obscure"
 							title="This achievement rewards Secrets of the Obscure mastery points"
+						/>
+					</div>
+				{/if}
+				{#if rewardsObj.mastery.find((x) => x.region == 'Unknown')}
+					<div class="reward-item">
+						<img
+							src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
+							alt="mastery points Janthir Wilds"
+							title="This achievement rewards Janthir Wilds mastery points"
 						/>
 					</div>
 				{/if}
@@ -232,11 +240,6 @@
 				flex-flow: row nowrap;
 				justify-content: space-between;
 				align-items: center;
-				img {
-					cursor: pointer;
-					width: 1.5em;
-					height: 1.5em;
-				}
 			}
 			h3 {
 				margin: 0;
@@ -264,6 +267,21 @@
 				width: 1.5em;
 				height: 1.5em;
 			}
+		}
+	}
+
+	.todo-state {
+		background: url(/gw2helper/assets/rewards/map_heart-sprite.png) no-repeat top center;
+		padding: 0;
+		border-radius: 0;
+		margin: 0;
+		cursor: pointer;
+		width: 24px;
+		height: 24px;
+		background-size: 24px;
+		flex-shrink: 0;
+		&.todo {
+			background-position-y: -24px;
 		}
 	}
 </style>

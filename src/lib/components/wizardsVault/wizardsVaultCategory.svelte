@@ -1,6 +1,7 @@
 <script>
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
+	import helperUtils from '$lib/utils/helper-utils';
 
 	export let data;
 	export let targetTime;
@@ -12,6 +13,13 @@
 
 	function notClaimed() {
 		return data.objectives.filter((x) => !x.claimed).length;
+	}
+
+	function acclaimLeft() {
+		const points = data.objectives.filter((x) => !x.claimed).reduce((acc, val) => acc + val.acclaim, 0);
+		data.meta_reward_claimed ??= false;
+		data.meta_reward_astral ??= 0;
+		return data.meta_reward_claimed ? points : points + data.meta_reward_astral;
 	}
 
 	console.log(`${title}: ${targetTime.toISOString()}`);
@@ -27,6 +35,12 @@
 			{:else}
 				<span>{notClaimed()} objectives left</span>
 			{/if}
+			<div class="reward">
+				{acclaimLeft()}
+				<a class="tooltip-link" target="_blank" href={helperUtils.wikiLink('Astral_Acclaim')}>
+					<img src="/gw2helper/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim" alt="Astral Acclaim" />
+				</a>
+			</div>
 		</div>
 	</summary>
 	<article>
@@ -64,6 +78,16 @@
 					column-gap: 1em;
 					justify-content: end;
 					align-items: center;
+				}
+			}
+			.reward {
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				justify-content: end;
+				width: 4em;
+				img {
+					width: 2em;
 				}
 			}
 		}

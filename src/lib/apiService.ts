@@ -3,6 +3,7 @@ import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum } from "./utils";
+import wxjs_types from "./wxjs_types";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mocktApiUrl = "http://localhost:3000";
@@ -12,7 +13,7 @@ const INVALID_ACHIEVES_IDS: number[] = [];
 const ACHIEVES_NOT_IN_API = {
     // Rift Hunting
     // TODO: will have to change to list of objects and get achieves' descriptions from wiki :(
-    361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
+    // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
 
 const unique = function (tab) {
@@ -238,7 +239,11 @@ const guildItems = async () => {
     const items = [];
     return promiseMe(_getGuilds(false), async (guilds) => {
         for (const guild of guilds) {
-            const stashRaw = (await apiClient(`/v2/guild/${guild.id}/stash`, ""))
+            let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
+            if (!wxjs_types.isArray(stashRaw)) {
+                continue;
+            }
+            stashRaw = stashRaw
                 .map((x) => x.inventory)
                 .flat()
                 .filter((x) => x != null);
@@ -272,19 +277,6 @@ const account = () => {
             // console.log('acc', {_acc, _wal})
             _acc.created_local = new Date(_acc.created).toLocaleString();
             _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
-
-            // temporary fix for missing keys in API
-            if (!_acc.access.includes('SecretsOfTheObscure')) {
-                if (_wal.find(x => [72, 73, 75].includes(x.id) && x.value > 0)) {
-                    _acc.access.push('SecretsOfTheObscure')
-                }
-            }
-            // total guess ;)
-            if (!_acc.access.includes('JanthirWilds')) {
-                if (_wal.find(x => (x.id > 75) && x.value > 0)) {
-                    _acc.access.push('JanthirWilds')
-                }
-            }
 
             resolve(_acc)
         });
@@ -504,7 +496,7 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     if (batches.length) {
         // and make requests in parallel
         const tasks = batches.map((ids) => achievementsInfo(ids));
-        const resp = (await Promise.all(tasks)).flat();
+        const resp = (await Promise.all(tasks)).filter(x => wxjs_types.isArray(x)).flat();
         resp.forEach((x) => {
             if (x) {
                 x.description = toHtml(x.description)

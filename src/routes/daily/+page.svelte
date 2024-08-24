@@ -26,7 +26,7 @@
 		quarters.forEach(q => {
 			q = wxdates.setTime(q, true, 16, 0, 0); // 16:00 UTC
 		});
-		console.log('quarters', quarters.map(x => x.toLocaleString()))
+		// console.log('quarters', quarters.map(x => x.toLocaleString()))
 
 		return quarters.find(x => x > today);
 	}
@@ -48,9 +48,7 @@
 	}
 </script>
 
-<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
-
-<h1>Wizard's Vault</h1>
+<h2>Wizard's Vault</h2>
 
 <Awaiter promise={data.daily} let:result>
 	<WizardsVaultCategory title="Daily" data={result} targetTime={getTimerTarget(Period.daily)} />

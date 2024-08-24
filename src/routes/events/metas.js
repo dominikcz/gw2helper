@@ -1,5 +1,6 @@
+
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
-// last update: 2024-06-28
+// last update: 2024-08-24
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
@@ -532,6 +533,20 @@ export const eventData = {
         sequences: {
             partial: [{r:0,d:90}],
             pattern: [{r:1,d:10},{r:0,d:170}]
+        }
+    },
+
+    // ** Janthir Wilds **
+    js: {
+        category: "Janthir Wilds",
+        name: "Janthir Syntri",
+        segments: {
+            0: { name: "", bg: [196,212,255] },
+            1: { name: "Of Mists and Monsters", chatlink: "[&BCoPAAA=]", bg: [146,170,235] },
+        },
+        sequences: {
+            partial: [{r:0,d:30}],
+            pattern: [{r:1,d:25},{r:0,d:95}]
         }
     },
 

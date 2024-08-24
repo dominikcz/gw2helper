@@ -3,6 +3,9 @@
 	import { base } from '$app/paths';
 	export let items;
 	export let todoList;
+	export let name = '';
+
+	// console.log('achieveList '+name, items)
 </script>
 
 <div class="achiev-list">

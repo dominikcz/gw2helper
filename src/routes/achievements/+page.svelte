@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
+	import Wiki from '$lib/components/wiki.svelte';
 
 	export let data;
 
@@ -28,6 +29,7 @@
 	let withMasteryIce = false;
 	let withMasteryEoD = false;
 	let withMasterySofO = false;
+	let withMasteryJW = false;
 	let withTitles = false;
 	let withItems = false;
 	let withCoins = false;
@@ -44,6 +46,7 @@
 		if (settings.withMasteryIce !== undefined) withMasteryIce = settings.withMasteryIce;
 		if (settings.withMasteryEoD !== undefined) withMasteryEoD = settings.withMasteryEoD;
 		if (settings.withMasterySofO !== undefined) withMasterySofO = settings.withMasterySofO;
+		if (settings.withMasteryJW !== undefined) withMasteryJW = settings.withMasteryJW;
 		if (settings.withTitles !== undefined) withTitles = settings.withTitles;
 		if (settings.withItems !== undefined) withItems = settings.withItems;
 		if (settings.withCoins !== undefined) withCoins = settings.withCoins;
@@ -67,6 +70,7 @@
 		if (withMasteryIce) requiredRegions.push('Tundra');
 		if (withMasteryEoD) requiredRegions.push('Jade');
 		if (withMasterySofO) requiredRegions.push('Sky');
+		if (withMasteryJW) requiredRegions.push('Unknown');
 
 		const withMasteryOK = !requiredRegions.length || mastery.find((x) => requiredRegions.includes(x.region));
 
@@ -90,6 +94,7 @@
 			withMasteryIce,
 			withMasteryEoD,
 			withMasterySofO,
+			withMasteryJW,
 			withTitles,
 			withItems,
 			withCoins,
@@ -196,6 +201,7 @@
 		withMasteryIce,
 		withMasteryEoD,
 		withMasterySofO,
+		withMasteryJW,
 		withTitles,
 		withItems,
 		withCoins,
@@ -237,12 +243,15 @@
 					<label><input type="checkbox" bind:checked={withMasteryIce} /> Icebrood Saga mastery</label>
 					<label><input type="checkbox" bind:checked={withMasteryEoD} /> EoD mastery</label>
 					<label><input type="checkbox" bind:checked={withMasterySofO} /> SofO mastery</label>
+					<label><input type="checkbox" bind:checked={withMasteryJW} /> Janthir Wilds mastery</label>
 					<label><input type="checkbox" bind:checked={withTitles} /> Titles to get</label>
 					<label><input type="checkbox" bind:checked={withItems} /> Items to get</label>
 					<label><input type="checkbox" bind:checked={withCoins} /> Coins to get</label>
 
-					<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
-					<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
+					<div style="width: 100%">
+						<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
+						<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
+					</div>
 
 					<button on:click={saveSettings}>Save settings</button>
 				</fieldset>
@@ -351,6 +360,16 @@
 												/>
 											</div>
 										{/if}
+										{#if category.rewards_to_get.has('mastery_unknown')}
+											<div class="reward-item">
+												<span>{category.rewards_to_get.get('mastery_unknown')}</span>
+												<img
+													src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
+													alt="mastery points Janthir Wilds"
+													title="This category rewards Janthir Wilds mastery points"
+												/>
+											</div>
+										{/if}
 										{#if category.points_to_get}
 											<div class="reward-item">
 												<span>{category.points_to_get}</span>
@@ -368,15 +387,15 @@
 												alt="achieves"
 												title="There are {category.achievements.length} achievements left to do"
 											/>
+											<a href={helperUtils.wikiLink(category.name)} target="_blank">
+												<Wiki width="1.8em" height="1.8em" />
+											</a>
 										</div>
-										<a href={helperUtils.wikiLink(category.name)} target="_blank">
-											<img src="{base}/assets/wiki.svg" alt="wiki logo" class="small" height="1.5em" title="Read more on GW2 Wiki" />
-										</a>
 									</div>
 								</div>
 							</summary>
 							{#if category.description}<p>{category.description}</p>{/if}
-							<AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo={hndToggleTodo} />
+							<AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo={hndToggleTodo} name={category.name} />
 						</details>
 					{/each}
 				</div>
@@ -430,7 +449,7 @@
 		img {
 			width: 3em;
 			height: 3em;
-			&.small{
+			&.small {
 				width: 1.5em;
 				height: 1.5em;
 				vertical-align: bottom;
@@ -461,6 +480,11 @@
 			flex-flow: row nowrap;
 			align-items: center;
 			font-size: medium;
+			column-gap: 0.2em;
+			a {
+				color: var(--gw2helper-module-text);
+				height: 1.8em;
+			}
 			img {
 				width: 1.5em;
 				height: 1.5em;
