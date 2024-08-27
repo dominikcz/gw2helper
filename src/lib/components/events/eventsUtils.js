@@ -191,6 +191,13 @@ function excludeEvents(keys) {
     keys.forEach((x) => delete wikiData[x]);
 }
 
+function getEntries(dt){
+    // param `dt` here is just for cheating responsiveness in svelte. 
+    // It's not even required have it declared, but imho it's better read this way, 
+    // especially if you jump here from a page that uses this funcion
+    return et.entries();
+}
+
 export default {
     getColor,
     getTimeSegments,
@@ -198,6 +205,7 @@ export default {
     getSchedule,
     init,
     getET,
+    getEntries,
     excludeEvents,
     wikiData,
     getDt0,

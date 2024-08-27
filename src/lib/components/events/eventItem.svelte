@@ -2,7 +2,6 @@
 	import wxdates from '$lib/wxjs_dates';
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import eventsUtils from './eventsUtils';
-	import { stringify } from 'yaml';
 
 	export let event;
 

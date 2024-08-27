@@ -65,7 +65,7 @@
 				currentTimePos = 0;
 				eventsRef.scrollLeft = 0;
 				eventUtils.init();
-				dt0 = eventUtils.getDt0();
+				setTimeout(updatePointerPos, 0);
 			} else {
 				currentTimePos = 100 * (diff / 120);
 				// scroll to center if out of view:
@@ -110,7 +110,7 @@
 		</div>
 	</div>
 
-	{#each eventUtils.getET().entries() as [cat, eventsList]}
+	{#each eventUtils.getEntries(dt0) as [cat, eventsList]}
 		<div class="category" class:no-headings={!showHeadings}>
 			{#if showCategories}
 				<h3>{cat}</h3>
