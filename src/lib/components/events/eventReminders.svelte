@@ -21,6 +21,8 @@
 	});
 	let sound = 'trumpet';
 
+	let alarms = [];
+
 	function getWatched(events, watched) {
 		const _watched = [];
 		Object.keys(events).forEach(cat => {
@@ -62,7 +64,13 @@
 	</fieldset>
 
 	<h2>Watched:</h2>
-	<EventsList events={getWatched(events, watched)} on:toggle-watched />
+	<EventsList events={getWatched(events, watched)} on:toggle-watched on:toggle-alarm/>
+
+	<pre>
+	{JSON.stringify(alarms, null, 4)}
+	</pre>
+
+
 	<h2>Available:</h2>
 	<section>
 		<label for="filter">Filter:</label>

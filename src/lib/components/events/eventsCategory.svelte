@@ -1,5 +1,5 @@
 <script>
-	import EventsList from "./eventsList.svelte";
+	import EventsList from './eventsList.svelte';
 
 	export let events;
 	export let category = '';
@@ -7,6 +7,8 @@
 
 <details open>
 	<summary>{category}</summary>
-    <EventsList {events} on:toggle-watched />
+	<EventsList {events} on:toggle-watched />
 </details>
 
+<style lang="scss">
+</style>

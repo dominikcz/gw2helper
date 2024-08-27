@@ -19,14 +19,18 @@
 
 <style lang="scss">
     .formkit-chip{
+        font-size: 0.8em;
         border-radius: 5px;
-        padding: 0.5em 1em;
+        padding: 0.3em 0.6em;
         background-color: var(--gw2helper-module);
-        color: var(--gw2helper-text);
+        color: var(--gw2helper-module-text);
         width: fit-content;
         cursor: pointer;
         &.selected{
             background-color: var(--gw2helper-module-white); 
+            &::before {
+                content: "\2713\ ";
+            }
         }
     }
 </style>

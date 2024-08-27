@@ -2,17 +2,20 @@
 	import Chip from '$lib/components/chips/chip.svelte';
 	import Chips from '$lib/components/chips/chips.svelte';
 
+	let options0 = ['item 1a', 'item 2a', 'item 3a'];
+    let choice0 = [];
+
 	let options1 = [
-		{ label: 'item 1a', value: 'item-1a', selected: false },
-		{ label: 'item 2a', value: 'item-2a', selected: false },
-		{ label: 'item 3a', value: 'item-3a', selected: false },
+		{ label: 'item 1b', value: 'item-1b', selected: false },
+		{ label: 'item 2b', value: 'item-2b', selected: false },
+		{ label: 'item 3b', value: 'item-3b', selected: false },
 	];
     let choice1 = [];
 
 	let options2 = {
-        'item-1b': 'item 1b',
-        'item-2b': 'item 2b',
-        'item-3b': 'item 3b',
+        'item-1c': 'item 1c',
+        'item-2c': 'item 2c',
+        'item-3c': 'item 3c',
     }
 		
     let choice2 = [];
@@ -21,6 +24,12 @@
     let item2 = false;
 
 </script>
+
+<h2>array of strings</h2>
+<Chips options={options0} bind:value={choice0} />
+<pre>
+{JSON.stringify(choice0, null, 4)}
+</pre>
 
 <h2>array of objects</h2>
 <Chips options={options1} bind:value={choice1} />

@@ -155,7 +155,7 @@ function prepareDailyCalendar() {
                                 name: event.name,
                                 bg: event.bg,
                                 link: event.link,
-                                chatLink: event.chatLink,
+                                chatlink: event.chatlink,
                                 duration: event.duration,
                                 startTimes: [time],
                                 category: catKey

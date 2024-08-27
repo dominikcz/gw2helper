@@ -13,6 +13,7 @@
         button{
             padding: 0.6em 3em;
             border: none;
+            height: 3em;
             &.selected{
                 background-color: var(--gw2helper-module-white);
             }

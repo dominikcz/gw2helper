@@ -25,6 +25,8 @@
 		gap: 1em;
 	}
 
+
+
 	@media (min-width: 900px) {
 		.events-list {
 			flex-flow: row wrap;
