@@ -1,0 +1,32 @@
+<script lang="ts">
+    export let name: string = '';
+    export let id: string = '';
+    export let label: string;
+    export let title: string = '';
+    export let value;
+    export let selected: boolean = false;
+
+    function toggleSelected(){
+        selected = !selected;
+    }
+
+</script>
+
+<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
+<span class="formkit-chip" class:selected on:click={toggleSelected}>
+    {label}
+</span>
+
+<style lang="scss">
+    .formkit-chip{
+        border-radius: 5px;
+        padding: 0.5em 1em;
+        background-color: var(--gw2helper-module);
+        color: var(--gw2helper-text);
+        width: fit-content;
+        cursor: pointer;
+        &.selected{
+            background-color: var(--gw2helper-module-white); 
+        }
+    }
+</style>

@@ -36,7 +36,7 @@
 	let sortBy = 'ap';
 
 	onMount(async () => {
-		showApiLinks = new URLSearchParams(window.location.search).get('show-api-links') == '1' ? true : false;
+		showApiLinks = utils.getQueryStringFlag('show-api-links');
 		const settings = await data.settings;
 		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
 		if (settings.withPoints !== undefined) withPoints = settings.withPoints;

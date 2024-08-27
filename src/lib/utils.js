@@ -69,6 +69,18 @@ async function readAchievesToDo(){
     return await ls.getObject(ACHIEVES_TODO, []);
 }
 
+function getQueryString(keyName, defaultValue){
+    if (typeof window != 'undefined'){
+        const query = new URLSearchParams(window.location.search).get(keyName);
+        return (query === null) ? defaultValue : query;
+    }
+    return defaultValue;
+}
+
+function getQueryStringFlag(keyName){
+    return getQueryString(keyName) == '1' ? true : false;
+}
+
 export default {
     readApiKey,
     saveApiKey,
@@ -83,4 +95,6 @@ export default {
     readWalletSettings,
     saveWalletSettings,
     saveWatchedEvents,
+    getQueryString,
+    getQueryStringFlag,
 }

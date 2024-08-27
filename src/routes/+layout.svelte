@@ -15,7 +15,7 @@
 	const defaultTitle = 'GW2 Helper';
 	let apiKey = data.apiKey;
 
-	$: devMode = new URLSearchParams(window.location.search).get('dev-mode') == '1'
+	const devMode = utils.getQueryStringFlag('dev-mode');
 
 	$: tokenInfo = data.tokenInfo;
 	$: active = $page.url.pathname;

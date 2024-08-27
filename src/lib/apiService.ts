@@ -2,7 +2,7 @@ import Logger from "./logger";
 import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
-import { sum } from "./utils";
+import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 
 const defaultApiUrl = "https://api.guildwars2.com";
@@ -24,21 +24,16 @@ const unique = function (tab) {
 
 const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 
-const ignoreCache =
-    typeof window != 'undefined'
-        ? new URLSearchParams(window.location.search).get('ignore-cache') == '1'
-        : false;
+const ignoreCache = getQueryStringFlag('ignore-cache');
+const devMode = getQueryStringFlag('dev-mode');
+const realApi = getQueryStringFlag('real-api');
+    
 
 interface CacheEntry {
     time: Date | string;
     timeout: number;
     data: object;
 }
-
-const devMode =
-    typeof window != 'undefined'
-        ? new URLSearchParams(window.location.search).get('dev-mode') == '1'
-        : false;
 
 let _items;
 let _achieves;
@@ -49,7 +44,7 @@ let requestCache: Map<string, CacheEntry>;
 let _apiKey = "";
 let fetchOptions = {
     method: "GET",
-    baseURL: devMode ? mockApiUrl : defaultApiUrl,
+    baseURL: devMode ? realApi ? defaultApiUrl : mockApiUrl : defaultApiUrl,
     timeout: 10000,
     expectJson: true,
     onError(request, response, options) {

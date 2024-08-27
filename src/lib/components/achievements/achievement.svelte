@@ -4,6 +4,7 @@
 	import Price from '$lib/components/price.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Wiki from '../wiki.svelte';
+	import { getQueryStringFlag } from '$lib/utils';
 
 	export let id;
 	export let icon;
@@ -23,7 +24,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	const showApiLinks = new URLSearchParams(window.location.search).get('show-api-links') == '1' ? true : false;
+	const showApiLinks = getQueryStringFlag('show-api-links');
 
 	$: todoState_class = todo ? 'todo' : '';
 	$: todoState_title = todo ? 'Click to remove from TODO list' : 'Click to add to TODO list';
