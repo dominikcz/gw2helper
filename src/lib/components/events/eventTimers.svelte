@@ -19,6 +19,7 @@
 	let timer;
 	let darkMode = false;
 	let dt0;
+	let firstRun = true;
 
 	onMount(() => {
 		if (window.matchMedia) {
@@ -72,10 +73,11 @@
 				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
 
 				// keep pointer positioned at center and scroll background
-				if (autoScroll && currentTimePos != window.innerWidth - 16) {
-					// console.log('autoscrolling...');
+				if (firstRun || (autoScroll && currentTimePos >= window.innerWidth - 16)) {
 					const elem = document.querySelector('.event-pointer');
+					// console.log('autoscrolling...', elem);
 					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+					firstRun = false;
 				}
 			}
 		}
