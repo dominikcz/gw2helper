@@ -1,5 +1,4 @@
 <script>
-	import { base } from '$app/paths';
 	import EventItem from './eventItem.svelte';
 
 	export let events;
