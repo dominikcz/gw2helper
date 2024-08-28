@@ -215,7 +215,7 @@ export const wikiData = {
         name: "Dragon's Stand",
         segments: {
             1: { name: "Start advancing on the Blighting Towers", link: "Advancing on the Blighting Towers", chatlink: "[&BBAIAAA=]", bg: [190,215, 66] },
-            2: { name: "(continued)", link: "Advancing on the Blighting Towers", bg: [190,215, 66] }
+            2: { name: "Advancing on the Blighting Towers", link: "Advancing on the Blighting Towers", bg: [190,215, 66] }
         },
         sequences: {
             partial: [{r:2,d:90}],

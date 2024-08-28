@@ -2,10 +2,8 @@ import { wikiData } from './metas';
 import wxdates from '$lib/wxjs_dates';
 
 const et = new Map();
-
+const ignored = ['t', 'dn', 'cdn'];
 let dt0;
-
-init();
 
 function init() {
     const _dt0 = new Date();
@@ -27,23 +25,23 @@ function getSchedule(dt0, et, width) {
                 wikiKey: key,
                 name: value.name,
                 link: value.link,
-                segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 24), width),
+                segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 24), width, !ignored.includes(key)),
             });
         }
     }
 }
 
-function getCurrentWindow(dt0, segments, hours = 2) {
+function getCurrentWindow(dt0, segments, hours = 2, adjustEventNames = false) {
     const dt1 = wxdates.dateAdd(dt0, 'hours', hours);
     const dt0t = dt0.getTime();
     const dt1t = dt1?.getTime();
 
     const filtered = segments.filter(
         (x) =>
-            (x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||
-            (x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||
-            (x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||
-            (x.start.getTime() < dt0t && x.stop.getTime() >= dt1t)
+            (x.start.getTime() >= dt0t && x.stop.getTime() <= dt1t) ||  // ....|dt0...st..sp......|dt1....
+            (x.start.getTime() <= dt0t && x.stop.getTime() > dt0t) ||   // .st.|dt0.......sp......|dt1....
+            (x.start.getTime() < dt1t && x.stop.getTime() >= dt1t) ||   // ....|dt0.......st......|dt1.sp.
+            (x.start.getTime() < dt0t && x.stop.getTime() >= dt1t)      // .st.|dt0...............|dt1.sp.
     );
 
     filtered.forEach((x) => {
@@ -52,6 +50,10 @@ function getCurrentWindow(dt0, segments, hours = 2) {
             const diff = wxdates.minutesBetween(x.start, dt0);
             // we keep original start hour in x.start and adjust duration
             x.duration -= diff;
+            // and adjust name of the event to indicate that it's continuation
+            if (x.name && adjustEventNames) {
+                x.name = '...' + x.name;
+            }
         }
 
         // similarly for events that span outside our window
@@ -143,13 +145,12 @@ function prepareDailyCalendar() {
     getSchedule(dt, et, 32);
 
     const _allEvents = new Map();
-    const ignored = ['t', 'dn', 'cdn'];
     et.forEach((value, catKey) => {
         value.forEach(group => {
             if (!ignored.includes(group.wikiKey)) {
                 group.segments.forEach(event => {
                     const time = getHour(event.start);
-                    if (event.name){
+                    if (event.name) {
                         if (!_allEvents.has(event.name)) {
                             _allEvents.set(event.name, {
                                 name: event.name,
@@ -197,7 +198,7 @@ function excludeEvents(keys) {
     keys.forEach((x) => delete wikiData[x]);
 }
 
-function getEntries(dt){
+function getEntries(dt) {
     // param `dt` here is just for cheating responsiveness in svelte. 
     // It's not even required have it declared, but imho it's better read this way, 
     // especially if you jump here from a page that uses this funcion

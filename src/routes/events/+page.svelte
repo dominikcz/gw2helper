@@ -13,13 +13,15 @@
 	let showCategories = true;
 	let showHeadings = true;
 	let autoScroll = false;
-	// remove special events
-	eventsUtils.excludeEvents(['lc', 'db', 'ha']);
-	
-	let allEvents = eventsUtils.prepareDailyCalendar(); // here we hold all events' data
+
+	let allEvents = [];  // here we hold all events' data
 	let watchedEvents = []; // here we only save names of events
 
 	onMount(async () => {
+		// remove special events
+		eventsUtils.excludeEvents(['lc', 'db', 'ha']);
+		eventsUtils.init();
+		allEvents = eventsUtils.prepareDailyCalendar();
 		watchedEvents = await utils.readWatchedEvents();
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
@@ -75,6 +77,6 @@
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} watched={watchedEvents} {showChatLinks} on:toggle-watched={hndToggleWatched}/>
+		<EventReminders events={allEvents} watched={watchedEvents} {showChatLinks} on:toggle-watched={hndToggleWatched} />
 	</TabPanel>
 </Tabs>

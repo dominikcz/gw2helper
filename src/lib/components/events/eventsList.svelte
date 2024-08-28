@@ -10,7 +10,7 @@
 		<EventItem {event} {showChatLinks} on:toggle-watched />
 	{:else}
 		<span class="no-results">
-			<slot>Nothing found...</slot>
+			<slot>...nothing found</slot>
 		</span>
 	{/each}
 </div>

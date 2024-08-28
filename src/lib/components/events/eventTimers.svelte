@@ -125,7 +125,7 @@
 				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
-						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, darkMode)};">
+						<div class="event" class:real={segment.name} title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, darkMode)};">
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - read more on Wiki`} >{segment.name}</a>
 								{#if showChatLinks && segment.chatlink}
@@ -205,6 +205,14 @@
 			padding: 0.3125em;
 			// word-break: break-all;
 			overflow-wrap: break-word;
+
+			// height: 4em;
+			// overflow: hidden;
+			// text-overflow: clip;
+
+			&.real {
+				border-left: 1px solid rgba(255, 255, 255, 0.3);
+			}
 			a {
 				color: var(--gw2helper-link-color);
 			}
