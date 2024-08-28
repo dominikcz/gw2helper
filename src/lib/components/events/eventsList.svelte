@@ -17,15 +17,14 @@
 
 <style lang="scss">
 	.events-list {
-		padding: 0.5em 1em;
+		// padding: 0.5em 1em;
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 1em;
+		align-items: stretch;
 	}
 
-
-
-	@media (min-width: 900px) {
+	@media (min-width: 40em) {
 		.events-list {
 			flex-flow: row wrap;
 		}

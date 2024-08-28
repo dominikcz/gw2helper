@@ -141,7 +141,7 @@ function getColor(colors, darkMode) {
 function prepareDailyCalendar() {
     const et = new Map();
     const dt = new Date();
-    dt.setHours(0, 0, 0, 0);
+    dt.setUTCHours(0, 0, 0, 0);
     getSchedule(dt, et, 32);
 
     const _allEvents = new Map();

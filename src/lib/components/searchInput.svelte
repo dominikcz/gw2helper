@@ -63,11 +63,19 @@
 			{/each}
 		</ul>
 	{/if}
+	<slot />
 </div>
 
 <style lang="scss">
 	div {
 		position: relative;
+		display: flex;
+		flex-flow: row nowrap;
+		gap: 0.4em;
+		align-items: center;
+		button {
+			font-size: 1em;
+		}
 	}
 
 	input {

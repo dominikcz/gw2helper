@@ -88,7 +88,7 @@
 		padding: 0.5em;
 		row-gap: 0.2em;
 		column-gap: 0;
-
+		
 		border-radius: 0.3125em;
 		background-color: var(--gw2helper-module-white);
 		box-shadow: var(--gw2helper-module-shadow);
@@ -113,7 +113,7 @@
 
 		.body {
 			display: flex;
-			flex-flow: row wrap;
+			flex-flow: column wrap;
 			justify-content: flex-start;
 			gap: 0.2em;
 		}
@@ -133,6 +133,12 @@
 		flex-shrink: 0;
 		&.watched {
 			background-position-y: -2em;
+		}
+	}
+
+	@media (min-width: 40em) {
+		.event {
+			width: 21em;
 		}
 	}
 </style>

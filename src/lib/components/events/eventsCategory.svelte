@@ -12,4 +12,7 @@
 </details>
 
 <style lang="scss">
+	:global(details .events-list) {
+		margin: 0.6em;
+	}
 </style>

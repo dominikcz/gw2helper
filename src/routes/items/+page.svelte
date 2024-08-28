@@ -2,6 +2,7 @@
 	import ItemsList from '$lib/components/itemsList.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
+	import SearchHelp from '$lib/components/searchHelp.svelte';
 
 	export let data;
 
@@ -19,26 +20,15 @@
 	function sortBySlots() {
 		sortBy = SortType.Slots;
 	}
-
 </script>
 
 <h1>Items</h1>
 
-<section>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?">
 	<!-- <button on:click={sortAsIs}>original sort order</button>
-	<button on:click={sortBySlots}>sort by quantity</button> -->
-	<details>
-		<summary>Search help</summary>
-		<p>Knock yourself out with queries like:</p>
-		<ul>
-			<li>ascend ring</li>
-			<li>utility master condition</li>
-			<li>&gt;=100</li>
-			<li>&gt;10 &lt;200</li>
-		</ul>
-	</details>
-</section>
+		<button on:click={sortBySlots}>sort by quantity</button> -->
+	<SearchHelp />
+</SearchInput>
 
 <h3>Common items</h3>
 

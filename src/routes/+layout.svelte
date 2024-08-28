@@ -10,6 +10,7 @@
 
 	import Navigation from '$lib/components/navigation.svelte';
 	import AutoTooltip from '$lib/components/autoTooltip.svelte';
+	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data;
 	const defaultTitle = 'GW2 Helper';
@@ -68,6 +69,8 @@
 
 <AutoTooltip />
 
+<Alert />
+
 <div id="content-wrapper">
 	<div id="content">
 		<header>
@@ -82,7 +85,7 @@
 		<section>
 			<details open={!tokenInfo.name}>
 				<summary>API Settings</summary>
-				<fieldset id="settings">
+				<fieldset class="settings">
 					<legend>API settings</legend>
 					<p>
 						In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
