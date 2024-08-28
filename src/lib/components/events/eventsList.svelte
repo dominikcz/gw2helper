@@ -11,9 +11,7 @@
 		<EventItem {event} {showChatLinks} on:toggle-watched />
 	{:else}
 		<span class="no-results">
-			You have not added anything to the list yet. Add items by clicking
-			<img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />
-			icon on any of the events below.
+			<slot>Nothing found...</slot>
 		</span>
 	{/each}
 </div>

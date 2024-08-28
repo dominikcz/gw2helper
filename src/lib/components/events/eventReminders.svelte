@@ -61,7 +61,7 @@
 			let changed = false;
 			cat.forEach((event) => {
 				const newNext = eventsUtils.getNextOccurence(event.startTimes, new Date());
-				if (event.next != newNext){
+				if (event.next != newNext) {
 					event.next = newNext;
 					changed = true;
 				}
@@ -103,7 +103,11 @@
 	</fieldset>
 
 	<h2>Watched:</h2>
-	<EventsList events={getWatched(events, watched)} on:toggle-watched on:toggle-alarm />
+	<EventsList events={getWatched(events, watched)} on:toggle-watched on:toggle-alarm>
+		You have not added anything to the list yet. Add items by clicking
+		<img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />
+		icon on any of the events below.
+	</EventsList>
 
 	<h2>Available:</h2>
 	<section>
