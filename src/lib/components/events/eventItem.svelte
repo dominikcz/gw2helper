@@ -3,18 +3,18 @@
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import eventsUtils from './eventsUtils';
 	import helperUtils from '$lib/utils/helper-utils';
-	import Wiki from '../wiki.svelte';
 	import Chips from '../chips/chips.svelte';
 
 	export let event;
+	export let showChatLinks = false;
 
 	$: watchedState_class = event.watched ? 'watched' : '';
 	$: watchedState_title = event.watched ? 'Click to remove from watched list' : 'Click to add to watched list';
 	// $: event.alarms, toggleAlarm(event);
 
-	let timeLeft = '';
 	let timerId;
 	let darkMode = false;
+	let currentTime = new Date();
 
 	const dispatch = createEventDispatcher();
 
@@ -35,7 +35,7 @@
 	}
 
 	onMount(() => {
-		// timerId = setTimeout(updateTime, 0);
+		timerId = setTimeout(updateTime, 0);
 		if (window.matchMedia) {
 			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 				darkMode = true;
@@ -50,36 +50,34 @@
 	}
 
 	onDestroy(() => {
-		// clearTimeout(timerId);
+		clearTimeout(timerId);
 	});
 
 	function updateTime() {
-		if (nextTimer) {
-			timeLeft = wxdates.friendlyDurationTill(new Date(), nextTimer);
-			const msec = new Date().getMilliseconds();
-			timerId = setTimeout(updateTime, 1000 - msec);
-		}
+		currentTime = new Date();
+		const msec = currentTime.getMilliseconds();
+		timerId = setTimeout(updateTime, 1000 - msec);
 	}
+
 </script>
 
 <div class="event" style="background: {eventsUtils.getColor(event.bg, darkMode)};">
 	<div class="header">
-		<h4>{event.name}</h4>
+		<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - read more on Wiki`} target="_blank">{event.name}</a>
 		<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
 		<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />
 	</div>
-	{#if event.watched}
-		<span>
-			{event.chatlink}
-			<a href={helperUtils.wikiLink(event.link)} target="_blank">
-				<Wiki width="1.8em" height="1.2em" />
-			</a>
-		</span>
-		<h5>Choose the times for your alarms:</h5>
-		<div class="body">
+	<div class="body">
+		{#if event.watched}
+			{#if showChatLinks}
+				<span>{event.chatlink}</span>
+			{/if}
+			<h5>Choose the times for your alarms:</h5>
 			<Chips options={event.startTimes} value={event.alarms} />
-		</div>
-	{/if}
+		{:else}
+			<span>Next: {event.next}</span>
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -100,7 +98,7 @@
 		:global(span svg) {
 			vertical-align: middle;
 		}
-		h5{
+		h5 {
 			margin: 1em 0 0.3em 0;
 		}
 		.header {
@@ -108,6 +106,9 @@
 			flex-flow: row nowrap;
 			justify-content: space-between;
 			align-items: flex-start;
+			a {
+				color: var(--gw2helper-module-text);
+			}
 		}
 
 		.body {

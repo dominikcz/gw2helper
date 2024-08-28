@@ -9,8 +9,7 @@
 <h1>Materials</h1>
 
 <section>
-	<label for="filter">Search:</label>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what are you looking for?" />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 	<details>
 		<summary>Search help</summary>
 		<p>Knock yourself out with queries like:</p>

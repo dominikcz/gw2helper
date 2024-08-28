@@ -65,6 +65,10 @@ async function saveWatchedEvents(list){
     return ls.set(WATCHED_EVENTS, list);
 }
 
+async function readWatchedEvents(){
+    return await ls.getObject(WATCHED_EVENTS, []);
+}
+
 async function readAchievesToDo(){
     return await ls.getObject(ACHIEVES_TODO, []);
 }
@@ -81,6 +85,13 @@ export function getQueryStringFlag(keyName){
     return getQueryString(keyName) == '1' ? true : false;
 }
 
+export function runsDesktop() {
+    const browser = window.navigator.userAgent || window.opera;
+    const desktop = ['Windows', 'Linux', 'Macintosh'].some((v) => browser.includes(v));
+    console.log('desktop', desktop);
+    return desktop;
+}
+
 export default {
     readApiKey,
     saveApiKey,
@@ -94,7 +105,9 @@ export default {
     saveAchievesToDo,
     readWalletSettings,
     saveWalletSettings,
+    readWatchedEvents,
     saveWatchedEvents,
     getQueryString,
     getQueryStringFlag,
+    runsDesktop,
 }

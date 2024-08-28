@@ -3,14 +3,11 @@ export async function load({ fetch, parent }) {
 	const key = apiService.getApiKey();
 	if (key) {
 		return {
-			'wallet': key ? apiService.wallet() : [],
-			'delivery': key ? apiService.delivery() : [],
+			'account': key ? apiService.account() : [],
 		};
 	} else {
-		console.log('no api key :(');
 		return {
-			'wallet': [],
-			'delivery': {},
+			'account': {},
 		};
 	}
 }

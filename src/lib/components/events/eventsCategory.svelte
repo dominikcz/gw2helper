@@ -3,11 +3,12 @@
 
 	export let events;
 	export let category = '';
+	export let showChatLinks = false;
 </script>
 
 <details open>
 	<summary>{category}</summary>
-	<EventsList {events} on:toggle-watched />
+	<EventsList {events} {showChatLinks} on:toggle-watched />
 </details>
 
 <style lang="scss">

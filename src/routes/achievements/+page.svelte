@@ -187,8 +187,6 @@
 	}
 </script>
 
-<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
-
 <h1>Achievements</h1>
 
 <Awaiter promise={data.achievements} let:result>
@@ -257,7 +255,6 @@
 				</fieldset>
 
 				<section>
-					<label for="filter">Filter:</label>
 					<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 				</section>
 

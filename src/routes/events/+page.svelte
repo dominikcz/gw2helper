@@ -8,7 +8,7 @@
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
 
-	let showChatLinks = runsDesktop();
+	let showChatLinks = utils.runsDesktop();
 	let showEventTimes = false;
 	let showCategories = true;
 	let showHeadings = true;
@@ -19,14 +19,8 @@
 	let allEvents = eventsUtils.prepareDailyCalendar(); // here we hold all events' data
 	let watchedEvents = []; // here we only save names of events
 
-	function runsDesktop() {
-		const browser = window.navigator.userAgent || window.opera;
-		const desktop = ['Windows', 'Linux', 'Macintosh'].some((v) => browser.includes(v));
-		console.log('desktop', desktop);
-		return desktop;
-	}
-
 	onMount(async () => {
+		watchedEvents = await utils.readWatchedEvents();
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
 		if (settings.showEventTimes !== undefined) showEventTimes = settings.showEventTimes;
@@ -81,6 +75,6 @@
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} watched={watchedEvents} on:toggle-watched={hndToggleWatched}/>
+		<EventReminders events={allEvents} watched={watchedEvents} {showChatLinks} on:toggle-watched={hndToggleWatched}/>
 	</TabPanel>
 </Tabs>

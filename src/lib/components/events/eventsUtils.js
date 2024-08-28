@@ -174,9 +174,15 @@ function prepareDailyCalendar() {
     // sort start times
     _allEvents.forEach(event => {
         event.startTimes.sort();
+        event.next = getNextOccurence(event.startTimes, new Date());
     })
     // convert events to array and group them by category
     return Object.groupBy(Array.from(_allEvents.values()), x => x.category);
+}
+
+function getNextOccurence(startTimes, dt) {
+    dt = getHour(dt);
+    return startTimes.find((x) => x >= dt) || startTimes[0];
 }
 
 function getET() {
@@ -210,4 +216,5 @@ export default {
     wikiData,
     getDt0,
     prepareDailyCalendar,
+    getNextOccurence,
 }

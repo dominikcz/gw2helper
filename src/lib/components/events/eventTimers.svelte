@@ -2,7 +2,7 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import { onMount, onDestroy } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
-	import eventUtils from './eventsUtils';
+	import eventsUtils from './eventsUtils';
 	export let showEventTimes = true;
 	export let showChatLinks = true;
 	export let showCategories = true;
@@ -54,7 +54,7 @@
 	}
 
 	function updatePointerPos() {
-		dt0 = eventUtils.getDt0();
+		dt0 = eventsUtils.getDt0();
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
 			pointerHeight = Math.trunc(rect.height);
@@ -64,7 +64,7 @@
 				console.log('reset.');
 				currentTimePos = 0;
 				eventsRef.scrollLeft = 0;
-				eventUtils.init();
+				eventsUtils.init();
 				setTimeout(updatePointerPos, 0);
 			} else {
 				currentTimePos = 100 * (diff / 120);
@@ -96,11 +96,11 @@
 	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
 			<div class="event-pointer" title="Current time" style="left: {currentTimePos}%; height: {pointerHeight}px">
-				<span class="event-pointer-time" style="right: inherit;">{eventUtils.getHour(currTime)}</span>
+				<span class="event-pointer-time" style="right: inherit;">{eventsUtils.getHour(currTime)}</span>
 			</div>
 		</div>
 		<div class="event-bar compact time">
-			{#each eventUtils.getTimeSegments(dt0) as segment}
+			{#each eventsUtils.getTimeSegments(dt0) as segment}
 				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
 					{#if segment.name}
 						<span>{segment.name}</span>
@@ -110,7 +110,7 @@
 		</div>
 	</div>
 
-	{#each eventUtils.getEntries(dt0) as [cat, eventsList]}
+	{#each eventsUtils.getEntries(dt0) as [cat, eventsList]}
 		<div class="category" class:no-headings={!showHeadings}>
 			{#if showCategories}
 				<h3>{cat}</h3>
@@ -118,21 +118,21 @@
 			{#each eventsList as event}
 				{#if showHeadings}
 					{#if event.link}
-						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank">{event.name}</a>
+						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank" title={`${event.name} - read more on Wiki`}>{event.name}</a>
 					{:else}
 						<span class="heading">{event.name}</span>
 					{/if}
 				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
-						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventUtils.getColor(segment.bg, darkMode)};">
+						<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, darkMode)};">
 							{#if segment.name}
-								<a href={helperUtils.wikiLink(segment.link)} target="_blank">{segment.name}</a>
+								<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - read more on Wiki`} >{segment.name}</a>
 								{#if showChatLinks && segment.chatlink}
 									<span class="chatlink">{segment.chatlink}</span>
 								{/if}
 								{#if showEventTimes}
-									<span>{`${eventUtils.getHour(segment.start)} - ${eventUtils.getHour(segment.stop)}`}</span>
+									<span>{`${eventsUtils.getHour(segment.start)} - ${eventsUtils.getHour(segment.stop)}`}</span>
 								{/if}
 							{/if}
 						</div>
@@ -144,7 +144,7 @@
 
 	<div class="category time-container bottom" class:no-headings={!showHeadings}>
 		<div class="event-bar compact time">
-			{#each eventUtils.getTimeSegments(dt0) as segment}
+			{#each eventsUtils.getTimeSegments(dt0) as segment}
 				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
 					{#if segment.name}
 						<span>{segment.name}</span>

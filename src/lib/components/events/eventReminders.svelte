@@ -5,9 +5,13 @@
 	import SearchInput from '../searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
 	import EventsCategory from './eventsCategory.svelte';
+	import eventsUtils from './eventsUtils';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let events;
 	export let watched;
+	export let showChatLinks = false;
+	export let updateInterval = 10;
 
 	let filter = '';
 
@@ -23,12 +27,14 @@
 
 	let alarms = [];
 
+	let timer;
+
 	function getWatched(events, watched) {
 		const _watched = [];
-		Object.keys(events).forEach(cat => {
-			const _events = events[cat].filter(x => watched.includes(x.name)).map((x) => ({ ...x, watched: true }));
-			_watched.push(..._events)
-		})
+		Object.keys(events).forEach((cat) => {
+			const _events = events[cat].filter((x) => watched.includes(x.name)).map((x) => ({ ...x, watched: true }));
+			_watched.push(..._events);
+		});
 		return _watched;
 	}
 
@@ -39,6 +45,39 @@
 
 	function playAlarm() {
 		sounds.play(sound);
+	}
+
+	onMount(() => {
+		timer = setTimeout(() => update(), 0);
+	});
+
+	onDestroy(() => {
+		clearTimeout(timer);
+	});
+
+	function updateNextEvents() {
+		Object.keys(events).forEach((catKey) => {
+			const cat = events[catKey];
+			let changed = false;
+			cat.forEach((event) => {
+				const newNext = eventsUtils.getNextOccurence(event.startTimes, new Date());
+				if (event.next != newNext){
+					event.next = newNext;
+					changed = true;
+				}
+			});
+			if (changed) {
+				events = events;
+			}
+		});
+	}
+
+	function update() {
+		updateNextEvents();
+		const dt = new Date();
+		const msecLeft = 60000 - dt.getSeconds() * 1000 + dt.getMilliseconds();
+		const nextTick = Math.min(updateInterval * 1000, msecLeft);
+		timer = setTimeout(() => update(), nextTick);
 	}
 </script>
 
@@ -64,23 +103,17 @@
 	</fieldset>
 
 	<h2>Watched:</h2>
-	<EventsList events={getWatched(events, watched)} on:toggle-watched on:toggle-alarm/>
-
-	<pre>
-	{JSON.stringify(alarms, null, 4)}
-	</pre>
-
+	<EventsList events={getWatched(events, watched)} on:toggle-watched on:toggle-alarm />
 
 	<h2>Available:</h2>
 	<section>
-		<label for="filter">Filter:</label>
 		<SearchInput bind:value={filter} name="filter" id="filter" placeholder="list too long?" />
 	</section>
 
 	{#each Object.keys(events) as cat}
 		{@const notWatched = getNotWatched(events[cat], watched, filter)}
 		{#if notWatched}
-			<EventsCategory events={notWatched} category={cat} on:toggle-watched />
+			<EventsCategory events={notWatched} {showChatLinks} category={cat} on:toggle-watched />
 		{/if}
 	{/each}
 </div>
