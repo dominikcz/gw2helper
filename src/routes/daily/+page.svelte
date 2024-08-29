@@ -2,7 +2,8 @@
 	import WizardsVaultCategory from '$lib/components/wizardsVault/wizardsVaultCategory.svelte';
 	import wxdates from '$lib/wxjs_dates';
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import AstralAcclaim from '$lib/components/astralAcclaim.svelte';
+	import WidgetInfo from '$lib/components/widgetInfo.svelte';
+	import { base } from '$app/paths';
 
 	export let data;
 
@@ -59,7 +60,7 @@
 <h2>Wizard's Vault</h2>
 
 <Awaiter promise={data.wallet} let:result>
-	<h3>You currently have: {astralAcclaimAvailable(result)} <AstralAcclaim /></h3>
+	<WidgetInfo title="Your Astral Acclaims" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png"/>
 </Awaiter>
 
 <Awaiter promise={data.daily} let:result>
