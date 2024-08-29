@@ -1,8 +1,8 @@
 <script>
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
-	import helperUtils from '$lib/utils/helper-utils';
 	import { onMount, onDestroy } from 'svelte';
+	import AstralAcclaim from '../astralAcclaim.svelte';
 
 	export let data;
 	export let targetTime;
@@ -51,9 +51,7 @@
 			{/if}
 			<div class="reward">
 				{acclaimLeft()}
-				<a class="tooltip-link" target="_blank" href={helperUtils.wikiLink('Astral_Acclaim')}>
-					<img src="/gw2helper/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim" alt="Astral Acclaim" />
-				</a>
+				<AstralAcclaim />
 			</div>
 		</div>
 	</summary>

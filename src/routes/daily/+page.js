@@ -3,15 +3,17 @@ export async function load({ fetch, parent }) {
 	const key = apiService.getApiKey();
 	if (key) {
 		return {
-			'daily': key ? apiService.wizardsVaultDaily() : [],
-			'weekly': key ? apiService.wizardsVaultWeekly() : [],
-			'special': key ? apiService.wizardsVaultSpecial() : [],
+			'wallet': key ? apiService.wallet() : [],
+			'daily': key ? apiService.wizardsVaultDaily() : {},
+			'weekly': key ? apiService.wizardsVaultWeekly() : {},
+			'special': key ? apiService.wizardsVaultSpecial() : {},
 		};
 	} else {
 		console.log('no api key :(');
 		return {
+			'wallet': [],
 			'daily': {},
-			'weekly': [],
+			'weekly': {},
 			'special': {},
 		};
 	}

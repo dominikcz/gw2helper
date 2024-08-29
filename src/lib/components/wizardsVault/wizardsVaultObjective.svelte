@@ -9,7 +9,7 @@
 		claimed: boolean;
 	}
 
-	import helperUtils from '$lib/utils/helper-utils';
+	import AstralAcclaim from '../astralAcclaim.svelte';
 	export let value: WizardsVaultObjective;
 
 	function getClasses() {
@@ -28,9 +28,7 @@
 	</div>
 	<div class="reward">
 		{value.acclaim}
-		<a class="tooltip-link" target="_blank" href={helperUtils.wikiLink('Astral_Acclaim')}>
-			<img src="/gw2helper/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim" alt="Astral Acclaim" />
-		</a>
+		<AstralAcclaim />
 	</div>
 </div>
 
