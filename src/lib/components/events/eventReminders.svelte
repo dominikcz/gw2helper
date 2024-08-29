@@ -83,14 +83,14 @@
 
 <fieldset class="settings">
 	<legend>Reminder settings</legend>
+	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
 	{#if inAdvance}
 		<p>Notify me {inAdvance} minutes before the event</p>
 	{:else}
 		<p>Notify me when the event starts</p>
 	{/if}
-	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	<h4>Alarm sound</h4>
-	<div style="width: 100%">
+	<div class="group">
+		<h4>Alarm sound</h4>
 		{#each ['trumpet', 'squeeze'] as name}
 			<label>
 				<input type="radio" name="sounds" value={name} bind:group={sound} />

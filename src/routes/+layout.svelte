@@ -85,7 +85,7 @@
 		<section>
 			<details open={!tokenInfo.name}>
 				<summary>API Settings</summary>
-				<fieldset class="settings">
+				<fieldset class="api-settings">
 					<legend>API settings</legend>
 					<p>
 						In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a

@@ -137,7 +137,7 @@
 			--gw2helper-wvw-progress-bg: #594b16;
 
 			--gw2helper-pve-bg: #6F9867;
-			--gw2helper-pve-progress: #296d1b;
+			--gw2helper-pve-progress: #87ff6f;
 			--gw2helper-pve-progress-bg: #4b6647;
 
 			--gw2helper-pvp-bg: #B05C6A;

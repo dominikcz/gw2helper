@@ -52,7 +52,7 @@ input[type=checkbox] {
 
 input.apikey {
 	width: 80%;
-	max-width: 36em;
+	max-width: 44em;
 	font-family: monospace;
 }
 
@@ -88,6 +88,9 @@ fieldset {
 		display: flex;
 		flex-flow: column nowrap;
 		row-gap: 0.2em;
+		.group{
+			width: 100%;
+		}
 
 		button {
 			margin-top: 0.5em;

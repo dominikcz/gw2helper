@@ -246,7 +246,7 @@
 					<label><input type="checkbox" bind:checked={withItems} /> Items to get</label>
 					<label><input type="checkbox" bind:checked={withCoins} /> Coins to get</label>
 
-					<div style="width: 100%">
+					<div class="group">
 						<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
 						<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
 					</div>
