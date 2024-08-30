@@ -29,9 +29,9 @@
 			on:toggle-todo
 		/>
 	{:else}
-		<span class="no-results"
-			>You have not added anything to the list yet. Add items by clicking <img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small"/> icon on list of achievements.</span
-		>
+		<span class="no-results">
+			<slot>...nothing found</slot>
+		</span>
 	{/each}
 </div>
 

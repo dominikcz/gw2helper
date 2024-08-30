@@ -7,6 +7,7 @@ export async function load({ fetch, parent }) {
 			'daily': key ? apiService.wizardsVaultDaily() : {},
 			'weekly': key ? apiService.wizardsVaultWeekly() : {},
 			'special': key ? apiService.wizardsVaultSpecial() : {},
+			'achievements': key ? apiService.achievements() : [],
 		};
 	} else {
 		console.log('no api key :(');

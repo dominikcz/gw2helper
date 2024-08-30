@@ -11,15 +11,14 @@
 	import { onMount } from 'svelte';
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
-	import Wiki from '$lib/components/wiki.svelte';
+	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
+	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
 
 	export let data;
 
 	let filter = '';
 	let todoList = [];
 	let showApiLinks = false;
-
-	const fields = ['name', 'category', 'description'];
 
 	let notCompleted = true;
 	let withPoints = false;
@@ -33,6 +32,8 @@
 	let withTitles = false;
 	let withItems = false;
 	let withCoins = false;
+	let daily = false;
+	let weekly = false;
 	let sortBy = 'ap';
 
 	onMount(async () => {
@@ -50,6 +51,8 @@
 		if (settings.withTitles !== undefined) withTitles = settings.withTitles;
 		if (settings.withItems !== undefined) withItems = settings.withItems;
 		if (settings.withCoins !== undefined) withCoins = settings.withCoins;
+		if (settings.daily !== undefined) daily = settings.daily;
+		if (settings.weekly !== undefined) weekly = settings.weekly;
 		if (settings.sortBy !== undefined) sortBy = settings.sortBy;
 
 		todoList = await data.todo;
@@ -63,6 +66,7 @@
 		const withTitlesOK = !withTitles || achiev.rewardsObj.title;
 		const withItemsOK = !withItems || achiev.rewardsObj.item;
 		const withCoinsOK = !withCoins || achiev.rewardsObj.coins;
+		const dailyWeeklyOK = (!daily && !weekly) || (daily && achiev.flags.includes('Daily')) || (weekly && achiev.flags.includes('Weekly'));
 		const requiredRegions = [];
 		if (withMasteryCentral) requiredRegions.push('Tyria');
 		if (withMasteryHoT) requiredRegions.push('Maguuma');
@@ -76,7 +80,7 @@
 
 		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement']);
 
-		const achiev_res = notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && filterOK;
+		const achiev_res = notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && dailyWeeklyOK && filterOK;
 
 		// if (item.id == 75) {
 		// 	console.log(`  ${achiev.name}`, { achiev_res, notCompletedOK, withPointsOK, withMasteryOK, filterOK });
@@ -98,66 +102,10 @@
 			withTitles,
 			withItems,
 			withCoins,
+			daily,
+			weekly,
 			sortBy,
 		});
-	}
-
-	function filteredAchieves(data, params) {
-		console.log('filtering...');
-		// clone base properties, but no categories
-		let _data = {
-			completed: data.completed,
-			todo: data.todo,
-			daily_ap: data.daily_ap,
-			monthly_ap: data.monthly_ap,
-		};
-
-		// in order to accomplish this task we have to produce a clone of this hierarchical structure and work on it,
-		// since we cannot modify original
-		// simplified structure:
-		// - data
-		//   |- some properties
-		//   |...
-		//   |- categories (1) (3)
-		//      |- some properties
-		//      |- achievements (2)
-		//         |- name, description, requirements - we filter here
-		//         |- masteries
-		//            |- [] we filter here too
-
-		// new categories (1)
-		_data.categories = data.categories
-			.map(({ achievements, ...rest }) => {
-				let _cat = { ...rest }; // (1) clone categories without achieves
-				// (2) filter achieves and attach them to this cloned category
-				_cat.achievements = achievements.filter(achievFilterCallback);
-				return _cat;
-			})
-			// (3) and finally remove all categories that have no achievs anymore
-			.filter((cat) => cat.achievements.length);
-
-		return _data;
-	}
-
-	function sort(collection, sortBy) {
-		console.log('sorting...');
-		switch (sortBy) {
-			case 'ap': {
-				collection.sort((a, b) => {
-					// done at the end, no matter how many points
-					const _a = (a.done ? -10000 : 0) + (a.points_to_get | 0);
-					const _b = (b.done ? -10000 : 0) + (b.points_to_get | 0);
-					return _b - _a; //desc
-				});
-				break;
-			}
-			default: {
-				collection.sort((a, b) => {
-					return a.name.localeCompare(b.name);
-				});
-			}
-		}
-		return collection;
 	}
 
 	async function hndToggleTodo(event) {
@@ -190,7 +138,7 @@
 <h1>Achievements</h1>
 
 <Awaiter promise={data.achievements} let:result>
-	{@const _result = filteredAchieves(result, [
+	{@const _result = filteredAchieves(result, filter, achievFilterCallback, null, [
 		notCompleted,
 		withPoints,
 		withMasteryCentral,
@@ -203,7 +151,8 @@
 		withTitles,
 		withItems,
 		withCoins,
-		filter,
+		daily,
+		weekly,
 	])}
 	<WidgetsGroup name="Achievements' completed">
 		<WidgetInfo title="Achieves completed" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
@@ -245,10 +194,13 @@
 					<label><input type="checkbox" bind:checked={withTitles} /> Titles to get</label>
 					<label><input type="checkbox" bind:checked={withItems} /> Items to get</label>
 					<label><input type="checkbox" bind:checked={withCoins} /> Coins to get</label>
+					<label><input type="checkbox" bind:checked={daily} /> Daily</label>
+					<label><input type="checkbox" bind:checked={weekly} /> Weekly</label>
 
 					<div class="group">
 						<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> sort by points</label>
 						<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> sort by name</label>
+						<label><input type="radio" name="sort" value="order" bind:group={sortBy} /> sort by in-game order</label>
 					</div>
 
 					<button on:click={saveSettings}>Save settings</button>
@@ -261,146 +213,20 @@
 				<span>showing {_result.categories.length} categories out of {result.categories.length}</span>
 				<div class="achiev-container">
 					{#each sort(_result.categories, sortBy) as category (category.id)}
-						<details class="achiev-group">
-							<summary>
-								<img src={category.icon} alt={category.name} />
-								<div class="descr">
-									<span>
-										{category.name}
-										{#if showApiLinks}
-											<small>
-												<a href="https://api.guildwars2.com/v2/achievements/categories/{category.id}" target="_blank">
-													id: {category.id}
-												</a>
-											</small>
-										{/if}
-									</span>
-									<div class="rewards large">
-										{#if category.rewards_to_get.has('title')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('title')}</span>
-												<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This category rewards a title" />
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('coins')}
-											<div class="reward-item">
-												<Price value={category.rewards_to_get.get('coins')} />
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('item')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('item')}</span>
-												<img
-													src="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
-													alt="item"
-													title="This category rewards items"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_tyria')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_tyria')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
-													alt="mastery points Central Tyria"
-													title="This category rewards Central Tyria mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_maguuma')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_maguuma')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
-													alt="mastery points Heart of Thorns"
-													title="This category rewards Heart of Thorns mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_desert')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_desert')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
-													alt="mastery points Path of Fire"
-													title="This category rewards Path of Fire mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_tundra')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_tundra')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
-													alt="mastery points Icebrood Saga"
-													title="This category rewards Icebrood Saga mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_jade')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_jade')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
-													alt="mastery points End of Dragons"
-													title="This category rewards End of Dragons mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_sky')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_sky')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
-													alt="mastery points Secrets of the Obscure"
-													title="This category rewards Secrets of the Obscure mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.rewards_to_get.has('mastery_unknown')}
-											<div class="reward-item">
-												<span>{category.rewards_to_get.get('mastery_unknown')}</span>
-												<img
-													src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
-													alt="mastery points Janthir Wilds"
-													title="This category rewards Janthir Wilds mastery points"
-												/>
-											</div>
-										{/if}
-										{#if category.points_to_get}
-											<div class="reward-item">
-												<span>{category.points_to_get}</span>
-												<img
-													src="{base}/assets/rewards/AP.png"
-													alt="achievement points"
-													title="You can get {category.points_to_get} achievement points from this category"
-												/>
-											</div>
-										{/if}
-										<div class="reward-item">
-											<span>{category.achievements.length}</span>
-											<img
-												src="{base}/assets/rewards/Achievements_Summary.png"
-												alt="achieves"
-												title="There are {category.achievements.length} achievements left to do"
-											/>
-											<a href={helperUtils.wikiLink(category.name)} target="_blank">
-												<Wiki width="1.8em" height="1.8em" />
-											</a>
-										</div>
-									</div>
-								</div>
-							</summary>
-							{#if category.description}<p>{category.description}</p>{/if}
-							<AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo={hndToggleTodo} name={category.name} />
-						</details>
+						<AchievGroup {category} {showApiLinks} {sortBy} on:toggle-todo={hndToggleTodo} />
 					{/each}
 				</div>
 			</TabPanel>
 
 			<TabPanel>
 				<h2>Your list</h2>
-				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={hndToggleTodo} />
+				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={hndToggleTodo}>
+					You have not added anything to the list yet. Add items by clicking <img
+						src="{base}/assets/rewards/map_heart_empty.png"
+						alt="not on list"
+						class="icon-small"
+					/> icon on list of achievements.
+				</AchievList>
 			</TabPanel>
 		</Tabs>
 	</section>
@@ -412,107 +238,6 @@
 		flex-flow: column nowrap;
 		gap: 1em;
 		margin: 0 0 1em 0;
-	}
-	.achiev-group {
-		display: flex;
-		flex-flow: column wrap;
-		gap: 1em;
-		margin: 0;
-		background-color: var(--gw2helper-module);
-		summary {
-			padding: 0.4em 0.4em;
-			display: flex;
-			flex-flow: row nowrap;
-			justify-content: flex-start;
-			align-items: center;
-			gap: 0.6em;
-			&::before {
-				content: '\25b6';
-				transition: 0.2s;
-			}
-
-			.descr {
-				display: flex;
-				flex-flow: column nowrap;
-				justify-content: flex-start;
-				align-items: flex-start;
-				gap: 0.6em;
-				width: 100%;
-			}
-		}
-		&[open] summary::before {
-			transform: rotate(90deg);
-		}
-		img {
-			width: 3em;
-			height: 3em;
-			&.small {
-				width: 1.5em;
-				height: 1.5em;
-				vertical-align: bottom;
-			}
-		}
-	}
-	.rewards {
-		width: 100%;
-		display: flex;
-		flex-flow: row wrap;
-		align-items: center;
-		justify-content: flex-end;
-		column-gap: 0.6em;
-		row-gap: 0.2em;
-		// font-family: monospace;
-		&.large {
-			.reward-item {
-				font-size: medium;
-				img {
-					width: 1.5em;
-					height: 1.5em;
-				}
-			}
-		}
-
-		.reward-item {
-			display: flex;
-			flex-flow: row nowrap;
-			align-items: center;
-			font-size: medium;
-			column-gap: 0.2em;
-			a {
-				color: var(--gw2helper-module-text);
-				height: 1.8em;
-			}
-			img {
-				width: 1.5em;
-				height: 1.5em;
-			}
-		}
-	}
-
-	@media (min-width: 420px) {
-		.achiev-group {
-			summary {
-				.descr {
-					flex-flow: row nowrap;
-					justify-content: space-between;
-					align-items: center;
-					gap: 0.6em;
-					width: 100%;
-				}
-			}
-		}
-		.rewards {
-			width: auto;
-			&.large {
-				.reward-item {
-					font-size: large;
-					img {
-						width: 2.25em;
-						height: 2.25em;
-					}
-				}
-			}
-		}
 	}
 
 	.tabs-container {

@@ -4,8 +4,14 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgetInfo.svelte';
 	import { base } from '$app/paths';
+	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
+	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
 
 	export let data;
+
+	let sortBy = 'ap';
+	let showApiLinks = false;
+	let todoList=[];
 
 	enum Period {
 		daily = 'daily',
@@ -55,12 +61,36 @@
 		}
 		return target;
 	}
+
+	function filterDaily(x){
+		return x.flags.includes('Daily');
+	}
+
+	function filterWeekly(x){
+		return x.flags.includes('Weekly');
+	}
+
+	function onlyActiveCategories(x) {
+		// it should be done on the level of an additional layer over api, but for now just quick reset of rewards
+		x.rewards_to_get.clear();
+		x.points_to_get = 0;
+
+		return !x.ignore;
+	}
+
+	function extractDaily(achieves) {
+		return filteredAchieves(achieves, '', filterDaily, onlyActiveCategories );
+	}
+
+	function extractWeekly(achieves) {
+		return filteredAchieves(achieves, '', filterWeekly, onlyActiveCategories );
+	}
 </script>
 
 <h2>Wizard's Vault</h2>
 
 <Awaiter promise={data.wallet} let:result>
-	<WidgetInfo title="Your Astral Acclaims" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png"/>
+	<WidgetInfo title="Your Astral Acclaims" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 </Awaiter>
 
 <Awaiter promise={data.daily} let:result>
@@ -73,6 +103,25 @@
 
 <Awaiter promise={data.special} let:result>
 	<WizardsVaultCategory title="Special" data={result} targetTime={getTimerTarget(Period.special)} />
+</Awaiter>
+
+<h2>Achievements</h2>
+
+<Awaiter promise={data.achievements} let:result>
+	{@const dailies = extractDaily(result)}
+	{@const weeklies = extractWeekly(result)}
+	<h4>Daily</h4>
+	<div class="achiev-container">
+		{#each sort(dailies.categories, sortBy) as category (category.id)}
+			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
+		{/each}
+	</div>
+	<h4>Weekly</h4>
+	<div class="achiev-container">
+		{#each sort(weeklies.categories, sortBy) as category (category.id)}
+			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
+		{/each}
+	</div>
 </Awaiter>
 
 <style>

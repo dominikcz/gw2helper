@@ -16,6 +16,8 @@ const ACHIEVES_NOT_IN_API = {
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
 
+let INACTIVE_ACHIEVES_CATEGORIES = [22, 45, 46, 73, 79, 98, 162, 191, 193, 197, 200, 201, 205, 212, 213, 214, 228, 230, 231, 232, 233, 238, 243, 257, 262, 263, 342, 365, 267, 268, 270, 271, 272, 273, 274, 275, 276, 278, 280, 281, 282, 351, 393, 400];
+
 const unique = function (tab) {
     return tab.filter(function (el, i, self) {
         return self.indexOf(el) === i;
@@ -504,11 +506,12 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     }
 
     categories.forEach(cat => {
-        if (ACHIEVES_NOT_IN_API[cat.id]) {
-            const tmp = cat.achievements;
-            tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({ id: x }))));
-            cat.achievements = unique(tmp);
-        }
+        // if (ACHIEVES_NOT_IN_API[cat.id]) {
+        //     const tmp = cat.achievements;
+        //     tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({ id: x }))));
+        //     cat.achievements = unique(tmp);
+        // }
+        cat.ignore = (INACTIVE_ACHIEVES_CATEGORIES.includes(cat.id)) ? true : false;
         cat.achievements = cat.achievements.map(x => {
             let achiev = achievesCache.get(x.id);
             if (!achiev) {
