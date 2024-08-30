@@ -104,9 +104,3 @@
 		<WidgetInfo title="WvW" value={result.wvw_rank} image="{base}/assets/rewards/WvW_Ability_Point.png" />
 	</WidgetsGroup>
 </Awaiter>
-
-<style lang="scss">
-	p {
-		margin: 1em;
-	}
-</style>

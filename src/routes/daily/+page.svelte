@@ -123,10 +123,3 @@
 		{/each}
 	</div>
 </Awaiter>
-
-<style>
-	h3 {
-		display: flex;
-		align-items: center;
-	}
-</style>

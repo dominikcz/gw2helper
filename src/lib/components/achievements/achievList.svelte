@@ -1,9 +1,7 @@
 <script>
 	import Achievement from '$lib/components/achievements/achievement.svelte';
-	import { base } from '$app/paths';
 	export let items;
 	export let todoList;
-	export let name = '';
 
 	// console.log('achieveList '+name, items)
 </script>

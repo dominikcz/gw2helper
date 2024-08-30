@@ -48,7 +48,7 @@
 	$: choice, updateValue();
 </script>
 
-<div class="formkit-chips">
+<div class="formkit-chips {className}">
 	{#each choice as item}
 		<Chip bind:selected={item.selected} id={item.id} name={item.name} value={item.value} label={item.label} title={item.help || help} />
 	{/each}

@@ -69,9 +69,6 @@
 			align-items: center;
 			justify-content: end;
 			width: 4em;
-			img {
-				width: 2em;
-			}
 		}
 		progress[value] {
 			height: 1em;

@@ -144,7 +144,7 @@
         </div>
     </summary>
     {#if category.description}<p>{category.description}</p>{/if}
-    <AchievList items={sort(category.achievements, sortBy)} name={category.name} {todoList} on:toggle-todo />
+    <AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo />
 </details>
 
 <style lang="scss">
@@ -181,11 +181,11 @@
 		img {
 			width: 3em;
 			height: 3em;
-			&.small {
-				width: 1.5em;
-				height: 1.5em;
-				vertical-align: bottom;
-			}
+			// &.small {
+			// 	width: 1.5em;
+			// 	height: 1.5em;
+			// 	vertical-align: bottom;
+			// }
 		}
 	}
 	.rewards {
