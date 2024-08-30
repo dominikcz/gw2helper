@@ -25,7 +25,7 @@ function getSchedule(dt0, et, width) {
                 wikiKey: key,
                 name: value.name,
                 link: value.link,
-                segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 24), width, !ignored.includes(key)),
+                segments: getCurrentWindow(dt0, fillCalendar(value.segments, value.sequences, 25), width, !ignored.includes(key)),
             });
         }
     }
@@ -198,6 +198,14 @@ function excludeEvents(keys) {
     keys.forEach((x) => delete wikiData[x]);
 }
 
+function onlyWorldBosses() {
+    Object.keys(wikiData).forEach((x) => {
+        if (x != 'wb') {
+            delete wikiData[x];
+        }
+    });
+}
+
 function getEntries(dt) {
     // param `dt` here is just for cheating responsiveness in svelte. 
     // It's not even required have it declared, but imho it's better read this way, 
@@ -218,4 +226,5 @@ export default {
     getDt0,
     prepareDailyCalendar,
     getNextOccurence,
+    onlyWorldBosses,
 }
