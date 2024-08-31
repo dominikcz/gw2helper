@@ -4,6 +4,7 @@ import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
+import { CURRENT_SEASON, INACTIVE_ACHIEVES_CATEGORIES, SEASONAL_ACHIEVES_CATEGORIES } from "./components/achievements/achieves";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -16,8 +17,6 @@ const ACHIEVES_NOT_IN_API = {
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
 
-let INACTIVE_ACHIEVES_CATEGORIES = [22, 45, 46, 73, 79, 98, 162, 191, 193, 197, 200, 201, 205, 212, 213, 214, 228, 230, 231, 232, 233, 238, 243, 257, 262, 263, 342, 365, 267, 268, 270, 271, 272, 273, 274, 275, 276, 278, 280, 281, 282, 351, 393, 400];
-
 const unique = function (tab) {
     return tab.filter(function (el, i, self) {
         return self.indexOf(el) === i;
@@ -29,7 +28,7 @@ const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 const ignoreCache = getQueryStringFlag('ignore-cache');
 const devMode = getQueryStringFlag('dev-mode');
 const realApi = getQueryStringFlag('real-api');
-    
+
 
 interface CacheEntry {
     time: Date | string;
@@ -505,13 +504,28 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
         mergeById(resp, accountAchieves);
     }
 
+    let _log = '';
+
+    // we don't want categories of achievements that are not obtainable anymore
+    const ignored_achieves = [...INACTIVE_ACHIEVES_CATEGORIES];
+    // so we also ignore seasonal ones (appart from current season ofc)
+    Object.keys(SEASONAL_ACHIEVES_CATEGORIES).forEach(season => {
+        if (season != CURRENT_SEASON) {
+            ignored_achieves.push(...SEASONAL_ACHIEVES_CATEGORIES[season]);
+        }
+    })
+
     categories.forEach(cat => {
         // if (ACHIEVES_NOT_IN_API[cat.id]) {
         //     const tmp = cat.achievements;
         //     tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({ id: x }))));
         //     cat.achievements = unique(tmp);
         // }
-        cat.ignore = (INACTIVE_ACHIEVES_CATEGORIES.includes(cat.id)) ? true : false;
+        _log += `${cat.id}, // ${cat.name}\n`;
+        cat.ignore = (ignored_achieves.includes(cat.id)) ? true : false;
+        if (!cat.ignore) {
+            cat.ignore
+        }
         cat.achievements = cat.achievements.map(x => {
             let achiev = achievesCache.get(x.id);
             if (!achiev) {
@@ -563,6 +577,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
         sumRewards(cat.rewards_to_get, cat._rewards_to_get);
         // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
     })
+
+    // console.log('achiev ids:', _log);
+
     // get all masteries for dev purposes
     // const tmp = categories.map(c => c.rewards.mastery).filter(x => x != undefined).flat(true).map((x => x.region))
     // console.log('masteries', [... new Set(tmp)])
