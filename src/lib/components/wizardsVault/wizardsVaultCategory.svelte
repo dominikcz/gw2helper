@@ -1,28 +1,19 @@
 <script>
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
-	import { onMount, onDestroy } from 'svelte';
 	import AstralAcclaim from '../astralAcclaim.svelte';
+	import clock from '$lib/stores/clock';	
 
 	export let data;
 	export let targetTime;
 	export let title;
 
 	let timeLeft;
-	let timerId;
-
-	onMount(() => {
-		timerId = setTimeout(updateTime, 0);
-	});
-
-	onDestroy(() => {
-		clearTimeout(timerId);
-	});
+	let time = clock({ interval: 1000 });
+	$: $time, updateTime();
 
 	function updateTime(){
-		timeLeft = wxdates.friendlyDurationTill(new Date(), targetTime);
-		const msec = new Date().getMilliseconds();
-		timerId = setTimeout(updateTime, 1000 - msec);
+		timeLeft = wxdates.friendlyDurationTill($time, targetTime);
 	}
 
 	function notClaimed() {
@@ -36,7 +27,7 @@
 		return data.meta_reward_claimed ? points : points + data.meta_reward_astral;
 	}
 
-	console.log(`${title}: ${targetTime.toISOString()}`);
+	// console.log(`${title}: ${targetTime.toISOString()}`);
 </script>
 
 <details>

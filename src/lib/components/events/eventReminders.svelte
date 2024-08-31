@@ -6,7 +6,7 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import EventsCategory from './eventsCategory.svelte';
 	import eventsUtils from './eventsUtils';
-	import { onMount, onDestroy } from 'svelte';
+	import clock from '$lib/stores/clock';
 
 	export let events;
 	export let watched;
@@ -27,7 +27,9 @@
 
 	let alarms = [];
 
-	let timer;
+	let time = clock( { interval: 10000 });
+
+	$: $time, updateNextEvents();
 
 	function getWatched(events, watched) {
 		const _watched = [];
@@ -47,20 +49,12 @@
 		sounds.play(sound);
 	}
 
-	onMount(() => {
-		timer = setTimeout(() => update(), 0);
-	});
-
-	onDestroy(() => {
-		clearTimeout(timer);
-	});
-
 	function updateNextEvents() {
 		Object.keys(events).forEach((catKey) => {
 			const cat = events[catKey];
 			let changed = false;
 			cat.forEach((event) => {
-				const newNext = eventsUtils.getNextOccurence(event.startTimes, new Date());
+				const newNext = eventsUtils.getNextOccurence(event.startTimes, $time);
 				if (event.next != newNext) {
 					event.next = newNext;
 					changed = true;
@@ -72,13 +66,6 @@
 		});
 	}
 
-	function update() {
-		updateNextEvents();
-		const dt = new Date();
-		const msecLeft = 60000 - dt.getSeconds() * 1000 + dt.getMilliseconds();
-		const nextTick = Math.min(updateInterval * 1000, msecLeft);
-		timer = setTimeout(() => update(), nextTick);
-	}
 </script>
 
 <fieldset class="settings">

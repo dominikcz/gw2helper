@@ -9,9 +9,9 @@
     - brakuje achievs (np. rift hunting vs https://wiki.guildwars2.com/wiki/Rift_Hunting_(achievements)). Napisać skrypcik do wyciągania różnic pomiędzy api a wiki i użyć wyniku do wypeniania luk. Chyba już nie brakuje...
     - sortowanie w /achievements  wywołuje się bez sensu dla każdej kategorii (czyli np. 188 razy...)
     - dodać listę niestandardowych linków do wiki, np. w achieves często zamiast "xxx" mamy "xxx_(achievements)"
-    - rozróżniać achiev czasowe, np. dragon bash, halloween itp. i je odpowiednio ukrywać
+    + rozróżniać achiev czasowe, np. dragon bash, halloween itp. i je odpowiednio ukrywać. Na razie tylk ręcznie...
 
-- colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
+x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
 
 + handle 403 errors
 - pvp

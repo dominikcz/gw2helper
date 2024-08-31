@@ -1,9 +1,10 @@
 <script>
-	import wxdates from '$lib/wxjs_dates';
-	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import eventsUtils from './eventsUtils';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';
+	import themeWatcher from '$lib/stores/themeWatcher';
+	import clock from '$lib/stores/clock';
 
 	export let event;
 	export let showChatLinks = false;
@@ -12,9 +13,8 @@
 	$: watchedState_title = event.watched ? 'Click to remove from watched list' : 'Click to add to watched list';
 	// $: event.alarms, toggleAlarm(event);
 
-	let timerId;
-	let darkMode = false;
-	let currentTime = new Date();
+	let darkMode = themeWatcher();
+	let currentTime = clock({ interval: 10000 });
 
 	const dispatch = createEventDispatcher();
 
@@ -34,34 +34,9 @@
 		});
 	}
 
-	onMount(() => {
-		timerId = setTimeout(updateTime, 0);
-		if (window.matchMedia) {
-			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				darkMode = true;
-			}
-			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', hndColorPrefChange);
-		}
-	});
-
-	function hndColorPrefChange(event) {
-		darkMode = event.matches;
-		console.log('darkMode change', darkMode);
-	}
-
-	onDestroy(() => {
-		clearTimeout(timerId);
-	});
-
-	function updateTime() {
-		currentTime = new Date();
-		const msec = currentTime.getMilliseconds();
-		timerId = setTimeout(updateTime, 1000 - msec);
-	}
-
 </script>
 
-<div class="event" style="background: {eventsUtils.getColor(event.bg, darkMode)};">
+<div class="event" style="background: {eventsUtils.getColor(event.bg, $darkMode)};">
 	<div class="header">
 		<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - read more on Wiki`} target="_blank">{event.name}</a>
 		<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->

@@ -1,8 +1,11 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
 	import eventsUtils from './eventsUtils';
+	import clock from '$lib/stores/clock';
+	import themeWatcher from '$lib/stores/themeWatcher';
+
 	export let showEventTimes = true;
 	export let showChatLinks = true;
 	export let showCategories = true;
@@ -16,46 +19,22 @@
 	let currentTimePos = 0;
 	let currTime = new Date();
 	let width = 0;
-	let timer;
-	let darkMode = false;
+	let darkMode = themeWatcher();
 	let dt0;
+	let time = clock({ interval: updateInterval * 1000 });
+	$: $time, updatePointerPos();
 
 	onMount(() => {
-		if (window.matchMedia) {
-			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				darkMode = true;
-			}
-			console.log('darkMode', darkMode);
-			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', hndColorPrefChange);
-		}
+		eventsUtils.init();
 		hndResize();
-		timer = setTimeout(() => update(), 0)
-		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
-	});
-
-	onDestroy(() => {
-		console.log('cleaning up');
-		clearTimeout(timer);
-		if (window.matchMedia) {
-			window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', hndColorPrefChange);
+		if (eventsRef.scrollLeft != 0){
+			setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 		}
 	});
-
-	function update(){
-		updatePointerPos();
-		const dt = new Date();
-		const msecLeft = 60000 - dt.getSeconds()* 1000 + dt.getMilliseconds();
-		const nextTick = Math.min(updateInterval * 1000, msecLeft);
-		timer = setTimeout(() => update(), nextTick);
-	}
-
-	function hndColorPrefChange(event) {
-		darkMode = event.matches;
-		console.log('darkMode change', darkMode);
-	}
 
 	function updatePointerPos(firstRun = false) {
 		dt0 = eventsUtils.getDt0();
+		if (!eventsRef) return;
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
 			pointerHeight = Math.trunc(rect.height);
@@ -75,7 +54,7 @@
 				// keep pointer positioned at center and scroll background
 				if (firstRun || (autoScroll && timePosPx >= window.innerWidth - 16)) {
 					const elem = document.querySelector('.event-pointer');
-					console.log('autoscrolling...', elem);
+					// console.log('autoscrolling...');
 					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 				}
 			}
@@ -126,7 +105,7 @@
 				{/if}
 				<div class="event-bar">
 					{#each Object.values(event.segments) as segment}
-						<div class="event" class:real={segment.name} title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, darkMode)};">
+						<div class="event" class:real={segment.name} title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, $darkMode)};">
 							{#if segment.name}
 								<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - read more on Wiki`} >{segment.name}</a>
 								{#if showChatLinks && segment.chatlink}
