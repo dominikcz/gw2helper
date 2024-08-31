@@ -19,7 +19,6 @@
 	let timer;
 	let darkMode = false;
 	let dt0;
-	let firstRun = true;
 
 	onMount(() => {
 		if (window.matchMedia) {
@@ -31,6 +30,7 @@
 		}
 		hndResize();
 		timer = setTimeout(() => update(), 0)
+		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 	});
 
 	onDestroy(() => {
@@ -54,7 +54,7 @@
 		console.log('darkMode change', darkMode);
 	}
 
-	function updatePointerPos() {
+	function updatePointerPos(firstRun = false) {
 		dt0 = eventsUtils.getDt0();
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
@@ -69,15 +69,14 @@
 				setTimeout(updatePointerPos, 0);
 			} else {
 				currentTimePos = 100 * (diff / 120);
-				// scroll to center if out of view:
-				// if (autoScroll && (currentTimePos < eventsRef.scrollLeft || currentTimePos > eventsRef.scrollLeft + window.innerWidth - 16)) {
+				const timePosPx = currentTimePos * eventsRef.scrollWidth /100;
 
+				// scroll to center if out of view
 				// keep pointer positioned at center and scroll background
-				if (firstRun || (autoScroll && currentTimePos >= window.innerWidth - 16)) {
+				if (firstRun || (autoScroll && timePosPx >= window.innerWidth - 16)) {
 					const elem = document.querySelector('.event-pointer');
-					// console.log('autoscrolling...', elem);
+					console.log('autoscrolling...', elem);
 					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-					firstRun = false;
 				}
 			}
 		}

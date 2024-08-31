@@ -106,6 +106,7 @@
 </Awaiter>
 
 <h2>Achievements</h2>
+<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}
