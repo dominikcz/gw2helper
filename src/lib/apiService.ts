@@ -77,7 +77,7 @@ const tryCache = (req: string): object | undefined => {
     if (_apiKey && requestCache.has(req)) {
         let info = requestCache.get(req);
         if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
-            return info!.data;
+            return info;
         }
     }
     return undefined;
@@ -106,7 +106,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
     if (cachedValue !== undefined) {
         Logger.log("requestCache is valid, returning cached response");
-        return cachedValue;
+        return cachedValue.data;
     } else {
         Logger.log("requestCache is INVALID, refreshing...");
 
@@ -135,9 +135,10 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             if (_options.transform) {
                 data = _options.transform(data);
             }
-            cachedValue = data;
-            cacheRequest(origReq, cachedValue);
-
+            if (cachedValue == undefined){
+                cachedValue = data;
+                cacheRequest(origReq, cachedValue);
+            }
             Logger.log(`requestCache for ${origReq} updated`, cachedValue);
         } else {
             Logger.log(`got response.status = ${response.status}... ignoring`);
