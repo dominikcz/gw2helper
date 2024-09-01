@@ -3,6 +3,9 @@ import { defineConfig } from 'vitest/config';
 import pkg from './package.json' assert { type: 'json' };
 
 export default defineConfig({
+	build: {
+		target: 'esnext'
+	},
 	plugins: [sveltekit()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
