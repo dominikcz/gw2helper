@@ -15,14 +15,12 @@
 	let autoScroll = false;
 
 	let allEvents = [];  // here we hold all events' data
-	let watchedEvents = []; // here we only save names of events
 
 	onMount(async () => {
 		// remove special events
 		eventsUtils.excludeEvents(['lc', 'db', 'ha']);
 		eventsUtils.init();
 		allEvents = eventsUtils.prepareDailyCalendar();
-		watchedEvents = await utils.readWatchedEvents();
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
 		if (settings.showEventTimes !== undefined) showEventTimes = settings.showEventTimes;
@@ -30,17 +28,6 @@
 		if (settings.showHeadings !== undefined) showHeadings = settings.showHeadings;
 		if (settings.autoScroll !== undefined) autoScroll = settings.autoScroll;
 	});
-
-	async function hndToggleWatched(event) {
-		const obj = event.detail;
-		if (obj.watched) {
-			watchedEvents.push(obj.name);
-			watchedEvents = watchedEvents;
-		} else {
-			watchedEvents = watchedEvents.filter((x) => x !== obj.name);
-		}
-		await utils.saveWatchedEvents(watchedEvents);
-	}
 
 	function saveSettings() {
 		utils.saveEventTimerSettings({
@@ -77,6 +64,6 @@
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} watched={watchedEvents} {showChatLinks} on:toggle-watched={hndToggleWatched} />
+		<EventReminders events={allEvents} {showChatLinks} />
 	</TabPanel>
 </Tabs>

@@ -28,37 +28,48 @@
 	const time2 = clock({ interval: 500 });
 </script>
 
-<details class="test">
+<details>
 	<summary>Clock store</summary>
-	<ul>
-		<li>Current time (updated every 15 sec) is: {$time1.toISOString()}</li>
-		<li>Current time (updated every 500 msec) is: {$time2.toISOString()}</li>
-	</ul>
+	<div class="test">
+		<ul>
+			<li>Current time (updated every 15 sec) is: {$time1.toISOString()}</li>
+			<li>Current time (updated every 500 msec) is: {$time2.toISOString()}</li>
+		</ul>
+	</div>
 </details>
 
-<details class="test">
+<details>
 	<summary>Chips</summary>
-	<h2>array of strings</h2>
-	<Chips options={options0} bind:value={choice0} />
-	<pre>{JSON.stringify(choice0, null, 4)}</pre>
+	<div class="test">
+		<h2>array of strings</h2>
+		<Chips options={options0} bind:value={choice0} />
+		<pre>{JSON.stringify(choice0, null, 4)}</pre>
 
-	<h2>array of objects</h2>
-	<Chips options={options1} bind:value={choice1} />
-	<pre>{JSON.stringify(choice1, null, 4)}</pre>
+		<h2>array of objects</h2>
+		<Chips options={options1} bind:value={choice1} />
+		<pre>{JSON.stringify(choice1, null, 4)}</pre>
 
-	<h2>object</h2>
-	<Chips options={options2} bind:value={choice2} />
-	<pre>{JSON.stringify(choice2, null, 4)}</pre>
+		<h2>object</h2>
+		<Chips options={options2} bind:value={choice2} />
+		<pre>{JSON.stringify(choice2, null, 4)}</pre>
 
-	<h2>single items</h2>
-	<Chip label="item a" bind:selected={item1} value="val-a" />
-	{item1}
-	<Chip label="item b" bind:selected={item2} value="val-b" />
-	{item2}
+		<h2>single items</h2>
+		<Chip label="item a" bind:selected={item1} value="val-a" />
+		{item1}
+		<Chip label="item b" bind:selected={item2} value="val-b" />
+		{item2}
+	</div>
 </details>
 
 <style>
 	.test {
 		background-color: #555;
+		padding: 0 1em;
+	}
+	:global(.formkit-chips) {
+		margin-left: 1em !important;
+	}
+	:global(.formkit-chip) {
+		width: 6em !important;
 	}
 </style>

@@ -6,8 +6,8 @@
 </script>
 
 <div class="events-list">
-	{#each events as event}
-		<EventItem {event} {showChatLinks} on:toggle-watched />
+	{#each events as event (event.name)}
+		<EventItem {event} {showChatLinks} on:toggle-watched on:alarms-change />
 	{:else}
 		<span class="no-results">
 			<slot>...nothing found</slot>

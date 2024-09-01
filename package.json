@@ -41,6 +41,7 @@
 	"dependencies": {
 		"howler": "^2.2.4",
 		"idb-keyval": "^6.2.1",
+		"mustache": "^4.2.0",
 		"yaml": "^2.5.0"
 	}
 }

@@ -4,33 +4,31 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';
 	import themeWatcher from '$lib/stores/themeWatcher';
-	import clock from '$lib/stores/clock';
 
 	export let event;
 	export let showChatLinks = false;
 
 	$: watchedState_class = event.watched ? 'watched' : '';
 	$: watchedState_title = event.watched ? 'Click to remove from watched list' : 'Click to add to watched list';
-	// $: event.alarms, toggleAlarm(event);
+	// $: event.alarms, toggleAlarm();
 
 	let darkMode = themeWatcher();
-	let currentTime = clock({ interval: 10000 });
 
 	const dispatch = createEventDispatcher();
 
 	function toggleWatched() {
 		event.watched = !event.watched;
-		event.alarms = [];
 		dispatch('toggle-watched', {
 			name: event.name,
 			watched: event.watched,
 		});
 	}
 
-	function toggleAlarm() {
-		dispatch('toggle-alarm', {
-			name: event.name,
-			alarms: event.alarms,
+	function hndHoursChange(ev) {
+		const obj = ev.detail;
+		dispatch('alarms-change', {
+			name: obj.name,
+			alarms: [...obj.value],
 		});
 	}
 
@@ -48,7 +46,7 @@
 				<span>{event.chatlink}</span>
 			{/if}
 			<h5>Choose the times for your alarms:</h5>
-			<Chips options={event.startTimes} value={event.alarms} />
+			<Chips name={event.name} options={event.startTimes} value={event.alarms} on:chips-change={hndHoursChange} />
 		{:else}
 			<span>Next: {event.next}</span>
 		{/if}
@@ -63,7 +61,7 @@
 		padding: 0.5em;
 		row-gap: 0.2em;
 		column-gap: 0;
-		
+
 		border-radius: 0.3125em;
 		background-color: var(--gw2helper-module-white);
 		box-shadow: var(--gw2helper-module-shadow);
