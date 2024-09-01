@@ -30,7 +30,7 @@
 				label: item,
 				name: item,
 				help: '',
-				selected: false
+				selected: value.includes(item)
 			}
 			choice.push(_item);
 			if (_item.selected) {
@@ -41,16 +41,15 @@
 		value = false;
 	}
 
-	function updateValue() {
+	function hndToggleChip(){
 		value = choice.filter((item) => item.selected).map((item) => item.value);
 	}
 
-	$: choice, updateValue();
 </script>
 
 <div class="formkit-chips {className}">
 	{#each choice as item}
-		<Chip bind:selected={item.selected} id={item.id} name={item.name} value={item.value} label={item.label} title={item.help || help} />
+		<Chip bind:selected={item.selected} id={item.id} name={item.name} value={item.value} label={item.label} title={item.help || help} on:toggle-chip={hndToggleChip} />
 	{/each}
 </div>
 

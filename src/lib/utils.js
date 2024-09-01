@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_idb";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS } from "$lib/consts";
 
 async function readApiKey() {
     let key = '';
@@ -7,7 +7,7 @@ async function readApiKey() {
         key = new URLSearchParams(window.location.search).get('key') || ''
     }
     if (!key) {
-        key = ls.get(KEY_NAME, '');
+        key = await ls.get(KEY_NAME, '');
     }
     return key;
 }
@@ -58,15 +58,23 @@ export function sum(array, property) {
 }
 
 async function saveAchievesToDo(list){
-    return ls.set(ACHIEVES_TODO, list);
+    return await ls.set(ACHIEVES_TODO, list);
 }
 
 async function saveWatchedEvents(list){
-    return ls.set(WATCHED_EVENTS, list);
+    return await ls.set(WATCHED_EVENTS, list);
+}
+
+async function saveReminders(value){
+    return await ls.set(REMINDERS, value);
 }
 
 async function readWatchedEvents(){
     return await ls.getObject(WATCHED_EVENTS, []);
+}
+
+async function readReminders(){
+    return await ls.getObject(REMINDERS, {});
 }
 
 async function readAchievesToDo(){
@@ -107,6 +115,8 @@ export default {
     saveWalletSettings,
     readWatchedEvents,
     saveWatchedEvents,
+    readReminders,
+    saveReminders,
     getQueryString,
     getQueryStringFlag,
     runsDesktop,

@@ -18,18 +18,13 @@
 
 	let currentTimePos = 0;
 	let currTime = new Date();
-	let width = 0;
 	let darkMode = themeWatcher();
 	let dt0;
 	let time = clock({ interval: updateInterval * 1000 });
 	$: $time, updatePointerPos();
 
 	onMount(() => {
-		eventsUtils.init();
-		hndResize();
-		if (eventsRef.scrollLeft != 0){
-			setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
-		}
+		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 	});
 
 	function updatePointerPos(firstRun = false) {
@@ -60,17 +55,7 @@
 			}
 		}
 	}
-
-	function hndResize() {
-		const rect = eventsRef.getBoundingClientRect();
-		let scroll = eventsRef.scrollLeftMax;
-		width = rect.width + scroll;
-		updatePointerPos();
-	}
-
 </script>
-
-<svelte:window on:resize={hndResize} />
 
 <div class="event-timer" bind:this={eventsRef}>
 	<div class="category time-container" class:no-headings={!showHeadings}>

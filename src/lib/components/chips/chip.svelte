@@ -1,13 +1,24 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
     export let name: string = '';
     export let id: string = '';
     export let label: string;
     export let title: string = '';
-    export let value;
+    export let value: any;
     export let selected: boolean = false;
+
+	const dispatch = createEventDispatcher();
 
     function toggleSelected(){
         selected = !selected;
+        dispatch('toggle-chip', {
+				name,
+				id,
+                label,
+                value,
+                selected
+			});
     }
 
 </script>
@@ -24,7 +35,9 @@
         padding: 0.3em 0.6em;
         background-color: var(--gw2helper-module);
         color: var(--gw2helper-module-text);
-        width: fit-content;
+        width: 5em;
+        text-align: right;
+        user-select: none;
         cursor: pointer;
         &.selected{
             background-color: var(--gw2helper-module-white); 

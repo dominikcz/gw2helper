@@ -66,8 +66,10 @@ Date.prototype.wxTomorrow = function(utc, atHour, atMinute, atSecond){
 }
 
 Date.prototype.wxNextWeekDay = function(weekDay = 1, utc, atHour, atMinute, atSecond){
+	const daysDiff = [1, 7, 6, 5, 4, 3, 2];
 	const d = new Date();
-	d.setDate(d.getDate() + weekDay + 7 - d.getDay());
+	console.log('dddd', {d, weekDay, dd: d.getDay()})
+	d.setDate(d.getDate() + weekDay + daysDiff[d.getDay()]);
 	return setTime(d, utc, atHour, atMinute, atSecond);
 }
 

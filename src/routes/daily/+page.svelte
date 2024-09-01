@@ -53,7 +53,7 @@
 				target = Date.prototype.wxTomorrow(true, 0, 0, 0);
 				break;
 			case Period.weekly:
-				target = Date.prototype.wxNextWeekDay(1, true, 7, 30, 0);
+				target = Date.prototype.wxNextWeekDay(0, true, 7, 30, 0);
 				break;
 			case Period.special:
 				target = gw2NextQuarter();

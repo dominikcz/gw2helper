@@ -124,19 +124,22 @@
 		let _class = '';
 		let __class = '';
 		// looking up hierarchy
-		do {
-			_title = elem.getAttribute('data-autotooltip');
-			__class = elem.getAttribute('data-autotooltip-class');
-			if (__class) {
-				_class = __class;
-			}
-			if (!_title) {
-				elem = elem.parentElement;
-			}
-		} while (!_title && elem != null);
-
-		title = _title ? _title : '';
-		autotooltipClass = _class;
+		try {
+			do {
+				_title = elem.getAttribute('data-autotooltip');
+				__class = elem.getAttribute('data-autotooltip-class');
+				if (__class) {
+					_class = __class;
+				}
+				if (!_title) {
+					elem = elem.parentElement;
+				}
+				title = _title ? _title : '';
+				autotooltipClass = _class;
+			} while (!_title && elem != null);
+		} catch (error) {
+			console.warn('autotooltip', {elem, error})
+		}
 	}
 
 	function loaded() {
