@@ -33,8 +33,8 @@ Date.prototype.wxToFriendlyText = function () {
 	}
 };
 
-function setTime(dt, utc, atHour, atMinute, atSecond){
-	if (utc){
+function setTime(dt, utc, atHour, atMinute, atSecond) {
+	if (utc) {
 		if (atHour !== null) {
 			dt.setUTCHours(atHour)
 		}
@@ -59,24 +59,27 @@ function setTime(dt, utc, atHour, atMinute, atSecond){
 	return dt;
 }
 
-Date.prototype.wxTomorrow = function(utc, atHour, atMinute, atSecond){
+Date.prototype.wxTomorrow = function (utc, atHour, atMinute, atSecond) {
 	const tomorrow = new Date();
 	tomorrow.setDate(tomorrow.getDate() + 1);
 	return setTime(tomorrow, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxNextWeekDay = function(weekDay = 1, utc, atHour, atMinute, atSecond){
-	const daysDiff = [1, 7, 6, 5, 4, 3, 2];
+Date.prototype.wxNextWeekDay = function (weekDay = 1, utc, atHour, atMinute, atSecond) {
+	const daysDiff = [0, 6, 5, 4, 3, 2, 1];
 	const d = new Date();
-	console.log('dddd', {d, weekDay, dd: d.getDay()})
-	d.setDate(d.getDate() + weekDay + daysDiff[d.getDay()]);
+	const currentTime = d.getHours() * 60 * 60 + d.getMinutes() * 60 + d.getSeconds();
+	const targetTime = (atHour || 0) * 60 * 60 + (atMinute || 0) * 60 + (atSecond || 0);
+	if (currentTime > targetTime){
+		d.setDate(d.getDate() + weekDay + daysDiff[d.getDay()]);
+	} 
 	return setTime(d, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxNextQuarterOfYear = function(utc, atHour, atMinute, atSecond) {
+Date.prototype.wxNextQuarterOfYear = function (utc, atHour, atMinute, atSecond) {
 	const today = new Date();
 	const quarter = Math.floor((today.getMonth() + 3) / 3);
-	const nextq = (quarter == 4) ? new Date (today.getFullYear() + 1, 1, 1) : new Date (today.getFullYear(), quarter * 3, 1);
+	const nextq = (quarter == 4) ? new Date(today.getFullYear() + 1, 1, 1) : new Date(today.getFullYear(), quarter * 3, 1);
 	return setTime(nextq, utc, atHour, atMinute, atSecond);
 }
 
@@ -154,9 +157,9 @@ const wxdates = {
 	},
 
 	friendlyDateTime: function (dt) {
-    if (typeof dt == 'string') {
-      return dt.replace('T', ' ').substring(0, 19);
-    }
+		if (typeof dt == 'string') {
+			return dt.replace('T', ' ').substring(0, 19);
+		}
 		dt.setMilliseconds(0);
 		return dt.toISOString().replace('T', ' ');
 	},
@@ -306,11 +309,11 @@ const wxdates = {
 	friendlyDurationTill: function (d0, d1) {
 		return this.durationToFriendlyText(this.secondsBetween(d1, d0, true), true);
 	},
-	
+
 	friendlyDurationTillNow: function (d) {
 		return this.friendlyDurationTill(d, new Date());
 	},
-	
+
 	setTime,
 };
 

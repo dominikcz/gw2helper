@@ -27,7 +27,7 @@
 		return data.meta_reward_claimed ? points : points + data.meta_reward_astral;
 	}
 
-	// console.log(`${title}: ${targetTime.toISOString()}`);
+	console.log(`${title}: ${targetTime.toISOString()}`);
 </script>
 
 <details>
