@@ -66,13 +66,17 @@ Date.prototype.wxTomorrow = function (utc, atHour, atMinute, atSecond) {
 }
 
 Date.prototype.wxNextWeekDay = function (weekDay = 1, utc, atHour, atMinute, atSecond) {
-	const daysDiff = [0, 6, 5, 4, 3, 2, 1];
 	const d = new Date();
+	const currentWeekDay = d.getDay();
 	const currentTime = d.getHours() * 60 * 60 + d.getMinutes() * 60 + d.getSeconds();
 	const targetTime = (atHour || 0) * 60 * 60 + (atMinute || 0) * 60 + (atSecond || 0);
-	if (currentTime > targetTime){
-		d.setDate(d.getDate() + weekDay + daysDiff[d.getDay()]);
-	} 
+
+	let numOfDays = ((7 - d.getDay()) % 7 + weekDay) % 7;
+	if ((currentWeekDay == weekDay) && (currentTime > targetTime)) {
+		numOfDays += 7;
+	}
+	d.setDate(d.getDate() + numOfDays);
+
 	return setTime(d, utc, atHour, atMinute, atSecond);
 }
 
