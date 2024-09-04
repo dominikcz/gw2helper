@@ -23,7 +23,7 @@
 
 	<WidgetsGroup name="Time spent">
 		<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
-		<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}h`} />
+		<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}d`} />
 		<WidgetInfo title="Average time per day" value={`${(helperUtils.hoursPlayed(result.age) / helperUtils.diff(result.created)).toFixed(2)}h/day`} />
 	</WidgetsGroup>
 
