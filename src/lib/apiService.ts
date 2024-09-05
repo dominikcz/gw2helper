@@ -4,7 +4,7 @@ import wx from "./wxjs_types";
 import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
-import { CURRENT_SEASON, INACTIVE_ACHIEVES_CATEGORIES, SEASONAL_ACHIEVES_CATEGORIES } from "./components/achievements/achieves";
+import { CURRENT_SEASON, INACTIVE_ACHIEVES_CATEGORIES, SEASONAL_ACHIEVES_CATEGORIES, sumRewards } from "./components/achievements/achieves";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -313,7 +313,7 @@ const achievements = async (all: boolean = false) => {
             apiClient("/v2/achievements", "")])
             .then(([categories, account, account_achieves, allIds]) => {
                 account_achieves.forEach(x => {
-                    x.bits_done = x.bits || [];
+                    x.bits_done = [...x.bits || []];
                     delete x.bits;
                 });
                 resolve(expandAchieves(account, categories, account_achieves, allIds));
@@ -462,14 +462,6 @@ const expandItems = async (ids: Array<number>, collection) => {
 
     return data;
 };
-
-const sumRewards = (rewardsToGet, rewards) => {
-    rewards.forEach(x => {
-        const key = (x.region ? `${x.type}_${x.region}` : x.type).toLowerCase();
-        const old = rewardsToGet.get(key) || 0;
-        rewardsToGet.set(key, old + (x.count || 1))
-    });
-}
 
 const expandAchieves = async (account, categories, accountAchieves, allIds) => {
     Object.keys(ACHIEVES_NOT_IN_API).forEach(x => {

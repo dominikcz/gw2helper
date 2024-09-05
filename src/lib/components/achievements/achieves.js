@@ -1,4 +1,5 @@
 import helperUtils from "$lib/utils/helper-utils";
+import {sum} from "$lib/utils";
 
 export function sort(collection, sortBy) {
     console.log('sorting...');
@@ -28,6 +29,14 @@ export function sort(collection, sortBy) {
     return collection;
 }
 
+export const sumRewards = (rewardsToGet, rewards) => {
+    rewards.forEach(x => {
+        const key = (x.region ? `${x.type}_${x.region}` : x.type).toLowerCase();
+        const old = rewardsToGet.get(key) || 0;
+        rewardsToGet.set(key, old + (x.count || 1))
+    });
+}
+
 export function filteredAchieves(data, filter, callbackFn, categoriesCallbackFn, params) {
     // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
 
@@ -55,14 +64,25 @@ export function filteredAchieves(data, filter, callbackFn, categoriesCallbackFn,
 
     // new categories (1)
     const _categories = categoriesCallbackFn ? data.categories.filter(categoriesCallbackFn) : data.categories.filter((x) => !x.ignore);
+
     _data.categories = _categories.map(({ achievements, ...rest }) => {
         let _cat = { ...rest }; // (1) clone categories without achieves
-        if (_categories.id == 346) {
-            console.log('_cat', _cat)
-        }
 
         // (2) filter achieves and attach them to this cloned category
         _cat.achievements = achievements.filter(callbackFn);
+
+        _cat.points_to_get = sum(_cat.achievements, 'points_to_get');
+        _cat.points_done = sum(_cat.achievements, 'points_done');
+        _cat._rewards_to_get = _cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)
+        // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
+        // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
+        // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
+        // cat.items_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.item).length;
+
+        _cat.rewards_to_get = new Map();
+        sumRewards(_cat.rewards_to_get, _cat._rewards_to_get);
+        // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
+
         return _cat;
     })
         // (3) and finally remove all categories that have no achievs anymore, unless category name matches filter

@@ -75,7 +75,7 @@
 	function playAlarm(info) {
 		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
 
-		console.log('tts', { info, tts });
+		// console.log('tts', { info, tts });
 		sounds.on('end', function () {
 			var msg = new SpeechSynthesisUtterance();
 			msg.text = tts;

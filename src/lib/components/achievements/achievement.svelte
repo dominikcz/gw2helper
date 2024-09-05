@@ -38,6 +38,21 @@
 			todo,
 		});
 	}
+
+	function getTitle(){
+		let res = '<ul>';
+		if (bits){
+			bits.forEach((x, idx) => {
+				const c = bitsDone.includes(idx) ? 'done' : '';
+				res += `<li class="${c}">${x.text}</li>`;
+			})
+		} else if (tiers){
+			// ...
+		}
+		res += '</ul>';
+		return res;
+	}
+
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
@@ -47,7 +62,7 @@
 		{/if}
 
 		{#if current && max}
-			<progress value={current <= max ? current : max} {max} />
+			<progress value={current <= max ? current : max} {max} title={getTitle()}/>
 			<span>{current <= max ? current : max} / {max}</span>
 		{/if}
 

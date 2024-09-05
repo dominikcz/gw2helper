@@ -3,7 +3,7 @@
 	export let items;
 	export let todoList;
 
-	// console.log('achieveList '+name, items)
+	// console.log('achieveList ' + name, items);
 </script>
 
 <div class="achiev-list">
