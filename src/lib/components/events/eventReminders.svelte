@@ -73,17 +73,22 @@
 	}
 
 	function playAlarm(info) {
-		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
+		if (info) {
+			let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
 
-		// console.log('tts', { info, tts });
-		sounds.on('end', function () {
-			var msg = new SpeechSynthesisUtterance();
-			msg.text = tts;
-			msg.volume = 1; // From 0 to 1
-			msg.rate = 1; // From 0.1 to 10
-			msg.pitch = 1; // From 0 to 2
-			window.speechSynthesis.speak(msg);
-		});
+			// console.log('tts', { info, tts });
+			sounds.on('end', function () {
+				var msg = new SpeechSynthesisUtterance();
+				msg.text = tts;
+				msg.volume = 1; // From 0 to 1
+				msg.rate = 1; // From 0.1 to 10
+				msg.pitch = 1; // From 0 to 2
+				window.speechSynthesis.speak(msg);
+			});
+		} else {
+			sounds.on('end', null);
+		}
+		sounds.stop();
 		sounds.play(sound);
 	}
 
@@ -152,7 +157,7 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={playAlarm}>test alarm ({sound})</button>
+	<button on:click={() => playAlarm()}>test alarm ({sound})</button>
 </fieldset>
 
 <h2>Current time: {eventsUtils.getHour($time)}</h2>
