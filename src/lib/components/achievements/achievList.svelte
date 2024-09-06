@@ -1,4 +1,5 @@
 <script>
+	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	export let items;
 	export let todoList;
@@ -6,7 +7,7 @@
 	// console.log('achieveList ' + name, items);
 </script>
 
-<div class="achiev-list">
+<div class="achiev-list autotooltip" use:autotooltip>
 	{#each items as achiev (achiev.id)}
 		<Achievement
 			id={achiev.id}

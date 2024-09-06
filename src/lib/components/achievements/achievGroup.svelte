@@ -1,5 +1,6 @@
 <script>
     import { base } from "$app/paths";
+	import { autotooltip } from "$lib/actions/autotooltip";
 	import helperUtils from "$lib/utils/helper-utils";
 	import Price from "../price.svelte";
 	import Wiki from "../wiki.svelte";
@@ -13,7 +14,7 @@
 
 </script>
 
-<details class="achiev-group">
+<details class="achiev-group autotooltip" use:autotooltip>
     <summary>
         <img src={category.icon} alt={category.name} />
         <div class="descr">

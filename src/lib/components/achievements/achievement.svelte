@@ -39,20 +39,20 @@
 		});
 	}
 
-	function getTitle(){
-		let res = '<ul>';
-		if (bits){
+	function getTitle() {
+		let res = '';
+		if (bits) {
+			res = '<ol>';
 			bits.forEach((x, idx) => {
 				const c = bitsDone.includes(idx) ? 'done' : '';
 				res += `<li class="${c}">${x.text}</li>`;
-			})
-		} else if (tiers){
+			});
+			res += '</ol>';
+		} else if (tiers) {
 			// ...
 		}
-		res += '</ul>';
 		return res;
 	}
-
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
@@ -62,7 +62,7 @@
 		{/if}
 
 		{#if current && max}
-			<progress value={current <= max ? current : max} {max} title={getTitle()}/>
+			<progress value={current <= max ? current : max} {max} title={getTitle()} />
 			<span>{current <= max ? current : max} / {max}</span>
 		{/if}
 
@@ -299,5 +299,10 @@
 		&.todo {
 			background-position-y: -24px;
 		}
+	}
+
+	:global(li.done) {
+		text-decoration: line-through;
+		color: var(--gw2helper-not-important);
 	}
 </style>

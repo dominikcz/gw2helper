@@ -1,5 +1,6 @@
 <script>
-	import { afterNavigate } from '$app/navigation';
+	import { autoTooltipInit } from './autotooltip-utils';
+
 	export let title = '';
 
 	let x;
@@ -16,10 +17,6 @@
 	let touchMode = 'ontouchstart' in window;
 
 	$: visible = title != '';
-
-	afterNavigate((_navigation) => {
-		_navigation.complete.then(() => loaded());
-	});
 
 	function handlingTouch(event) {
 		const result = touchInProgress || touchMode;
@@ -138,24 +135,11 @@
 				autotooltipClass = _class;
 			} while (!_title && elem != null);
 		} catch (error) {
-			console.warn('autotooltip', {elem, error})
+			console.warn('autotooltip', { elem, error });
 		}
 	}
 
-	function loaded() {
-		let count = 0;
-		document.querySelectorAll('.autotooltip[title]').forEach((elem) => {
-			const t = elem.getAttribute('title');
-			elem.setAttribute('title', '');
-			if (t && !elem.getAttribute('data-autotooltip')) {
-				elem.setAttribute('data-autotooltip', t);
-				count++;
-			}
-		});
-		console.log('autotooltip', count);
-	}
-
-	async function updateXY() {
+	function updateXY() {
 		if (ref) {
 			const rect = ref.getBoundingClientRect();
 
@@ -171,6 +155,8 @@
 			ref.style.top = `${newY}px`;
 		}
 	}
+
+	autoTooltipInit();
 </script>
 
 <svelte:window
@@ -211,4 +197,12 @@
 		font-size: smaller;
 		cursor: help;
 	}
+
+	@media (min-width: 900px) {
+		div{
+			max-width: fit-content;
+			overflow-wrap: break-word;
+		}
+	}
+
 </style>

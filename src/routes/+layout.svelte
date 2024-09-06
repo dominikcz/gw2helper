@@ -9,8 +9,8 @@
 	import utils from '$lib/utils.js';
 
 	import Navigation from '$lib/components/navigation.svelte';
-	import AutoTooltip from '$lib/components/autoTooltip.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
 
 	export let data;
 	const defaultTitle = 'GW2 Helper';
@@ -66,8 +66,6 @@
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
-
-<AutoTooltip />
 
 <Alert />
 
@@ -136,6 +134,8 @@
 		</p>
 	</footer>
 </div>
+
+<AutoTooltip />
 
 <style lang="scss" global>
 	.line {

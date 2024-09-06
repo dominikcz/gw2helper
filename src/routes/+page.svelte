@@ -8,6 +8,7 @@
 	import ItemsList from '$lib/components/itemsList.svelte';
 	import utils from '$lib/utils';
 	export let data;
+	import { autotooltip } from '$lib/actions/autotooltip.js';
 
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -40,7 +41,7 @@
 	{#if result.coins || result.items.length}
 		<details open class="bltc">
 			<summary>Delivery Box</summary>
-			<div class="delivery-box">
+			<div class="delivery-box" use:autotooltip>
 				{#if result.coins}
 					<WidgetInfo title="Coins for pickup" value={result.coins} let:value id="bltc-coins">
 						<Price {value} />
@@ -68,7 +69,7 @@
 </section>
 
 <Awaiter promise={data.wallet} let:result>
-	<section class="wallet">
+	<section class="wallet" use:autotooltip>
 		{#each helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as currency}
 			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
 				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
