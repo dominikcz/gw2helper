@@ -1,25 +1,21 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import { stringify } from 'yaml';
 	export let item: object;
 
-	function debugInfo() {
-		return stringify(item);
+	function rarityClass() {
+		return item.rarity ? `rarity rarity-${item.rarity.toLowerCase()}` : 'rarity';
 	}
 
-	function rarityClass(){
-		return item.rarity ? `rarity-${item.rarity.toLowerCase()}` : '';
-	}
 </script>
 
-<figure class={rarityClass()}>
-	<a href={helperUtils.wikiLink(item.name)} target="_blank" >
-		<img alt={item.name} title={`<h4>${item.name}  - <a class="tooltip-link" target="_blank" href="${helperUtils.wikiLink(item.name)}">Click for wiki</a></h4><pre>${debugInfo()}</pre>`} src={item.icon} />
+<figure class={rarityClass()} >
+	<a href={helperUtils.wikiLink(item.name)} target="_blank">
+		<img alt={item.name} src={item.icon} data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}/>
 	</a>
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>
 
-<style lang="scss" global>
+<style lang="scss">
 	figure {
 		width: 3.75em;
 		height: 3.75em;
@@ -34,6 +30,7 @@
 			cursor: pointer;
 		}
 		figcaption {
+			cursor: pointer;
 			position: absolute;
 			top: 0;
 			right: 0;

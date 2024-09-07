@@ -1,6 +1,7 @@
 <script>
 	import Chip from '$lib/components/chips/chip.svelte';
 	import Chips from '$lib/components/chips/chips.svelte';
+	import ItemTooltip from '$lib/components/itemTooltip.svelte';
 	import clock from '$lib/stores/clock.js';
 
 	let options0 = ['item 1a', 'item 2a', 'item 3a'];
@@ -26,6 +27,79 @@
 
 	const time1 = clock({ interval: 15000 });
 	const time2 = clock({ interval: 500 });
+
+	let itemTooltip1 = {
+		name: 'Omnomberry Bar',
+		type: 'Consumable',
+		level: 80,
+		rarity: 'Fine',
+		vendor_value: 33,
+		game_types: ['Wvw', 'Dungeon', 'Pve'],
+		flags: ['NoSell'],
+		restrictions: [],
+		id: 12452,
+		chat_link: '[&AgGkMAAA]',
+		icon: 'https://render.guildwars2.com/file/6BD5B65FBC6ED450219EC86DD570E59F4DA3791F/433643.png',
+		details: {
+			type: 'Food',
+			duration_ms: 1800000,
+			apply_count: 1,
+			name: 'Nourishment',
+			icon: 'https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png',
+			description: '30% Magic Find\n40% Gold from Monsters\n+10% Experience from Kills',
+		},
+	};
+
+	let itemTooltip2 = {
+		name: 'Strong Soft Wood Longbow of Fire',
+		description: '',
+		type: 'Weapon',
+		level: 44,
+		rarity: 'Masterwork',
+		vendor_value: 120,
+		default_skin: 3942,
+		game_types: ['Activity', 'Dungeon', 'Pve', 'Wvw'],
+		flags: ['SoulBindOnUse'],
+		restrictions: [],
+		id: 28445,
+		chat_link: '[&AgEdbwAA]',
+		icon: 'https://render.guildwars2.com/file/C6110F52DF5AFE0F00A56F9E143E9732176DDDE9/65015.png',
+		details: {
+			type: 'LongBow',
+			damage_type: 'Physical',
+			min_power: 385,
+			max_power: 452,
+			defense: 0,
+			infusion_slots: [],
+			infix_upgrade: {
+				attributes: [
+					{ attribute: 'Power', modifier: 62 },
+					{ attribute: 'Precision', modifier: 44 },
+				],
+			},
+			suffix_item_id: 24547,
+			secondary_suffix_item_id: '',
+		},
+	};
+
+	let itemTooltip3 = {
+		count: 234,
+		name: 'Essence of Luck',
+		description: 'Double-click to gain 10 luck.',
+		type: 'Consumable',
+		level: 0,
+		rarity: 'Fine',
+		vendor_value: 0,
+		game_types: ['Pvp', 'PvpLobby', 'Wvw', 'Dungeon', 'Pve'],
+		flags: ['AccountBound', 'NoSalvage', 'BulkConsume', 'AccountBindOnUse'],
+		restrictions: [],
+		id: 45175,
+		chat_link: '[&AgF3sAAA]',
+		icon: 'https://render.guildwars2.com/file/1BF5D192EE5DAF97A7F4090461C450DA00F8FFAC/631148.png',
+		details: {
+			type: 'Generic',
+		},
+	};
 </script>
 
 <details>
@@ -59,6 +133,15 @@
 		<Chip label="item b" bind:selected={item2} value="val-b" />
 		{item2}
 	</div>
+</details>
+
+<details>
+	<summary>item tooltip</summary>
+	<ItemTooltip item={itemTooltip1} />
+	<p></p>
+	<ItemTooltip item={itemTooltip2} />
+	<p></p>
+	<ItemTooltip item={itemTooltip3} />
 </details>
 
 <style>

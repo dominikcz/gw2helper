@@ -3,6 +3,8 @@
 
 	export let title = '';
 
+	let customContent = false;
+
 	let x;
 	let y;
 	let ref;
@@ -16,7 +18,24 @@
 
 	let touchMode = 'ontouchstart' in window;
 
-	$: visible = title != '';
+	$: visible = title != '' || customContent;
+
+	window.__autotooltip = {
+		customRenderers: {},
+	};
+
+	function processCustomRenderers(node) {
+		ref.textContent = '';
+		const customRendererId = node.getAttribute('data-autotooltip-renderer') || '';
+		if (customRendererId) {
+			const renderer = window.__autotooltip.customRenderers[customRendererId];
+			const params = JSON.parse(node.getAttribute('data-autotooltip-params') || {});
+			// console.log('autotooltip', customRendererId, window.__autotooltip.customRenderers, params);
+			renderer(ref, params);
+			return true;
+		}
+		return false;
+	}
 
 	function handlingTouch(event) {
 		const result = touchInProgress || touchMode;
@@ -52,9 +71,9 @@
 	}
 
 	function mouseLeave(event) {
-		if (!handlingTouch(event)) {
-			title = '';
-		}
+		// if (!handlingTouch(event)) {
+		// 	title = '';
+		// }
 	}
 
 	//#endregion
@@ -110,7 +129,7 @@
 		if (!event.target.href) {
 			event.stopPropagation();
 			event.preventDefault();
-			title = '';
+			// title = '';
 		}
 	}
 
@@ -122,18 +141,29 @@
 		let __class = '';
 		// looking up hierarchy
 		try {
+			let _visible = false;
 			do {
-				_title = elem.getAttribute('data-autotooltip');
-				__class = elem.getAttribute('data-autotooltip-class');
-				if (__class) {
-					_class = __class;
-				}
-				if (!_title) {
-					elem = elem.parentElement;
-				}
-				title = _title ? _title : '';
-				autotooltipClass = _class;
+				if (processCustomRenderers(elem)) {
+					customContent = true;
+					return;
+				} else {
+					_title = elem.getAttribute('data-autotooltip');
+					__class = elem.getAttribute('data-autotooltip-class');
+					if (elem.classList.contains('autotooltip')) {
+						_visible = true;
+					}
+					if (__class) {
+						_class = __class;
+					}
+					if (!_title) {
+						elem = elem.parentElement;
+					} else {
+						title = _title;
+					}
+					autotooltipClass = _class;
+				} 
 			} while (!_title && elem != null);
+			visible = _visible;
 		} catch (error) {
 			console.warn('autotooltip', { elem, error });
 		}
@@ -199,10 +229,10 @@
 	}
 
 	@media (min-width: 900px) {
-		div{
-			max-width: fit-content;
+		div {
+			max-width: 30em;
+			width: 30em;
 			overflow-wrap: break-word;
 		}
 	}
-
 </style>

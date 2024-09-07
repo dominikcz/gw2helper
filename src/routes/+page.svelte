@@ -23,6 +23,7 @@
 			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
 			<p>${currency.description}</p>`;
 	}
+	
 	function saveSettings() {
 		utils.saveWalletSettings({
 			showDepreciated,

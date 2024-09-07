@@ -596,7 +596,9 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
 const toHtml = (text: string | null): string => {
     let descr = text || '';
     descr = descr.replace('<c=@Flavor>', '<span class="flavor">');
+    descr = descr.replace('<c=@flavor>', '<span class="flavor">');
     descr = descr.replace('<c=@Warning>', '<span class="warning">');
+    descr = descr.replace('<c=@warning>', '<span class="warning">');
     descr = descr.replace('</c>', '</span>');
     return descr;
 }

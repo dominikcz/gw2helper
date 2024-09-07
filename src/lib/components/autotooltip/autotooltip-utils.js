@@ -1,4 +1,7 @@
-export function autoTooltipInit(node) {
+export function autoTooltipInit(node, options) {
+    if (options && options.customRenderers){
+        Object.assign(window.__autotooltip.customRenderers, options.customRenderers);
+    }
     let count = 0;
     node ??= document;
     node.querySelectorAll('.autotooltip [title]').forEach((elem) => {
