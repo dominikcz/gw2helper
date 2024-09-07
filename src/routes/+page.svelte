@@ -70,7 +70,7 @@
 </section>
 
 <Awaiter promise={data.wallet} let:result>
-	<section class="wallet" use:autotooltip>
+	<section class="wallet autotooltip" use:autotooltip>
 		{#each helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as currency}
 			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
 				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">

@@ -4,6 +4,7 @@
 	export let title = '';
 
 	let customContent = false;
+	let visible = title != '';
 
 	let x;
 	let y;
@@ -18,21 +19,25 @@
 
 	let touchMode = 'ontouchstart' in window;
 
-	$: visible = title != '' || customContent;
-
 	window.__autotooltip = {
 		customRenderers: {},
 	};
 
 	function processCustomRenderers(node) {
-		ref.textContent = '';
 		const customRendererId = node.getAttribute('data-autotooltip-renderer') || '';
 		if (customRendererId) {
 			const renderer = window.__autotooltip.customRenderers[customRendererId];
 			const params = JSON.parse(node.getAttribute('data-autotooltip-params') || {});
 			// console.log('autotooltip', customRendererId, window.__autotooltip.customRenderers, params);
-			renderer(ref, params);
-			return true;
+			if (renderer) {
+				ref.textContent = '';
+				renderer(ref, params);
+				return true;
+			}
+		} else {
+			if (customContent) {
+				ref.textContent = '';
+			}
 		}
 		return false;
 	}
@@ -145,7 +150,8 @@
 			do {
 				if (processCustomRenderers(elem)) {
 					customContent = true;
-					return;
+					_visible = true;
+					break;
 				} else {
 					_title = elem.getAttribute('data-autotooltip');
 					__class = elem.getAttribute('data-autotooltip-class');
@@ -153,17 +159,24 @@
 						_class = __class;
 					}
 					if (!_title) {
+						if (elem.classList.contains('autotooltip') && (title || customContent)) {
+							_visible = true;
+						}
 						elem = elem.parentElement;
 					} else {
-						title = _title;
-						if (elem.classList.contains('autotooltip') && title) {
-							_visible = true;
-							console.log('visible', title);
-						}
+						customContent = false;
+						_visible = true;
 					}
 					autotooltipClass = _class;
 				}
+				// console.log('__', {_title, _visible, customContent})
 			} while (!_title && elem != null);
+			if (_visible) {
+				if (!customContent) {
+					// ref.textContent = '';
+				}
+				title = _title;
+			}
 			visible = _visible;
 		} catch (error) {
 			console.warn('autotooltip', { elem, error });
