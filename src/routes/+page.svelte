@@ -41,7 +41,7 @@
 	{#if result.coins || result.items.length}
 		<details open class="bltc">
 			<summary>Delivery Box</summary>
-			<div class="delivery-box" use:autotooltip>
+			<div class="delivery-box autotooltip" use:autotooltip>
 				{#if result.coins}
 					<WidgetInfo title="Coins for pickup" value={result.coins} let:value id="bltc-coins">
 						<Price {value} />

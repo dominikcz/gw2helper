@@ -19,6 +19,6 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 - wydzielić więcej komponentów wizualnych
 - refaktoring apiservice by zajmowało się tylko api, a dodać nową warstwę do mapowania i zwracania obiektów dla frontu
 - autotooltip:
-    - nie inicjuje się prawidłowo. Nie czeka na załadowanie całej strony. Część strony potrafi miec autotooltip, a reszta oryginalny. 
+    ~ nie inicjuje się prawidłowo. Nie czeka na załadowanie całej strony. Część strony potrafi miec autotooltip, a reszta oryginalny. 
     - przy filtrowaniu dochodzi do sytuacji, gdzie są da tooltipy do jednej pozycji pokazujące co innego (autotooltip pokazuje tooltip pozycji, która byłą w tym miejscu przed filtrowaniem)
 ? podanie klucza powoduje jego natychmiastowy zapis, zamiast poczekać na potwierdzenie, że jest poprawny
