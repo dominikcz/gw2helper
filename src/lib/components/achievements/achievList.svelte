@@ -7,7 +7,7 @@
 	// console.log('achieveList ' + name, items);
 </script>
 
-<div class="achiev-list autotooltip" use:autotooltip>
+<div class="achiev-list" use:autotooltip>
 	{#each items as achiev (achiev.id)}
 		<Achievement
 			id={achiev.id}

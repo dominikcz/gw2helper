@@ -21,6 +21,7 @@
 	export let bits = [];
 	export let bitsDone = [];
 	export let pointsToGet = 0;
+	export let tiers = [];
 
 	const dispatch = createEventDispatcher();
 
@@ -30,6 +31,8 @@
 	$: todoState_title = todo ? 'Click to remove from TODO list' : 'Click to add to TODO list';
 	$: _bits = bits ? bits.length : 0;
 	$: _bitsDone = bits ? (done ? bits.length : (bitsDone || []).length) : 0;
+
+	const _title = getTitle();
 
 	function toggleTodo() {
 		todo = !todo;
@@ -41,7 +44,7 @@
 
 	function getTitle() {
 		let res = '';
-		if (bits) {
+		if (bits && bits.length) {
 			res = '<ol>';
 			bits.forEach((x, idx) => {
 				const c = bitsDone.includes(idx) ? 'done' : '';
@@ -56,14 +59,14 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div class="head">
+	<div class="head autotooltip" >
 		{#if icon}
-			<img src={icon} alt={name} />
+			<img src={icon} alt={name} title={_title} />
 		{/if}
 
 		{#if current && max}
-			<progress value={current <= max ? current : max} {max} title={getTitle()} />
-			<span>{current <= max ? current : max} / {max}</span>
+			<progress value={current <= max ? current : max} {max} title={_title} />
+			<span title={_title}>{current <= max ? current : max} / {max}</span>
 		{/if}
 
 		{#if flags && flags.includes('Hidden')}

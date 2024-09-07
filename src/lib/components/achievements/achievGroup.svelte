@@ -14,7 +14,7 @@
 
 </script>
 
-<details class="achiev-group autotooltip" use:autotooltip>
+<details class="achiev-group" use:autotooltip>
     <summary>
         <img src={category.icon} alt={category.name} />
         <div class="descr">

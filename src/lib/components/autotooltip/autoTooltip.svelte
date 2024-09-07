@@ -149,9 +149,6 @@
 				} else {
 					_title = elem.getAttribute('data-autotooltip');
 					__class = elem.getAttribute('data-autotooltip-class');
-					if (elem.classList.contains('autotooltip')) {
-						_visible = true;
-					}
 					if (__class) {
 						_class = __class;
 					}
@@ -159,9 +156,13 @@
 						elem = elem.parentElement;
 					} else {
 						title = _title;
+						if (elem.classList.contains('autotooltip') && title) {
+							_visible = true;
+							console.log('visible', title);
+						}
 					}
 					autotooltipClass = _class;
-				} 
+				}
 			} while (!_title && elem != null);
 			visible = _visible;
 		} catch (error) {
