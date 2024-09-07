@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	import ItemsList from '$lib/components/itemsList.svelte';
+	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	let filter = '';

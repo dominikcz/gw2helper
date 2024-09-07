@@ -1,9 +1,9 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import WidgetInfo from '$lib/components/widgetInfo.svelte';
-	import WidgetsGroup from '$lib/components/widgetsGroup.svelte';
-	import WidgetImg from '$lib/components/widgetImg.svelte';
+	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
+	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
+	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 	import { base } from '$app/paths';
 	export let data;
 

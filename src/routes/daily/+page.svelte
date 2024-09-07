@@ -2,7 +2,7 @@
 	import WizardsVaultCategory from '$lib/components/wizardsVault/wizardsVaultCategory.svelte';
 	import wxdates from '$lib/wxjs_dates';
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import WidgetInfo from '$lib/components/widgetInfo.svelte';
+	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';

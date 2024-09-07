@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ItemsList from '$lib/components/itemsList.svelte';
+	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';

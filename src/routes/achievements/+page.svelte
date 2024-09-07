@@ -2,8 +2,8 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import WidgetInfo from '$lib/components/widgetInfo.svelte';
-	import WidgetsGroup from '$lib/components/widgetsGroup.svelte';
+	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
+	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import { sum } from '$lib/utils';
 	import utils from '$lib/utils';
 	import { base } from '$app/paths';

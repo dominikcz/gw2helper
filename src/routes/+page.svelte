@@ -4,8 +4,8 @@
 	import Price from '$lib/components/price.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
-	import WidgetInfo from '$lib/components/widgetInfo.svelte';
-	import ItemsList from '$lib/components/itemsList.svelte';
+	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
+	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import utils from '$lib/utils';
 	export let data;
 	import { autotooltip } from '$lib/actions/autotooltip.js';

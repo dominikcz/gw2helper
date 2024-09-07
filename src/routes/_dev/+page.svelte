@@ -1,7 +1,7 @@
 <script>
 	import Chip from '$lib/components/chips/chip.svelte';
 	import Chips from '$lib/components/chips/chips.svelte';
-	import ItemTooltip from '$lib/components/itemTooltip.svelte';
+	import ItemTooltip from '$lib/components/items/itemTooltip.svelte';
 	import clock from '$lib/stores/clock.js';
 
 	let options0 = ['item 1a', 'item 2a', 'item 3a'];
