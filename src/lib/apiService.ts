@@ -135,7 +135,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             if (_options.transform) {
                 data = _options.transform(data);
             }
-            if (cachedValue == undefined){
+            if (cachedValue == undefined) {
                 cachedValue = data;
                 cacheRequest(origReq, cachedValue);
             }
@@ -345,7 +345,13 @@ const currencies = async () => {
     const ignored = [74];
     return promiseMe(apiClient("/v2/currencies", "ids=all"), (resp) => {
         const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
-        return mergeById(_rawData, _dep);
+        const _data = mergeById(_rawData, _dep);
+        _data.forEach(x => {
+            if (x.depreciated) {
+                x.order += 1000;
+            }
+        });
+        return _data.sort((a, b) => a.order - b.order);
     })
 }
 
