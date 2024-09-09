@@ -325,7 +325,7 @@ const achievementsInfo = async (ids: string) => {
     return apiClient("/v2/achievements", "ids=" + ids);
 };
 
-const currencies = async () => {
+const currencies = async (order) => {
     const depreciated = [
         {
             reason: 'Replaced by "Tales of Dungeon Delving"',
@@ -347,17 +347,16 @@ const currencies = async () => {
         const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
         const _data = mergeById(_rawData, _dep);
         _data.forEach(x => {
-            if (x.depreciated) {
-                x.order += 1000;
-            }
+            const idx = order.findIndex(y => y == x.id)
+            x.order = (idx >=0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
         });
         return _data.sort((a, b) => a.order - b.order);
     })
 }
 
-const wallet = async () => {
+const wallet = async (order) => {
     return new Promise((resolve) => {
-        Promise.all([currencies(), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
+        Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
             resolve(mergeById(_curr, _wallet));
         });
     });

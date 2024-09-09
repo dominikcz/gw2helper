@@ -9,21 +9,13 @@
 	import utils from '$lib/utils';
 	export let data;
 	import { autotooltip } from '$lib/actions/autotooltip.js';
+	import Currencies from '$lib/components/currencies/currencies.svelte';
 
 	let filter = '';
 	const fields = ['name', 'description'];
 	let showDepreciated = false;
+	let items = [];
 
-	function formatValue(v: number) {
-		return v.toLocaleString('en-US', { maximumFractionDigits: 0 });
-	}
-
-	function getTitle(currency) {
-		return `<h4>${currency.name} (${currency.id}) - <a class="autotooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">Click for wiki</a></h4>
-			${currency.depreciated ? '<p class="warning"><strong>DEPRECIATED:</strong> ' + currency.depreciationReason + '</p>' : ''}
-			<p>${currency.description}</p>`;
-	}
-	
 	function saveSettings() {
 		utils.saveWalletSettings({
 			showDepreciated,
@@ -34,6 +26,11 @@
 		const settings = await utils.readWalletSettings();
 		showDepreciated = settings.showDepreciated;
 	});
+
+	function hndWalletReorder(ev){
+		const order = ev.detail.order;
+		utils.saveWalletOrder(order);
+	}
 </script>
 
 <h1>Home</h1>
@@ -70,61 +67,10 @@
 </section>
 
 <Awaiter promise={data.wallet} let:result>
-	<section class="wallet autotooltip" use:autotooltip>
-		{#each helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as currency}
-			<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip">
-				<div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
-					<span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
-					<div class="currency-value">
-						{#if currency.id == 1}
-							<Price value={currency.value} />
-						{:else}
-							<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
-							<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip" />
-						{/if}
-					</div>
-				</div>
-			</a>
-		{/each}
-	</section>
+	<Currencies items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })} on:wallet-reorder={hndWalletReorder}/>
 </Awaiter>
 
 <style lang="scss">
-	.wallet {
-		max-width: 37.5em;
-		display: flex;
-		flex-flow: column nowrap;
-		gap: 0.2em;
-		a {
-			text-decoration: none;
-		}
-	}
-	.currency {
-		min-height: 2em;
-		background-color: var(--gw2helper-module);
-		color: var(--gw2helper-module-text);
-		padding: 0 0.4em;
-		gap: 1em;
-		display: flex;
-		flex-flow: row nowrap;
-		justify-content: space-between;
-		align-items: center;
-		&.depreciated {
-			color: var(--gw2helper-not-important);
-		}
-		img {
-			height: 2em;
-		}
-		.currency-value {
-			display: flex;
-			flex-flow: row nowrap;
-			justify-content: flex-end;
-			align-items: center;
-			column-gap: 0.5em;
-			font-size: 120%;
-		}
-	}
-
 	.delivery-box {
 		margin: 0 0.6em;
 		display: flex;

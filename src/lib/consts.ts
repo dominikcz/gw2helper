@@ -9,3 +9,4 @@ export const ACHIEVES_TODO = 'dominikcz/gw2helper.achieves_todo';
 export const WALLET_SETTINGS = 'dominikcz/gw2helper.wallet_settings';
 export const WATCHED_EVENTS = 'dominikcz/gw2helper.watched_events';
 export const REMINDERS = 'dominikcz/gw2helper.reminders';
+export const WALLET_ORDER = 'dominikcz/gw2helper.wallet_order';

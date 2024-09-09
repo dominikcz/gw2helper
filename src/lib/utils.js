@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_idb";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS, WALLET_ORDER } from "$lib/consts";
 
 async function readApiKey() {
     let key = '';
@@ -81,6 +81,14 @@ async function readAchievesToDo(){
     return await ls.getObject(ACHIEVES_TODO, []);
 }
 
+async function readWalletOrder(){
+    return await ls.getObject(WALLET_ORDER, []);
+}
+
+async function saveWalletOrder(value){
+    return await ls.set(WALLET_ORDER, value);
+}
+
 export function getQueryString(keyName, defaultValue){
     if (typeof window != 'undefined'){
         const query = new URLSearchParams(window.location.search).get(keyName);
@@ -117,6 +125,8 @@ export default {
     saveWatchedEvents,
     readReminders,
     saveReminders,
+    readWalletOrder,
+    saveWalletOrder,
     getQueryString,
     getQueryStringFlag,
     runsDesktop,
