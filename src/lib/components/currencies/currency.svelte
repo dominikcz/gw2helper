@@ -43,12 +43,6 @@
 		justify-content: space-between;
 		align-items: center;
         user-select: none;
-		.handle {
-			cursor: grab;
-			&.grabbing {
-				cursor: grabbing;
-			}
-		}
 		&.depreciated {
 			color: var(--gw2helper-not-important);
 		}

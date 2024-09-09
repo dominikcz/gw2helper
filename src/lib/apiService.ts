@@ -325,7 +325,7 @@ const achievementsInfo = async (ids: string) => {
     return apiClient("/v2/achievements", "ids=" + ids);
 };
 
-const currencies = async (order) => {
+const currencies = async (order = []) => {
     const depreciated = [
         {
             reason: 'Replaced by "Tales of Dungeon Delving"',
