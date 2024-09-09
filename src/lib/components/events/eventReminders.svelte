@@ -140,6 +140,13 @@
 	}
 </script>
 
+<h2>Watched:</h2>
+<EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
+	You have not added anything to the list yet. Add items by clicking
+	<img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />
+	icon on any of the events below.
+</EventsList>
+
 <fieldset class="settings">
 	<legend>Reminder settings</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
@@ -160,14 +167,6 @@
 	<button on:click={() => playAlarm()}>test alarm ({sound})</button>
 </fieldset>
 
-<h2>Current time: {eventsUtils.getHour($time)}</h2>
-
-<h2>Watched:</h2>
-<EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	You have not added anything to the list yet. Add items by clicking
-	<img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />
-	icon on any of the events below.
-</EventsList>
 
 <!-- <pre>{JSON.stringify($remindersStore, null, 4)}</pre> -->
 

@@ -25,7 +25,7 @@
 		{#if currency.id == 1}
 			<Price value={currency.value} />
 		{:else}
-			<span class:karma={currency.id == 2}>{formatValue(currency.value || 0)}</span>
+			<span class:karma={currency.id == 2} class:gems={currency.id == 4}>{formatValue(currency.value || 0)}</span>
 			<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip" />
 		{/if}
 	</div>

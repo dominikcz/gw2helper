@@ -87,6 +87,8 @@
 	}
 </script>
 
+<h1>Daily & Weekly</h1>
+
 <h2>Wizard's Vault</h2>
 
 <Awaiter promise={data.wallet} let:result>

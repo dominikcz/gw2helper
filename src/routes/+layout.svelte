@@ -80,6 +80,12 @@
 		</header>
 		<Navigation items={navigation} {active} />
 
+		{#if currentPageVisible}
+			<main>
+				<slot />
+			</main>
+		{/if}
+
 		<section>
 			<details open={!tokenInfo.name}>
 				<summary>API Settings</summary>
@@ -111,12 +117,6 @@
 				</fieldset>
 			</details>
 		</section>
-
-		{#if currentPageVisible}
-			<main>
-				<slot />
-			</main>
-		{/if}
 
 		<BackToTop>
 			<div class="waypoint" title="waypoint to top"></div>

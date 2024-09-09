@@ -55,13 +55,6 @@
 
 <h2>Your wallet</h2>
 
-<fieldset class="settings">
-	<legend>Settings</legend>
-
-	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> Show depreciated currencies</label>
-	<button on:click={saveSettings}>Save settings</button>
-</fieldset>
-
 <section>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
 </section>
@@ -69,6 +62,13 @@
 <Awaiter promise={data.wallet} let:result>
 	<Currencies items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })} on:wallet-reorder={hndWalletReorder}/>
 </Awaiter>
+
+<fieldset class="settings">
+	<legend>Settings</legend>
+
+	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> Show depreciated currencies</label>
+	<button on:click={saveSettings}>Save settings</button>
+</fieldset>
 
 <style lang="scss">
 	.delivery-box {

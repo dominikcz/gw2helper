@@ -18,7 +18,9 @@
                 background-color: var(--gw2helper-module-white);
             }
             &:focus{
-                outline: none;
+                outline: 2px dashed var(--button-outline);
+                outline-offset: -2px;
+                box-shadow: none;
             }
         }
     }
