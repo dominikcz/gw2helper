@@ -1,6 +1,5 @@
 <script>
 	import { base } from '$app/paths';
-	import { Howl } from 'howler';
 	import EventsList from './eventsList.svelte';
 	import SearchInput from '../searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
@@ -8,26 +7,16 @@
 	import eventsUtils from './eventsUtils';
 	import clock from '$lib/stores/clock';
 	import Reminders from '$lib/reminders';
-	import { EVENTS_PARTIAL, EVENT_TEMPLATE } from '$lib/components/events/tts';
-	import mustache from 'mustache';
+	import utils from '$lib/utils';
 
 	export let events;
 	export let showChatLinks = false;
 	export let updateInterval = 60;
 
-	let filter = '';
+	export let inAdvance = 5;
+	export let sound = 'trumpet';
 
-	let inAdvance = 5;
-	let sounds = new Howl({
-		src: [`${base}/assets/sounds/alarms.mp3`],
-		sprite: {
-			trumpet: [0, 5923],
-			squeeze: [5924, 850],
-			notif3: [6834, 1160],
-			notif9: [8000, 2182],
-		},
-	});
-	let sound = 'trumpet';
+	let filter = '';
 
 	let time = clock({ interval: updateInterval * 1000 });
 	let reminders = new Reminders();
@@ -72,26 +61,6 @@
 		return _event;
 	}
 
-	function playAlarm(info) {
-		if (info) {
-			let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
-
-			// console.log('tts', { info, tts });
-			sounds.on('end', function () {
-				var msg = new SpeechSynthesisUtterance();
-				msg.text = tts;
-				msg.volume = 1; // From 0 to 1
-				msg.rate = 1; // From 0.1 to 10
-				msg.pitch = 1; // From 0 to 2
-				window.speechSynthesis.speak(msg);
-			});
-		} else {
-			sounds.on('end', null);
-		}
-		sounds.stop();
-		sounds.play(sound);
-	}
-
 	function updateNextEvents() {
 		Object.keys(events).forEach((catKey) => {
 			const cat = events[catKey];
@@ -111,18 +80,6 @@
 
 	function onTimeChange() {
 		updateNextEvents();
-
-		const list = reminders.activeAlarms($time, inAdvance);
-		// const list = ['event 1', 'event 2']; // test
-		if (list.length) {
-			playAlarm({
-				time: eventsUtils.getHour($time),
-				eventsList: list.join(', '),
-				inAdvance,
-				immediate: inAdvance == 0,
-				plural: list.length > 1,
-			});
-		}
 	}
 
 	async function hndToggleWatched(event) {
@@ -137,6 +94,10 @@
 			reminders.deleteEvent(obj.name);
 		}
 		version++;
+	}
+
+	async function saveNotifySettings() {
+		await utils.saveRemindersSettings({ inAdvance, sound });
 	}
 </script>
 
@@ -165,10 +126,8 @@
 		{/each}
 	</div>
 	<button on:click={() => playAlarm()}>test alarm ({sound})</button>
+	<button on:click={saveNotifySettings}>save</button>
 </fieldset>
-
-
-<!-- <pre>{JSON.stringify($remindersStore, null, 4)}</pre> -->
 
 <h2>Available:</h2>
 <section>

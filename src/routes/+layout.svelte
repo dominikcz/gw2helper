@@ -5,16 +5,41 @@
 	import { page } from '$app/stores';
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
+	import { remindersSettings } from '$lib/stores/reminders.js';
+	import Reminders from '$lib/reminders';
+
+	import { Howl } from 'howler';
 
 	import utils from '$lib/utils.js';
 
 	import Navigation from '$lib/components/navigation.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
+	import { onMount } from 'svelte';
+
+	import { EVENTS_PARTIAL, EVENT_TEMPLATE } from '$lib/components/events/tts';
+	import mustache from 'mustache';
+	import eventsUtils from '$lib/components/events/eventsUtils.js';
+	import clock from '$lib/stores/clock.js';
+	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 
 	export let data;
+
 	const defaultTitle = 'GW2 Helper';
 	let apiKey = data.apiKey;
+	let reminders = new Reminders();
+	let lastNotify = '';
+	let confirmedNotify = '';
+
+	let sounds = new Howl({
+		src: [`${base}/assets/sounds/alarms.mp3`],
+		sprite: {
+			trumpet: [0, 5923],
+			squeeze: [5924, 850],
+			notif3: [6834, 1160],
+			notif9: [8000, 2182],
+		},
+	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
@@ -34,7 +59,11 @@
 		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
 	];
 
-	$: currentPageVisible = (devMode || navigation.find((x) => x.slug == active)?.visible || false);
+	$: currentPageVisible = devMode || navigation.find((x) => x.slug == active)?.visible || false;
+
+	onMount(async () => {
+		$remindersSettings = await data.remindersSettings;
+	});
 
 	async function saveApiKey() {
 		if (data.apiService) {
@@ -61,6 +90,61 @@
 		}
 		location.reload(true);
 	}
+
+	let time = clock({ interval: 10 * 1000 });
+	$: $time, onTimeChange();
+
+	function onTimeChange() {
+		const inAdvance = $remindersSettings.inAdvance;
+		const list = reminders.activeAlarms($time, inAdvance);
+		// const list = ['event 1', 'event 2']; // test
+		if (list.length) {
+			// we repeat alarm till it's active, unless confirmed by user (by closing associated toast message)
+			playAlarm({
+				time: eventsUtils.getHour($time),
+				eventsList: list.join(', '),
+				inAdvance,
+				immediate: inAdvance == 0,
+				plural: list.length > 1,
+			});
+		}
+	}
+
+	function playAlarm(info) {
+		if (!info) return;
+		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
+		// ignoring request with the same text, as we were not able to speak previous one yet and excessive queuing doesn't help ;)
+		if ([lastNotify, confirmedNotify].includes(tts)) return;
+		lastNotify = tts;
+
+		toast.push(tts, {
+			duration: 1000 * (tts.length / 10),
+			onpop: (ev) => {
+				if (ev == 2) {
+					// if closed by user
+					console.log('notification disabled:', tts);
+					confirmedNotify = tts;
+				}
+			},
+		});
+		// console.log('tts', { info, tts });
+		sounds.off('end');
+		sounds.on('end', function () {
+			let msg = new SpeechSynthesisUtterance();
+			msg.text = tts;
+			msg.volume = 1; // From 0 to 1
+			msg.rate = 1; // From 0.1 to 10
+			msg.pitch = 1; // From 0 to 2
+			msg.lang = 'en-US';
+			msg.onend = (ev) => {
+				// reset last spoken text
+				lastNotify = '';
+			};
+			window.speechSynthesis.speak(msg);
+		});
+		sounds.stop();
+		sounds.play($remindersSettings.sound);
+	}
 </script>
 
 <svelte:head>
@@ -68,6 +152,7 @@
 </svelte:head>
 
 <Alert />
+<SvelteToast />
 
 <div id="content-wrapper">
 	<div id="content">
@@ -75,11 +160,12 @@
 			<img src="{base}/assets/heart.png" alt="logo" />
 			<div class="line">
 				<h1>GW2 Helper</h1>
-				<small>v{data.version}</small>
+				<small>v{data.version} - {eventsUtils.getHour($time)}</small>
 			</div>
 		</header>
 		<Navigation items={navigation} {active} />
 
+		<button> enable sounds </button>
 		{#if currentPageVisible}
 			<main>
 				<slot />

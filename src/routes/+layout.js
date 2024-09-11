@@ -23,6 +23,7 @@ export async function load( { fetch } ) {
 		apiKeyHist,
 		tokenInfo,
 		apiService,
+
 	};
 
 	console.log('key', key);
@@ -34,9 +35,13 @@ export async function load( { fetch } ) {
 			if (!tokenInfo.name) {
 				if (tokenInfo) {
 					returnObj.tokenInfo.error = tokenInfo;
-				}
+					returnObj.reminders = {};
+					returnObj.remindersSettings = {};
+					}
 			} else {
 				returnObj.tokenInfo = tokenInfo;
+				returnObj.reminders = await utils.readReminders();
+				returnObj.remindersSettings = await utils.readRemindersSettings();
 			}
 		} catch (error) {
 			console.log('Layout load error', error)

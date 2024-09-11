@@ -8,6 +8,8 @@
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
 
+	export let data;
+
 	let showChatLinks = utils.runsDesktop();
 	let showEventTimes = false;
 	let showCategories = true;
@@ -62,6 +64,6 @@
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} {showChatLinks} />
+		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={data.remindersSettings.inAdvance} bind:sound={data.remindersSettings.sound} />
 	</TabPanel>
 </Tabs>

@@ -1,5 +1,5 @@
 import ls from "$lib/wxjs_idb";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS, WALLET_ORDER } from "$lib/consts";
+import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS, REMINDERS_SETTINGS, WALLET_ORDER } from "$lib/consts";
 
 async function readApiKey() {
     let key = '';
@@ -29,27 +29,27 @@ async function getKeyHist() {
     return await ls.getObject(KEY_HIST, []);
 }
 
-async function readEventTimerSettings(){
+async function readEventTimerSettings() {
     return await ls.getObject(EVENT_TIMER_SETTINGS, {});
 }
 
-async function saveEventTimerSettings(settings){
+async function saveEventTimerSettings(settings) {
     return await ls.set(EVENT_TIMER_SETTINGS, settings);
 }
 
-async function readAchievesSettings(){
+async function readAchievesSettings() {
     return await ls.getObject(ACHIEVES_SETTINGS, {});
 }
 
-async function saveAchievesSettings(settings){
+async function saveAchievesSettings(settings) {
     return await ls.set(ACHIEVES_SETTINGS, settings);
 }
 
-async function readWalletSettings(){
+async function readWalletSettings() {
     return await ls.getObject(WALLET_SETTINGS, {});
 }
 
-async function saveWalletSettings(settings){
+async function saveWalletSettings(settings) {
     return await ls.set(WALLET_SETTINGS, settings);
 }
 
@@ -57,47 +57,55 @@ export function sum(array, property) {
     return array.reduce((acc, cur) => acc + cur[property], 0)
 }
 
-async function saveAchievesToDo(list){
+async function saveAchievesToDo(list) {
     return await ls.set(ACHIEVES_TODO, list);
 }
 
-async function saveWatchedEvents(list){
+async function saveWatchedEvents(list) {
     return await ls.set(WATCHED_EVENTS, list);
 }
 
-async function saveReminders(value){
+async function saveReminders(value) {
     return await ls.set(REMINDERS, value);
 }
 
-async function readWatchedEvents(){
+async function saveRemindersSettings(value) {
+    return await ls.set(REMINDERS_SETTINGS, value);
+}
+
+async function readWatchedEvents() {
     return await ls.getObject(WATCHED_EVENTS, []);
 }
 
-async function readReminders(){
+async function readReminders() {
     return await ls.getObject(REMINDERS, {});
 }
 
-async function readAchievesToDo(){
+async function readRemindersSettings() {
+    return await ls.getObject(REMINDERS_SETTINGS, {});
+}
+
+async function readAchievesToDo() {
     return await ls.getObject(ACHIEVES_TODO, []);
 }
 
-async function readWalletOrder(){
+async function readWalletOrder() {
     return await ls.getObject(WALLET_ORDER, []);
 }
 
-async function saveWalletOrder(value){
+async function saveWalletOrder(value) {
     return await ls.set(WALLET_ORDER, value);
 }
 
-export function getQueryString(keyName, defaultValue){
-    if (typeof window != 'undefined'){
+export function getQueryString(keyName, defaultValue) {
+    if (typeof window != 'undefined') {
         const query = new URLSearchParams(window.location.search).get(keyName);
         return (query === null) ? defaultValue : query;
     }
     return defaultValue;
 }
 
-export function getQueryStringFlag(keyName){
+export function getQueryStringFlag(keyName) {
     return getQueryString(keyName) == '1' ? true : false;
 }
 
@@ -125,6 +133,8 @@ export default {
     saveWatchedEvents,
     readReminders,
     saveReminders,
+    readRemindersSettings,
+    saveRemindersSettings,
     readWalletOrder,
     saveWalletOrder,
     getQueryString,
