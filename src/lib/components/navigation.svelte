@@ -16,8 +16,8 @@
 
 	function hndScroll() {
 		const rect = navRef.getBoundingClientRect();
-		navLeftVisible = navRef.scrollLeft > 50;
-		navRightVisible = navRef.scrollLeftMax > navRef.scrollLeft + 50;
+		navLeftVisible = navRef.scrollLeft > 32;
+		navRightVisible = navRef.scrollWidth > navRef.scrollLeft + navRef.offsetWidth;
 	}
 
 	function scrollLeft() {
