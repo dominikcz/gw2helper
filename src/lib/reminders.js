@@ -37,6 +37,10 @@ export default class Reminders {
         return _reminders[eventName] != undefined;
     }
 
+    hasAny(){
+        return Object.keys(_reminders).length > 0;
+    }
+
     activeAlarms(currTime, inAdvance = 0) {
         const target = eventsUtils.getHour(currTime);
         const test = new Date(currTime);

@@ -30,16 +30,9 @@
 	let reminders = new Reminders();
 	let lastNotify = '';
 	let confirmedNotify = '';
+	let noAudio = 0;
 
-	let sounds = new Howl({
-		src: [`${base}/assets/sounds/alarms.mp3`],
-		sprite: {
-			trumpet: [0, 5923],
-			squeeze: [5924, 850],
-			notif3: [6834, 1160],
-			notif9: [8000, 2182],
-		},
-	});
+	let sounds;
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
@@ -63,7 +56,33 @@
 
 	onMount(async () => {
 		$remindersSettings = await data.remindersSettings;
+		checkIfAudioPlayable();
 	});
+
+	function checkIfAudioPlayable(dummmy) {
+		let dummyAudio = new AudioContext();
+		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
+			noAudio = toast.push("You've got notifications set up. Please click here to enable sound.", {
+				initial: 0,
+				onpop: () => initSounds(),
+			});
+		} else {
+			toast.pop(noAudio);
+			initSounds();
+		}
+	}
+
+	function initSounds() {
+		sounds = new Howl({
+			src: [`${base}/assets/sounds/alarms.mp3`],
+			sprite: {
+				trumpet: [0, 5923],
+				squeeze: [5924, 850],
+				notif3: [6834, 1160],
+				notif9: [8000, 2182],
+			},
+		});
+	}
 
 	async function saveApiKey() {
 		if (data.apiService) {
@@ -119,14 +138,19 @@
 
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10),
-			onpop: (ev) => {
-				if (ev == 2) {
+			onpop: (id, ev) => {
+				console.log('onpop', ev)
+				if (ev !== undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);
 					confirmedNotify = tts;
 				}
+				toast.pop(noAudio);
 			},
 		});
+
+		if (!sounds) return;
+
 		// console.log('tts', { info, tts });
 		sounds.off('end');
 		sounds.on('end', function () {
@@ -165,7 +189,6 @@
 		</header>
 		<Navigation items={navigation} {active} />
 
-		<button> enable sounds </button>
 		{#if currentPageVisible}
 			<main>
 				<slot />
@@ -288,5 +311,12 @@
 		font-size: smaller;
 		padding: 0.3em 1em;
 		width: 100%;
+	}
+
+	:root {
+		--toastContainerTop: auto;
+		--toastContainerRight: auto;
+		--toastContainerBottom: 1em;
+		--toastContainerLeft: calc(50vw - 8rem);
 	}
 </style>
