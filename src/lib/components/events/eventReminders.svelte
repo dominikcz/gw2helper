@@ -99,6 +99,17 @@
 	async function saveNotifySettings() {
 		await utils.saveRemindersSettings({ inAdvance, sound });
 	}
+
+	function testAlarm() {
+		dispatchEvent(
+			new CustomEvent('notification-test', {
+				bubbles: true,
+				detail: {
+					sound,
+				},
+			})
+		);
+	}
 </script>
 
 <h2>Watched:</h2>
@@ -125,7 +136,7 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => playAlarm()}>test alarm ({sound})</button>
+	<button on:click={() => testAlarm()}>test alarm ({sound})</button>
 	<button on:click={saveNotifySettings}>save</button>
 </fieldset>
 

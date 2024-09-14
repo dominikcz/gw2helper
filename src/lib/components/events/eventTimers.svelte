@@ -5,6 +5,8 @@
 	import eventsUtils from './eventsUtils';
 	import clock from '$lib/stores/clock';
 	import themeWatcher from '$lib/stores/themeWatcher';
+	import EventTimerItem from './eventTimerItem.svelte';
+	import EventTimerTime from './eventTimerTime.svelte';
 
 	export let showEventTimes = true;
 	export let showChatLinks = true;
@@ -64,15 +66,7 @@
 				<span class="event-pointer-time" style="right: inherit;">{eventsUtils.getHour(currTime)}</span>
 			</div>
 		</div>
-		<div class="event-bar compact time">
-			{#each eventsUtils.getTimeSegments(dt0) as segment}
-				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
-					{#if segment.name}
-						<span>{segment.name}</span>
-					{/if}
-				</div>
-			{/each}
-		</div>
+		<EventTimerTime {dt0} />
 	</div>
 
 	{#each eventsUtils.getEntries(dt0) as [cat, eventsList]}
@@ -88,39 +82,17 @@
 						<span class="heading">{event.name}</span>
 					{/if}
 				{/if}
-				<div class="event-bar">
-					{#each Object.values(event.segments) as segment}
-						<div class="event" class:real={segment.name} title={segment.name} style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, $darkMode)};">
-							{#if segment.name}
-								<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - read more on Wiki`} >{segment.name}</a>
-								{#if showChatLinks && segment.chatlink}
-									<span class="chatlink">{segment.chatlink}</span>
-								{/if}
-								{#if showEventTimes}
-									<span>{`${eventsUtils.getHour(segment.start)} - ${eventsUtils.getHour(segment.stop)}`}</span>
-								{/if}
-							{/if}
-						</div>
-					{/each}
-				</div>
+				<EventTimerItem {event} {showChatLinks} {showEventTimes} darkMode={$darkMode} />
 			{/each}
 		</div>
 	{/each}
 
 	<div class="category time-container bottom" class:no-headings={!showHeadings}>
-		<div class="event-bar compact time">
-			{#each eventsUtils.getTimeSegments(dt0) as segment}
-				<div class="event" title={segment.name} style="width: {(segment.duration * 100) / 120}%;">
-					{#if segment.name}
-						<span>{segment.name}</span>
-					{/if}
-				</div>
-			{/each}
-		</div>
+		<EventTimerTime {dt0} />
 	</div>
 </div>
 
-<style lang="scss">
+<style lang="scss" global>
 	.event-timer {
 		// position: relative;
 		display: flex;
@@ -148,6 +120,44 @@
 		// font-weight: bold;
 		min-width: 75em;
 	}
+
+	.time-container {
+		top: 0;
+		min-width: 75em;
+		width: 100%;
+		// position: static;
+		// margin: 0 1em;
+		z-index: 10;
+		background-color: var(--gw2helper-module-white);
+		&.bottom {
+			z-index: 1;
+		}
+	}
+
+	.event-pointer {
+		position: absolute;
+		z-index: 11;
+		// height: 101%;
+		border-left: 2px solid red;
+		margin-left: -1px;
+		top: 0;
+		transition: left 1s ease-in-out;
+		cursor: help;
+		scroll-margin-top: 13.125em;
+	}
+
+	.event-pointer-time {
+		position: absolute;
+		background: red;
+		color: white;
+		font-weight: bold;
+		padding: 0.125em 0.375em;
+		margin-left: -2px;
+		white-space: nowrap;
+		top: 0;
+		z-index: 11;
+	}
+
 	.event-bar {
 		position: relative;
 		display: flex;
@@ -192,43 +202,6 @@
 				color: var(--gw2helper-module-text);
 			}
 		}
-	}
-
-	.time-container {
-		top: 0;
-		min-width: 75em;
-		width: 100%;
-		// position: static;
-		// margin: 0 1em;
-		z-index: 10;
-		background-color: var(--gw2helper-module-white);
-		&.bottom {
-			z-index: 1;
-		}
-	}
-
-	.event-pointer {
-		position: absolute;
-		z-index: 11;
-		// height: 101%;
-		border-left: 2px solid red;
-		margin-left: -1px;
-		top: 0;
-		transition: left 1s ease-in-out;
-		cursor: help;
-		scroll-margin-top: 13.125em;
-	}
-
-	.event-pointer-time {
-		position: absolute;
-		background: red;
-		color: white;
-		font-weight: bold;
-		padding: 0.125em 0.375em;
-		margin-left: -2px;
-		white-space: nowrap;
-		top: 0;
-		z-index: 11;
 	}
 
 	@media (min-width: 900px) {

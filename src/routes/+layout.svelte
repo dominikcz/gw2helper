@@ -32,7 +32,15 @@
 	let confirmedNotify = '';
 	let noAudio = 0;
 
-	let sounds;
+	let sounds = new Howl({
+		src: [`${base}/assets/sounds/alarms.mp3`],
+		sprite: {
+			trumpet: [0, 5923],
+			squeeze: [5924, 850],
+			notif3: [6834, 1160],
+			notif9: [8000, 2182],
+		},
+	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
@@ -64,24 +72,10 @@
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
 			noAudio = toast.push("You've got notifications set up. Please close this notification to enable sound.", {
 				initial: 0,
-				onpop: () => initSounds(),
 			});
 		} else {
 			toast.pop(noAudio);
-			initSounds();
 		}
-	}
-
-	function initSounds() {
-		sounds = new Howl({
-			src: [`${base}/assets/sounds/alarms.mp3`],
-			sprite: {
-				trumpet: [0, 5923],
-				squeeze: [5924, 850],
-				notif3: [6834, 1160],
-				notif9: [8000, 2182],
-			},
-		});
 	}
 
 	async function saveApiKey() {
@@ -129,6 +123,12 @@
 		}
 	}
 
+	function hndNotificationTest(ev){
+		const sound = ev.detail.sound;
+		sounds.stop();
+		sounds.play(sound);		
+	}
+
 	function playAlarm(info) {
 		if (!info) return;
 		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
@@ -139,7 +139,7 @@
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10),
 			onpop: (id, ev) => {
-				console.log('onpop', ev)
+				console.log('onpop', ev);
 				if (ev !== undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);
@@ -174,6 +174,8 @@
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
+
+<svelte:window on:notification-test={hndNotificationTest} />
 
 <Alert />
 <SvelteToast />
