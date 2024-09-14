@@ -62,7 +62,7 @@
 	function checkIfAudioPlayable(dummmy) {
 		let dummyAudio = new AudioContext();
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
-			noAudio = toast.push("You've got notifications set up. Please click here to enable sound.", {
+			noAudio = toast.push("You've got notifications set up. Please close this notification to enable sound.", {
 				initial: 0,
 				onpop: () => initSounds(),
 			});

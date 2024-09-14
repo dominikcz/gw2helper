@@ -36,13 +36,16 @@
 		min-height: 2.5em;
 		background-color: var(--gw2helper-module);
 		color: var(--gw2helper-module-text);
-		padding: 0 0.4em;
+		padding: 0 0.4em 0 0;
 		gap: 1em;
 		display: flex;
 		flex-flow: row nowrap;
 		justify-content: space-between;
 		align-items: center;
         user-select: none;
+		.handle{
+			padding: 0 0 0 0.4em;
+		}
 		&.depreciated {
 			color: var(--gw2helper-not-important);
 		}
