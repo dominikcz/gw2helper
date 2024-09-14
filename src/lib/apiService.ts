@@ -160,6 +160,11 @@ const charactersItems = async () => {
                 .filter((x) => x != null);
             let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1 }));
             let charItems = bags.concat(itemsInBags).concat(equipment);
+            const addons = [];
+            charItems.forEach(x => {
+                addons.push(...(x.upgrades || []), ...(x.infusions || []));
+            })
+            charItems.push(...addons.map(x => ({id: x, count: 1})))
             let ids = charItems.map(x => x.id);
             char._items = await expandItems(ids, charItems);
         }

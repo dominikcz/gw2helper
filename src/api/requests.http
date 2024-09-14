@@ -28,7 +28,7 @@ GET {{baseUrl}}/v2/items/67367
 Authorization: Bearer {{key}}###
 
 ###
-GET {{baseUrl}}/v2/items/97730
+GET {{baseUrl}}/v2/items/24836
 Authorization: Bearer {{key}}
 
 ###
