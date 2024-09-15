@@ -1,4 +1,5 @@
 export const KEY_NAME = 'dominikcz/gw2helper.apiKey';
+export const API_LANG = 'dominikcz/gw2helper.api_lang';
 export const REQUESTS_CACHE = "dominikcz/gw2helper.requests_cache";
 export const ITEMS_CACHE = "dominikcz/gw2helper.items_cache";
 export const ACHIEVES_CACHE = "dominikcz/gw2helper.achieves_cache";

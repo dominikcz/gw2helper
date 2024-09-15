@@ -31,6 +31,15 @@
 	let lastNotify = '';
 	let confirmedNotify = '';
 	let noAudio = 0;
+	let apiLang = data.apiLang;
+
+	const apiLanguages = {
+		en: 'English',
+		fr: 'French',
+		de: 'German',
+		es: 'Spanish',
+		zh: 'Chinese',
+	};
 
 	let sounds = new Howl({
 		src: [`${base}/assets/sounds/alarms.mp3`],
@@ -64,26 +73,31 @@
 
 	onMount(async () => {
 		$remindersSettings = await data.remindersSettings;
+		console.log('al', apiLang)
 		checkIfAudioPlayable();
 	});
 
 	function checkIfAudioPlayable(dummmy) {
 		let dummyAudio = new AudioContext();
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
-			noAudio = toast.push("You've got notifications set up. Please close this notification to enable sound.", {
-				initial: 0,
-			});
+			noAudio = toast.push(
+				"You've got notifications set up but your browser prevents audio without user interaction. Please close this message to enable sound.",
+				{
+					initial: 0,
+				}
+			);
 		} else {
 			toast.pop(noAudio);
 		}
 	}
 
-	async function saveApiKey() {
+	async function saveApiSettings() {
 		if (data.apiService) {
-			await data.apiService.init(apiKey);
+			await data.apiService.init(apiKey, { apiLang });
 			const _token = await data.apiService?.tokenInfo();
 			if (_token.name) {
 				await utils.saveApiKey(apiKey);
+				await utils.saveApiLang(apiLang);
 				invalidateAll();
 			} else {
 				tokenInfo.error = `Token "${apiKey}" is invalid`;
@@ -108,6 +122,7 @@
 	$: $time, onTimeChange();
 
 	function onTimeChange() {
+		if (!$remindersSettings) return;
 		const inAdvance = $remindersSettings.inAdvance;
 		const list = reminders.activeAlarms($time, inAdvance);
 		// const list = ['event 1', 'event 2']; // test
@@ -123,10 +138,10 @@
 		}
 	}
 
-	function hndNotificationTest(ev){
+	function hndNotificationTest(ev) {
 		const sound = ev.detail.sound;
 		sounds.stop();
-		sounds.play(sound);		
+		sounds.play(sound);
 	}
 
 	function playAlarm(info) {
@@ -138,9 +153,9 @@
 
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10),
-			onpop: (id, ev) => {
-				console.log('onpop', ev);
-				if (ev !== undefined) {
+			onpop: (id, details) => {
+				console.log('onpop', details);
+				if (!details.autoClose) {
 					// if closed by user
 					console.log('notification disabled:', tts);
 					confirmedNotify = tts;
@@ -216,9 +231,17 @@
 						bind:value={apiKey}
 						options={data.apiKeyHist}
 					/>
-					<button on:click={() => saveApiKey()}>Apply</button>
-					<button on:click={() => deleteApiKey()}>Forget stored key</button>
-					<button on:click={refresh}>Clear cache & reload</button>
+					<label for="api-lang">API language</label>
+					<select name="api-lang" id="api-lang" bind:value={apiLang}>
+						{#each Object.entries(apiLanguages) as [key, label]}
+							<option value={key}>{label}</option>
+						{/each}
+					</select>
+					<p>
+						<button on:click={() => saveApiSettings()}>Apply</button>
+						<button on:click={() => deleteApiKey()}>Forget stored key</button>
+						<button on:click={refresh}>Clear cache & reload</button>
+					</p>
 					{#if tokenInfo.name}
 						<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
 					{/if}

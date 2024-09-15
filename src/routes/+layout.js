@@ -14,6 +14,7 @@ export async function load( { fetch } ) {
 		error: 'invalid token key',
 	};
 	const key = await utils.readApiKey();
+	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
 	let tokenInfo = dummyTokenInfo;
 
@@ -23,12 +24,12 @@ export async function load( { fetch } ) {
 		apiKeyHist,
 		tokenInfo,
 		apiService,
-
+		apiLang,
 	};
 
 	console.log('key', key);
 	if (key){
-		await apiService.init(key, {fetchFunction: fetch });
+		await apiService.init(key, {apiLang, fetchFunction: fetch });
 		try {
 			tokenInfo = await apiService.tokenInfo();
 			// console.log('tokenInfo', tokenInfo);
