@@ -6,6 +6,7 @@
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
+	import { _ } from 'svelte-i18n';
 
 	export let data;
 
@@ -87,39 +88,39 @@
 	}
 </script>
 
-<h1>Daily & Weekly</h1>
+<h1>{ $_('daily.daily_and_weekly') }</h1>
 
-<h2>Wizard's Vault</h2>
+<h2>{ $_('daily.wizards_vault') }</h2>
 
 <Awaiter promise={data.wallet} let:result>
-	<WidgetInfo title="Your Astral Acclaims" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+	<WidgetInfo title="{ $_('daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 </Awaiter>
 
 <Awaiter promise={data.daily} let:result>
-	<WizardsVaultCategory title="Daily" data={result} targetTime={getTimerTarget(Period.daily)} />
+	<WizardsVaultCategory title="{ $_('daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
 </Awaiter>
 
 <Awaiter promise={data.weekly} let:result>
-	<WizardsVaultCategory title="Weekly" data={result} targetTime={getTimerTarget(Period.weekly)} />
+	<WizardsVaultCategory title="{ $_('daily.weekly') }" data={result} targetTime={getTimerTarget(Period.weekly)} />
 </Awaiter>
 
 <Awaiter promise={data.special} let:result>
-	<WizardsVaultCategory title="Special" data={result} targetTime={getTimerTarget(Period.special)} />
+	<WizardsVaultCategory title="{ $_('daily.special') }" data={result} targetTime={getTimerTarget(Period.special)} />
 </Awaiter>
 
-<h2>Achievements</h2>
-<img src="/gw2helper/assets/150px-construction.png" title="Under constrution" width="150px" alt="under construction" />
+<h2>{ $_('daily.achievements') }</h2>
+<img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_constrution') }" width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}
 	{@const weeklies = extractWeekly(result)}
-	<h4>Daily</h4>
+	<h4>{ $_('daily.daily') }</h4>
 	<div class="achiev-container">
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
 		{/each}
 	</div>
-	<h4>Weekly</h4>
+	<h4>{ $_('daily.weekly') }</h4>
 	<div class="achiev-container">
 		{#each sort(weeklies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>

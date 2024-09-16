@@ -5,6 +5,8 @@
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 	import { base } from '$app/paths';
+	import { _ } from 'svelte-i18n';
+
 	export let data;
 
 	function has(account, content: string): boolean {
@@ -12,95 +14,98 @@
 	}
 </script>
 
-<h1>Account info</h1>
+<h1>{$_('account.account_info')}</h1>
 
 <Awaiter promise={data.account} let:result>
 	<h3>{result.name}</h3>
 	<ul>
-		<li>Created at: <span>{result.created_local}</span></li>
-		<li>Last change: <span>{result.last_modified_local}</span></li>
+		<li>{$_('account.created_at')} <span>{result.created_local}</span></li>
+		<li>{$_('account.last_change')} <span>{result.last_modified_local}</span></li>
 	</ul>
 
 	<WidgetsGroup name="Time spent">
-		<WidgetInfo title="Hours played" value={`${helperUtils.hoursPlayed(result.age)}h`} />
-		<WidgetInfo title="Days" value={`${helperUtils.diff(result.created)}d`} />
-		<WidgetInfo title="Average time per day" value={`${(helperUtils.hoursPlayed(result.age) / helperUtils.diff(result.created)).toFixed(2)}h/day`} />
+		<WidgetInfo title={$_('account.hours_played')} value={`${helperUtils.hoursPlayed(result.age)}h`} />
+		<WidgetInfo title={$_('account.days')} value={`${helperUtils.diff(result.created)}d`} />
+		<WidgetInfo
+			title={$_('account.average_time_per_day')}
+			value={`${(helperUtils.hoursPlayed(result.age) / helperUtils.diff(result.created)).toFixed(2)}h/day`}
+		/>
 	</WidgetsGroup>
 
-	<WidgetsGroup name="Accessible content">
+	<WidgetsGroup name={$_('account.accessible_content')}>
 		{#if has(result, 'PlayForFree')}
 			<WidgetImg
-				title="Play for free"
+				title={$_('account.play_for_free')}
 				url="{base}/assets/400px-GW2Logo_new.png"
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'GuildWars2')}
 			<WidgetImg
-				title="Base game"
+				title={$_('account.base_game')}
 				url={`${base}/assets/400px-GW2Logo_new.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'HeartOfThorns')}
 			<WidgetImg
-				title="Heart Of Thorns"
+				title={$_('account.heart_of_thorns')}
 				url={`${base}/assets/400px-HoT_Texture_Centered_Trans.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'PathOfFire')}
 			<WidgetImg
-				title="Path Of Fire"
+				title={$_('account.path_of_fire')}
 				url={`${base}/assets/400px-GW2-PoF_Texture_Centered_Trans.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'EndOfDragons')}
 			<WidgetImg
-				title="End Of Dragons"
+				title={$_('account.end_of_dragons')}
 				url={`${base}/assets/400px-EoD_Texture_Trans.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'SecretsOfTheObscure')}
 			<WidgetImg
-				title="Secrets of the Obscure"
+				title={$_('account.secrets_of_the_obscure')}
 				url={`${base}/assets/400px-Secrets_of_the_Obscure_logo.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 
 		{#if has(result, 'JanthirWilds')}
 			<WidgetImg
-				title="Janthir Wilds"
+				title={$_('account.janthir_wilds')}
 				url={`${base}/assets/400px-Janthir_Wilds_logo.png`}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds"
-				linkTitle="Read more on wiki"
+				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
 			/>
 		{/if}
 	</WidgetsGroup>
 
-	<WidgetsGroup name="Levels">
-		<WidgetInfo title="Fractals" value={result.fractal_level} image="{base}/assets/rewards/Daily_Fractals.png" />
+	<WidgetsGroup name={$_('account.levels')}>
+		<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image="{base}/assets/rewards/Daily_Fractals.png" />
 		<WidgetInfo title="WvW" value={result.wvw_rank} image="{base}/assets/rewards/WvW_Ability_Point.png" />
 	</WidgetsGroup>
 </Awaiter>

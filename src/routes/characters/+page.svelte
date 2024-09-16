@@ -3,6 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
+	import { _ } from 'svelte-i18n';
 
 	export let data;
 	let filter = '';
@@ -30,8 +31,8 @@
 	}
 </script>
 
-<h1>Characters</h1>
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder="what are you looking for?" />
+<h1>{ $_('characters.characters') }</h1>
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder="{ $_('common.what_are_you_looking_for') }" />
 
 <Awaiter promise={data.characters} let:result>
 	{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
@@ -47,19 +48,19 @@
 							{#each char.crafting as craft}
 								<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
 							{:else}
-								<li class="no-results">no crafting professions</li>
+								<li class="no-results">{ $_('characters.no_crafting_professions') }</li>
 							{/each}
 						</ul>
 					{/if}
-					<div class="info">hours played</div>
+					<div class="info">{ $_('characters.hours_played') }</div>
 					<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
 				</div>
 			</section>
 			<section>
 				<div class="sect-img" style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"></div>
 				<div class="sect-info">
-					<div class="counter">{helperUtils.age(char.created)} years</div>
-					<div class="info">next birthday in</div>
+					<div class="counter">{ $_('characters.years') }</div>
+					<div class="info">{ $_('characters.next_birthday_in') }</div>
 					<div class="counter">{helperUtils.tillBirthday(char.created)} <span class="info">days</span></div>
 				</div>
 			</section>

@@ -2,7 +2,10 @@ export const ssr = false;
 export const trailingSlash = 'always';
 
 import utils from "$lib/utils";
-import apiService from "$lib/apiService.ts";
+import apiService from "$lib/apiService";
+
+import '$lib/services/i18n';
+import { locale } from 'svelte-i18n'
 
 console.log(__NAME__, __VERSION__);
 
@@ -48,5 +51,6 @@ export async function load( { fetch } ) {
 			console.log('Layout load error', error)
 		}
 	} 
+	locale.set('en');
 	return returnObj;
 }

@@ -1,0 +1,31 @@
+achievements: Achievements
+achieves_completed: Achieves completed
+achieves_to_do: Achieves to do
+central_tyria_mastery: Central Tyria mastery
+coins_to_get: Coins to get
+daily: Daily
+daily_points: Daily points
+empty_list: You have not added anything to the list yet. Add items by clicking <> icon on list of achievements.
+eod_mastery: EoD mastery
+gold_to_get: Gold to get
+hot_mastery: HoT mastery
+icebrood_saga_mastery: Icebrood Saga mastery
+items_to_get: Items to get
+janthir_wilds_mastery: Janthir Wilds mastery
+list: List
+monthly_points: Monthly points
+not_completed: Not completed
+pof_mastery: PoF mastery
+points_from_achieves: Points from achieves
+points_to_get: Points to get
+showing_out_of: >-
+  showing {_result.categories.length} categories out of
+  {result.categories.length}
+sofo_mastery: SofO mastery
+sort_by_in_game_order: sort by in-game order
+sort_by_name: sort by name
+sort_by_points: sort by points
+titles_to_get: Titles to get
+to_dos: To dos
+weekly: Weekly
+your_list: Your list

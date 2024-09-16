@@ -1,7 +1,7 @@
 <script>
 	import '$lib/scss/gw2.scss';
 	import { base } from '$app/paths';
-	import { invalidateAll } from '$app/navigation';
+	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
@@ -22,6 +22,11 @@
 	import eventsUtils from '$lib/components/events/eventsUtils.js';
 	import clock from '$lib/stores/clock.js';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
+	import { _ } from 'svelte-i18n';
+	import languages from '$lib/locales/languages.json';
+	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
+	import { lang } from '$lib/stores/lang.js';
+	import { loadLocaleForPath } from '$lib/services/i18n.ts';
 
 	export let data;
 
@@ -35,10 +40,10 @@
 
 	const apiLanguages = {
 		en: 'English',
-		fr: 'French',
-		de: 'German',
-		es: 'Spanish',
-		zh: 'Chinese',
+		fr: 'Français',
+		de: 'Deutsch',
+		es: 'Español',
+		zh: '中国人',
 	};
 
 	let sounds = new Howl({
@@ -51,6 +56,11 @@
 		},
 	});
 
+	beforeNavigate(({ to }) => {
+		if (!to) return;
+		loadLocaleForPath(to?.url.pathname);
+	});
+
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
 	$: tokenInfo = data.tokenInfo;
@@ -58,22 +68,21 @@
 	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - ');
 
 	$: navigation = [
-		{ slug: `${base}/`, label: 'Home', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: 'Daily', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/events/`, label: 'Events', visible: true },
-		{ slug: `${base}/items/`, label: 'Items', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/materials/`, label: 'Materials', visible: tokenInfo.permissions.includes('inventories') },
-		{ slug: `${base}/achievements/`, label: 'Achievements', visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/account/`, label: 'Account', visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/characters/`, label: 'Characters', visible: tokenInfo.permissions.includes('characters') },
-		{ slug: `${base}/guilds/`, label: 'Guilds', visible: tokenInfo.permissions.includes('guilds') },
+		{ slug: `${base}/`, label: $_('layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/events/`, label: $_('layout.nav.events'), visible: true },
+		{ slug: `${base}/items/`, label: $_('layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
+		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
+		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
+		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
 	];
 
 	$: currentPageVisible = devMode || navigation.find((x) => x.slug == active)?.visible || false;
 
 	onMount(async () => {
 		$remindersSettings = await data.remindersSettings;
-		console.log('al', apiLang)
 		checkIfAudioPlayable();
 	});
 
@@ -81,7 +90,7 @@
 		let dummyAudio = new AudioContext();
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
 			noAudio = toast.push(
-				"You've got notifications set up but your browser prevents audio without user interaction. Please close this message to enable sound.",
+				$_('layout.no_audio'),
 				{
 					initial: 0,
 				}
@@ -100,7 +109,7 @@
 				await utils.saveApiLang(apiLang);
 				invalidateAll();
 			} else {
-				tokenInfo.error = `Token "${apiKey}" is invalid`;
+				tokenInfo.error = $_('layout.invalid_token');
 			}
 		}
 	}
@@ -201,7 +210,7 @@
 			<img src="{base}/assets/heart.png" alt="logo" />
 			<div class="line">
 				<h1>GW2 Helper</h1>
-				<small>v{data.version} - {eventsUtils.getHour($time)}</small>
+				<small>v{data.version} <LocaleSwitch {languages} bind:value={$lang} keysOnly={true} /></small>
 			</div>
 		</header>
 		<Navigation items={navigation} {active} />
@@ -214,36 +223,34 @@
 
 		<section>
 			<details open={!tokenInfo.name}>
-				<summary>API Settings</summary>
+				<summary>{$_('layout.api_settings')}</summary>
 				<fieldset class="api-settings">
-					<legend>API settings</legend>
+					<legend>{$_('layout.api_settings')}</legend>
 					<p>
-						In order to use this site you have to provide an API key for your account. API keys may be created or deleted at <a
-							href="https://account.arena.net/applications">https://account.arena.net/applications.</a
-						>.
+						{@html $_('layout.api_key_required')}
 					</p>
-					<label for="api-key">Your API key:</label>
+					<label for="api-key">{$_('layout.your_api_key')}</label>
 					<SearchInput
 						name="api-key"
 						id="api-key"
 						class="apikey"
-						placeholder="Paste your API key here"
+						placeholder="$_('layout.paste_your_api_key_here')"
 						bind:value={apiKey}
 						options={data.apiKeyHist}
 					/>
-					<label for="api-lang">API language</label>
+					<label for="api-lang">{$_('layout.api_language')}</label>
 					<select name="api-lang" id="api-lang" bind:value={apiLang}>
 						{#each Object.entries(apiLanguages) as [key, label]}
 							<option value={key}>{label}</option>
 						{/each}
 					</select>
 					<p>
-						<button on:click={() => saveApiSettings()}>Apply</button>
-						<button on:click={() => deleteApiKey()}>Forget stored key</button>
-						<button on:click={refresh}>Clear cache & reload</button>
+						<button on:click={() => saveApiSettings()}>{$_('layout.apply')}</button>
+						<button on:click={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
+						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>Successfully loaded key "{tokenInfo.name}".</em></p>
+						<p><em>{$_('layout.token_ok')}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>
@@ -253,19 +260,12 @@
 		</section>
 
 		<BackToTop>
-			<div class="waypoint" title="waypoint to top"></div>
+			<div class="waypoint" title={$_('layout.waypoint_to_top')}></div>
 		</BackToTop>
 	</div>
 	<footer>
-		<p>
-			This unofficial site includes art and other assets that are © 2015 ArenaNet, Inc. All rights reserved. All other trademarks are the property of
-			their respective owners. This site uses also images and data from <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
-		</p>
-		<p>
-			© ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire,
-			Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure and all associated logos, designs, and composite marks are trademarks or
-			registered trademarks of NCSOFT Corporation.
-		</p>
+		<p>{@html $_('layout.legal.unofficial_site')}</p>
+		<p>{$_('layout.legal.copyright')}</p>
 	</footer>
 </div>
 

@@ -10,6 +10,7 @@
 	export let data;
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
+	import { _ } from 'svelte-i18n';
 
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -27,21 +28,21 @@
 		showDepreciated = settings.showDepreciated;
 	});
 
-	function hndWalletReorder(ev){
+	function hndWalletReorder(ev) {
 		const order = ev.detail.order;
 		utils.saveWalletOrder(order);
 	}
 </script>
 
-<h1>Home</h1>
+<h1>{$_('home.title')}</h1>
 
 <Awaiter promise={data.delivery} let:result>
 	{#if result.coins || result.items.length}
 		<details open class="bltc">
-			<summary>Delivery Box</summary>
+			<summary>{$_('home.delivery_box')}</summary>
 			<div class="delivery-box autotooltip" use:autotooltip>
 				{#if result.coins}
-					<WidgetInfo title="Coins for pickup" value={result.coins} let:value id="bltc-coins">
+					<WidgetInfo title={$_('home.coins_for_pickup')} value={result.coins} let:value id="bltc-coins">
 						<Price {value} />
 					</WidgetInfo>
 				{/if}
@@ -53,21 +54,24 @@
 	{/if}
 </Awaiter>
 
-<h2>Your wallet</h2>
+<h2>{$_('home.your_wallet')}</h2>
 
 <section>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?" />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')} />
 </section>
 
 <Awaiter promise={data.wallet} let:result>
-	<Currencies items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })} on:wallet-reorder={hndWalletReorder}/>
+	<Currencies
+		items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })}
+		on:wallet-reorder={hndWalletReorder}
+	/>
 </Awaiter>
 
 <fieldset class="settings">
-	<legend>Settings</legend>
+	<legend>{$_('home.settings')}</legend>
 
-	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> Show depreciated currencies</label>
-	<button on:click={saveSettings}>Save settings</button>
+	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
+	<button on:click={saveSettings}>{$_('common.save_settings')}</button>
 </fieldset>
 
 <style lang="scss">
