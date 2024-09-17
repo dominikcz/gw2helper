@@ -1,37 +1,40 @@
 api_key_required: >-
-  In order to use this site you have to provide an API key for your account.
-  API keys may be created or deleted at <a href="https://account.arena.net/applications">https://account.arena.net/applications.</a>
-api_language: API language
-api_settings: API Settings
-apply: Apply
-clear_cache: Clear cache  & reload
-forget_stored_key: Forget stored key
-invalid_token: Token "{0}" is invalid
+  Aby korzystać z tej strony musisz podać klucz API dla swojego konta. Klucze
+  API mogą być tworzone lub usuwane w <a
+  href="https://account.arena.net/applications">https://account.arena.net/applications.</a>
+api_language: Język API
+api_settings: Ustawienia API
+apply: Zastosuj
+clear_cache: Wyczyść pamięć podręczną i przeładuj
+forget_stored_key: Zapomnij zapisany klucz
+invalid_token: Token "{token}" jest nieprawidłowy
 legal:
   copyright: >
-    © ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild
-    Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire,
-    Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure and
-    all associated logos, designs, and composite marks are trademarks or
-    registered trademarks of NCSOFT Corporation.
+    © ArenaNet LLC. Wszelkie prawa zastrzeżone. NCSOFT, ArenaNet, Guild Wars,
+    Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of
+    Fire, Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure
+    i wszystkie powiązane loga, projekty i znaki kompozytowe są znakami
+    towarowymi lub zarejestrowanymi znakami towarowymi firmy NCSOFT Corporation.
   unofficial_site: >-
-    This unofficial site includes art and other assets that are © 2015
-    ArenaNet, Inc. All rights reserved. All other trademarks are the property
-    of their respective owners. This site uses also images and data from <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+    Ta nieoficjalna strona zawiera sztukę i inne elementy, które są własnością ©
+    2015 ArenaNet, Inc. Wszelkie prawa zastrzeżone. Wszystkie pozostałe znaki
+    towarowe są własnością ich właścicieli. Ta strona wykorzystuje również
+    obrazy i dane z <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
 nav:
   account: Konto
   achievements: Osiągnięcia
   characters: Postacie
-  daily: Zadania
+  daily: Codzienne
   events: Wydarzenia
-  guilds: Guildie
+  guilds: Gildie
   home: Start
   items: Przedmioty
   materials: Materiały
 no_audio: >-
-  You've got notifications set up but your browser prevents audio without user
-  interaction. Please close this message to enable sound.
-paste_your_api_key_here: Paste your API key here
-token_ok: Successfully loaded key "{tokenInfo.name}".
-waypoint_to_top: waypoint to top
-your_api_key: "Your API key:"
+  Masz skonfigurowane powiadomienia, ale przeglądarka zapobiega automatycznemu
+  odtwarzaniu dźwięku bez interakcji użytkownika. Proszę zamknąć tę wiadomość,
+  aby włączyć dźwięk.
+paste_your_api_key_here: Wklej tutaj swój klucz API
+token_ok: Udane wczytanie klucza "{token}".
+waypoint_to_top: Teleport do góry
+your_api_key: 'Twój klucz API:'

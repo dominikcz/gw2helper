@@ -155,14 +155,14 @@
 		daily,
 		weekly,
 	])}
-	<WidgetsGroup name="Achievements' completed">
+	<WidgetsGroup name={$_('achievements.achievements_completed')}>
 		<WidgetInfo title="{ $_('achievements.achieves_completed') }" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
 		<WidgetInfo title="{ $_('achievements.daily_points') }" value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
 		<WidgetInfo title="{ $_('achievements.monthly_points') }" value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
 		<WidgetInfo title="{ $_('achievements.points_from_achieves') }" value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
 		<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
 	</WidgetsGroup>
-	<WidgetsGroup name="Achievements' to do">
+	<WidgetsGroup name={$_('achievements.achievements_todo')}>
 		<WidgetInfo title="{ $_('achievements.achieves_to_do') }" value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
 		<WidgetInfo title="{ $_('achievements.points_to_get') }" value={sum(result.categories, 'points_to_get')} image="{base}/assets/rewards/AP.png" />
 		<WidgetInfo title="{ $_('achievements.titles_to_get') }" value={result.rewards_to_get.get('title')} image="{base}/assets/rewards/Talk_collection_option.png" />
@@ -184,7 +184,7 @@
 					<legend>{$_('common.settings')}</legend>
 
 					<label><input type="checkbox" bind:checked={notCompleted} /> { $_('achievements.not_completed') }</label>
-					<label><input type="checkbox" bind:checked={withPoints} /> { $_('achievements.points_to_get') }</label>
+					<label><input type="checkbox" bind:checked={withPoints} /> { $_('achievements.giving_points') }</label>
 					<label><input type="checkbox" bind:checked={withMasteryCentral} /> { $_('achievements.central_tyria_mastery') }</label>
 					<label><input type="checkbox" bind:checked={withMasteryHoT} /> { $_('achievements.hot_mastery') }</label>
 					<label><input type="checkbox" bind:checked={withMasteryPoF} /> { $_('achievements.pof_mastery') }</label>
@@ -192,9 +192,9 @@
 					<label><input type="checkbox" bind:checked={withMasteryEoD} /> { $_('achievements.eod_mastery') }</label>
 					<label><input type="checkbox" bind:checked={withMasterySofO} /> { $_('achievements.sofo_mastery') }</label>
 					<label><input type="checkbox" bind:checked={withMasteryJW} /> { $_('achievements.janthir_wilds_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withTitles} /> { $_('achievements.titles_to_get') }</label>
-					<label><input type="checkbox" bind:checked={withItems} /> { $_('achievements.items_to_get') }</label>
-					<label><input type="checkbox" bind:checked={withCoins} /> { $_('achievements.coins_to_get') }</label>
+					<label><input type="checkbox" bind:checked={withTitles} /> { $_('achievements.giving_titles') }</label>
+					<label><input type="checkbox" bind:checked={withItems} /> { $_('achievements.giving_items') }</label>
+					<label><input type="checkbox" bind:checked={withCoins} /> { $_('achievements.giving_gold') }</label>
 					<label><input type="checkbox" bind:checked={daily} /> { $_('achievements.daily') }</label>
 					<label><input type="checkbox" bind:checked={weekly} /> { $_('achievements.weekly') }</label>
 
@@ -211,7 +211,7 @@
 					<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')} />
 				</section>
 
-				<span>{ $_('achievements.showing_out_of', { values: {} }) }</span>
+				<span>{ $_('achievements.showing_out_of', { values: { shown: _result.categories.length, total: result.categories.length} }) }</span>
 				<div class="achiev-container">
 					{#each sort(_result.categories, sortBy) as category (category.id)}
 						<AchievGroup {category} {showApiLinks} {sortBy} on:toggle-todo={hndToggleTodo} />

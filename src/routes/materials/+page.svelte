@@ -3,12 +3,14 @@
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
+	import { _ } from 'svelte-i18n';
+
 	let filter = '';
 </script>
 
-<h1>Materials</h1>
+<h1>{$_('materials.materials')}</h1>
 
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder="too much data?">
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')}>
 	<SearchHelp />
 </SearchInput>
 

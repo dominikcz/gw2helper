@@ -1,16 +1,17 @@
-accessible_content: Accessible content
-account_info: Account info
-average_time_per_day: Average time per day
-base_game: Base game
-created_at: 'Created at:'
-days: Days
+accessible_content: Dostępna zawartość
+account_info: Informacje o koncie
+average_time_per_day: Czas średnio dziennie
+base_game: Podstawowa gra
+created_at: 'Data utworzenia:'
+days: Dni grania
 end_of_dragons: End Of Dragons
-fractals: Fractals
+fractals: Fraktale
 heart_of_thorns: Heart Of Thorns
-hours_played: Hours played
+hours_played: Godzin grania
 janthir_wilds: Janthir Wilds
-last_change: 'Last change:'
+last_change: 'Ostatnia zmiana:'
+levels: Poziomy
 path_of_fire: Path Of Fire
-play_for_free: Play for free
+play_for_free: Konto darmowe
 secrets_of_the_obscure: Secrets of the Obscure
-levels: Levels
+time_spent: Spędzony czas

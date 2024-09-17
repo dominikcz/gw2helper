@@ -1,31 +1,34 @@
-achievements: Achievements
-achieves_completed: Achieves completed
-achieves_to_do: Achieves to do
-central_tyria_mastery: Central Tyria mastery
-coins_to_get: Coins to get
-daily: Daily
-daily_points: Daily points
-empty_list: You have not added anything to the list yet. Add items by clicking <> icon on list of achievements.
-eod_mastery: EoD mastery
-gold_to_get: Gold to get
-hot_mastery: HoT mastery
-icebrood_saga_mastery: Icebrood Saga mastery
-items_to_get: Items to get
-janthir_wilds_mastery: Janthir Wilds mastery
-list: List
-monthly_points: Monthly points
-not_completed: Not completed
-pof_mastery: PoF mastery
-points_from_achieves: Points from achieves
-points_to_get: Points to get
-showing_out_of: >-
-  showing {_result.categories.length} categories out of
-  {result.categories.length}
-sofo_mastery: SofO mastery
-sort_by_in_game_order: sort by in-game order
-sort_by_name: sort by name
-sort_by_points: sort by points
-titles_to_get: Titles to get
-to_dos: To dos
-weekly: Weekly
-your_list: Your list
+achievements: Osiągnięcia
+achievements_completed: Ukończone osiągnięcia
+achievements_todo: Osiągnięcia do zrobienia
+achieves_completed: Osiągnięcia
+achieves_to_do: Osiągnięcia
+central_tyria_mastery: Zdolności Central Tyria
+daily: Codzienne
+daily_points: Codzienne punkty
+empty_list: Nie dodałeś niczego do listy. W celu dodania do listy kliknij ikonkę <> na któymś z dostępnych osiagnięć
+eod_mastery: Zdolności EoD
+giving_gold: Dające złoto
+giving_items: Dające przedmioty
+giving_points: Dające punkty
+giving_titles: Dające tytuły
+gold_to_get: Złoto do zdobycia
+hot_mastery: Zdolności HoT
+icebrood_saga_mastery: Zdolności Icebrood Saga
+items_to_get: Przedmioty do zdobycia
+janthir_wilds_mastery: Zdolności Janthir Wilds
+list: Lista
+monthly_points: Punkty z miesięcznych
+not_completed: Nie zakończone
+pof_mastery: Zdolności PoF
+points_from_achieves: Punkty z osiągnięć
+points_to_get: Punkty do zdobycia
+showing_out_of: wyświetlono {shown} z {total} kategorii   
+sofo_mastery: Zdolności SofO
+sort_by_in_game_order: sortuj po kolejności z gry
+sort_by_name: sortuj po nazwie
+sort_by_points: sortuj po punktach
+titles_to_get: Tytuły do zdobycia
+to_dos: Do zrobienia
+weekly: Tygodniowe
+your_list: Twoja lista

@@ -1,11 +1,12 @@
 <script>
 	import GuildEmblem from '$lib/components/guildEmblem.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data;
 </script>
 
-<h1>Guilds</h1>
+<h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} let:result>
 	{#each result as guild (guild.id)}
 		<section class="guild-info">
@@ -17,12 +18,12 @@
 				</div>
 			</div>
 			<div class="details">
-				<span>level: <span class="big">{guild.level}</span></span>
-				<span>members: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
-				<span>aetherium: <span class="big">{guild.aetherium}</span></span>
-				<span>favor: <span class="big">{guild.favor}</span></span>
-				<span>influence: <span class="big">{guild.influence}</span></span>
-				<span>resonance: <span class="big">{guild.resonance}</span></span>
+				<span>{$_('guilds.level')}: <span class="big">{guild.level}</span></span>
+				<span>{$_('guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
+				<span>{$_('guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
+				<span>{$_('guilds.favor')}: <span class="big">{guild.favor}</span></span>
+				<!-- <span>{$_('guilds.influence')}: <span class="big">{guild.influence}</span></span> -->
+				<!-- <span>{$_('guilds.resonance')}: <span class="big">{guild.resonance}</span></span> -->
 			</div>
 		</section>
 	{/each}

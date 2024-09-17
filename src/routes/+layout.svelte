@@ -250,7 +250,7 @@
 						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok')}</em></p>
+						<p><em>{$_('layout.token_ok', { values: {token: tokenInfo.name}})}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>

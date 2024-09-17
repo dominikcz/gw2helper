@@ -1,15 +1,22 @@
 import { browser } from '$app/environment';
-import { init, addMessages, register } from 'svelte-i18n'
+import { init, addMessages } from 'svelte-i18n'
 import { lang } from '$lib/stores/lang';
 import { base } from '$app/paths';
 
 let langValue;
+let namespacesCache = [];
 const namespaces = ['layout', 'common'];
 
-lang.subscribe((value) => {
-	langValue = value;
-	loadLocale();
-});
+export const initi18n = () => {
+	if (browser) {
+		lang.subscribe(async (value) => {
+			langValue = value;
+			namespacesCache = [];
+			console.log('switching lang', langValue);
+			loadLocale();
+		});
+	}
+}
 
 async function loadLocale() {
 	if (browser) {
@@ -30,9 +37,9 @@ async function loadLocale() {
 	}
 }
 
-function getKeyFromPath(path){
+function getKeyFromPath(path) {
 	let key = path.replace(base, '');
-	if (key.startsWith('/')){
+	if (key.startsWith('/')) {
 		key = key.slice(1);
 	}
 	if (key.endsWith('/')) {
@@ -46,11 +53,15 @@ function getKeyFromPath(path){
 
 export async function loadLocaleForPath(path) {
 	const key = getKeyFromPath(path);
-	const localePath = `./../locales/${langValue}/${key}.yaml`;
-	console.log('loading locales', localePath);
-	return import(/* @vite-ignore */ localePath).then(data => {
-		const obj = {};
-		obj[key] = data.default;
-		addMessages(langValue, obj);
-	});
+
+	if (!namespacesCache.includes(key)) {
+		const localePath = `./../locales/${langValue}/${key}.yaml`;
+		console.log('loading locales', localePath);
+		return import(/* @vite-ignore */ localePath).then(data => {
+			const obj = {};
+			obj[key] = data.default;
+			addMessages(langValue, obj);
+			namespacesCache.push(key);
+		});
+	}
 }

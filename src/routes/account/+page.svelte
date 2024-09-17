@@ -23,7 +23,7 @@
 		<li>{$_('account.last_change')} <span>{result.last_modified_local}</span></li>
 	</ul>
 
-	<WidgetsGroup name="Time spent">
+	<WidgetsGroup name={$_('account.time_spent')}>
 		<WidgetInfo title={$_('account.hours_played')} value={`${helperUtils.hoursPlayed(result.age)}h`} />
 		<WidgetInfo title={$_('account.days')} value={`${helperUtils.diff(result.created)}d`} />
 		<WidgetInfo

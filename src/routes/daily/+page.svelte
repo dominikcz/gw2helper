@@ -109,7 +109,7 @@
 </Awaiter>
 
 <h2>{ $_('daily.achievements') }</h2>
-<img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_constrution') }" width="150px" alt="under construction" />
+<img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_construction') }" width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}

@@ -1,5 +1,18 @@
 import ls from "$lib/wxjs_idb";
-import { KEY_NAME, KEY_HIST, EVENT_TIMER_SETTINGS, ACHIEVES_SETTINGS, ACHIEVES_TODO, WALLET_SETTINGS, WATCHED_EVENTS, REMINDERS, REMINDERS_SETTINGS, WALLET_ORDER, API_LANG } from "$lib/consts";
+import { 
+    KEY_NAME, 
+    KEY_HIST, 
+    EVENT_TIMER_SETTINGS, 
+    ACHIEVES_SETTINGS, 
+    ACHIEVES_TODO, 
+    WALLET_SETTINGS, 
+    WATCHED_EVENTS, 
+    REMINDERS, 
+    REMINDERS_SETTINGS, 
+    WALLET_ORDER, 
+    API_LANG, 
+    LANG 
+} from "$lib/consts";
 
 async function readApiKey() {
     let key = '';
@@ -35,6 +48,14 @@ async function readApiLang() {
 
 async function saveApiLang(value) {
     return await ls.set(API_LANG, value);
+}
+
+async function readLang() {
+    return await ls.get(LANG, 'en');
+}
+
+async function saveLang(value) {
+    return await ls.set(LANG, value);
 }
 
 async function readEventTimerSettings() {
@@ -127,6 +148,8 @@ export function runsDesktop() {
 export default {
     readApiKey,
     saveApiKey,
+    readLang,
+    saveLang,
     readApiLang,
     saveApiLang,
     deleteApiKey,

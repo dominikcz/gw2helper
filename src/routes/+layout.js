@@ -4,12 +4,13 @@ export const trailingSlash = 'always';
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
-import '$lib/services/i18n';
+import { initi18n } from '$lib/services/i18n';
 import { locale } from 'svelte-i18n'
+import { lang } from "$lib/stores/lang.js";
 
 console.log(__NAME__, __VERSION__);
 
-export async function load( { fetch } ) {
+export async function load({ fetch }) {
 	// const apiService = await import("$lib/apiService.ts");
 	const dummyTokenInfo = {
 		name: null,
@@ -31,8 +32,10 @@ export async function load( { fetch } ) {
 	};
 
 	console.log('key', key);
-	if (key){
-		await apiService.init(key, {apiLang, fetchFunction: fetch });
+	if (key) {
+		await apiService.init(key, { apiLang, fetchFunction: fetch });
+		await lang.init();
+		initi18n();
 		try {
 			tokenInfo = await apiService.tokenInfo();
 			// console.log('tokenInfo', tokenInfo);
@@ -41,7 +44,7 @@ export async function load( { fetch } ) {
 					returnObj.tokenInfo.error = tokenInfo;
 					returnObj.reminders = {};
 					returnObj.remindersSettings = {};
-					}
+				}
 			} else {
 				returnObj.tokenInfo = tokenInfo;
 				returnObj.reminders = await utils.readReminders();
@@ -50,7 +53,7 @@ export async function load( { fetch } ) {
 		} catch (error) {
 			console.log('Layout load error', error)
 		}
-	} 
+	}
 	locale.set('en');
 	return returnObj;
 }

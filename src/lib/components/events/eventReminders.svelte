@@ -8,6 +8,7 @@
 	import clock from '$lib/stores/clock';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
+	import { _ } from 'svelte-i18n';
 
 	export let events;
 	export let showChatLinks = false;
@@ -112,23 +113,17 @@
 	}
 </script>
 
-<h2>Watched:</h2>
+<h2>{$_('events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	You have not added anything to the list yet. Add items by clicking
-	<img src="{base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />
-	icon on any of the events below.
+	{@html $_('events.watched.empty_list', { values: { img_url: `${base}/assets/rewards/map_heart_empty.png` } })}
 </EventsList>
 
 <fieldset class="settings">
-	<legend>Reminder settings</legend>
+	<legend>{$_('events.watched.reminder_settings')}</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	{#if inAdvance}
-		<p>Notify me {inAdvance} minutes before the event</p>
-	{:else}
-		<p>Notify me when the event starts</p>
-	{/if}
+	<p>{$_('events.watched.notify_me', {values: {inAdvance}})}</p>
 	<div class="group">
-		<h4>Alarm sound</h4>
+		<h4>{$_('events.watched.alarm_sound')}</h4>
 		{#each ['trumpet', 'squeeze', 'notif3', 'notif9'] as name}
 			<label>
 				<input type="radio" name="sounds" value={name} bind:group={sound} />
@@ -136,13 +131,13 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => testAlarm()}>test alarm ({sound})</button>
+	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { values: { sound } })}</button>
 	<button on:click={saveNotifySettings}>save</button>
 </fieldset>
 
-<h2>Available:</h2>
+<h2>{$_('events.available')}</h2>
 <section>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder="list too long?" />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.list_too_long')} />
 </section>
 
 {#each Object.keys(events) as cat}

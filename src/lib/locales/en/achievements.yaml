@@ -1,12 +1,17 @@
 achievements: Achievements
-achieves_completed: Achieves completed
-achieves_to_do: Achieves to do
+achievements_completed: Completed achievements
+achievements_todo: Achievements to do
+achieves_completed: Number of achievements
+achieves_to_do: Left to do
 central_tyria_mastery: Central Tyria mastery
-coins_to_get: Coins to get
 daily: Daily
 daily_points: Daily points
 empty_list: You have not added anything to the list yet. Add items by clicking <> icon on list of achievements.
 eod_mastery: EoD mastery
+giving_gold: Giving gold
+giving_items: Giving items
+giving_points: Giving points
+giving_titles: Giving titles
 gold_to_get: Gold to get
 hot_mastery: HoT mastery
 icebrood_saga_mastery: Icebrood Saga mastery
@@ -18,9 +23,7 @@ not_completed: Not completed
 pof_mastery: PoF mastery
 points_from_achieves: Points from achieves
 points_to_get: Points to get
-showing_out_of: >-
-  showing {_result.categories.length} categories out of
-  {result.categories.length}
+showing_out_of: showing {shown} categories out of {total}
 sofo_mastery: SofO mastery
 sort_by_in_game_order: sort by in-game order
 sort_by_name: sort by name

@@ -1,5 +1,8 @@
-characters: Characters
-hours_played: hours played
-next_birthday_in: next birthday in
-no_crafting_professions: no crafting professions
-years: '{helperUtils.age(char.created)} years'
+characters: Postacie
+days: dni
+died: zmarł
+hours_played: godziny gry
+next_birthday_in: Następne urodziny za
+no_crafting_professions: Brak profesji rzemieślniczych
+times: razy
+years: '{age} lata'

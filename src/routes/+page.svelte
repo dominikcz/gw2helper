@@ -68,7 +68,7 @@
 </Awaiter>
 
 <fieldset class="settings">
-	<legend>{$_('home.settings')}</legend>
+	<legend>{$_('common.settings')}</legend>
 
 	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
 	<button on:click={saveSettings}>{$_('common.save_settings')}</button>

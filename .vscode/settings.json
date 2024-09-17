@@ -12,8 +12,26 @@
     "i18n-ally.keystyle": "nested",
     "i18n-ally.extract.keygenStyle": "snake_case",
     "i18n-ally.sortKeys": true,
+    "i18n-ally.keepFulfilled": true,
     "i18n-ally.sourceLanguage": "en",
     "i18n-ally.namespace": true,
     "i18n-ally.pathMatcher": "{locale}/{namespace}.yaml",
-
+    "i18n-ally.translate.engines": [
+        "libretranslate"
+    ],
+    "i18n-ally.translate.libre.apiRoot": "http://localhost:5000",
+    "i18n-ally.extract.autoDetect": true,
+    "i18n-ally.extract.parsers.html": {
+        "attributes": ["text", "title", "alt", "placeholder", "label", "aria-label"],
+        "ignoredTags": ["script", "style"],
+        "vBind": true,
+        "inlineText": true
+    },
+    "i18n-ally.refactor.templates": [{
+        "source": "html-attribute",
+        "templates": [
+            "i18n.t('{key}'{args})",
+            "custom.t('{key}'{args})",
+        ],
+    }]
 }
