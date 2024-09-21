@@ -11,13 +11,17 @@ import { lang } from "$lib/stores/lang.js";
 console.log(__NAME__, __VERSION__);
 
 export async function load({ fetch }) {
+	console.log('load')
+	await lang.init();
+	initi18n();
+
+	const key = await utils.readApiKey();
 	// const apiService = await import("$lib/apiService.ts");
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
-		error: 'invalid token key',
+		error: 'invalid API key',
 	};
-	const key = await utils.readApiKey();
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
 	let tokenInfo = dummyTokenInfo;
@@ -34,8 +38,6 @@ export async function load({ fetch }) {
 	console.log('key', key);
 	if (key) {
 		await apiService.init(key, { apiLang, fetchFunction: fetch });
-		await lang.init();
-		initi18n();
 		try {
 			tokenInfo = await apiService.tokenInfo();
 			// console.log('tokenInfo', tokenInfo);

@@ -22,8 +22,6 @@
 				<span>{$_('guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
 				<span>{$_('guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
 				<span>{$_('guilds.favor')}: <span class="big">{guild.favor}</span></span>
-				<!-- <span>{$_('guilds.influence')}: <span class="big">{guild.influence}</span></span> -->
-				<!-- <span>{$_('guilds.resonance')}: <span class="big">{guild.resonance}</span></span> -->
 			</div>
 		</section>
 	{/each}

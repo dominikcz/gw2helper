@@ -1,0 +1,29 @@
+{
+  "api_key_required": "Aby korzystać z tej strony musisz podać klucz API dla swojego konta. Klucze API mogą być tworzone lub usuwane w <a href=\"https://account.arena.net/applications\">https://account.arena.net/applications.</a>",
+  "api_language": "Język API",
+  "api_settings": "Ustawienia API",
+  "apply": "Zastosuj",
+  "clear_cache": "Wyczyść pamięć podręczną i przeładuj",
+  "forget_stored_key": "Zapomnij zapisany klucz",
+  "invalid_token": "Token \"{token}\" jest nieprawidłowy",
+  "legal": {
+    "copyright": "© ArenaNet LLC. Wszelkie prawa zastrzeżone. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire, Guild Wars 2: End of Dragons, and Guild Wars 2: Secrets of the Obscure i wszystkie powiązane loga, projekty i znaki kompozytowe są znakami towarowymi lub zarejestrowanymi znakami towarowymi firmy NCSOFT Corporation.\n",
+    "unofficial_site": "Ta nieoficjalna strona zawiera sztukę i inne elementy, które są własnością © 2015 ArenaNet, Inc. Wszelkie prawa zastrzeżone. Wszystkie pozostałe znaki towarowe są własnością ich właścicieli. Ta strona wykorzystuje również obrazy i dane z <a href=\"https://wiki.guildwars2.com/\">Guild Wars 2 Wiki</a>"
+  },
+  "nav": {
+    "account": "Konto",
+    "achievements": "Osiągnięcia",
+    "characters": "Postacie",
+    "daily": "Codzienne",
+    "events": "Wydarzenia",
+    "guilds": "Gildie",
+    "home": "Start",
+    "items": "Przedmioty",
+    "materials": "Materiały"
+  },
+  "no_audio": "Masz skonfigurowane powiadomienia, ale przeglądarka zapobiega automatycznemu odtwarzaniu dźwięku bez interakcji użytkownika. Proszę zamknąć tę wiadomość, aby włączyć dźwięk.",
+  "paste_your_api_key_here": "Wklej tutaj swój klucz API",
+  "token_ok": "Udane wczytanie klucza \"{token}\".",
+  "waypoint_to_top": "Teleport do góry",
+  "your_api_key": "Twój klucz API:"
+}

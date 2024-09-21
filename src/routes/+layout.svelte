@@ -234,7 +234,7 @@
 						name="api-key"
 						id="api-key"
 						class="apikey"
-						placeholder="$_('layout.paste_your_api_key_here')"
+						placeholder={$_('layout.paste_your_api_key_here')}
 						bind:value={apiKey}
 						options={data.apiKeyHist}
 					/>

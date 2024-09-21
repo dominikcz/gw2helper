@@ -55,7 +55,7 @@ export async function loadLocaleForPath(path) {
 	const key = getKeyFromPath(path);
 
 	if (!namespacesCache.includes(key)) {
-		const localePath = `./../locales/${langValue}/${key}.yaml`;
+		const localePath = `./../locales/${langValue}/${key}.json`;
 		console.log('loading locales', localePath);
 		return import(/* @vite-ignore */ localePath).then(data => {
 			const obj = {};

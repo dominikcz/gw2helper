@@ -28,7 +28,6 @@
         "inlineText": true
     },
     "i18n-ally.refactor.templates": [{
-        "source": "html-attribute",
         "templates": [
             "i18n.t('{key}'{args})",
             "custom.t('{key}'{args})",
