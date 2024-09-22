@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { init, addMessages } from 'svelte-i18n'
 import { lang } from '$lib/stores/lang';
 import { base } from '$app/paths';
+import { invalidateAll } from '$app/navigation';
 
 let langValue;
 let namespacesCache = [];
@@ -17,7 +18,8 @@ export const initi18n = async (defaultLang) => {
 				langValue = value;
 				namespacesCache = [];
 				console.log('switching lang', langValue);
-				loadLocale();	
+				invalidateAll();
+				// loadLocale();	
 			}
 		});
 	}
