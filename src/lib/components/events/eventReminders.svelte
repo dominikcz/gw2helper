@@ -8,11 +8,12 @@
 	import clock from '$lib/stores/clock';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/localizer.js';
 
 	export let events;
 	export let showChatLinks = false;
 	export let updateInterval = 60;
+	export let langCode = 'en';
 
 	export let inAdvance = 5;
 	export let sound = 'trumpet';
@@ -113,17 +114,17 @@
 	}
 </script>
 
-<h2>{$_('events.watched.watched')}</h2>
+<h2>{_(langCode, 'events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	{@html $_('events.watched.empty_list', { values: { img_url: `${base}/assets/rewards/map_heart_empty.png` } })}
+	{@html _(langCode, 'events.watched.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` } )}
 </EventsList>
 
 <fieldset class="settings">
-	<legend>{$_('events.watched.reminder_settings')}</legend>
+	<legend>{_(langCode, 'events.watched.reminder_settings')}</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	<p>{$_('events.watched.notify_me', {values: {inAdvance}})}</p>
+	<p>{_(langCode, 'events.watched.notify_me', {inAdvance})}</p>
 	<div class="group">
-		<h4>{$_('events.watched.alarm_sound')}</h4>
+		<h4>{_(langCode, 'events.watched.alarm_sound')}</h4>
 		{#each ['trumpet', 'squeeze', 'notif3', 'notif9'] as name}
 			<label>
 				<input type="radio" name="sounds" value={name} bind:group={sound} />
@@ -131,13 +132,13 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { values: { sound } })}</button>
+	<button on:click={() => testAlarm()}>{_(langCode, 'events.watched.test_alarm', { sound } )}</button>
 	<button on:click={saveNotifySettings}>save</button>
 </fieldset>
 
-<h2>{$_('events.available')}</h2>
+<h2>{_(langCode, 'events.available')}</h2>
 <section>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.list_too_long')} />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={_(langCode, 'common.list_too_long')} />
 </section>
 
 {#each Object.keys(events) as cat}

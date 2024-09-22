@@ -7,7 +7,8 @@
 	import Tab from '$lib/components/tabs/tab.svelte';
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/localizer.js';
+	import { lang } from '$lib/stores/lang.js';
 
 	export let data;
 
@@ -43,28 +44,28 @@
 	}
 </script>
 
-<h1>{ $_('events.events') }</h1>
+<h1>{ _($lang, 'events.events') }</h1>
 <Tabs>
 	<div class="tab-list">
-		<Tab>{ $_('events.event_timers') }</Tab>
-		<Tab>{ $_('events.reminders') }</Tab>
+		<Tab>{ _($lang, 'events.event_timers') }</Tab>
+		<Tab>{ _($lang, 'events.reminders') }</Tab>
 	</div>
 
 	<TabPanel>
 		<EventTimers updateInterval={15} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
 		<fieldset class="settings">
-			<legend>{ $_('common.settings') }</legend>
+			<legend>{ _($lang, 'common.settings') }</legend>
 
-			<label><input type="checkbox" id="chat-links" bind:checked={showChatLinks} /> { $_('events.show_chat_links') }</label>
-			<label><input type="checkbox" id="event-times" bind:checked={showEventTimes} /> { $_('events.show_event_times') }</label>
-			<label><input type="checkbox" id="categories" bind:checked={showCategories} /> { $_('events.show_categories') }</label>
-			<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> { $_('events.show_headings') }</label>
-			<label><input type="checkbox" id="auto-scroll" bind:checked={autoScroll} /> { $_('events.auto_scroll') }</label>
-			<button on:click={saveSettings}>{ $_('common.save_settings') }</button>
+			<label><input type="checkbox" id="chat-links" bind:checked={showChatLinks} /> { _($lang, 'events.show_chat_links') }</label>
+			<label><input type="checkbox" id="event-times" bind:checked={showEventTimes} /> { _($lang, 'events.show_event_times') }</label>
+			<label><input type="checkbox" id="categories" bind:checked={showCategories} /> { _($lang, 'events.show_categories') }</label>
+			<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> { _($lang, 'events.show_headings') }</label>
+			<label><input type="checkbox" id="auto-scroll" bind:checked={autoScroll} /> { _($lang, 'events.auto_scroll') }</label>
+			<button on:click={saveSettings}>{ _($lang, 'common.save_settings') }</button>
 		</fieldset>
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={data.remindersSettings.inAdvance} bind:sound={data.remindersSettings.sound} />
+		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={data.remindersSettings.inAdvance} bind:sound={data.remindersSettings.sound} langCode={$lang}/>
 	</TabPanel>
 </Tabs>

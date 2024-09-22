@@ -6,7 +6,8 @@
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/localizer.js';
+	import { lang } from '$lib/stores/lang.js';
 
 	export let data;
 
@@ -88,39 +89,39 @@
 	}
 </script>
 
-<h1>{ $_('daily.daily_and_weekly') }</h1>
+<h1>{ _($lang, 'daily.daily_and_weekly') }</h1>
 
-<h2>{ $_('daily.wizards_vault') }</h2>
+<h2>{ _($lang, 'daily.wizards_vault') }</h2>
 
 <Awaiter promise={data.wallet} let:result>
-	<WidgetInfo title="{ $_('daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+	<WidgetInfo title="{ _($lang, 'daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 </Awaiter>
 
 <Awaiter promise={data.daily} let:result>
-	<WizardsVaultCategory title="{ $_('daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
+	<WizardsVaultCategory title="{ _($lang, 'daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
 </Awaiter>
 
 <Awaiter promise={data.weekly} let:result>
-	<WizardsVaultCategory title="{ $_('daily.weekly') }" data={result} targetTime={getTimerTarget(Period.weekly)} />
+	<WizardsVaultCategory title="{ _($lang, 'daily.weekly') }" data={result} targetTime={getTimerTarget(Period.weekly)} />
 </Awaiter>
 
 <Awaiter promise={data.special} let:result>
-	<WizardsVaultCategory title="{ $_('daily.special') }" data={result} targetTime={getTimerTarget(Period.special)} />
+	<WizardsVaultCategory title="{ _($lang, 'daily.special') }" data={result} targetTime={getTimerTarget(Period.special)} />
 </Awaiter>
 
-<h2>{ $_('daily.achievements') }</h2>
-<img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_construction') }" width="150px" alt="under construction" />
+<h2>{ _($lang, 'daily.achievements') }</h2>
+<img src="/gw2helper/assets/150px-construction.png" title="{ _($lang, 'common.under_construction') }" width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}
 	{@const weeklies = extractWeekly(result)}
-	<h4>{ $_('daily.daily') }</h4>
+	<h4>{ _($lang, 'daily.daily') }</h4>
 	<div class="achiev-container">
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
 		{/each}
 	</div>
-	<h4>{ $_('daily.weekly') }</h4>
+	<h4>{ _($lang, 'daily.weekly') }</h4>
 	<div class="achiev-container">
 		{#each sort(weeklies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>

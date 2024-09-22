@@ -1,12 +1,13 @@
 <script>
 	import GuildEmblem from '$lib/components/guildEmblem.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/localizer.js';
+	import { lang } from '$lib/stores/lang.js';
 
 	export let data;
 </script>
 
-<h1>{ $_('guilds.guilds') }</h1>
+<h1>{ _($lang, 'guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} let:result>
 	{#each result as guild (guild.id)}
 		<section class="guild-info">
@@ -18,10 +19,10 @@
 				</div>
 			</div>
 			<div class="details">
-				<span>{$_('guilds.level')}: <span class="big">{guild.level}</span></span>
-				<span>{$_('guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
-				<span>{$_('guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
-				<span>{$_('guilds.favor')}: <span class="big">{guild.favor}</span></span>
+				<span>{_($lang, 'guilds.level')}: <span class="big">{guild.level}</span></span>
+				<span>{_($lang, 'guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
+				<span>{_($lang, 'guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
+				<span>{_($lang, 'guilds.favor')}: <span class="big">{guild.favor}</span></span>
 			</div>
 		</section>
 	{/each}

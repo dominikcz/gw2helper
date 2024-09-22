@@ -1,12 +1,13 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
-import pkg from './package.json' assert { type: 'json' };
+import pkg from './package.json' with { type: 'json' };
+import ViteYaml from '@modyfi/vite-plugin-yaml';
 
 export default defineConfig({
 	build: {
 		target: 'esnext'
 	},
-	plugins: [sveltekit()],
+	plugins: [sveltekit(), ViteYaml()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},

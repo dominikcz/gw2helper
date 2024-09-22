@@ -4,11 +4,9 @@
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	import { _ } from 'svelte-i18n';
 	import languages from '$lib/locales/languages.json';
 	import { lang } from '$lib/stores/lang.js';
-	import { loadLocale } from '$lib/services/i18n.js';
-
+	
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import { remindersSettings } from '$lib/stores/reminders.js';
@@ -29,6 +27,8 @@
 	import clock from '$lib/stores/clock.js';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
+
+	import Llzr, {_} from '$lib/localizer';
 
 	export let data;
 
@@ -60,7 +60,7 @@
 
 	beforeNavigate(async ({ to }) => {
 		if (!to) return;
-		await loadLocale(to?.url.pathname);
+		await Llzr.loadLocale($lang, to?.url.pathname);
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
@@ -70,15 +70,15 @@
 	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - ');
 
 	$: navigation = [
-		{ slug: `${base}/`, label: $_('layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/events/`, label: $_('layout.nav.events'), visible: true },
-		{ slug: `${base}/items/`, label: $_('layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
+		{ slug: `${base}/`, label: _($lang, 'layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: _($lang, 'layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/events/`, label: _($lang, 'layout.nav.events'), visible: true },
+		{ slug: `${base}/items/`, label: _($lang, 'layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/materials/`, label: _($lang, 'layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
+		{ slug: `${base}/achievements/`, label: _($lang, 'layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
+		{ slug: `${base}/account/`, label: _($lang, 'layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/characters/`, label: _($lang, 'layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
+		{ slug: `${base}/guilds/`, label: _($lang, 'layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
 	];
 
 	$: currentPageVisible = devMode || navigation.find((x) => x.slug == active)?.visible || false;
@@ -92,7 +92,7 @@
 		let dummyAudio = new AudioContext();
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
 			noAudio = toast.push(
-				$_('layout.no_audio'),
+				_($lang, 'layout.no_audio'),
 				{
 					initial: 0,
 				}
@@ -111,7 +111,7 @@
 				await utils.saveApiLang(apiLang);
 				invalidateAll();
 			} else {
-				tokenInfo.error = $_('layout.invalid_token');
+				tokenInfo.error = _($lang, 'layout.invalid_token');
 			}
 		}
 	}
@@ -225,34 +225,34 @@
 
 		<section>
 			<details open={!tokenInfo.name}>
-				<summary>{$_('layout.api_settings')}</summary>
+				<summary>{_($lang, 'layout.api_settings')}</summary>
 				<fieldset class="api-settings">
-					<legend>{$_('layout.api_settings')}</legend>
+					<legend>{_($lang, 'layout.api_settings')}</legend>
 					<p>
-						{@html $_('layout.api_key_required')}
+						{@html _($lang, 'layout.api_key_required')}
 					</p>
-					<label for="api-key">{$_('layout.your_api_key')}</label>
+					<label for="api-key">{_($lang, 'layout.your_api_key')}</label>
 					<SearchInput
 						name="api-key"
 						id="api-key"
 						class="apikey"
-						placeholder={$_('layout.paste_your_api_key_here')}
+						placeholder={_($lang, 'layout.paste_your_api_key_here')}
 						bind:value={apiKey}
 						options={data.apiKeyHist}
 					/>
-					<label for="api-lang">{$_('layout.api_language')}</label>
+					<label for="api-lang">{_($lang, 'layout.api_language')}</label>
 					<select name="api-lang" id="api-lang" bind:value={apiLang}>
 						{#each Object.entries(apiLanguages) as [key, label]}
 							<option value={key}>{label}</option>
 						{/each}
 					</select>
 					<p>
-						<button on:click={() => saveApiSettings()}>{$_('layout.apply')}</button>
-						<button on:click={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
-						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
+						<button on:click={() => saveApiSettings()}>{_($lang, 'layout.apply')}</button>
+						<button on:click={() => deleteApiKey()}>{_($lang, 'layout.forget_stored_key')}</button>
+						<button on:click={refresh}>{_($lang, 'layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok', { values: {token: tokenInfo.name}})}</em></p>
+						<p><em>{_($lang, 'layout.token_ok', {token: tokenInfo.name})}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>
@@ -262,12 +262,12 @@
 		</section>
 
 		<BackToTop>
-			<div class="waypoint" title={$_('layout.waypoint_to_top')}></div>
+			<div class="waypoint" title={_($lang, 'layout.waypoint_to_top')}></div>
 		</BackToTop>
 	</div>
 	<footer>
-		<p>{@html $_('layout.legal.unofficial_site')}</p>
-		<p>{$_('layout.legal.copyright')}</p>
+		<p>{@html _($lang, 'layout.legal.unofficial_site')}</p>
+		<p>{_($lang, 'layout.legal.copyright')}</p>
 	</footer>
 </div>
 
