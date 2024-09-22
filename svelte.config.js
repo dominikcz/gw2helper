@@ -13,9 +13,12 @@ const config = {
 			fallback: 'index.html',
 			pages: "build"
 		}),
+		// prerender: {
+		// 	entries: ['*'],
+		// },
 		paths: {
 			base: '/gw2helper'
-		}
+		},
 	}
 };
 

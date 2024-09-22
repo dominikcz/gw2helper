@@ -3,6 +3,12 @@
 	import { base } from '$app/paths';
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+
+	import { _ } from 'svelte-i18n';
+	import languages from '$lib/locales/languages.json';
+	import { lang } from '$lib/stores/lang.js';
+	import { loadLocale } from '$lib/services/i18n.js';
+
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import { remindersSettings } from '$lib/stores/reminders.js';
@@ -22,11 +28,7 @@
 	import eventsUtils from '$lib/components/events/eventsUtils.js';
 	import clock from '$lib/stores/clock.js';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
-	import { _ } from 'svelte-i18n';
-	import languages from '$lib/locales/languages.json';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
-	import { lang } from '$lib/stores/lang.js';
-	import { loadLocaleForPath } from '$lib/services/i18n.ts';
 
 	export let data;
 
@@ -56,9 +58,9 @@
 		},
 	});
 
-	beforeNavigate(({ to }) => {
+	beforeNavigate(async ({ to }) => {
 		if (!to) return;
-		loadLocaleForPath(to?.url.pathname);
+		await loadLocale(to?.url.pathname);
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');

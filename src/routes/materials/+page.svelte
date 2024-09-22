@@ -14,4 +14,4 @@
 	<SearchHelp />
 </SearchInput>
 
-<ItemsList summary="Materials" items={data.materials} {filter} />
+<ItemsList summary={$_('materials.materials')} items={data.materials} {filter} />

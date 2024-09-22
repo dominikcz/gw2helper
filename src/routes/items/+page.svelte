@@ -33,8 +33,8 @@
 
 <h3>{ $_('items.common_items') }</h3>
 
-<ItemsList summary="Bank" items={data.bank} {filter} />
-<ItemsList summary="Shared inventory" items={data.shared} {filter} />
+<ItemsList summary={ $_('items.bank') } items={data.bank} {filter} />
+<ItemsList summary={ $_('items.shared_inventory') } items={data.shared} {filter} />
 
 <h3>{ $_('items.guild_items') }</h3>
 <Awaiter promise={data.guildItems} let:result>

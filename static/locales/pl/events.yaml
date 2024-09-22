@@ -1,0 +1,26 @@
+auto_scroll: Automatyczne przewijanie
+available: 'Dostępne:'
+current_time: Bieżący czas
+event_timers: Harmonogram wydarzeń
+events: Wydarzenia
+reminders: Przypomnienia
+show_categories: Pokaż kategorie
+show_chat_links: Pokaż linki do czatu
+show_event_times: Pokaż czasy zdarzeń
+show_headings: Pokaż nagłówki
+watched:
+  alarm_sound: Sygnał alarmu
+  empty_list: >-
+    Jeszcze nie masz niczego na liście. Możesz dodać wydarzenie klikając ikonkę
+    <img src="{img_url}" alt="not on list" class="icon-small" /> na którymś z
+    poniższych wydarzeń.
+  notify_me: >-
+    Powiadom mnie {inAdvance, plural,
+        =0 {gdy się zacznie}
+        one {minutę wcześniej}
+        few {{inAdvance} minuty wcześniej}
+        other {{inAdvance} minut wcześniej}
+    }
+  reminder_settings: Ustawienia powiadomień
+  test_alarm: sprawdź dźwięk alarmu ({sound})
+  watched: 'Obserwowane:'

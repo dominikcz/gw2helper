@@ -1,0 +1,20 @@
+{
+  "auto_scroll": "Auto scroll",
+  "available": "Available:",
+  "current_time": "Current time",
+  "event_timers": "Event timers",
+  "events": "Events",
+  "reminders": "Reminders",
+  "show_categories": "Show categories",
+  "show_chat_links": "Show chat links",
+  "show_event_times": "Show event times",
+  "show_headings": "Show headings",
+  "watched": {
+    "alarm_sound": "Alarm sound",
+    "empty_list": "You have not added anything to the list yet. Add items by clicking <img src=\"{img_url}\" alt=\"not on list\" class=\"icon-small\" /> icon on any of the events below.",
+    "notify_me": "Notify me {inAdvance, plural,\n    =0 {when the event starts}\n    one {one minute before the event}\n    other {{inAdvance} minutes before the event}\n}",
+    "reminder_settings": "Reminder settings",
+    "test_alarm": "test alarm ({sound})",
+    "watched": "Watched:"
+  }
+}
