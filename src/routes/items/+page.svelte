@@ -4,7 +4,6 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { _ } from '$lib/localizer.js';
-	import { lang } from '$lib/stores/lang.js';
 
 	export let data;
 
@@ -24,27 +23,27 @@
 	}
 </script>
 
-<h1>{ _($lang, 'items.items') }</h1>
+<h1>{ $_('items.items') }</h1>
 
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder="{ _($lang, 'common.too_much_data') }">
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder="{ $_('common.too_much_data') }">
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 		<button on:click={sortBySlots}>sort by quantity</button> -->
 	<SearchHelp />
 </SearchInput>
 
-<h3>{ _($lang, 'items.common_items') }</h3>
+<h3>{ $_('items.common_items') }</h3>
 
-<ItemsList summary={ _($lang, 'items.bank') } items={data.bank} {filter} />
-<ItemsList summary={ _($lang, 'items.shared_inventory') } items={data.shared} {filter} />
+<ItemsList summary={ $_('items.bank') } items={data.bank} {filter} />
+<ItemsList summary={ $_('items.shared_inventory') } items={data.shared} {filter} />
 
-<h3>{ _($lang, 'items.guild_items') }</h3>
+<h3>{ $_('items.guild_items') }</h3>
 <Awaiter promise={data.guildItems} let:result>
 	{#each result as guild}
 		<ItemsList summary={guild.name} items={guild.stash} {filter} />
 	{/each}
 </Awaiter>
 
-<h3>{ _($lang, 'items.characters_items') }</h3>
+<h3>{ $_('items.characters_items') }</h3>
 <Awaiter promise={data.characterItems} let:result>
 	{#each result as char}
 		<ItemsList summary={char.name} items={char._items} {filter} />

@@ -10,7 +10,8 @@
         flex-flow: row nowrap;
         border-bottom: 0.6em solid var(--gw2helper-module-white);
         column-gap: 2em;
-        overflow-x: scroll;
+        align-items: flex-start;
+        // overflow-x: clip;
         button{
             padding: 0.6em 3em;
             border: none;

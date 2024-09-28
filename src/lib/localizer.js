@@ -1,4 +1,6 @@
-import { writable } from 'svelte/store'
+import { writable, derived } from 'svelte/store'
+// import { lang } from '$lib/stores/lang';
+import utils from './utils';
 import deepmerge from 'deepmerge';
 import { IntlMessageFormat } from 'intl-messageformat';
 import wxjs_types from './wxjs_types';
@@ -21,19 +23,45 @@ class Localizer {
     #messages = new Map();
     #namespacesCache = [];
     #options = DEF_LOCALIZER_OPTIONS;
+    #lang = 'en';
+    lang$ = writable(this.#lang);
+    _$ = derived(this.lang$, $lang => (message, values = {}) => this._(this.lang, message, values));
 
     constructor() {
     }
 
-    init(options) {
+    async init(options) {
+        const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
         if (wxjs_types.isObject(options)) {
-            this.#options = deepmerge(this.#options, options);
+            this.#options = deepmerge(this.#options, options, { arrayMerge: overwriteMerge });
         }
-        this.loadLocale(this.#options.defaultLocale);
+        this.#lang = utils.readLang(this.#options.defaultLocale);
+        console.log('llzr.init', this.#options, this.#lang)
+
+        await this.loadLocale(this.#lang);
     }
 
-    changeLocale(lang) {
-        this.#options.defaultLocale = lang;
+    get lang() {
+        console.log('get lang', this.#lang)
+        return this.#lang;
+    }
+
+    set lang(value) {
+        if (this.#lang != value) {
+            this.#lang = value;
+            utils.saveLang(value);
+            console.log('switching lang', this.#lang);
+            if (this.lang$ !== undefined) {
+                this.lang$.set(this.#lang)
+            }
+            // this.loadLocale();	
+        }
+    }
+
+    async changeLocale(lang) {
+        console.log('changing locale', lang)
+        await this.loadLocale(lang);
+        this.lang = lang;
         this.#namespacesCache = [];
     }
 
@@ -68,13 +96,13 @@ class Localizer {
         return result
     }
 
-    registerDefaultNamespaces(namespaces) {
-        if (!namespaces) return;
-        if (!Array.isArray(namespaces)) {
-            throw new Error("`namespace` should be an array of strings");
-        }
-        this.#options.defaultNamespaces = namespaces;
-    }
+    // registerDefaultNamespaces(namespaces) {
+    //     if (!namespaces) return;
+    //     if (!Array.isArray(namespaces)) {
+    //         throw new Error("`namespace` should be an array of strings");
+    //     }
+    //     this.#options.defaultNamespaces = namespaces;
+    // }
 
     addMessages(locale, messages) {
         let old = this.#messages.get(locale) || {};
@@ -85,13 +113,13 @@ class Localizer {
     //     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     // }
 
-    getLocalePaths(path) {
+    getLocalePaths(locale, path) {
         const keys = [];
         const key = this.getKeyFromPath(path);
         const test = [...this.#options.defaultNamespaces, key];
 
         test.forEach((key) => {
-            if (!this.#namespacesCache.includes(key)) {
+            if (!this.#namespacesCache.includes(`${locale}-${key}`)) {
                 keys.push(key);
             }
         });
@@ -101,45 +129,53 @@ class Localizer {
     async loadLocale(locale, path = null) {
         if (browser) {
             path ??= window.location.pathname;
-            const keys = this.getLocalePaths(path);
+            const keys = this.getLocalePaths(locale, path);
             const tasks = [];
 
+            console.log('loadLocale', locale, keys)
             keys.forEach(key => {
                 if (key) {
                     // tasks.push(import(/* @vite-ignore */ key.path, { with: { type: "json" } }).then(data => {
                     const opt = this.#options;
-                    let loader = opt.loaders[key];
-                    let importPath                    ;
+                    if (opt.loaders[locale] == undefined) {
+                        opt.loaders[locale] = {}
+                    }
+                    let loader = opt.loaders[locale][key];
+                    let importPath = '';
                     if (!loader) {
                         importPath = `${opt.localePath}/${opt.pathMatcher}`
                             .replace('{locale}', locale)
                             .replace('{namespace}', key);
                         loader = () => import(/* @vite-ignore */ importPath);
+                        opt.loaders[locale][key] = loader;
                     }
-                    loader().then(data => {
+                    tasks.push(loader().then(data => {
                         const obj = {};
                         obj[key] = data;
                         this.addMessages(locale, obj);
                         this.#namespacesCache.push(key);
-                        console.log('loaded locale', key, locale, importPath)
-                    });
+                        console.log('loaded locale', key, locale, importPath, obj)
+                    }));
                 }
             });
 
             await Promise.all(tasks);
-            console.log('locale finished')
+            console.log('locale finished', tasks.length)
         }
     }
 
     _(locale, message, values = {}) {
+        const opt = this.#options;
         if (!locale) {
-            locale = this.#options.defaultLocale;
-            console.log('locale not provided, using default...')
+            locale = this.#lang;
+            console.log('locale not provided, using default...', locale)
         }
         let loc = this.#messages.get(locale);
         if (!loc) {
-            if (this.#options.fallbackLocale != locale) {
-                loc = this.#messages.get(this.#options.fallbackLocale);
+            console.log('messages not defined for', locale, message)
+            if (opt.fallbackLocale != locale) {
+                loc = this.#messages.get(opt.fallbackLocale);
+                console.log('using fallback locale', opt.fallbackLocale)
             }
             if (!loc) return message;
         }
@@ -155,12 +191,16 @@ class Localizer {
         return f.format(values);
     }
 
-
+    __(message, values) {
+        return this._(this.#lang, message, values);
+    }
 }
 
 const llzr = new Localizer();
 
-export function _(locale, message, values = {}){
+export const _ = llzr._$;
+
+export function __(locale, message, values = {}) {
     return llzr._(locale, message, values);
 }
 

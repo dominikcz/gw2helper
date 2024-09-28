@@ -6,17 +6,13 @@ import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
 import { initi18n } from '$lib/services/i18n.js';
-import { lang } from "$lib/stores/lang.js";
-import { get } from 'svelte/store';
 
-import {_} from '$lib/localizer';
+import llzr, {__} from '$lib/localizer';
 
 console.log(__NAME__, __VERSION__);
 
 export async function load({ fetch }) {
-	await lang.init();
-	const defLang = get(lang);
-	await initi18n(defLang);
+	await initi18n();
 	console.log('initialized')
 
 	const key = await utils.readApiKey();
@@ -24,7 +20,7 @@ export async function load({ fetch }) {
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
-		error: _(defLang, 'layout.no_token'),
+		error: __(llzr.lang, 'layout.no_token'),
 	};
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();

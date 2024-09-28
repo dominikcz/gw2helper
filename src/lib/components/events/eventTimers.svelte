@@ -8,7 +8,6 @@
 	import EventTimerItem from './eventTimerItem.svelte';
 	import EventTimerTime from './eventTimerTime.svelte';
 	import { _ } from '$lib/localizer.js';
-	import { lang } from '$lib/stores/lang.js';
 
 	export let showEventTimes = true;
 	export let showChatLinks = true;
@@ -64,7 +63,7 @@
 <div class="event-timer" bind:this={eventsRef}>
 	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
-			<div class="event-pointer" title={_($lang, 'events.current_time')} style="left: {currentTimePos}%; height: {pointerHeight}px">
+			<div class="event-pointer" title={$_('events.current_time')} style="left: {currentTimePos}%; height: {pointerHeight}px">
 				<span class="event-pointer-time" style="right: inherit;">{eventsUtils.getHour(currTime)}</span>
 			</div>
 		</div>
@@ -79,7 +78,7 @@
 			{#each eventsList as event}
 				{#if showHeadings}
 					{#if event.link}
-						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank" title={`${event.name} - ${_($lang, 'common.read_more_on_wiki')}`}>{event.name}</a>
+						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank" title={`${event.name} - ${$_('common.read_more_on_wiki')}`}>{event.name}</a>
 					{:else}
 						<span class="heading">{event.name}</span>
 					{/if}

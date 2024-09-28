@@ -5,12 +5,12 @@ function createStore() {
     const { subscribe, set } = writable('en');
     return {
         subscribe,
-        async init() {
-            const initialLang = await utils.readLang();
+        init() {
+            const initialLang = utils.readLang();
             set(initialLang);
         },
-        set: ( async (value) => {
-            await utils.saveLang(value);
+        set: ((value) => {
+            utils.saveLang(value);
             return set(value);
         })
     }

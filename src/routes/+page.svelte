@@ -11,7 +11,6 @@
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
 	import {_} from '$lib/localizer';
-	import { lang } from '$lib/stores/lang.js';
 
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -35,15 +34,15 @@
 	}
 </script>
 
-<h1>{_($lang, 'home.title')}</h1>
+<h1>{$_('home.title')}</h1>
 
 <Awaiter promise={data.delivery} let:result>
 	{#if result.coins || result.items.length}
 		<details open class="bltc">
-			<summary>{_($lang, 'home.delivery_box')}</summary>
+			<summary>{$_('home.delivery_box')}</summary>
 			<div class="delivery-box autotooltip" use:autotooltip>
 				{#if result.coins}
-					<WidgetInfo title={_($lang, 'home.coins_for_pickup')} value={result.coins} let:value id="bltc-coins">
+					<WidgetInfo title={$_('home.coins_for_pickup')} value={result.coins} let:value id="bltc-coins">
 						<Price {value} />
 					</WidgetInfo>
 				{/if}
@@ -55,10 +54,10 @@
 	{/if}
 </Awaiter>
 
-<h2>{_($lang, 'home.your_wallet')}</h2>
+<h2>{$_('home.your_wallet')}</h2>
 
 <section>
-	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={_($lang, 'common.too_much_data')} />
+	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')} />
 </section>
 
 <Awaiter promise={data.wallet} let:result>
@@ -69,10 +68,10 @@
 </Awaiter>
 
 <fieldset class="settings">
-	<legend>{_($lang, 'common.settings')}</legend>
+	<legend>{$_('common.settings')}</legend>
 
-	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> {_($lang, 'home.show_depreciated_currencies')}</label>
-	<button on:click={saveSettings}>{_($lang, 'common.save_settings')}</button>
+	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
+	<button on:click={saveSettings}>{$_('common.save_settings')}</button>
 </fieldset>
 
 <style lang="scss">
