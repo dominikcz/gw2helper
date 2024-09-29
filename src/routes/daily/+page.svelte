@@ -117,11 +117,11 @@
 	<h4>{ $_('daily.daily') }</h4>
 	<div class="achiev-container">
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
-			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
+			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} class="masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;"/>
 		{/each}
 	</div>
 	<h4>{ $_('daily.weekly') }</h4>
-	<div class="achiev-container">
+	<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 		{#each sort(weeklies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
 		{/each}

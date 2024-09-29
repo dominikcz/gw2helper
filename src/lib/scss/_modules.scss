@@ -1,6 +1,12 @@
 details {
     margin: 0 0 0.5em 0;
 
+    background-color: var(--gw2helper-module);
+
+    &.secondary{
+        background-color: inherit;
+    }
+
     display: flex;
 
     &[open] {
@@ -78,6 +84,35 @@ summary {
         box-shadow: var(--gw2helper-module-shadow-hover);
     }
 }
+
+%masked {
+    mask-image: url(/gw2helper/assets/footer_mask_inv.png), linear-gradient(180deg, rgba(0, 0, 0, 1) calc(100% - 42px), rgba(255, 255, 255, 0) 42px);
+    mask-position: left bottom;
+    mask-repeat: repeat-x;
+    padding-bottom: 3.25em !important;
+    margin-bottom: 1em !important;
+}
+
+.masked {
+    @extend %masked;
+}
+
+// details.masked{
+//     padding-bottom: 0 !important;
+//     margin-bottom: 0 !important;
+//     mask: none;
+//     &[open]{
+//         @extend %masked;
+//     }
+// }
+
+.achiev-container {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1em;
+    margin: 0 0 1em 0;
+}
+
 
 @media (min-width: 420px) {
     .widget {

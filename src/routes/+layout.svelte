@@ -224,7 +224,7 @@
 		{/if}
 
 		<section>
-			<details open={!tokenInfo.name}>
+			<details open={!tokenInfo.name} class="secondary">
 				<summary>{$_('layout.api_settings')}</summary>
 				<fieldset class="api-settings">
 					<legend>{$_('layout.api_settings')}</legend>

@@ -30,7 +30,7 @@
 	console.log(`${title}: ${targetTime.toISOString()}`);
 </script>
 
-<details>
+<details class="masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 	<summary
 		>{title}
 		<div class="info">

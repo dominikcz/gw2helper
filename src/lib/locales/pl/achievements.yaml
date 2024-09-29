@@ -6,7 +6,7 @@ achieves_to_do: Osiągnięcia
 central_tyria_mastery: Zdolności Central Tyria
 daily: Codzienne
 daily_points: Codzienne punkty
-empty_list: Nie dodałeś niczego do listy. W celu dodania do listy kliknij ikonkę <> na któymś z dostępnych osiagnięć
+empty_list: Nie dodałeś niczego do listy. W celu dodania do listy kliknij ikonkę <img src="{img_url}" alt="not on list" class="icon-small" /> na którymś z dostępnych osiagnięć
 eod_mastery: Zdolności EoD
 giving_gold: Dające złoto
 giving_items: Dające przedmioty

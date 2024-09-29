@@ -212,7 +212,7 @@
 				</section>
 
 				<span>{ $_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length} ) }</span>
-				<div class="achiev-container">
+				<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 					{#each sort(_result.categories, sortBy) as category (category.id)}
 						<AchievGroup {category} {showApiLinks} {sortBy} on:toggle-todo={hndToggleTodo} />
 					{/each}
@@ -222,11 +222,7 @@
 			<TabPanel>
 				<h2>{ $_('achievements.your_list') }</h2>
 				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={hndToggleTodo}>
-					{ $_('achievements.empty_list') } <img
-						src="{base}/assets/rewards/map_heart_empty.png"
-						alt="not on list"
-						class="icon-small"
-					/> 
+					{@html $_('achievements.empty_list', {img_url: `${base}/assets/rewards/map_heart_empty.png`}) } 
 				</AchievList>
 			</TabPanel>
 		</Tabs>
@@ -234,13 +230,6 @@
 </Awaiter>
 
 <style lang="scss">
-	.achiev-container {
-		display: flex;
-		flex-flow: column nowrap;
-		gap: 1em;
-		margin: 0 0 1em 0;
-	}
-
 	.tabs-container {
 		margin-top: 4em;
 	}

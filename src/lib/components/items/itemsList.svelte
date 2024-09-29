@@ -18,7 +18,7 @@
 
 </script>
 
-<details class="searchable" open>
+<details class="searchable masked" open style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 	<summary>{summary}</summary>
 	<article>
 		<Awaiter promise={items} let:result>
