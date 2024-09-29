@@ -1,17 +1,13 @@
 details {
     margin: 0 0 0.5em 0;
-
     background-color: var(--gw2helper-module);
-
-    &.secondary{
-        background-color: inherit;
-    }
-
     display: flex;
-
     &[open] {
         background-color: var(--gw2helper-module);
         padding-bottom: 1em;
+    }
+    &.secondary{
+        background-color: inherit;
     }
 
     p {
