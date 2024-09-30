@@ -42,9 +42,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltekit-i18n/parser-icu": "^1.0.8",
 		"howler": "^2.2.4",
 		"idb-keyval": "^6.2.1",
 		"mustache": "^4.2.0",
-		"svelte-i18n": "^4.0.0"
+		"sveltekit-i18n": "^2.4.2"
 	}
 }

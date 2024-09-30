@@ -4,10 +4,8 @@
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	import { _ } from 'svelte-i18n';
 	import languages from '$lib/locales/languages.json';
-	import { lang } from '$lib/stores/lang.js';
-	import { loadLocale } from '$lib/services/i18n.js';
+	import { t as _, locale } from '$lib/services/i18n.js';
 
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
@@ -56,11 +54,6 @@
 			notif3: [6834, 1160],
 			notif9: [8000, 2182],
 		},
-	});
-
-	beforeNavigate(async ({ to }) => {
-		if (!to) return;
-		await loadLocale(to?.url.pathname);
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
@@ -212,7 +205,7 @@
 			<img src="{base}/assets/heart.png" alt="logo" />
 			<div class="line">
 				<h1>GW2 Helper</h1>
-				<small>v{data.version} <LocaleSwitch {languages} bind:value={$lang} keysOnly={true} /></small>
+				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>
 			</div>
 		</header>
 		<Navigation items={navigation} {active} />
@@ -252,7 +245,7 @@
 						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok', { values: {token: tokenInfo.name}})}</em></p>
+						<p><em>{$_('layout.token_ok', {token: tokenInfo.name})}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>

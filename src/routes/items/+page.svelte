@@ -3,7 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 

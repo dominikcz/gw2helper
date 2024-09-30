@@ -3,7 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 	let filter = '';
@@ -59,7 +59,7 @@
 			<section>
 				<div class="sect-img" style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"></div>
 				<div class="sect-info">
-					<div class="counter">{$_('characters.years', { values: { age: helperUtils.age(char.created) } })}</div>
+					<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) } )}</div>
 					<div class="info">{$_('characters.next_birthday_in')}</div>
 					<div class="counter">{helperUtils.tillBirthday(char.created)} <span class="info">{$_('characters.days')}</span></div>
 				</div>

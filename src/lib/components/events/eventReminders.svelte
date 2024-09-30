@@ -8,7 +8,7 @@
 	import clock from '$lib/stores/clock';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let events;
 	export let showChatLinks = false;
@@ -115,7 +115,7 @@
 
 <h2>{$_('events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	{@html $_('events.watched.empty_list', { values: { img_url: `${base}/assets/rewards/map_heart_empty.png` } })}
+	{@html $_('events.watched.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` } )}
 </EventsList>
 
 <fieldset class="settings">
@@ -131,7 +131,7 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { values: { sound } })}</button>
+	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
 	<button on:click={saveNotifySettings}>save</button>
 </fieldset>
 

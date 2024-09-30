@@ -13,7 +13,7 @@
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 

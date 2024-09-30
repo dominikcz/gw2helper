@@ -5,19 +5,17 @@ export const trailingSlash = 'always';
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
-import { initi18n } from '$lib/services/i18n.js';
-import { locale } from 'svelte-i18n';
-import { lang } from "$lib/stores/lang.js";
-import { get } from 'svelte/store';
-import { _ } from "svelte-i18n";
+import { loadTranslations, locale, t as _ } from '$lib/services/i18n';
 
 console.log(__NAME__, __VERSION__);
 
-export async function load({ fetch }) {
-	locale.set('en');
-	await lang.init();
-	const defLang = get(lang);
-	await initi18n(defLang);
+export async function load({ fetch, url }) {
+	const { pathname } = url;
+
+	let defaultLocale = 'pl';
+	const initLocale = locale.get() || defaultLocale;
+
+	await loadTranslations(initLocale, pathname);
 	console.log('initialized')
 
 	const key = await utils.readApiKey();
@@ -25,7 +23,7 @@ export async function load({ fetch }) {
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
-		error: get(_)('layout.no_token'),
+		error: 'layout.no_token',
 	};
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
