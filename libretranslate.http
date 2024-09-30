@@ -6,3 +6,8 @@ Content-Type: application/json
     "source": "en",
     "target": "pl"
 }
+
+
+####
+
+http://dev.local/gw2helper/_app/immutable/chunks/locales/en/home.json

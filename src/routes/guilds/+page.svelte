@@ -9,7 +9,7 @@
 <h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} let:result>
 	{#each result as guild (guild.id)}
-		<section class="guild-info">
+		<section class="guild-info masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 			<div class="guild-header">
 				<GuildEmblem emblem={guild.emblem} background="#777" />
 				<div class="guild-h">

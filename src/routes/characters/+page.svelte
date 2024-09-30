@@ -36,7 +36,7 @@
 
 <Awaiter promise={data.characters} let:result>
 	{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
-		<article class="character">
+		<article class="character masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 			<h2>{char.name}</h2>
 			<section>
 				<h4>{char.profession} lvl. {char.level}</h4>

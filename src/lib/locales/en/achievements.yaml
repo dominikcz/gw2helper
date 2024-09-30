@@ -6,7 +6,7 @@ achieves_to_do: Left to do
 central_tyria_mastery: Central Tyria mastery
 daily: Daily
 daily_points: Daily points
-empty_list: You have not added anything to the list yet. Add items by clicking <> icon on list of achievements.
+empty_list: You have not added anything to the list yet. Add items by clicking <img src="{img_url}" alt="not on list" class="icon-small" /> icon on list of achievements.
 eod_mastery: EoD mastery
 giving_gold: Giving gold
 giving_items: Giving items
