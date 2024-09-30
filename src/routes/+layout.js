@@ -12,7 +12,7 @@ console.log(__NAME__, __VERSION__);
 export async function load({ fetch, url }) {
 	const { pathname } = url;
 
-	let defaultLocale = 'pl';
+	let defaultLocale = 'en';
 	const initLocale = locale.get() || defaultLocale;
 
 	await loadTranslations(initLocale, pathname);

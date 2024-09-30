@@ -121,7 +121,7 @@
 <fieldset class="settings">
 	<legend>{$_('events.watched.reminder_settings')}</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	<p>{$_('events.watched.notify_me', {values: {inAdvance}})}</p>
+	<p>{$_('events.watched.notify_me', {inAdvance})}</p>
 	<div class="group">
 		<h4>{$_('events.watched.alarm_sound')}</h4>
 		{#each ['trumpet', 'squeeze', 'notif3', 'notif9'] as name}
