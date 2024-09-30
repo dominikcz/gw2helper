@@ -2,6 +2,7 @@ import i18n from '@sveltekit-i18n/base';
 import parser from '@sveltekit-i18n/parser-icu';
 
 import languages from '$lib/locales/languages.json';
+import utils from '$lib/utils';
 
 const namespaces = ['common', 'home', 'layout', 'account', 'achievements', 'characters', 'daily', 'events', 'guilds', 'items', 'materials'];
 
@@ -18,7 +19,7 @@ Object.keys(languages).forEach((lang) => {
 
 export const config = {
 	fallbackLocale: 'en',
-	parser: parser({ignoreTag: true}),	
+	parser: parser({ ignoreTag: true }),
 	translations: {
 		en: { languages },
 		pl: { languages }
@@ -27,5 +28,12 @@ export const config = {
 };
 
 export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(config);
+
+locale.subscribe(value => {
+	if (value != undefined) {
+		console.log('locales subscribe', value)
+		utils.saveLang(value);
+	}
+});
 
 loading.subscribe(($loading) => $loading && console.log('Loading translations...'));

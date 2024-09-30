@@ -1,4 +1,6 @@
-import ls from "$lib/wxjs_idb";
+import idb from "$lib/wxjs_idb";
+import ls from "$lib/wxjs_localstorage";
+
 import { 
     KEY_NAME, 
     KEY_HIST, 
@@ -20,7 +22,7 @@ async function readApiKey() {
         key = new URLSearchParams(window.location.search).get('key') || ''
     }
     if (!key) {
-        key = await ls.get(KEY_NAME, '');
+        key = await idb.get(KEY_NAME, '');
     }
     return key;
 }
@@ -29,57 +31,57 @@ async function saveApiKey(value) {
     const hist = await getKeyHist();
     if (!hist.includes(value)) {
         hist.push(value);
-        await ls.set(KEY_HIST, hist);
+        await idb.set(KEY_HIST, hist);
     }
-    return await ls.set(KEY_NAME, value);
+    return await idb.set(KEY_NAME, value);
 }
 
 async function deleteApiKey() {
-    await ls.delete(KEY_NAME)
+    await idb.delete(KEY_NAME)
 }
 
 async function getKeyHist() {
-    return await ls.getObject(KEY_HIST, []);
+    return await idb.getObject(KEY_HIST, []);
 }
 
 async function readApiLang() {
-    return await ls.get(API_LANG, 'en');
+    return await idb.get(API_LANG, 'en');
 }
 
 async function saveApiLang(value) {
-    return await ls.set(API_LANG, value);
+    return await idb.set(API_LANG, value);
 }
 
-async function readLang() {
-    return await ls.get(LANG, 'en');
+function readLang(defaultValue = 'en') {
+    return ls.get(LANG, defaultValue);
 }
 
-async function saveLang(value) {
-    return await ls.set(LANG, value);
+function saveLang(value) {
+    return ls.set(LANG, value);
 }
 
 async function readEventTimerSettings() {
-    return await ls.getObject(EVENT_TIMER_SETTINGS, {});
+    return await idb.getObject(EVENT_TIMER_SETTINGS, {});
 }
 
 async function saveEventTimerSettings(settings) {
-    return await ls.set(EVENT_TIMER_SETTINGS, settings);
+    return await idb.set(EVENT_TIMER_SETTINGS, settings);
 }
 
 async function readAchievesSettings() {
-    return await ls.getObject(ACHIEVES_SETTINGS, {});
+    return await idb.getObject(ACHIEVES_SETTINGS, {});
 }
 
 async function saveAchievesSettings(settings) {
-    return await ls.set(ACHIEVES_SETTINGS, settings);
+    return await idb.set(ACHIEVES_SETTINGS, settings);
 }
 
 async function readWalletSettings() {
-    return await ls.getObject(WALLET_SETTINGS, {});
+    return await idb.getObject(WALLET_SETTINGS, {});
 }
 
 async function saveWalletSettings(settings) {
-    return await ls.set(WALLET_SETTINGS, settings);
+    return await idb.set(WALLET_SETTINGS, settings);
 }
 
 export function sum(array, property) {
@@ -87,43 +89,43 @@ export function sum(array, property) {
 }
 
 async function saveAchievesToDo(list) {
-    return await ls.set(ACHIEVES_TODO, list);
+    return await idb.set(ACHIEVES_TODO, list);
 }
 
 async function saveWatchedEvents(list) {
-    return await ls.set(WATCHED_EVENTS, list);
+    return await idb.set(WATCHED_EVENTS, list);
 }
 
 async function saveReminders(value) {
-    return await ls.set(REMINDERS, value);
+    return await idb.set(REMINDERS, value);
 }
 
 async function saveRemindersSettings(value) {
-    return await ls.set(REMINDERS_SETTINGS, value);
+    return await idb.set(REMINDERS_SETTINGS, value);
 }
 
 async function readWatchedEvents() {
-    return await ls.getObject(WATCHED_EVENTS, []);
+    return await idb.getObject(WATCHED_EVENTS, []);
 }
 
 async function readReminders() {
-    return await ls.getObject(REMINDERS, {});
+    return await idb.getObject(REMINDERS, {});
 }
 
 async function readRemindersSettings() {
-    return await ls.getObject(REMINDERS_SETTINGS, {});
+    return await idb.getObject(REMINDERS_SETTINGS, {});
 }
 
 async function readAchievesToDo() {
-    return await ls.getObject(ACHIEVES_TODO, []);
+    return await idb.getObject(ACHIEVES_TODO, []);
 }
 
 async function readWalletOrder() {
-    return await ls.getObject(WALLET_ORDER, []);
+    return await idb.getObject(WALLET_ORDER, []);
 }
 
 async function saveWalletOrder(value) {
-    return await ls.set(WALLET_ORDER, value);
+    return await idb.set(WALLET_ORDER, value);
 }
 
 export function getQueryString(keyName, defaultValue) {

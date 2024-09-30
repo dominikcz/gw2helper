@@ -5,15 +5,14 @@ export const trailingSlash = 'always';
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
-import { loadTranslations, locale, t as _ } from '$lib/services/i18n';
+import { loadTranslations, t as _ } from '$lib/services/i18n';
 
 console.log(__NAME__, __VERSION__);
 
 export async function load({ fetch, url }) {
 	const { pathname } = url;
 
-	let defaultLocale = 'en';
-	const initLocale = locale.get() || defaultLocale;
+	const initLocale = utils.readLang();
 
 	await loadTranslations(initLocale, pathname);
 	console.log('initialized')
