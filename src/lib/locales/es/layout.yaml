@@ -1,0 +1,41 @@
+api_key_required: >-
+  Para utilizar este sitio tiene que proporcionar una clave de API para su
+  cuenta. Las claves de API se pueden crear o eliminar en <a
+  href="https://account.arena.net/applications">https://account.arena.net/applications.</a>
+api_language: Lenguaje de API
+api_settings: Ajustes de API
+apply: Aplicar
+clear_cache: Caché transparente y recarga
+forget_stored_key: Olvida la clave almacenada
+invalid_token: Token "{token") es inválido
+legal:
+  copyright: >
+    © ArenaNet LLC. Todos los derechos reservados. NCSOFT, ArenaNet, Guild Wars,
+    Guild Wars 2, GW2, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of
+    Fire, Guild Wars 2: End of Dragons, y Guild Wars 2: Secrets of the Obscure y
+    todos los logos asociados, diseños y marcas compuestas son marcas
+    comerciales o marcas registradas de NCSOFT Corporation.
+  unofficial_site: >-
+    Este sitio no oficial incluye arte y otros activos que son © 2015 ArenaNet,
+    Inc. Todos los derechos reservados. Todas las demás marcas son propiedad de
+    sus respectivos propietarios. Este sitio utiliza también imágenes y datos de
+    <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+nav:
+  account: Cuenta
+  achievements: Logros
+  characters: Personajes
+  daily: Diario
+  events: Eventos
+  guilds: Guilds
+  home: Home
+  items: Temas
+  materials: Materiales
+no_audio: >-
+  Usted tiene notificaciones establecidas pero su navegador evita el audio de
+  reproducción automática sin interacción con el usuario. Por favor, cierre este
+  mensaje para permitir el sonido.
+no_token: No API key provided
+paste_your_api_key_here: Pruebe su clave de API aquí
+token_ok: Clave cargada exitosamente "{token}".
+waypoint_to_top: waypoint to top
+your_api_key: 'Tu clave de API:'

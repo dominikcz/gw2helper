@@ -1,0 +1,33 @@
+api_key_required: >-
+  要使用此站点, 您必须为您的账户提供 API 密钥 。 API 密钥可以在 <a
+  href="https://account.arena.net/applications">https://count.arena.net/应用程序.</a>
+api_language: API 语言
+api_settings: API 设置
+apply: 应用
+clear_cache: 清除缓存并重新装入
+forget_stored_key: 忘记存储的密钥
+invalid_token: 键“ { token} ” 无效
+legal:
+  copyright: >
+    ArenaNet有限责任公司。 版权所有。 NCSOFT, ArenaNet, Guild Wars, GULD Wars 2, GW2, GULD
+    Wars 2: Thorns之心, GULD Wars 2: 火路, GULD Wars 2: 灭龙, GULD Wars 2: Ond of
+    Dragons, GULD Wars 2: 淫秽的秘密和所有相关的标志,设计和复合标志都是NCSOFT公司的商标或注册商标.
+  unofficial_site: >-
+    这个非官方网站包括艺术和其他资产,即2015 ArenaNet Inc. 版权所有。 其他商标均为各自所有者的财产. 该网站还使用来自 <a
+    href="https://wiki.guildwars2.com/">关节战争 2 维基语录</a>
+nav:
+  account: 账户
+  achievements: 成绩
+  characters: 字符
+  daily: 日报
+  events: 活动
+  guilds: 团体
+  home: 页 次
+  items: 项目
+  materials: 材料
+no_audio: 已经设置了通知,但您的浏览器在没有用户互动的情况下防止自动播放音频. 请关闭此消息以启用声音 。
+no_token: 未提供 API 密钥
+paste_your_api_key_here: 在此粘贴您的 API 密钥
+token_ok: 成功装入密钥"{token}" 。
+waypoint_to_top: 向上方向移动
+your_api_key: '您的 API 密钥 :'

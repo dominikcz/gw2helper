@@ -1,0 +1,24 @@
+auto_scroll: 自动滚动
+available: '可用 :'
+current_time: 当前时间
+event_timers: 事件计时器
+events: 活动
+reminders: 提醒
+show_categories: 显示类别
+show_chat_links: 显示聊天链接
+show_event_times: 显示事件时间
+show_headings: 显示标题
+watched:
+  alarm_sound: 提醒声音
+  empty_list: >-
+    您还没有在列表中添加任何内容 。 点击添加项目 <img alt="not on list" class="icon-small"
+    src="{img_url}"/> 图标。
+  notify_me: |-
+    通知我 注意 复数
+    =0 {当事件开始时}
+    1 {事发前一分钟}
+    其他语句 事发前几分钟
+    {\fn黑体\fs22\bord1\shad0\3aHBE\4aH00\fscx67\fscy66\2cHFFFFFF\3cH808080}你觉得呢?
+  reminder_settings: 提醒设置
+  test_alarm: 测试提醒 ({声音})
+  watched: '监视 :'

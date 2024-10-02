@@ -1,0 +1,25 @@
+auto_scroll: Déroulement automatique
+available: 'Disponible:'
+current_time: Heure actuelle
+event_timers: Calendrier des événements
+events: Événements
+reminders: Rappels
+show_categories: Afficher les catégories
+show_chat_links: Afficher les liens de chat
+show_event_times: Afficher les heures des événements
+show_headings: Afficher les titres
+watched:
+  alarm_sound: Son d'alarme
+  empty_list: >-
+    Vous n'avez encore rien ajouté à la liste. Ajouter des éléments en cliquant
+    sur <img alt="not on list" class="icon-small" src="{img_url}"/> icône sur
+    l'un des événements ci-dessous.
+  notify_me: |-
+    Avertissez-moi {en avance, pluriel,
+    =0 {lorsque l'événement commence}
+    une {une minute avant l'événement}
+    autres Avance} minutes avant l'événement}
+    }
+  reminder_settings: Paramètres du rappel
+  test_alarm: alarme d'essai ({sonne})
+  watched: 'Attention :'
