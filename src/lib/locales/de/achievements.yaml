@@ -1,8 +1,8 @@
 achievements: Erfolge
 achievements_completed: Vollständige Leistungen
 achievements_todo: Erfolge zu tun
-achieves_completed: Anzahl der Leistungen
-achieves_to_do: Links zu tun
+achievements_completed_number: Anzahl der Leistungen
+achievements_to_do: Links zu tun
 central_tyria_mastery: Zentrale Tyria Meisterschaft
 daily: Täglich
 daily_points: Tagespunkte
@@ -24,7 +24,7 @@ list: Liste
 monthly_points: Monatliche Punkte
 not_completed: Nicht abgeschlossen
 pof_mastery: PoF Meisterschaft
-points_from_achieves: Punkte aus den Ergebnissen
+points_from_achievements: Punkte aus den Ergebnissen
 points_to_get: Punkte zu erhalten
 showing_out_of: '{shown} Kategorien aus {total} anzeigen'
 sofo_mastery: SofO Meisterschaft

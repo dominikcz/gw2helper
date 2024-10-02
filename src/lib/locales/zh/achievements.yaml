@@ -1,8 +1,8 @@
 achievements: 成绩
 achievements_completed: 完成成绩
 achievements_todo: 成就
-achieves_completed: 成就数目
-achieves_to_do: 左边做
+achievements_completed_number: 成就数目
+achievements_to_do: 左边做
 central_tyria_mastery: 中央泰利亚精通
 daily: 日报
 daily_points: 每日点数
@@ -23,7 +23,7 @@ list: 列表
 monthly_points: 每月点数
 not_completed: 未完成
 pof_mastery: PoF 熟练
-points_from_achieves: 来自成就的点数
+points_from_achievements: 来自成就的点数
 points_to_get: 要得到的点
 showing_out_of: 显示 {shown} 类别中的 {total}
 sofo_mastery: SofO 掌握

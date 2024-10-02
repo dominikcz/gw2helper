@@ -5,7 +5,7 @@
 	import Price from "../price.svelte";
 	import Wiki from "../wiki.svelte";
 	import AchievList from "./achievList.svelte";
-    import { sort } from "./achieves";
+    import { sort } from "./achievements";
 
     export let category;
     export let todoList = [];
@@ -134,7 +134,7 @@
                     <span>{category.achievements.length}</span>
                     <img
                         src="{base}/assets/rewards/Achievements_Summary.png"
-                        alt="achieves"
+                        alt="achievements"
                         title="There are {category.achievements.length} achievements left to do"
                     />
                     <a href={helperUtils.wikiLink(category.name)} target="_blank">

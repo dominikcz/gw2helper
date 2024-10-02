@@ -1,8 +1,8 @@
 achievements: Réalisations
 achievements_completed: Réalisations
 achievements_todo: Réalisations à accomplir
-achieves_completed: Nombre de réalisations
-achieves_to_do: Gauche à faire
+achievements_completed_number: Nombre de réalisations
+achievements_to_do: Gauche à faire
 central_tyria_mastery: Maîtrise de la Tyria centrale
 daily: Tous les jours
 daily_points: Points quotidiens
@@ -24,7 +24,7 @@ list: Liste
 monthly_points: Points mensuels
 not_completed: Non achevée
 pof_mastery: Maîtrise du PoF
-points_from_achieves: Points positifs
+points_from_achievements: Points positifs
 points_to_get: Points à obtenir
 showing_out_of: montrant les catégories {montrées} sur {total}
 sofo_mastery: Maîtrise de la SofO

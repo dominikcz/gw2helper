@@ -5,7 +5,7 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
+	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
 	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
@@ -79,12 +79,12 @@
 		return !x.ignore;
 	}
 
-	function extractDaily(achieves) {
-		return filteredAchieves(achieves, '', filterDaily, onlyActiveCategories );
+	function extractDaily(achievements) {
+		return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories );
 	}
 
-	function extractWeekly(achieves) {
-		return filteredAchieves(achieves, '', filterWeekly, onlyActiveCategories );
+	function extractWeekly(achievements) {
+		return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
 	}
 </script>
 

@@ -5,8 +5,8 @@ import {
     KEY_NAME, 
     KEY_HIST, 
     EVENT_TIMER_SETTINGS, 
-    ACHIEVES_SETTINGS, 
-    ACHIEVES_TODO, 
+    ACHIEVEMENTS_SETTINGS, 
+    ACHIEVEMENTS_TODO, 
     WALLET_SETTINGS, 
     WATCHED_EVENTS, 
     REMINDERS, 
@@ -68,12 +68,12 @@ async function saveEventTimerSettings(settings) {
     return await idb.set(EVENT_TIMER_SETTINGS, settings);
 }
 
-async function readAchievesSettings() {
-    return await idb.getObject(ACHIEVES_SETTINGS, {});
+async function readAchievementsSettings() {
+    return await idb.getObject(ACHIEVEMENTS_SETTINGS, {});
 }
 
-async function saveAchievesSettings(settings) {
-    return await idb.set(ACHIEVES_SETTINGS, settings);
+async function saveAchievementsSettings(settings) {
+    return await idb.set(ACHIEVEMENTS_SETTINGS, settings);
 }
 
 async function readWalletSettings() {
@@ -88,8 +88,8 @@ export function sum(array, property) {
     return array.reduce((acc, cur) => acc + cur[property], 0)
 }
 
-async function saveAchievesToDo(list) {
-    return await idb.set(ACHIEVES_TODO, list);
+async function saveAchievementsToDo(list) {
+    return await idb.set(ACHIEVEMENTS_TODO, list);
 }
 
 async function saveWatchedEvents(list) {
@@ -116,8 +116,8 @@ async function readRemindersSettings() {
     return await idb.getObject(REMINDERS_SETTINGS, {});
 }
 
-async function readAchievesToDo() {
-    return await idb.getObject(ACHIEVES_TODO, []);
+async function readAchievementsToDo() {
+    return await idb.getObject(ACHIEVEMENTS_TODO, []);
 }
 
 async function readWalletOrder() {
@@ -158,10 +158,10 @@ export default {
     getKeyHist,
     readEventTimerSettings,
     saveEventTimerSettings,
-    readAchievesSettings,
-    saveAchievesSettings,
-    readAchievesToDo,
-    saveAchievesToDo,
+    readAchievementsSettings,
+    saveAchievementsSettings,
+    readAchievementsToDo,
+    saveAchievementsToDo,
     readWalletSettings,
     saveWalletSettings,
     readWatchedEvents,

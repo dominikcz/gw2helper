@@ -1,8 +1,8 @@
 achievements: Osiągnięcia
 achievements_completed: Ukończone osiągnięcia
 achievements_todo: Osiągnięcia do zrobienia
-achieves_completed: Osiągnięcia
-achieves_to_do: Osiągnięcia
+achievements_completed_number: Osiągnięcia
+achievements_to_do: Osiągnięcia
 central_tyria_mastery: Zdolności Central Tyria
 daily: Codzienne
 daily_points: Codzienne punkty
@@ -21,7 +21,7 @@ list: Lista
 monthly_points: Punkty z miesięcznych
 not_completed: Nie zakończone
 pof_mastery: Zdolności PoF
-points_from_achieves: Punkty z osiągnięć
+points_from_achievements: Punkty z osiągnięć
 points_to_get: Punkty do zdobycia
 showing_out_of: wyświetlono {shown} z {total} kategorii   
 sofo_mastery: Zdolności SofO

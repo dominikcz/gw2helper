@@ -37,7 +37,7 @@ export const sumRewards = (rewardsToGet, rewards) => {
     });
 }
 
-export function filteredAchieves(data, filter, callbackFn, categoriesCallbackFn, params) {
+export function filteredAchievements(data, filter, callbackFn, categoriesCallbackFn, params) {
     // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
 
     console.log('filtering...');
@@ -66,9 +66,9 @@ export function filteredAchieves(data, filter, callbackFn, categoriesCallbackFn,
     const _categories = categoriesCallbackFn ? data.categories.filter(categoriesCallbackFn) : data.categories.filter((x) => !x.ignore);
 
     _data.categories = _categories.map(({ achievements, ...rest }) => {
-        let _cat = { ...rest }; // (1) clone categories without achieves
+        let _cat = { ...rest }; // (1) clone categories without achievements
 
-        // (2) filter achieves and attach them to this cloned category
+        // (2) filter achievements and attach them to this cloned category
         _cat.achievements = achievements.filter(callbackFn);
 
         _cat.points_to_get = sum(_cat.achievements, 'points_to_get');
@@ -93,7 +93,7 @@ export function filteredAchieves(data, filter, callbackFn, categoriesCallbackFn,
 
 export const CURRENT_SEASON = '';
 
-export const SEASONAL_ACHIEVES_CATEGORIES = {
+export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
     'sab': [
         22, // Super Adventure Box: World 1
         45, // Super Adventure Box: World 2
@@ -142,7 +142,7 @@ export const SEASONAL_ACHIEVES_CATEGORIES = {
     ]
 }
 
-export const INACTIVE_ACHIEVES_CATEGORIES = [
+export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
     28, // A Very Merry Wintersday '12
     36, // Support Ellen Kiel
     37, // Support Evon Gnashblade

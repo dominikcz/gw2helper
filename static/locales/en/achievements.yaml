@@ -1,8 +1,8 @@
 achievements: Achievements
 achievements_completed: Completed achievements
 achievements_todo: Achievements to do
-achieves_completed: Number of achievements
-achieves_to_do: Left to do
+achievements_completed: Number of achievements
+achievements_to_do: Left to do
 central_tyria_mastery: Central Tyria mastery
 daily: Daily
 daily_points: Daily points
@@ -21,7 +21,7 @@ list: List
 monthly_points: Monthly points
 not_completed: Not completed
 pof_mastery: PoF mastery
-points_from_achieves: Points from achieves
+points_from_achievements: Points from achievements
 points_to_get: Points to get
 showing_out_of: showing {shown} categories out of {total}
 sofo_mastery: SofO mastery
