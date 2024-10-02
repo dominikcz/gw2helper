@@ -1,0 +1,25 @@
+auto_scroll: Auto Scroll
+available: 'Verfügbar:'
+current_time: Aktuelle Zeit
+event_timers: Veranstaltungszeiträume
+events: Veranstaltungen
+reminders: Erinnerungen
+show_categories: Kategorien anzeigen
+show_chat_links: Chat-Links anzeigen
+show_event_times: Veranstaltungszeiten anzeigen
+show_headings: Überschriften anzeigen
+watched:
+  alarm_sound: Alarmanlage
+  empty_list: >-
+    Sie haben noch nichts zur Liste hinzugefügt. Elemente hinzufügen, indem Sie
+    <img alt="not on list" class="icon-small" src="{img_url}"/> Icon auf einer
+    der Ereignisse unten.
+  notify_me: |-
+    Benachrichtigen Sie mich {inAdvance, plural,
+    =0, wenn das Ereignis beginnt
+    eine Minute vor dem Ereignis
+    Sonstige Advance} Minuten vor dem Ereignis}
+    }
+  reminder_settings: Reminder-Einstellungen
+  test_alarm: Testalarm ({sound})
+  watched: 'Beobachten:'
