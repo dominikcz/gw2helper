@@ -33,11 +33,11 @@
 				ref.textContent = '';
 				renderer(ref, params);
 				return true;
-			}
+			} 
 		} else {
 			if (customContent) {
 				ref.textContent = '';
-			}
+			} 
 		}
 		return false;
 	}
@@ -148,8 +148,8 @@
 		try {
 			let _visible = false;
 			do {
-				if (processCustomRenderers(elem)) {
-					customContent = true;
+				customContent = processCustomRenderers(elem);
+				if (customContent) {
 					_visible = true;
 					break;
 				} else {
@@ -164,7 +164,6 @@
 						}
 						elem = elem.parentElement;
 					} else {
-						customContent = false;
 						_visible = true;
 					}
 					autotooltipClass = _class;
@@ -177,7 +176,7 @@
 				}
 				title = _title;
 			}
-			visible = _visible;
+			visible = _visible && (title || customContent);
 		} catch (error) {
 			console.warn('autotooltip', { elem, error });
 		}
