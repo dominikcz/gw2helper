@@ -97,8 +97,8 @@
 </Awaiter>
 
 <div class="info-block">
-	<h4>$_('daily.info.hint')</h4>
-	<p>$_('daily.info.hint-content')</p>
+	<h4>{ $_('daily.info.hint') }</h4>
+	<p>{ $_('daily.info.hint-content') }</p>
 </div>
 
 <Awaiter promise={data.daily} let:result>
