@@ -96,6 +96,11 @@
 	<WidgetInfo title="{ $_('daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 </Awaiter>
 
+<div class="info-block">
+	<h4>$_('daily.info.hint')</h4>
+	<p>$_('daily.info.hint-content')</p>
+</div>
+
 <Awaiter promise={data.daily} let:result>
 	<WizardsVaultCategory title="{ $_('daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
 </Awaiter>

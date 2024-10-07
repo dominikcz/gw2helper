@@ -1,6 +1,9 @@
 achievements: 成绩
 daily: 日报
 daily_and_weekly: 每日和每周
+info:
+  hint: 暗示
+  hint-content: 为了查看 Wizard's Vault 的当前目标，您必须先登录游戏。
 special: 特别
 weekly: 每周活动
 wizards_vault: 向导的默认值
