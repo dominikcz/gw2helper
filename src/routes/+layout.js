@@ -15,14 +15,15 @@ export async function load({ fetch, url }) {
 	const initLocale = utils.readLang();
 
 	await loadTranslations(initLocale, pathname);
-	console.log('initialized')
+	let no_token = _.get('layout.no_token');
+	console.log('initialized');
 
 	const key = await utils.readApiKey();
 	// const apiService = await import("$lib/apiService.ts");
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
-		error: 'layout.no_token',
+		error: no_token,
 	};
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
@@ -57,6 +58,6 @@ export async function load({ fetch, url }) {
 		} catch (error) {
 			console.log('Layout load error', error)
 		}
-	}
+	} 
 	return returnObj;
 }
