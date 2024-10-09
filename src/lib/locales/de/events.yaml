@@ -10,15 +10,16 @@ show_event_times: Veranstaltungszeiten anzeigen
 show_headings: Überschriften anzeigen
 watched:
   alarm_sound: Alarmanlage
+  choose_times: 'Wählen Sie die Zeiten für Ihre Alarme:'
   empty_list: >-
     Sie haben noch nichts zur Liste hinzugefügt. Elemente hinzufügen, indem Sie
     <img alt="not on list" class="icon-small" src="{img_url}"/> Icon auf einer
     der Ereignisse unten.
-  notify_me: |-
+  notify_me: >-
     Benachrichtigen Sie mich {inAdvance, plural,
-    =0, wenn das Ereignis beginnt
-    eine Minute vor dem Ereignis
-    Sonstige Advance} Minuten vor dem Ereignis}
+      =0 {wenn das Ereignis beginnt}
+      one {Minute vor dem Ereignis}
+      other {{inAdvance} Minuten vor dem Ereignis}
     }
   reminder_settings: Reminder-Einstellungen
   test_alarm: Testalarm ({sound})

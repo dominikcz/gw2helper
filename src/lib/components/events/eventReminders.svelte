@@ -132,7 +132,7 @@
 		{/each}
 	</div>
 	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
-	<button on:click={saveNotifySettings}>save</button>
+	<button on:click={saveNotifySettings}>{$_('common.save')}</button>
 </fieldset>
 
 <h2>{$_('events.available')}</h2>

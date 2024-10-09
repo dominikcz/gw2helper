@@ -1,7 +1,15 @@
 list_too_long: list too long?
+nothing_found: ...nothing found
 read_more_on_wiki: Read more on wiki
+save: save
 save_settings: Save settings
 settings: Settings
 too_much_data: too much data?
 under_construction: Under construction
 what_are_you_looking_for: what are you looking for?
+search_help:
+  title: Search help
+  prompt: >- 
+    Knock yourself out with queries like:
+  example1: ascend ring
+  example2: utility master condition

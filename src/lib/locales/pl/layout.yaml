@@ -37,5 +37,5 @@ no_audio: >-
 no_token: Brak klucza API  
 paste_your_api_key_here: Wklej tutaj swój klucz API
 token_ok: Udane wczytanie klucza "{token}".
-waypoint_to_top: Teleport do góry
+waypoint_to_top: Teleportuj do góry
 your_api_key: 'Twój klucz API:'

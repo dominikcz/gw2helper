@@ -1,6 +1,7 @@
 <script>
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
+	import { t as _ } from '$lib/services/i18n.js';
 	export let items;
 	export let todoList;
 
@@ -29,7 +30,7 @@
 		/>
 	{:else}
 		<span class="no-results">
-			<slot>...nothing found</slot>
+			<slot>{$_('common.nothing_found')}</slot>
 		</span>
 	{/each}
 </div>

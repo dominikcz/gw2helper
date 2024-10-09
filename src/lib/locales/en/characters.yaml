@@ -1,8 +1,21 @@
 characters: Characters
-days: days
+days: >-
+  {days, plural,
+      one {day}
+      other {days}
+  }
 died: died
 hours_played: hours played
 next_birthday_in: next birthday in
 no_crafting_professions: no crafting professions
-times: times
-years: '{age} years'
+times: >-
+  {times, plural,
+    one {time}
+    other {times}
+  }
+years: >-
+  {age, plural,
+    =0 {less than a year}
+    one {1 year}
+    other {{age} years}
+  }

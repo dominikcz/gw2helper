@@ -14,7 +14,7 @@
 
 </script>
 
-<details class="achiev-group masked" use:autotooltip style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+<details class="achiev-group masked" use:autotooltip style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;" {...$$restProps}>
     <summary>
         <img src={category.icon} alt={category.name} />
         <div class="descr">

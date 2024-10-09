@@ -10,6 +10,8 @@ show_event_times: Show event times
 show_headings: Show headings
 watched:
   alarm_sound: Alarm sound
+  choose_times: >- 
+    Choose the times for your alarms:
   empty_list: >-
     You have not added anything to the list yet. Add items by clicking <img
     src="{img_url}" alt="not on list" class="icon-small" /> icon on any of the
