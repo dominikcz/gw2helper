@@ -1,21 +1,27 @@
+name: Build and deploy to FTP
 on: 
   push:
     tags:
     - '*'
-name: Deploy to FTP on push
+  workflow_dispatch:
 jobs:
-  web-deploy:
-    name: Deploy
+  build_deploy:
+    name: Build & deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v3
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ vars.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        protocol: ftps
-        server-dir: ${{ vars.FTP_REMOTE_PATH }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Build dependencies
+        run: npm run build
+      - name: Sync files to hosting
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with: 
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ vars.FTP_REMOTE_PATH }}
+          local-dir: build/
+          
