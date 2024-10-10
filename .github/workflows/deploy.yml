@@ -21,7 +21,7 @@ jobs:
           server: ${{ vars.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
+          protocol: sftp
           server-dir: ${{ vars.FTP_REMOTE_PATH }}
           local-dir: build/
           
