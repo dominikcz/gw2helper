@@ -19,10 +19,10 @@ jobs:
         # uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         uses: SamKirkland/web-deploy@v1
         with: 
-          server: ${{ vars.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          target-server: ${{ vars.FTP_SERVER }}
+          remote-user: ${{ secrets.FTP_USERNAME }}
+          # private-ssh-key: ${{ secrets.FTP_PASSWORD }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # protocol: sftp
-          server-dir: ${{ vars.FTP_REMOTE_PATH }}
-          local-dir: build/
-          
+          ssh-port: 22
+          source-path: build/
+          destination-path: ${{ vars.FTP_REMOTE_PATH }}
