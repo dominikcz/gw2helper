@@ -16,12 +16,13 @@ jobs:
       - name: Build dependencies
         run: npm run build
       - name: Sync files to hosting
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        # uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/web-deploy@v1
         with: 
           server: ${{ vars.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp
+          # protocol: sftp
           server-dir: ${{ vars.FTP_REMOTE_PATH }}
           local-dir: build/
           
