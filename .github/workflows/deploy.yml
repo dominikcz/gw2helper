@@ -24,6 +24,5 @@ jobs:
           port: 22
           # private-ssh-key: ${{ secrets.FTP_PASSWORD }}
           password: ${{ secrets.FTP_PASSWORD }}
-          ssh-port: 22
-          local-path: build/
-          remote-path: ${{ vars.FTP_REMOTE_PATH }}
+          local_path: build/
+          remote_path: ${{ vars.FTP_REMOTE_PATH }}
