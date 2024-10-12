@@ -2,7 +2,7 @@ name: Build and deploy to FTP
 on: 
   push:
     tags:
-    - '*'
+      - '*'
   workflow_dispatch:
 jobs:
   build_deploy:
