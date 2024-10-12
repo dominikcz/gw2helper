@@ -1,8 +1,9 @@
 name: Build and deploy to FTP
 on: 
   push:
+    branches: 'main'
     tags:
-      - '*'
+      - 'v**'
 jobs:
   build_deploy:
     name: Build & deploy
