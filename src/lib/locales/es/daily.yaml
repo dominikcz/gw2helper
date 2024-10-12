@@ -6,6 +6,12 @@ info:
   hint-content: >-
     Para ver los objetivos actuales de Wizard's Vault, primero debes iniciar
     sesión en el juego.
+objectives_left: |-
+  {objectivesCount, plural,
+        =0 {todo listo}
+        one {Queda un objetivo}
+        other {Queda {objectivesCount} objetivos}
+  }
 special: Especial
 weekly: Semanal
 wizards_vault: Wizard's Vault

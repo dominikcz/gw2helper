@@ -12,7 +12,7 @@ watched:
   alarm_sound: Sygnał alarmu
   choose_times: 'Wybierz godziny alarmów:'
   empty_list: >-
-    Jeszcze nie masz niczego na liście. Możesz dodać wydarzenie klikając ikonkę
+    Jeszcze nie masz niczego na liście. Dodaj pozycję klikając ikonkę
     <img src="{img_url}" alt="not on list" class="icon-small" /> na którymś z
     poniższych wydarzeń.
   notify_me: >-

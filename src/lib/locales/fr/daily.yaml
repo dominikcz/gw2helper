@@ -6,6 +6,12 @@ info:
   hint-content: >-
     Pour voir les objectifs actuels de Wizard's Vault, vous devez d'abord vous
     connecter au jeu.
+objectives_left: |-
+  {objectivesCount, plural,
+        =0 {tout est fait}
+        one {il reste un objectif}
+        other {il reste {objectivesCount} objectifs}
+  }
 special: Spécial
 weekly: Semaine
 wizards_vault: La faute du magicien

@@ -1,11 +1,11 @@
-characters: Zeichen
+characters: Charaktere
 days: >-
   {days, plural,
       one {Tag}
       other {Tage}
   }
 died: gestorben
-hours_played: Stunden gespielt
+hours_played: Spielstunden
 next_birthday_in: nächster Geburtstag in
 no_crafting_professions: keine Handwerksberufe
 times: >-

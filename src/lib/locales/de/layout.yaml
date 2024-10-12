@@ -1,13 +1,13 @@
 api_key_required: >-
-  Um diese Website zu nutzen, müssen Sie einen API-Schlüssel für Ihr Konto zur
+  Um diese Website zu nutzen, muss man einen API-Schlüssel für Ihr Konto zur
   Verfügung stellen. API-Schlüssel können erstellt oder gelöscht werden <a
   href="https://account.arena.net/applications">https://account.arena.net/applications.</a>
 api_language: API Sprache
 api_settings: API-Einstellungen
 apply: Anwendung
-clear_cache: Löschen Sie Cache und Nachladen
-forget_stored_key: Vergessen Sie den gespeicherten Schlüssel
-invalid_token: Token "{token} ist ungültig
+clear_cache: Cache und Nachladen löschen
+forget_stored_key: Den gespeicherten Schlüssel vergessen
+invalid_token: Token "{token}" ist ungültig
 legal:
   copyright: >
     © ArenaNet LLC. Alle Rechte vorbehalten. NCSOFT, ArenaNet, Guild Wars, Guild
@@ -22,15 +22,15 @@ legal:
     Daten von <a href="https://wiki.guildwars2.com/">In den Warenkorb 2
     Wikis</a>
 nav:
-  account: Gesamt
+  account: Account
   achievements: Erfolge
-  characters: Zeichen
+  characters: Charaktere
   daily: Täglich
-  events: Veranstaltungen
+  events: Events
   guilds: Gilden
   home: Home
-  items: Waren
-  materials: Material
+  items: Gegenstände
+  materials: Materialien
 no_audio: >-
   Sie haben Benachrichtigungen eingerichtet, aber Ihr Browser verhindert
   Auto-Playing Audio ohne Benutzerinteraktion. Bitte schließen Sie diese
@@ -38,5 +38,5 @@ no_audio: >-
 no_token: Keine API-Schlüssel vorhanden
 paste_your_api_key_here: Fügen Sie Ihre API-Schlüssel hier ein
 token_ok: Erfolgreich geladener Schlüssel "{token}".
-waypoint_to_top: Wegpunkt nach oben
-your_api_key: 'Ihre API-Taste:'
+waypoint_to_top: Teleportieren nach oben
+your_api_key: 'Ihre API-Schlüssel:'

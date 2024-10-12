@@ -4,9 +4,15 @@ daily_and_weekly: Täglich und wöchentlich
 info:
   hint: Andeuten
   hint-content: >-
-    Um die aktuellen Ziele von Wizard's Vault zu sehen, müssen Sie sich zuerst
+    Um die aktuellen Ziele von Gewölbe des Zauberers zu sehen, müssen Sie sich zuerst
     beim Spiel anmelden.
-special: Spezial
+objectives_left: >-
+  {objectivesCount, plural,
+        =0 {keine Ziele}
+        one {ein verbleibendes Ziel}
+        other {{objectivesCount} verbleibende Ziele}
+  } 
+special: Besondere
 weekly: Wöchentlich
-wizards_vault: Wizard's Vault
-your_astral_acclaims: Ihre Astral-Annahmen
+wizards_vault: Gewölbe des Zauberers
+your_astral_acclaims: Ihre Astraler Ruhm

@@ -4,6 +4,13 @@ daily_and_weekly: Codzienne i tygodniowe
 info:
   hint: Wskazówka
   hint-content: Aby zobaczyć aktualne cele, musisz najpierw zalogować się do gry i otworzyć Skarbiec Czarnoksiężnika.
+objectives_left: >-
+  {objectivesCount, plural,
+        =0 {wszystko zrobione}
+        one {pozostało jedno zadanie}
+        few {pozostały {objectivesCount} zadania}
+        other {pozostało {objectivesCount} zadań}
+  } 
 special: Specjalne
 weekly: Tygodniowe
 wizards_vault: Skarbiec Czarnoksiężnika

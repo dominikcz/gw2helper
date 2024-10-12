@@ -1,5 +1,6 @@
-coins_for_pickup: Münzen für Abholung
-delivery_box: Lieferbox
+coins_for_pickup: Vermögen
+delivery_box: Warenlager
+items_for_pickup: Gegenstände
 show_depreciated_currencies: Depreziierte Währungen anzeigen
 title: Home
-your_wallet: Ihre Brieftasche
+your_wallet: Geldbörse

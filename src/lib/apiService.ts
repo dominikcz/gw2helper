@@ -102,6 +102,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         Logger.error('not initialized, please provide api key from https://account.arena.net');
         return null;
     }
+    query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
     const _options = Object.assign({}, fetchOptions, options);
     let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
@@ -174,7 +175,7 @@ const charactersItems = async () => {
 };
 
 const materials = async () => {
-    return promiseMe(apiClient("/v2/account/materials", `lang=${fetchOptions.apiLang}`), async (rawData) => {
+    return promiseMe(apiClient("/v2/account/materials", ""), async (rawData) => {
         let ids = rawData.map((x) => x.id);
         return expandItems(ids, rawData);
     })
@@ -271,7 +272,7 @@ const guilds = async () => {
 };
 
 const items = (x: string) => {
-    return apiClient("/v2/items", `lang=${fetchOptions.apiLang}&ids=${x}`);
+    return apiClient("/v2/items", `ids=${x}`);
 };
 
 const account = () => {
@@ -313,7 +314,7 @@ const tokenInfo = async () => {
 const achievements = async (all: boolean = false) => {
     return new Promise((resolve) => {
         Promise.all([
-            apiClient("/v2/achievements/categories", `lang=${fetchOptions.apiLang}&ids=all&v=2022-03-23T19:00:00.000Z`),
+            apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
             apiClient("/v2/account", ""),
             apiClient("/v2/account/achievements", ""),
             apiClient("/v2/achievements", "")])
@@ -349,7 +350,7 @@ const currencies = async (order = []) => {
     // denormalize
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
-    return promiseMe(apiClient("/v2/currencies", `lang=${fetchOptions.apiLang}&ids=all`), (resp) => {
+    return promiseMe(apiClient("/v2/currencies", `ids=all`), (resp) => {
         const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
         const _data = mergeById(_rawData, _dep);
         _data.forEach(x => {

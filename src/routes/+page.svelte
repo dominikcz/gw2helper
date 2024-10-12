@@ -47,7 +47,7 @@
 					</WidgetInfo>
 				{/if}
 				{#if result.items.length}
-					<ItemsList summary="Items for pickup" items={result.items} {filter} />
+					<ItemsList summary={$_('home.items_for_pickup')} items={result.items} {filter} />
 				{/if}
 			</div>
 		</details>

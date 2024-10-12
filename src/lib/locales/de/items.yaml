@@ -1,6 +1,6 @@
 bank: Bank
-characters_items: Waren der Zeichen
+characters_items: Gegenstände der Charakters
 common_items: Allgemeines
 guild_items: Gildengegenstände
-items: Waren
+items: Gegenstände
 shared_inventory: Gemeinschaftsinventar
