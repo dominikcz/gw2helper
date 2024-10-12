@@ -8,8 +8,8 @@ objectives_left: >-
   {objectivesCount, plural,
         =0 {wszystko zrobione}
         one {pozostało jedno zadanie}
-        few {pozostały {objectivesCount} zadania}
-        other {pozostało {objectivesCount} zadań}
+        few {pozostały # zadania}
+        other {pozostało # zadań}
   } 
 special: Specjalne
 weekly: Tygodniowe

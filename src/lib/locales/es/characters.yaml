@@ -22,5 +22,5 @@ years: >-
   {age, plural,
     =0 {menos de un año}
     one {1 año}
-    other {{age} añoa}
+    other {# añoa}
   }

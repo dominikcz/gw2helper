@@ -10,7 +10,7 @@ objectives_left: >-
   {objectivesCount, plural,
         =0 {keine Ziele}
         one {ein verbleibendes Ziel}
-        other {{objectivesCount} verbleibende Ziele}
+        other {# verbleibende Ziele}
   } 
 special: Besondere
 weekly: Wöchentlich

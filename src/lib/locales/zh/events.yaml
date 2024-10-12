@@ -8,17 +8,33 @@ show_categories: 显示类别
 show_chat_links: 显示聊天链接
 show_event_times: 显示事件时间
 show_headings: 显示标题
+tts: >-
+  是时候了{time}.
+  {plural, select,
+    true {
+      {inAdvance, plural,
+          =0 {活动：{eventsList}刚刚开始 }
+          one {事件：{eventsList} 一分钟后开始}
+          other {活动：{eventsList} 将在 # 分钟后开始}
+      }
+    }
+    other {
+      {inAdvance, plural,
+          =0 {活动：{eventsList}刚刚开始}
+          one {事件：{eventsList} 一分钟后开始}
+          other {活动：{eventsList} 将在 # 分钟后开始}
+      }
+    }
+  }
 watched:
   alarm_sound: 提醒声音
   choose_times: '选择闹钟时间:'
-  empty_list: >-
-    您还没有在列表中添加任何内容 。 点击添加项目 <img alt="not on list" class="icon-small"
-    src="{img_url}"/> 图标。
+  empty_list: 您还没有在列表中添加任何内容 。 点击添加项目 {image} 图标。
   notify_me: |-
     通知我 {inAdvance, plural,
       =0 {当它开始时}
       one {早一分钟}
-      other {提前{inAdvance}分钟}
+      other {提前#分钟}
     }
   reminder_settings: 提醒设置
   test_alarm: 测试提醒 ({sound})

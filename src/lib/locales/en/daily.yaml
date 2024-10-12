@@ -10,7 +10,7 @@ objectives_left: >-
   {objectivesCount, plural,
         =0 {no objectives remaining}
         one {one objective left}
-        other {{objectivesCount} objectives left}
+        other {# objectives left}
   } 
 special: Special
 weekly: Weekly

@@ -21,8 +21,6 @@
 	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
 	import { onMount } from 'svelte';
 
-	import { EVENTS_PARTIAL, EVENT_TEMPLATE } from '$lib/components/events/tts';
-	import mustache from 'mustache';
 	import eventsUtils from '$lib/components/events/eventsUtils.js';
 	import clock from '$lib/stores/clock.js';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
@@ -150,7 +148,8 @@
 
 	function playAlarm(info) {
 		if (!info) return;
-		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
+		// console.log('info', info)
+		let tts = $_('events.tts', {...info})
 		// ignoring request with the same text, as we were not able to speak previous one yet and excessive queuing doesn't help ;)
 		if ([lastNotify, confirmedNotify].includes(tts)) return;
 		lastNotify = tts;
@@ -159,7 +158,7 @@
 			duration: 1000 * (tts.length / 10),
 			onpop: (id, details) => {
 				console.log('onpop', details);
-				if (!details.autoClose) {
+				if (details.event != undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);
 					confirmedNotify = tts;
@@ -178,7 +177,7 @@
 			msg.volume = 1; // From 0 to 1
 			msg.rate = 1; // From 0.1 to 10
 			msg.pitch = 1; // From 0 to 2
-			msg.lang = 'en-US';
+			msg.lang = $locale;
 			msg.onend = (ev) => {
 				// reset last spoken text
 				lastNotify = '';

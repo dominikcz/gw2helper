@@ -8,6 +8,24 @@ show_categories: Mostrar categorías
 show_chat_links: Mostrar enlaces de chat
 show_event_times: Mostrar tiempos de evento
 show_headings: Mostrar títulos
+tts: >-
+  Es {time}.
+  {plural, select,
+    true {
+      {inAdvance, plural,
+        =0 {Eventos: {eventsList} acaba de comenzar }
+        one {Eventos: {eventsList} comienzan en un minuto}
+        other {Eventos: {eventsList} comienzan en # minutos}
+      }
+    }
+    other {
+      {inAdvance, plural,
+        =0 {Evento: {eventsList} acaba de comenzar }
+        one {Evento: {eventsList} comienza en un minuto}
+        other {Evento: {eventsList} comienza en # minutos}
+      }
+    }
+  }
 watched:
   alarm_sound: Sonido de alarma
   choose_times: 'Elige los horarios para tus alarmas:'
@@ -19,7 +37,7 @@ watched:
     Avísame {inAdvance, plural,
       =0 {cuando el evento comience}
       one {minuto antes del evento}
-      other {{inAdvance} minutos antes del evento}
+      other {# minutos antes del evento}
     }
   reminder_settings: Ajustes de recordatorio
   test_alarm: alarma de prueba ({sound})

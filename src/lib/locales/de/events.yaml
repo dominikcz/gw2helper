@@ -8,18 +8,35 @@ show_categories: Kategorien anzeigen
 show_chat_links: Chat-Links anzeigen
 show_event_times: Eventzeiten anzeigen
 show_headings: Überschriften anzeigen
+tts: >-
+  Es ist {time}.
+  {plural, select,
+    true {
+      {inAdvance, plural,
+        =0 {Events: {eventsList} hat gerade begonnen }
+        one {Events: {eventsList} beginnt in einer Minute}
+        other {Events: {eventsList} beginnen in # Minuten}
+      }
+    }
+    other {
+      {inAdvance, plural,
+        =0 {Event: {eventsList} hat gerade begonnen }
+        one {Event: {eventsList} beginnt in einer Minute}
+        other {Event: {eventsList} beginnt in # Minuten}
+      }
+    }
+  }
 watched:
   alarm_sound: Alarmton
   choose_times: 'Wähle die Zeiten für die Alarme:'
   empty_list: >-
-    Du hast noch nichts zur Liste hinzugefügt. Klick
-    <img alt="not on list" class="icon-small" src="{img_url}"/> Icon auf einer
-    der Events unten um sie hinzufügen
-  notify_me: >-
+    Du hast noch nichts zur Liste hinzugefügt. Klick {image} Icon auf einer der
+    Events unten um sie hinzufügen
+  notify_me: |-
     Benachrichtige mich {inAdvance, plural,
       =0 {wenn das Event beginnt}
       one {Minute vor dem Event}
-      other {{inAdvance} Minuten vor dem Event}
+      other {# Minuten vor dem Event}
     }
   reminder_settings: Reminder-Einstellungen
   test_alarm: Testalarm ({sound})

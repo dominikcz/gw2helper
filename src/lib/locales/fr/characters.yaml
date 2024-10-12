@@ -22,5 +22,5 @@ years: >-
   {age, plural,
     =0 {moins d'un an}
     one {1 an}
-    other {{age} ans}
+    other {# ans}
   }

@@ -17,5 +17,5 @@ years: >-
   {age, plural,
     =0 {less than a year}
     one {1 year}
-    other {{age} years}
+    other {# years}
   }

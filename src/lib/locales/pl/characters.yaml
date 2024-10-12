@@ -22,6 +22,6 @@ years: >-
   {age, plural,
     =0 {poniżej roku}
     one {1 rok}
-    few {{age} lata}
-    other {{age} lat}
+    few {# lata}
+    other {# lat}
   }

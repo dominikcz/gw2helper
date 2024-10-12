@@ -8,7 +8,7 @@ objectives_left: |-
   {objectivesCount, plural,
         =0 {全部完成}
         one {剩余一个目标}
-        other {剩余 {objectivesCount} 个目标}
+        other {剩余 # 个目标}
   } 
 special: 特别
 weekly: 每周活动

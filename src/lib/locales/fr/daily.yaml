@@ -10,7 +10,7 @@ objectives_left: |-
   {objectivesCount, plural,
         =0 {tout est fait}
         one {il reste un objectif}
-        other {il reste {objectivesCount} objectifs}
+        other {il reste # objectifs}
   }
 special: Spécial
 weekly: Semaine

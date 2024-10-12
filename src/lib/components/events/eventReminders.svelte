@@ -115,7 +115,9 @@
 
 <h2>{$_('events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	{@html $_('events.watched.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` } )}
+	{@html $_('events.watched.empty_list', { 
+		image: `<img src="${base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />` 
+	 })}
 </EventsList>
 
 <fieldset class="settings">

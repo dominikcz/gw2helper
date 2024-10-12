@@ -8,19 +8,38 @@ show_categories: Pokaż kategorie
 show_chat_links: Pokaż linki do czatu
 show_event_times: Pokaż czasy zdarzeń
 show_headings: Pokaż nagłówki
+tts: >-
+  Jest {time}.
+  {plural, select,
+    true {
+      {inAdvance, plural,
+        =0 {Wydarzenia: {eventsList} właśnie się rozpoczęły }
+        one {Wydarzenia: {eventsList} zaczynają się za minutę}
+        few {Wydarzenia: {eventsList} zaczynają się za # minuty}
+        other {Wydarzenia: {eventsList} zaczynają się za # minut}
+      }
+    }
+    other {
+      {inAdvance, plural,
+        =0 {Wydarzenie: {eventsList} właśnie się rozpoczęło }
+        one {Wydarzenie: {eventsList} zaczyna się za minutę}
+        few {Wydarzenie: {eventsList} zaczyna się za # minuty}
+        other {Wydarzenie: {eventsList} zaczyna się za # minut}
+      }
+    }
+  }
 watched:
   alarm_sound: Sygnał alarmu
   choose_times: 'Wybierz godziny alarmów:'
   empty_list: >-
-    Jeszcze nie masz niczego na liście. Dodaj pozycję klikając ikonkę
-    <img src="{img_url}" alt="not on list" class="icon-small" /> na którymś z
-    poniższych wydarzeń.
-  notify_me: >-
+    Jeszcze nie masz niczego na liście. Dodaj pozycję klikając ikonkę {image} na
+    którymś z poniższych wydarzeń.
+  notify_me: |-
     Powiadom mnie {inAdvance, plural,
         =0 {gdy się zacznie}
         one {minutę wcześniej}
-        few {{inAdvance} minuty wcześniej}
-        other {{inAdvance} minut wcześniej}
+        few {# minuty wcześniej}
+        other {# minut wcześniej}
     }
   reminder_settings: Ustawienia powiadomień
   test_alarm: sprawdź dźwięk alarmu ({sound})
