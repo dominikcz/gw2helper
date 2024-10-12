@@ -1,5 +1,7 @@
 auto_scroll: Pergamino automático
 available: 'Disponible:'
+click_to_add: Haga clic para agregar a la lista de seguimiento
+click_to_remove: Haga clic para eliminar de la lista de vigilancia
 current_time: Hora actual
 event_timers: temporizadores del evento
 events: Eventos

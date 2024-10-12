@@ -1,5 +1,7 @@
 auto_scroll: Auto Scroll
 available: 'Verfügbar:'
+click_to_add: Klicken Sie hier, um zur Beobachtungsliste hinzuzufügen
+click_to_remove: Klicken Sie hier, um es aus der Beobachtungsliste zu entfernen
 current_time: Aktuelle Zeit
 event_timers: Event-Kalender
 events: Events
@@ -8,9 +10,8 @@ show_categories: Kategorien anzeigen
 show_chat_links: Chat-Links anzeigen
 show_event_times: Eventzeiten anzeigen
 show_headings: Überschriften anzeigen
-tts: >-
-  Es ist {time}.
-  {plural, select,
+tts: |-
+  Es ist {time}. {plural, select,
     true {
       {inAdvance, plural,
         =0 {Events: {eventsList} hat gerade begonnen }

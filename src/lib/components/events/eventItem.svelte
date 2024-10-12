@@ -10,7 +10,7 @@
 	export let showChatLinks = false;
 
 	$: watchedState_class = event.watched ? 'watched' : '';
-	$: watchedState_title = event.watched ? 'Click to remove from watched list' : 'Click to add to watched list';
+	$: watchedState_title = event.watched ? $_('events.click_to_remove') : $_('events.click_to_add');
 	// $: event.alarms, toggleAlarm();
 
 	let darkMode = themeWatcher();

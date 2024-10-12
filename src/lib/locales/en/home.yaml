@@ -1,5 +1,6 @@
 coins_for_pickup: Funds
 delivery_box: Delivery Box
+depreciated: DEPRECIATED
 items_for_pickup: Items
 show_depreciated_currencies: Show depreciated currencies
 title: Home

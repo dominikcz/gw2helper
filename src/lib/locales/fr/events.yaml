@@ -1,5 +1,7 @@
 auto_scroll: Déroulement automatique
 available: 'Disponible:'
+click_to_add: Cliquez pour ajouter à la liste de surveillance
+click_to_remove: Cliquez pour supprimer de la liste de surveillance
 current_time: Heure actuelle
 event_timers: Calendrier des événements
 events: Événements
@@ -8,9 +10,8 @@ show_categories: Afficher les catégories
 show_chat_links: Afficher les liens de chat
 show_event_times: Afficher les heures des événements
 show_headings: Afficher les titres
-tts: >-
-  Il est {time}.
-  {plural, select,
+tts: |-
+  Il est {time}. {plural, select,
     true {
       {inAdvance, plural,
         =0 {Événements : {eventsList} vient de démarrer }

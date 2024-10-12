@@ -1,5 +1,7 @@
 auto_scroll: Auto scroll
 available: 'Available:'
+click_to_add: Click to add to watched list
+click_to_remove: Click to remove from watched list
 current_time: Current time
 event_timers: Event timers
 events: Events
@@ -13,16 +15,16 @@ tts: >-
   {plural, select,
     true {
       {inAdvance, plural,
-        =0 {events: {eventsList} are starting now}
-        one {in one minute events: {eventsList} are starting}
-        other {in # minutes events: {eventsList} are starting}
+        =0 {Events: {eventsList} are starting now}
+        one {In one minute events: {eventsList} are starting}
+        other {In # minutes events: {eventsList} are starting}
       }
     }
     other {
       {inAdvance, plural,
-        =0 {event: {eventsList} is starting now}
-        one {in one minute event: {eventsList} is starting}
-        other {in # minutes event: {eventsList} is starting}
+        =0 {Event: {eventsList} is starting now}
+        one {In one minute event: {eventsList} is starting}
+        other {In # minutes event: {eventsList} is starting}
       }
     }
   }

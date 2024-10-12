@@ -1,6 +1,7 @@
-coins_for_pickup: 皮条箱
-delivery_box: 交付框
-items_for_pickup: 谨慎
-show_depreciated_currencies: 显示已贬值的货币
-title: 页 次
-your_wallet: 钱包
+coins_for_pickup: 资金
+delivery_box: 送货箱
+depreciated: 已贬值
+items_for_pickup: 项目
+show_depreciated_currencies: 显示贬值的货币
+title: 家
+your_wallet: 你的钱包

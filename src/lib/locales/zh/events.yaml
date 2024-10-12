@@ -1,5 +1,7 @@
 auto_scroll: 自动滚动
 available: '可用 :'
+click_to_add: 点击添加到观看列表
+click_to_remove: 点击从观看列表中删除
 current_time: 当前时间
 event_timers: 事件计时器
 events: 活动
@@ -8,9 +10,8 @@ show_categories: 显示类别
 show_chat_links: 显示聊天链接
 show_event_times: 显示事件时间
 show_headings: 显示标题
-tts: >-
-  是时候了{time}.
-  {plural, select,
+tts: |-
+  是时候了{time}. {plural, select,
     true {
       {inAdvance, plural,
           =0 {活动：{eventsList}刚刚开始 }
