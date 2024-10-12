@@ -16,13 +16,11 @@ jobs:
       - name: Build dependencies
         run: npm run build
       - name: Sync files to hosting
-        # uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with: 
           server: ${{ vars.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           port: 22
-          # private-ssh-key: ${{ secrets.FTP_PASSWORD }}
           password: ${{ secrets.FTP_PASSWORD }}
           local_path: build/*
           remote_path: ${{ vars.FTP_REMOTE_PATH }}

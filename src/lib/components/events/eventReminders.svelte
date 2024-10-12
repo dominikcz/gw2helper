@@ -8,7 +8,7 @@
 	import clock from '$lib/stores/clock';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let events;
 	export let showChatLinks = false;
@@ -115,13 +115,15 @@
 
 <h2>{$_('events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	{@html $_('events.watched.empty_list', { values: { img_url: `${base}/assets/rewards/map_heart_empty.png` } })}
+	{@html $_('events.watched.empty_list', { 
+		image: `<img src="${base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />` 
+	 })}
 </EventsList>
 
 <fieldset class="settings">
 	<legend>{$_('events.watched.reminder_settings')}</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	<p>{$_('events.watched.notify_me', {values: {inAdvance}})}</p>
+	<p>{$_('events.watched.notify_me', {inAdvance})}</p>
 	<div class="group">
 		<h4>{$_('events.watched.alarm_sound')}</h4>
 		{#each ['trumpet', 'squeeze', 'notif3', 'notif9'] as name}
@@ -131,8 +133,8 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { values: { sound } })}</button>
-	<button on:click={saveNotifySettings}>save</button>
+	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
+	<button on:click={saveNotifySettings}>{$_('common.save')}</button>
 </fieldset>
 
 <h2>{$_('events.available')}</h2>

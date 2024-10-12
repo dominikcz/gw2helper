@@ -1,0 +1,21 @@
+characters: Charaktere
+days: >-
+  {days, plural,
+      one {Tag}
+      other {Tage}
+  }
+died: gestorben
+hours_played: Spielstunden
+next_birthday_in: nächster Geburtstag in
+no_crafting_professions: keine Handwerksberufe
+times: >-
+  {times, plural,
+      one {Mal}
+      other {Mal}
+  }
+years: >-
+  {age, plural,
+    =0 {weniger als ein Jahr}
+    one {1 Jahr}
+    other {# Jahre}
+  }

@@ -1,0 +1,18 @@
+achievements: Réalisations
+daily: Tous les jours
+daily_and_weekly: Quotidien et hebdomadaire
+info:
+  hint: Indice
+  hint-content: >-
+    Pour voir les objectifs actuels de Wizard's Vault, vous devez d'abord vous
+    connecter au jeu.
+objectives_left: |-
+  {objectivesCount, plural,
+        =0 {tout est fait}
+        one {il reste un objectif}
+        other {il reste # objectifs}
+  }
+special: Spécial
+weekly: Semaine
+wizards_vault: La faute du magicien
+your_astral_acclaims: Vos déclarations astrales

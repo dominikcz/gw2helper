@@ -10,7 +10,7 @@
 	export let data;
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -47,7 +47,7 @@
 					</WidgetInfo>
 				{/if}
 				{#if result.items.length}
-					<ItemsList summary="Items for pickup" items={result.items} {filter} />
+					<ItemsList summary={$_('home.items_for_pickup')} items={result.items} {filter} />
 				{/if}
 			</div>
 		</details>

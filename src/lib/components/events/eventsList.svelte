@@ -1,5 +1,6 @@
 <script>
 	import EventItem from './eventItem.svelte';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let events;
 	export let showChatLinks = false;
@@ -10,7 +11,7 @@
 		<EventItem {event} {showChatLinks} on:toggle-watched on:alarms-change />
 	{:else}
 		<span class="no-results">
-			<slot>...nothing found</slot>
+			<slot>{$_('common.nothing_found')}</slot>
 		</span>
 	{/each}
 </div>

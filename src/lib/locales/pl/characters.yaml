@@ -1,8 +1,27 @@
 characters: Postacie
-days: dni
-died: zmarł
+days: >-
+  {days, plural,
+      one {dzień}
+      other {dni}
+  }
+died: >-
+  {gender, select,
+    male {zmarł}
+    female {zmarła}
+    other {zmarł}
+  }
 hours_played: godziny gry
 next_birthday_in: Następne urodziny za
-no_crafting_professions: Brak profesji rzemieślniczych
-times: razy
-years: '{age} lata'
+no_crafting_professions: brak profesji rzemieślniczych
+times: >-
+  {times, plural,
+      one {raz}
+      other {razy}
+  }
+years: >-
+  {age, plural,
+    =0 {poniżej roku}
+    one {1 rok}
+    few {# lata}
+    other {# lat}
+  }

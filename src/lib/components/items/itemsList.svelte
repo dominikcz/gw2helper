@@ -4,6 +4,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from './itemTooltipRenderer';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let summary: string;
 	export let items;
@@ -27,7 +28,7 @@
 					<Item {item} />
 				{:else}
 					<slot name="no-results">
-						<span class="no-results">...nothing found</span>
+						<span class="no-results">{$_('common.nothing_found')}</span>
 					</slot>
 				{/each}
 			</div>

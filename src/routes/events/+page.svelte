@@ -7,7 +7,7 @@
 	import Tab from '$lib/components/tabs/tab.svelte';
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 

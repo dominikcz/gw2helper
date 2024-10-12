@@ -1,0 +1,36 @@
+achievements: 成绩
+achievements_completed: 完成成绩
+achievements_todo: 成就
+achievements_completed_number: 成就数目
+achievements_to_do: 左边做
+central_tyria_mastery: 中央泰利亚精通
+daily: 日报
+daily_points: 每日点数
+empty_list: >-
+  您还没有在列表中添加任何内容 。 点击添加项目 <img alt="not on list" class="icon-small"
+  src="{img_url}"/> 图标。
+eod_mastery: 电子数据掌握
+giving_gold: 给黄金
+giving_items: 提供项目
+giving_points: 给定点数
+giving_titles: 授予头衔
+gold_to_get: 黄金来取
+hot_mastery: 高超的手艺
+icebrood_saga_mastery: 冰冻萨加的掌握
+items_to_get: 要得到的项目
+janthir_wilds_mastery: 扬蒂尔·怀斯掌握
+list: 列表
+monthly_points: 每月点数
+not_completed: 未完成
+pof_mastery: PoF 熟练
+points_from_achievements: 来自成就的点数
+points_to_get: 要得到的点
+showing_out_of: 显示 {shown} 类别中的 {total}
+sofo_mastery: SofO 掌握
+sort_by_in_game_order: 按游戏顺序排序
+sort_by_name: 按名称排序
+sort_by_points: 按点排序
+titles_to_get: 要获得的标题
+to_dos: 要做到这一点
+weekly: 每周活动
+your_list: 名单

@@ -12,8 +12,8 @@
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
-	import { _ } from 'svelte-i18n';
+	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 
@@ -90,7 +90,7 @@
 	}
 
 	function saveSettings() {
-		utils.saveAchievesSettings({
+		utils.saveAchievementsSettings({
 			notCompleted,
 			withPoints,
 			withMasteryCentral,
@@ -117,7 +117,7 @@
 		} else {
 			todoList = todoList.filter((x) => x !== obj.id);
 		}
-		await utils.saveAchievesToDo(todoList);
+		await utils.saveAchievementsToDo(todoList);
 	}
 
 	function expandToDoList(all, list) {
@@ -139,7 +139,7 @@
 <h1>{ $_('achievements.achievements') }</h1>
 
 <Awaiter promise={data.achievements} let:result>
-	{@const _result = filteredAchieves(result, filter, achievFilterCallback, null, [
+	{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, [
 		notCompleted,
 		withPoints,
 		withMasteryCentral,
@@ -156,14 +156,14 @@
 		weekly,
 	])}
 	<WidgetsGroup name={$_('achievements.achievements_completed')}>
-		<WidgetInfo title="{ $_('achievements.achieves_completed') }" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
+		<WidgetInfo title="{ $_('achievements.achievements_completed') }" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
 		<WidgetInfo title="{ $_('achievements.daily_points') }" value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
 		<WidgetInfo title="{ $_('achievements.monthly_points') }" value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
-		<WidgetInfo title="{ $_('achievements.points_from_achieves') }" value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title="{ $_('achievements.points_from_achievements') }" value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
 		<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
 	</WidgetsGroup>
 	<WidgetsGroup name={$_('achievements.achievements_todo')}>
-		<WidgetInfo title="{ $_('achievements.achieves_to_do') }" value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
+		<WidgetInfo title="{ $_('achievements.achievements_to_do') }" value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
 		<WidgetInfo title="{ $_('achievements.points_to_get') }" value={sum(result.categories, 'points_to_get')} image="{base}/assets/rewards/AP.png" />
 		<WidgetInfo title="{ $_('achievements.titles_to_get') }" value={result.rewards_to_get.get('title')} image="{base}/assets/rewards/Talk_collection_option.png" />
 		<WidgetInfo title="{ $_('achievements.items_to_get') }" value={result.rewards_to_get.get('item')} image="{base}/assets/rewards/Achievement_Chest_interface_icon.png" />

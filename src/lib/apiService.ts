@@ -1,19 +1,19 @@
 import Logger from "./logger";
 import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
-import { ACHIEVES_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
+import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
-import { CURRENT_SEASON, INACTIVE_ACHIEVES_CATEGORIES, SEASONAL_ACHIEVES_CATEGORIES, sumRewards } from "./components/achievements/achieves";
+import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
 const CACHE_TIMEOUT = 15 * 60;
 const INVALID_IDS: number[] = [4589, 21083, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101651];
-const INVALID_ACHIEVES_IDS: number[] = [];
-const ACHIEVES_NOT_IN_API = {
+const INVALID_ACHIEVEMENTS_IDS: number[] = [];
+const ACHIEVEMENTS_NOT_IN_API = {
     // Rift Hunting
-    // TODO: will have to change to list of objects and get achieves' descriptions from wiki :(
+    // TODO: will have to change to list of objects and get achievements' descriptions from wiki :(
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
 
@@ -37,9 +37,9 @@ interface CacheEntry {
 }
 
 let _items;
-let _achieves;
+let _achievements;
 let itemsCache;
-let achievesCache;
+let achievementsCache;
 let requestCache: Map<string, CacheEntry>;
 
 let _apiKey = "";
@@ -93,8 +93,8 @@ const cacheRequest = async (req: string, value: any) => {
     await ls.set(requestCacheName(), [...requestCache.entries()]);
 };
 
-const getFromAchievesCache = (key: string): object => {
-    return achievesCache.get(key);
+const getFromAchievementsCache = (key: string): object => {
+    return achievementsCache.get(key);
 }
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
@@ -102,6 +102,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         Logger.error('not initialized, please provide api key from https://account.arena.net');
         return null;
     }
+    query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
     const _options = Object.assign({}, fetchOptions, options);
     let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
@@ -174,7 +175,7 @@ const charactersItems = async () => {
 };
 
 const materials = async () => {
-    return promiseMe(apiClient("/v2/account/materials", `lang=${fetchOptions.apiLang}`), async (rawData) => {
+    return promiseMe(apiClient("/v2/account/materials", ""), async (rawData) => {
         let ids = rawData.map((x) => x.id);
         return expandItems(ids, rawData);
     })
@@ -271,7 +272,7 @@ const guilds = async () => {
 };
 
 const items = (x: string) => {
-    return apiClient("/v2/items", `lang=${fetchOptions.apiLang}&ids=${x}`);
+    return apiClient("/v2/items", `ids=${x}`);
 };
 
 const account = () => {
@@ -313,16 +314,16 @@ const tokenInfo = async () => {
 const achievements = async (all: boolean = false) => {
     return new Promise((resolve) => {
         Promise.all([
-            apiClient("/v2/achievements/categories", `lang=${fetchOptions.apiLang}&ids=all&v=2022-03-23T19:00:00.000Z`),
+            apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
             apiClient("/v2/account", ""),
             apiClient("/v2/account/achievements", ""),
             apiClient("/v2/achievements", "")])
-            .then(([categories, account, account_achieves, allIds]) => {
-                account_achieves.forEach(x => {
+            .then(([categories, account, account_achievements, allIds]) => {
+                account_achievements.forEach(x => {
                     x.bits_done = [...x.bits || []];
                     delete x.bits;
                 });
-                resolve(expandAchieves(account, categories, account_achieves, allIds));
+                resolve(expandAchievements(account, categories, account_achievements, allIds));
             });
     });
 };
@@ -349,7 +350,7 @@ const currencies = async (order = []) => {
     // denormalize
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
-    return promiseMe(apiClient("/v2/currencies", `lang=${fetchOptions.apiLang}&ids=all`), (resp) => {
+    return promiseMe(apiClient("/v2/currencies", `ids=all`), (resp) => {
         const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
         const _data = mergeById(_rawData, _dep);
         _data.forEach(x => {
@@ -414,9 +415,9 @@ const wizardsVaultSpecial = async () => {
 
 const init = async (newApiKey: string, options?: object) => {
     _items = await ls.getObject(ITEMS_CACHE, []);
-    _achieves = await ls.getObject(ACHIEVES_CACHE, []);
+    _achievements = await ls.getObject(ACHIEVEMENTS_CACHE, []);
     itemsCache = _items ? new Map(_items) : new Map();
-    achievesCache = _achieves ? new Map(_achieves) : new Map();
+    achievementsCache = _achievements ? new Map(_achievements) : new Map();
 
     Logger.log("apiService.init", newApiKey);
     _apiKey = newApiKey;
@@ -474,15 +475,15 @@ const expandItems = async (ids: Array<number>, collection) => {
     return data;
 };
 
-const expandAchieves = async (account, categories, accountAchieves, allIds) => {
-    Object.keys(ACHIEVES_NOT_IN_API).forEach(x => {
-        allIds.push(...(ACHIEVES_NOT_IN_API[x]));
+const expandAchievements = async (account, categories, accountAchievements, allIds) => {
+    Object.keys(ACHIEVEMENTS_NOT_IN_API).forEach(x => {
+        allIds.push(...(ACHIEVEMENTS_NOT_IN_API[x]));
     })
 
-    const knownIds = [...achievesCache.keys()];
-    const _doneIds = accountAchieves.filter(x => x.done === true).map(x => x.id);
+    const knownIds = [...achievementsCache.keys()];
+    const _doneIds = accountAchievements.filter(x => x.done === true).map(x => x.id);
     const _notDone = allIds.filter(x => !_doneIds.includes(x));
-    const missingIds = allIds.filter((x) => !INVALID_ACHIEVES_IDS.includes(x) && !knownIds.includes(x));
+    const missingIds = allIds.filter((x) => !INVALID_ACHIEVEMENTS_IDS.includes(x) && !knownIds.includes(x));
 
     // prepare list of ids to request in batches of 200 max
     const batches = [];
@@ -500,43 +501,43 @@ const expandAchieves = async (account, categories, accountAchieves, allIds) => {
         resp.forEach((x) => {
             if (x) {
                 x.description = toHtml(x.description)
-                achievesCache.set(x.id, x);
+                achievementsCache.set(x.id, x);
             }
         });
         // store updated achievs in localStorage for future
-        await ls.set(ACHIEVES_CACHE, [...achievesCache.entries()]);
-        mergeById(resp, accountAchieves);
+        await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
+        mergeById(resp, accountAchievements);
     }
 
     let _log = '';
 
     // we don't want categories of achievements that are not obtainable anymore
-    const ignored_achieves = [...INACTIVE_ACHIEVES_CATEGORIES];
+    const ignored_achievements = [...INACTIVE_ACHIEVEMENTS_CATEGORIES];
     // so we also ignore seasonal ones (appart from current season ofc)
-    Object.keys(SEASONAL_ACHIEVES_CATEGORIES).forEach(season => {
+    Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach(season => {
         if (season != CURRENT_SEASON) {
-            ignored_achieves.push(...SEASONAL_ACHIEVES_CATEGORIES[season]);
+            ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season]);
         }
     })
 
     categories.forEach(cat => {
-        // if (ACHIEVES_NOT_IN_API[cat.id]) {
+        // if (ACHIEVEMENTS_NOT_IN_API[cat.id]) {
         //     const tmp = cat.achievements;
-        //     tmp.push(...(ACHIEVES_NOT_IN_API[cat.id].map(x => ({ id: x }))));
+        //     tmp.push(...(ACHIEVEMENTS_NOT_IN_API[cat.id].map(x => ({ id: x }))));
         //     cat.achievements = unique(tmp);
         // }
         _log += `${cat.id}, // ${cat.name}\n`;
-        cat.ignore = (ignored_achieves.includes(cat.id)) ? true : false;
+        cat.ignore = (ignored_achievements.includes(cat.id)) ? true : false;
         if (!cat.ignore) {
             cat.ignore
         }
         cat.achievements = cat.achievements.map(x => {
-            let achiev = achievesCache.get(x.id);
+            let achiev = achievementsCache.get(x.id);
             if (!achiev) {
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchieves.find(acv => acv.id == x.id) || {
+            const mine = accountAchievements.find(acv => acv.id == x.id) || {
                 id: x.id,
                 current: 0,
                 repeated: 0,
@@ -632,10 +633,10 @@ const clearCache = async () => {
     Logger.log('clearing cache...');
     await ls.delete(requestCacheName());
     await ls.delete(ITEMS_CACHE);
-    await ls.delete(ACHIEVES_CACHE);
+    await ls.delete(ACHIEVEMENTS_CACHE);
     await ls.delete(KEY_HIST);
     itemsCache.clear();
-    achievesCache.clear();
+    achievementsCache.clear();
     requestCache.clear();
 }
 
@@ -660,7 +661,7 @@ export default {
     currencies,
     wallet,
     clearCache,
-    getFromAchievesCache,
+    getFromAchievementsCache,
     delivery,
     wizardsVaultDaily,
     wizardsVaultWeekly,

@@ -1,0 +1,18 @@
+achievements: Logros
+daily: Diario
+daily_and_weekly: Diario y semanal
+info:
+  hint: Indirecta
+  hint-content: >-
+    Para ver los objetivos actuales de Wizard's Vault, primero debes iniciar
+    sesión en el juego.
+objectives_left: |-
+  {objectivesCount, plural,
+        =0 {todo listo}
+        one {Queda un objetivo}
+        other {Queda # objetivos}
+  }
+special: Especial
+weekly: Semanal
+wizards_vault: Wizard's Vault
+your_astral_acclaims: Tu Aclamación Astral

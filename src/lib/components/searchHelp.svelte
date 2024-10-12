@@ -1,14 +1,15 @@
 <script>
 	import { alert } from './alert/alert';
+	import { t as _ } from '$lib/services/i18n.js';
 </script>
 
 <button
 	on:click={() => {
-		$alert = `<h3>Search help</h3
-            <p>Knock yourself out with queries like:</p>
+		$alert = `<h3>${$_('common.search_help.title')}</h3>
+            <p>${$_('common.search_help.prompt')}</p>
             <ul>
-                <li>ascend ring</li>
-                <li>utility master condition</li>
+                <li>${$_('common.search_help.example1')}</li>
+                <li>${$_('common.search_help.example2')}</li>
                 <li>&gt;=100</li>
                 <li>&gt;10 &lt;200</li>
             </ul>`;

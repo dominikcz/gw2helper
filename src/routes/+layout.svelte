@@ -4,10 +4,8 @@
 	import { beforeNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	import { _ } from 'svelte-i18n';
 	import languages from '$lib/locales/languages.json';
-	import { lang } from '$lib/stores/lang.js';
-	import { loadLocale } from '$lib/services/i18n.js';
+	import { t as _, locale } from '$lib/services/i18n.js';
 
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
@@ -23,8 +21,6 @@
 	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
 	import { onMount } from 'svelte';
 
-	import { EVENTS_PARTIAL, EVENT_TEMPLATE } from '$lib/components/events/tts';
-	import mustache from 'mustache';
 	import eventsUtils from '$lib/components/events/eventsUtils.js';
 	import clock from '$lib/stores/clock.js';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
@@ -56,11 +52,6 @@
 			notif3: [6834, 1160],
 			notif9: [8000, 2182],
 		},
-	});
-
-	beforeNavigate(async ({ to }) => {
-		if (!to) return;
-		await loadLocale(to?.url.pathname);
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
@@ -157,7 +148,8 @@
 
 	function playAlarm(info) {
 		if (!info) return;
-		let tts = mustache.render(EVENT_TEMPLATE, info, EVENTS_PARTIAL);
+		// console.log('info', info)
+		let tts = $_('events.tts', {...info})
 		// ignoring request with the same text, as we were not able to speak previous one yet and excessive queuing doesn't help ;)
 		if ([lastNotify, confirmedNotify].includes(tts)) return;
 		lastNotify = tts;
@@ -166,7 +158,7 @@
 			duration: 1000 * (tts.length / 10),
 			onpop: (id, details) => {
 				console.log('onpop', details);
-				if (!details.autoClose) {
+				if (details.event != undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);
 					confirmedNotify = tts;
@@ -185,7 +177,7 @@
 			msg.volume = 1; // From 0 to 1
 			msg.rate = 1; // From 0.1 to 10
 			msg.pitch = 1; // From 0 to 2
-			msg.lang = 'en-US';
+			msg.lang = $locale;
 			msg.onend = (ev) => {
 				// reset last spoken text
 				lastNotify = '';
@@ -212,7 +204,7 @@
 			<img src="{base}/assets/heart.png" alt="logo" />
 			<div class="line">
 				<h1>GW2 Helper</h1>
-				<small>v{data.version} <LocaleSwitch {languages} bind:value={$lang} keysOnly={true} /></small>
+				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>
 			</div>
 		</header>
 		<Navigation items={navigation} {active} />
@@ -252,7 +244,7 @@
 						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok', { values: {token: tokenInfo.name}})}</em></p>
+						<p><em>{$_('layout.token_ok', {token: tokenInfo.name})}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>

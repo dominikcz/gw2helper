@@ -5,8 +5,8 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, filteredAchieves } from '$lib/components/achievements/achieves.js';
-	import { _ } from 'svelte-i18n';
+	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 
@@ -79,12 +79,12 @@
 		return !x.ignore;
 	}
 
-	function extractDaily(achieves) {
-		return filteredAchieves(achieves, '', filterDaily, onlyActiveCategories );
+	function extractDaily(achievements) {
+		return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories );
 	}
 
-	function extractWeekly(achieves) {
-		return filteredAchieves(achieves, '', filterWeekly, onlyActiveCategories );
+	function extractWeekly(achievements) {
+		return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
 	}
 </script>
 
@@ -95,6 +95,11 @@
 <Awaiter promise={data.wallet} let:result>
 	<WidgetInfo title="{ $_('daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 </Awaiter>
+
+<div class="info-block">
+	<h4>{ $_('daily.info.hint') }</h4>
+	<p>{ $_('daily.info.hint-content') }</p>
+</div>
 
 <Awaiter promise={data.daily} let:result>
 	<WizardsVaultCategory title="{ $_('daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
@@ -117,13 +122,13 @@
 	<h4>{ $_('daily.daily') }</h4>
 	<div class="achiev-container">
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
-			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} class="masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;"/>
+			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} />
 		{/each}
 	</div>
 	<h4>{ $_('daily.weekly') }</h4>
 	<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 		{#each sort(weeklies.categories, sortBy) as category (category.id)}
-			<AchievGroup {category} {showApiLinks} {sortBy} {todoList}/>
+			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} />
 		{/each}
 	</div>
 </Awaiter>

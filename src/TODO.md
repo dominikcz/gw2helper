@@ -1,10 +1,7 @@
 # TODO
 - event timer 
     - pomyśleć jednak o jakiejś formie sticky dla godzin
-    
-- items 
-    - pokazać upgrade (runy agony ) jako items
-    
+        
 - achievs 
     - planowanie wg zysku/pracochłonności/kosztów
     - w todo sortowanie po ilości ap i postępie malejąco

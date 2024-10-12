@@ -2,7 +2,8 @@
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
 	import AstralAcclaim from '../astralAcclaim.svelte';
-	import clock from '$lib/stores/clock';	
+	import clock from '$lib/stores/clock';
+	import { t as _ } from '$lib/services/i18n';
 
 	export let data;
 	export let targetTime;
@@ -38,7 +39,7 @@
 			{#if data.meta_progress_current}
 				<progress value={data.meta_progress_current} max={data.meta_progress_complete} />
 			{:else}
-				<span>{notClaimed()} objectives left</span>
+				<span>{$_('daily.objectives_left', {objectivesCount: notClaimed()}) }</span>
 			{/if}
 			<div class="reward">
 				{acclaimLeft()}

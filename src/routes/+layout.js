@@ -5,27 +5,25 @@ export const trailingSlash = 'always';
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
-import { initi18n } from '$lib/services/i18n.js';
-import { locale } from 'svelte-i18n';
-import { lang } from "$lib/stores/lang.js";
-import { get } from 'svelte/store';
-import { _ } from "svelte-i18n";
+import { loadTranslations, t as _ } from '$lib/services/i18n';
 
 console.log(__NAME__, __VERSION__);
 
-export async function load({ fetch }) {
-	locale.set('en');
-	await lang.init();
-	const defLang = get(lang);
-	await initi18n(defLang);
-	console.log('initialized')
+export async function load({ fetch, url }) {
+	const { pathname } = url;
+
+	const initLocale = utils.readLang();
+
+	await loadTranslations(initLocale, pathname);
+	let no_token = _.get('layout.no_token');
+	console.log('initialized');
 
 	const key = await utils.readApiKey();
 	// const apiService = await import("$lib/apiService.ts");
 	const dummyTokenInfo = {
 		name: null,
 		permissions: [],
-		error: get(_)('layout.no_token'),
+		error: no_token,
 	};
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
@@ -60,6 +58,6 @@ export async function load({ fetch }) {
 		} catch (error) {
 			console.log('Layout load error', error)
 		}
-	}
+	} 
 	return returnObj;
 }

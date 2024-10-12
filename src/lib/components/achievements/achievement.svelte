@@ -188,7 +188,7 @@
 			{#if _bits}
 				<div class="reward-item">
 					<span>{_bitsDone} / {_bits}</span>
-					<img src="{base}/assets/rewards/Achievements_Summary.png" alt="achieves" title="There are {_bits - _bitsDone} tasks left to do" />
+					<img src="{base}/assets/rewards/Achievements_Summary.png" alt="achievements" title="There are {_bits - _bitsDone} tasks left to do" />
 				</div>
 			{/if}
 		</div>

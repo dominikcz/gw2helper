@@ -1,0 +1,18 @@
+achievements: Erfolge
+daily: Täglich
+daily_and_weekly: Täglich und wöchentlich
+info:
+  hint: Andeuten
+  hint-content: >-
+    Um die aktuellen Ziele von Gewölbe des Zauberers zu sehen, müssen Sie sich zuerst
+    beim Spiel anmelden.
+objectives_left: >-
+  {objectivesCount, plural,
+        =0 {keine Ziele}
+        one {ein verbleibendes Ziel}
+        other {# verbleibende Ziele}
+  } 
+special: Besondere
+weekly: Wöchentlich
+wizards_vault: Gewölbe des Zauberers
+your_astral_acclaims: Ihre Astraler Ruhm

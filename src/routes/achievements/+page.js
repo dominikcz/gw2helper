@@ -6,7 +6,7 @@ export async function load({ fetch, parent }) {
     const { apiService } = await parent();
 	return {
 		achievements: apiService.getApiKey() ? apiService.achievements(false) : [],
-		todo: utils.readAchievesToDo(),
-		settings: utils.readAchievesSettings(),
+		todo: utils.readAchievementsToDo(),
+		settings: utils.readAchievementsSettings(),
 	};
 }

@@ -4,12 +4,13 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';
 	import themeWatcher from '$lib/stores/themeWatcher';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let event;
 	export let showChatLinks = false;
 
 	$: watchedState_class = event.watched ? 'watched' : '';
-	$: watchedState_title = event.watched ? 'Click to remove from watched list' : 'Click to add to watched list';
+	$: watchedState_title = event.watched ? $_('events.click_to_remove') : $_('events.click_to_add');
 	// $: event.alarms, toggleAlarm();
 
 	let darkMode = themeWatcher();
@@ -45,7 +46,7 @@
 			{#if showChatLinks}
 				<span>{event.chatlink}</span>
 			{/if}
-			<h5>Choose the times for your alarms:</h5>
+			<h5>{$_('events.watched.choose_times')}</h5>
 			<Chips name={event.name} options={event.startTimes} value={event.alarms} on:chips-change={hndHoursChange} />
 		{:else}
 			<span>Next: {event.next}</span>

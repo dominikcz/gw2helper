@@ -1,0 +1,26 @@
+characters: Caractères
+days: >-
+  {days, plural,
+      one {jour}
+      other {jours}
+  }
+died: >-
+  {gender, select,
+    male {il est mort}
+    female {elle est morte}
+    other {il est mort}
+  }
+hours_played: heures jouées
+next_birthday_in: prochain anniversaire
+no_crafting_professions: pas de professions artisanales
+times: >-
+  {times, plural,
+      one {fois}
+      other {fois}
+  }
+years: >-
+  {age, plural,
+    =0 {moins d'un an}
+    one {1 an}
+    other {# ans}
+  }

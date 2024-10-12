@@ -5,7 +5,7 @@
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 	import { base } from '$app/paths';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let data;
 

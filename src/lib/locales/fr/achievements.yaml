@@ -1,0 +1,37 @@
+achievements: Réalisations
+achievements_completed: Réalisations
+achievements_todo: Réalisations à accomplir
+achievements_completed_number: Nombre de réalisations
+achievements_to_do: Gauche à faire
+central_tyria_mastery: Maîtrise de la Tyria centrale
+daily: Tous les jours
+daily_points: Points quotidiens
+empty_list: >-
+  Vous n'avez encore rien ajouté à la liste. Ajouter des éléments en cliquant
+  sur <img alt="not on list" class="icon-small" src="{img_url}"/> icône sur la
+  liste des réalisations.
+eod_mastery: Maîtrise EoD
+giving_gold: Donner de l'or
+giving_items: Donner des éléments
+giving_points: Donner des points
+giving_titles: Donner des titres
+gold_to_get: L'or pour obtenir
+hot_mastery: Maîtrise du HoT
+icebrood_saga_mastery: Icebrood Saga maîtrise
+items_to_get: Éléments à obtenir
+janthir_wilds_mastery: Janthir Wilds maîtrise
+list: Liste
+monthly_points: Points mensuels
+not_completed: Non achevée
+pof_mastery: Maîtrise du PoF
+points_from_achievements: Points positifs
+points_to_get: Points à obtenir
+showing_out_of: montrant les catégories {montrées} sur {total}
+sofo_mastery: Maîtrise de la SofO
+sort_by_in_game_order: Tri par ordre dans le jeu
+sort_by_name: trier par nom
+sort_by_points: Tri par points
+titles_to_get: Titres à obtenir
+to_dos: Pour faire
+weekly: Semaine
+your_list: Votre liste

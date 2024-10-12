@@ -7,7 +7,7 @@
 	import themeWatcher from '$lib/stores/themeWatcher';
 	import EventTimerItem from './eventTimerItem.svelte';
 	import EventTimerTime from './eventTimerTime.svelte';
-	import { _ } from 'svelte-i18n';
+	import { t as _ } from '$lib/services/i18n.js';
 
 	export let showEventTimes = true;
 	export let showChatLinks = true;
