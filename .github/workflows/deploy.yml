@@ -2,7 +2,6 @@ name: Build and deploy to FTP
 on: 
   push:
     tags: [v*]
-    branches: main
   workflow_dispatch:
 
 jobs:
