@@ -2,7 +2,7 @@ characters: Charaktere
 days: >-
   {days, plural,
       one {Tag}
-      other {Tage}
+      other {Tagen}
   }
 died: gestorben
 hours_played: Spielstunden
