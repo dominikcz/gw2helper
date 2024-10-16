@@ -10,10 +10,12 @@
         flex-flow: row nowrap;
         border-bottom: 0.6em solid var(--gw2helper-module-white);
         column-gap: 2em;
+        align-items: flex-start;
+        overflow-x: scroll;
         button{
-            padding: 0.6em 3em;
+            padding: 0.6em 2em;
             border: none;
-            height: 3em;
+            height: 4em;
             &.selected{
                 background-color: var(--gw2helper-module-white);
             }

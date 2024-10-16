@@ -5,6 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Wiki from '../wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
+	import {t as _} from "$lib/services/i18n";
 
 	export let id;
 	export let icon;
@@ -75,7 +76,7 @@
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
 		{/if}
-		<a href={helperUtils.wikiLink(name)} target="_blank" title="Read more on GW2 Wiki">
+		<a href={helperUtils.wikiLink(name)} target="_blank" title={$_('common.read_more_on_wiki')}>
 			<Wiki width="1.5em" height="1.5em" />
 		</a>
 	</div>

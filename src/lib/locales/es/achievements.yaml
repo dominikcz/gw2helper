@@ -1,8 +1,14 @@
 achievements: Logros
 achievements_completed: Logros completados
-achievements_todo: Logros por hacer
 achievements_completed_number: Número de logros
+achievements_left: |-
+  {todo, plural,
+    =0 {obtuviste todos los logros}
+    one {queda un logro}
+    other {# logros restantes}
+  } 
 achievements_to_do: Izquierda a hacer
+achievements_todo: Logros por hacer
 central_tyria_mastery: Central Tyria mastery
 daily: Diario
 daily_points: Puntos diarios
@@ -26,6 +32,21 @@ not_completed: No terminada
 pof_mastery: PoF mastery
 points_from_achievements: Puntos de logro
 points_to_get: Puntos para conseguir
+rewards_ap_left: |-
+  Puedes ganar {points, plural,
+    one {un punto}
+    other {# puntos}
+  } en esta categoría
+rewards_gold: Monedas para ganar
+rewards_items: Artículos para obtener
+rewards_mastery_eod: Puntos de maestría End of Dragons que se ganarán
+rewards_mastery_hot: Puntos de maestría Heart of Thorns que se ganarán
+rewards_mastery_ice: Puntos de maestría Icebrood Saga que se ganarán
+rewards_mastery_jw: Puntos de maestría Janthir Wilds que se ganarán
+rewards_mastery_pof: Puntos de maestría Path of Fire que se ganarán
+rewards_mastery_soto: Puntos de maestría Secrets of the Obscure que se ganarán
+rewards_mastery_tyria: Puntos de maestría Central Tyria que se ganarán
+rewards_title: Título por ganar
 showing_out_of: mostrando {shown} categorías de {total}
 sofo_mastery: SofO mastery
 sort_by_in_game_order: orden en el juego

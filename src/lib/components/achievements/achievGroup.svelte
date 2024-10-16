@@ -6,6 +6,7 @@
 	import Wiki from "../wiki.svelte";
 	import AchievList from "./achievList.svelte";
     import { sort } from "./achievements";
+    import { t as _ } from "$lib/services/i18n";
 
     export let category;
     export let todoList = [];
@@ -32,7 +33,7 @@
                 {#if category.rewards_to_get.has('title')}
                     <div class="reward-item">
                         <span>{category.rewards_to_get.get('title')}</span>
-                        <img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This category rewards a title" />
+                        <img src="{base}/assets/rewards/Title_icon.png" alt="title" title={$_('achievements.rewards_title')} />
                     </div>
                 {/if}
                 {#if category.rewards_to_get.has('coins')}
@@ -46,7 +47,7 @@
                         <img
                             src="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
                             alt="item"
-                            title="This category rewards items"
+                            title={$_('achievements.rewards_items')}
                         />
                     </div>
                 {/if}
@@ -56,7 +57,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
                             alt="mastery points Central Tyria"
-                            title="This category rewards Central Tyria mastery points"
+                            title={$_('achievements.rewards_mastery_tyria')}
                         />
                     </div>
                 {/if}
@@ -66,7 +67,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
                             alt="mastery points Heart of Thorns"
-                            title="This category rewards Heart of Thorns mastery points"
+                            title={$_('achievements.rewards_mastery_hot')}
                         />
                     </div>
                 {/if}
@@ -76,7 +77,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
                             alt="mastery points Path of Fire"
-                            title="This category rewards Path of Fire mastery points"
+                            title={$_('achievements.rewards_mastery_pof')}
                         />
                     </div>
                 {/if}
@@ -86,7 +87,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
                             alt="mastery points Icebrood Saga"
-                            title="This category rewards Icebrood Saga mastery points"
+                            title={$_('achievements.rewards_mastery_ice')}
                         />
                     </div>
                 {/if}
@@ -96,7 +97,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
                             alt="mastery points End of Dragons"
-                            title="This category rewards End of Dragons mastery points"
+                            title={$_('achievements.rewards_mastery_eod')}
                         />
                     </div>
                 {/if}
@@ -106,7 +107,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
                             alt="mastery points Secrets of the Obscure"
-                            title="This category rewards Secrets of the Obscure mastery points"
+                            title={$_('achievements.rewards_mastery_soto')}
                         />
                     </div>
                 {/if}
@@ -116,7 +117,7 @@
                         <img
                             src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
                             alt="mastery points Janthir Wilds"
-                            title="This category rewards Janthir Wilds mastery points"
+                            title={$_('achievements.rewards_mastery_jw')}
                         />
                     </div>
                 {/if}
@@ -126,7 +127,7 @@
                         <img
                             src="{base}/assets/rewards/AP.png"
                             alt="achievement points"
-                            title="You can get {category.points_to_get} achievement points from this category"
+                            title={$_('achievements.rewards_ap_left', {points: category.points_to_get})}
                         />
                     </div>
                 {/if}
@@ -135,9 +136,9 @@
                     <img
                         src="{base}/assets/rewards/Achievements_Summary.png"
                         alt="achievements"
-                        title="There are {category.achievements.length} achievements left to do"
+                        title={$_('achievements.achievements_left', {todo: category.achievements.length})}
                     />
-                    <a href={helperUtils.wikiLink(category.name)} target="_blank">
+                    <a href={helperUtils.wikiLink(category.name)} target="_blank" title={$_('common.read_more_on_wiki')}>
                         <Wiki width="1.8em" height="1.8em" />
                     </a>
                 </div>
