@@ -1,3 +1,24 @@
+achievement_can_get: >-
+  Sie können {pointsToGet, plural,
+    one {einen Punkt}
+    other {# Punkte}
+  } für diesen Erfolg erhalten
+achievement_tasks_left: >-
+  {left, plural,
+    one {Es ist noch eine Aufgabe}
+    other {Es sind noch # Aufgaben}
+  } zu erledigen
+achievement_is_collection: Diese Leistung ist mit einer Sammlung verknüpft
+achievement_is_hidden: Dies ist ein versteckter Erfolg
+achievement_is_item: Dieser Erfolg belohnt Gegenstände
+achievement_is_mastery_eod: Dieser Erfolg belohnt End of Dragons-Meisterschaftspunkte
+achievement_is_mastery_hot: Dieser Erfolg belohnt Heart of Thorns-Meisterschaftspunkte
+achievement_is_mastery_ice: Dieser Erfolg belohnt Icebrood Saga-Meisterschaftspunkte
+achievement_is_mastery_jw: Dieser Erfolg belohnt Janthir Wilds-Meisterschaftspunkte
+achievement_is_mastery_pof: Dieser Erfolg belohnt Path of Fire-Meisterschaftspunkte
+achievement_is_mastery_soto: Dieser Erfolg belohnt Secrets of the Obscure-Meisterschaftspunkte
+achievement_is_mastery_tyria: Dieser Erfolg belohnt Central Tyria-Meisterschaftspunkte
+achievement_is_title: Dieser Erfolg belohnt einen Titel
 achievements: Erfolge
 achievements_completed: Vollständige Leistungen
 achievements_completed_number: Anzahl der Leistungen
@@ -10,6 +31,8 @@ achievements_left: |-
 achievements_to_do: Bleibt zu tun
 achievements_todo: Erfolge zu tun
 central_tyria_mastery: Zentraltyria Beherrschunge
+click_to_add_todo: Klicken Sie, um ihn zur TODO-Liste hinzuzufügen
+click_to_remove_todo: Klicken Sie, um ihn aus der TODO-Liste zu entfernen
 daily: Täglich
 daily_points: Tagespunkte
 empty_list: >-

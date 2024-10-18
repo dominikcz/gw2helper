@@ -1,4 +1,3 @@
-achievements: Achievements
 achievement_can_get: >-
   You can get {pointsToGet, plural,
     one {one point}
@@ -9,8 +8,6 @@ achievement_tasks_left: >-
     one {is one task}
     other {are # tasks}
   } left to do
-achievements_completed: Completed achievements
-achievements_completed_number: Number of achievements
 achievement_is_collection: This achievement is linked to a collection
 achievement_is_hidden: This is a hidden achievement
 achievement_is_item: This achievement rewards items
@@ -22,6 +19,9 @@ achievement_is_mastery_pof: This achievement rewards Path of Fire mastery points
 achievement_is_mastery_soto: This achievement rewards Secrets of the Obscure mastery points
 achievement_is_mastery_tyria: This achievement rewards Central Tyria mastery points
 achievement_is_title: This achievement rewards a title
+achievements: Achievements
+achievements_completed: Completed achievements
+achievements_completed_number: Number of achievements
 achievements_left: |-
   There {todo, plural,
     =0 {are no achievements}
@@ -31,6 +31,8 @@ achievements_left: |-
 achievements_to_do: Left to do
 achievements_todo: Achievements to do
 central_tyria_mastery: Central Tyria mastery
+click_to_add_todo: Click to add to TODO list
+click_to_remove_todo: Click to remove from TODO list
 daily: Daily
 daily_points: Daily points
 empty_list: >-

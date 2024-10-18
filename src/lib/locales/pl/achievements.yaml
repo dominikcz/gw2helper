@@ -1,16 +1,41 @@
+achievement_can_get: |-
+  Możesz zdobyć {pointsToGet, plural,
+    one {jeden punkt}
+    few {# punkty}
+    other {# punktów}
+  } z tego osiągnięcia
+achievement_tasks_left: >-
+  {left, plural,
+    one {Pozostało jedno zadanie}
+    few {Pozostały # zadania}
+    other {Pozostało # zadań}
+  } do zrobienia
+achievement_is_collection: To osiągnięcie łączy się z kolekcją
+achievement_is_hidden: To osiągnięcie jest ukryte
+achievement_is_item: To osiągnięcie daje przedmiot
+achievement_is_mastery_eod: To osiągnięcie daje punkty mistrzostwa End of Dragons
+achievement_is_mastery_hot: To osiągnięcie daje punkty mistrzostwa Heart of Thorns
+achievement_is_mastery_ice: To osiągnięcie daje punkty mistrzostwa Icebrood Saga
+achievement_is_mastery_jw: To osiągnięcie daje punkty mistrzostwa Janthir Wilds
+achievement_is_mastery_pof: To osiągnięcie daje punkty mistrzostwa Path of Fire
+achievement_is_mastery_soto: To osiągnięcie daje punkty mistrzostwa Secrets of the Obscure
+achievement_is_mastery_tyria: To osiągnięcie daje punkty mistrzostwa Central Tyria
+achievement_is_title: To osiągnięcie daje tytuł
 achievements: Osiągnięcia
 achievements_completed: Ukończone osiągnięcia
 achievements_completed_number: Osiągnięcia
 achievements_left: |-
   {todo, plural,
-    =0 {zdobyłeś wszystkie osiągnięcia}
-    one {pozostało jedno osiągnięcie}
-    few {pozostały # osiągnięcia}
-    other {pozostało # osiągnięć}
+    =0 {Zdobyto wszystkie osiągnięcia}
+    one {Pozostało jedno osiągnięcie}
+    few {Pozostały # osiągnięcia}
+    other {Pozostało # osiągnięć}
   }
 achievements_to_do: Osiągnięcia
 achievements_todo: Osiągnięcia do zrobienia
 central_tyria_mastery: Zdolności Central Tyria
+click_to_add_todo: Kliknij by dodać do listy do zrobienia
+click_to_remove_todo: Kliknij by usunąć z listy do zrobienia
 daily: Codzienne
 daily_points: Codzienne punkty
 empty_list: >-

@@ -1,3 +1,24 @@
+achievement_can_get: |-
+  Vous pouvez obtenir {pointsToGet, plural,
+    one {un point}
+    other {# points}
+  } grâce à ce succès
+achievement_is_collection: Ce succès est lié à une collection
+achievement_is_hidden: Il s'agit d'un succès caché
+achievement_is_item: Ce succès récompense des objets
+achievement_is_mastery_eod: Ce succès récompense des points de maîtrise End of Dragons
+achievement_is_mastery_hot: Ce succès récompense des points de maîtrise Heart of Thorns
+achievement_is_mastery_ice: Ce succès récompense des points de maîtrise Icebrood Saga
+achievement_is_mastery_jw: Ce succès récompense des points de maîtrise Janthir Wilds
+achievement_is_mastery_pof: Ce succès récompense des points de maîtrise Path of Fire
+achievement_is_mastery_soto: Ce succès récompense des points de maîtrise Secrets of The Obscure
+achievement_is_mastery_tyria: Ce succès récompense des points de maîtrise Central Tyria
+achievement_is_title: Ce succès récompense un titre
+achievement_tasks_left: >-
+  Il reste {left, plural,
+    one {une tâche}
+    other {# tâches}
+  } à accomplir
 achievements: Réalisations
 achievements_completed: Réalisations
 achievements_completed_number: Nombre de réalisations
@@ -10,6 +31,8 @@ achievements_left: |-
 achievements_to_do: Gauche à faire
 achievements_todo: Réalisations à accomplir
 central_tyria_mastery: Maîtrise de la Tyria centrale
+click_to_add_todo: Cliquez pour ajouter à la liste des tâches
+click_to_remove_todo: Cliquez pour supprimer de la liste des tâches
 daily: Tous les jours
 daily_points: Points quotidiens
 empty_list: >-
