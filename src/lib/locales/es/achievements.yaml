@@ -24,13 +24,15 @@ achievement_is_title: Este logro otorga un título como recompensa
 achievements: Logros
 achievements_left: |-
   {todo, plural,
-    =0 {obtuviste todos los logros}
-    one {queda un logro}
+    =0 {Obtuviste todos los logros}
+    one {Queda un logro}
     other {# logros restantes}
   } 
 achievements_to_do: Izquierda a hacer
 achievements_todo: Logros por hacer
 central_tyria_mastery: Maestría en Central Tyria
+click_to_add_todo: Haz clic para agregar a la lista de TODO
+click_to_remove_todo: Haz clic para eliminar de la lista de TODO
 daily: Diario
 daily_points: Puntos diarios
 empty_list: >-
