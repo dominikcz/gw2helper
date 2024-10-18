@@ -29,7 +29,7 @@
 	const showApiLinks = getQueryStringFlag('show-api-links');
 
 	$: todoState_class = todo ? 'todo' : '';
-	$: todoState_title = todo ? 'Click to remove from TODO list' : 'Click to add to TODO list';
+	$: todoState_title = todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo');
 	$: _bits = bits ? bits.length : 0;
 	$: _bitsDone = bits ? (done ? bits.length : (bitsDone || []).length) : 0;
 
@@ -71,7 +71,7 @@
 		{/if}
 
 		{#if flags && flags.includes('Hidden')}
-			<img class="icon" src="{base}/assets/rewards/Achievements_Watch_List.png" alt="hidden achievement" title="This is a hidden achievement" />
+			<img class="icon" src="{base}/assets/rewards/Achievements_Watch_List.png" alt="hidden achievement" title={$_('achievements.achievement_is_hidden')} />
 		{/if}
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
@@ -92,13 +92,13 @@
 		<div class="rewards small">
 			{#if type == 'ItemSet'}
 				<div class="reward-item">
-					<img src="{base}/assets/rewards/Talk_collection_option.png" alt="title" title="This achievement is linked to a collection" />
+					<img src="{base}/assets/rewards/Talk_collection_option.png" alt="title" title={$_('achievements.achievement_is_collection')} />
 				</div>
 			{/if}
 
 			{#if rewardsObj.title}
 				<div class="reward-item">
-					<img src="{base}/assets/rewards/Title_icon.png" alt="title" title="This achievement rewards a title" />
+					<img src="{base}/assets/rewards/Title_icon.png" alt="title" title={$_('achievements.achievement_is_title')} />
 				</div>
 			{/if}
 			{#if rewardsObj.coins}
@@ -108,7 +108,7 @@
 			{/if}
 			{#if rewardsObj.item}
 				<div class="reward-item">
-					<img src="{base}/assets/rewards/Achievement_Chest_interface_icon.png" alt="item" title="This achievement rewards items" />
+					<img src="{base}/assets/rewards/Achievement_Chest_interface_icon.png" alt="item" title={$_('achievements.achievement_is_item')} />
 				</div>
 			{/if}
 			{#if rewardsObj.mastery}
@@ -117,7 +117,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
 							alt="mastery points Central Tyria"
-							title="This achievement rewards Central Tyria mastery points"
+							title={$_('achievements.achievement_is_mastery_tyria')}
 						/>
 					</div>
 				{/if}
@@ -126,7 +126,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
 							alt="mastery points Heart of Thorns"
-							title="This achievement rewards Heart of Thorns mastery points"
+							title={$_('achievements.achievement_is_mastery_hot')}
 						/>
 					</div>
 				{/if}
@@ -135,7 +135,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
 							alt="mastery points Path of Fire"
-							title="This achievement rewards Path of Fire mastery points"
+							title={$_('achievements.achievement_is_mastery_pof')}
 						/>
 					</div>
 				{/if}
@@ -144,7 +144,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
 							alt="mastery points Icebrood Saga"
-							title="This achievement rewards Icebrood Saga mastery points"
+							title={$_('achievements.achievement_is_mastery_ice')}
 						/>
 					</div>
 				{/if}
@@ -153,7 +153,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
 							alt="mastery points End of Dragons"
-							title="This achievement rewards End of Dragons mastery points"
+							title={$_('achievements.achievement_is_mastery_eod')}
 						/>
 					</div>
 				{/if}
@@ -162,7 +162,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
 							alt="mastery points Secrets of the Obscure"
-							title="This achievement rewards Secrets of the Obscure mastery points"
+							title={$_('achievements.achievement_is_mastery_soto')}
 						/>
 					</div>
 				{/if}
@@ -171,7 +171,7 @@
 						<img
 							src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
 							alt="mastery points Janthir Wilds"
-							title="This achievement rewards Janthir Wilds mastery points"
+							title={$_('achievements.achievement_is_mastery_jw')}
 						/>
 					</div>
 				{/if}
@@ -182,14 +182,14 @@
 					<img
 						src="{base}/assets/rewards/AP.png"
 						alt="achievement points"
-						title="You can get {pointsToGet} achievement points from this achievement"
+						title={$_('achievements.achievement_can_get', {pointsToGet})}
 					/>
 				</div>
 			{/if}
 			{#if _bits}
 				<div class="reward-item">
 					<span>{_bitsDone} / {_bits}</span>
-					<img src="{base}/assets/rewards/Achievements_Summary.png" alt="achievements" title="There are {_bits - _bitsDone} tasks left to do" />
+					<img src="{base}/assets/rewards/Achievements_Summary.png" alt="achievements" title={$_('achievements.achievement_tasks_left', {left: _bits - _bitsDone})} />
 				</div>
 			{/if}
 		</div>

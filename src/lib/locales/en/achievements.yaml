@@ -1,6 +1,27 @@
 achievements: Achievements
+achievement_can_get: >-
+  You can get {pointsToGet, plural,
+    one {one point}
+    other {# points}
+  } from this achievement
+achievement_tasks_left: >-
+  There {left, plural,
+    one {is one task}
+    other {are # tasks}
+  } left to do
 achievements_completed: Completed achievements
 achievements_completed_number: Number of achievements
+achievement_is_collection: This achievement is linked to a collection
+achievement_is_hidden: This is a hidden achievement
+achievement_is_item: This achievement rewards items
+achievement_is_mastery_eod: This achievement rewards End of Dragons mastery points
+achievement_is_mastery_hot: This achievement rewards Heart of Thorns mastery points
+achievement_is_mastery_ice: This achievement rewards Icebrood Saga mastery points
+achievement_is_mastery_jw: This achievement rewards Janthir Wilds mastery points
+achievement_is_mastery_pof: This achievement rewards Path of Fire mastery points
+achievement_is_mastery_soto: This achievement rewards Secrets of the Obscure mastery points
+achievement_is_mastery_tyria: This achievement rewards Central Tyria mastery points
+achievement_is_title: This achievement rewards a title
 achievements_left: |-
   There {todo, plural,
     =0 {are no achievements}
