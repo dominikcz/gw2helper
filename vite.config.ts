@@ -15,5 +15,12 @@ export default defineConfig({
 	define: {
 		__NAME__: `"${pkg.name}"`,
 		__VERSION__: `"${pkg.version}"`
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				api: "modern-compiler"
+			}
+		}
 	}
 });
