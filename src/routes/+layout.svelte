@@ -157,7 +157,7 @@
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10),
 			onpop: (id, details) => {
-				console.log('onpop', details);
+				// console.log('onpop', details);
 				if (details.event != undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);

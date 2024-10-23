@@ -14,8 +14,11 @@
 	let touchStartTime;
 	let touchEventIsTap;
 	let touchInProgress;
-	let touchLayerX;
-	let touchLayerY;
+	let touchX;
+	let touchY;
+	let left = false;
+	let above = false;
+	let sticky = true;
 
 	let touchMode = 'ontouchstart' in window;
 
@@ -25,6 +28,7 @@
 
 	function processCustomRenderers(node) {
 		const customRendererId = node.getAttribute('data-autotooltip-renderer') || '';
+		// console.log('customRendererId', customRendererId, node)
 		if (customRendererId) {
 			const renderer = window.__autotooltip.customRenderers[customRendererId];
 			const params = JSON.parse(node.getAttribute('data-autotooltip-params') || {});
@@ -33,11 +37,11 @@
 				ref.textContent = '';
 				renderer(ref, params);
 				return true;
-			} 
+			}
 		} else {
 			if (customContent) {
 				ref.textContent = '';
-			} 
+			}
 		}
 		return false;
 	}
@@ -47,32 +51,35 @@
 		if (result) {
 			event.preventDefault();
 			event.stopPropagation();
+			if (event.type.startsWith('touch') && event.touches.length) {
+				touchX = event.touches[0].pageX;
+				touchY = event.touches[0].pageY;
+			} else {
+				touchX = event.pageX + 15;
+				touchY = event.pageY + 5;
+			}
+			// console.log('touch updated', touchX, touchY);
 		}
 		return result;
 	}
 
 	// #region mouse events
 
+	function mouseUp(event) {
+		touchInProgress = false;
+		touchEventIsTap = false;
+	}
+
 	function mouseOver(event) {
 		let elem = event.target;
 		findTitle(elem);
+		updateXY(event);
 		// mouseMove(event);
 		event.stopPropagation();
 	}
 
 	function mouseMove(event) {
-		if (!handlingTouch(event)) {
-			// console.log('mouseMove', event);
-			if (event.type.startsWith('touch') && event.touches.length) {
-				x = event.touches[0].pageX;
-				y = event.touches[0].pageY;
-				// console.log('move', [x, y]);
-			} else {
-				x = event.pageX + 15;
-				y = event.pageY + 5;
-				updateXY();
-			}
-		}
+		updateXY(event);
 	}
 
 	function mouseLeave(event) {
@@ -88,9 +95,7 @@
 		touchInProgress = true;
 		touchStartTime = new Date().getTime();
 		touchEventIsTap = true;
-		touchLayerX = event.layerX;
-		touchLayerY = event.layerY;
-		// console.log(event);
+		// console.log('touch start', event);
 	}
 
 	function touchMove(event) {
@@ -109,16 +114,10 @@
 			// } else {
 			// 	console.log('Long press');
 			// }
-			if (event.target.classList.contains('autotooltip')) {
-				// console.log('touchended');
-				event.preventDefault();
+			// console.log('touchended', event);
 
-				const rect = event.target.getBoundingClientRect();
-				findTitle(event.target);
-				x = touchLayerX + rect.x + 40;
-				y = touchLayerY + rect.y + 5;
-				// console.log('ttt', [x, y, title]);
-				updateXY();
+			if (findTitle(event.target)) {
+				updateXY(event);
 			}
 		}
 		touchEventIsTap = false;
@@ -140,13 +139,36 @@
 
 	//#endregion
 
+	function checkIfSticky(elem) {
+		if (elem == null) return false;
+		// looking up hierarchy
+		try {
+			let _sticky = false;
+			do {
+				if (elem.classList.contains('autotooltip-sticky')) {
+					_sticky = true;
+					break;
+				}
+				elem = elem.parentElement;
+			} while (!_sticky && elem != null);
+			sticky = _sticky;
+		} catch (error) {
+			console.warn('checkIfSticky', { elem, error });
+			return false;
+		}
+		return sticky;
+	}
+
 	function findTitle(elem) {
 		let _title = '';
 		let _class = '';
 		let __class = '';
+
+		if (elem == null) return false;
 		// looking up hierarchy
 		try {
 			let _visible = false;
+			const _sticky = checkIfSticky(elem);
 			do {
 				customContent = processCustomRenderers(elem);
 				if (customContent) {
@@ -177,25 +199,75 @@
 				title = _title;
 			}
 			visible = _visible && (title || customContent);
+			sticky = _sticky;
 		} catch (error) {
 			console.warn('autotooltip', { elem, error });
+			return false;
 		}
+		return visible;
 	}
 
-	function updateXY() {
-		if (ref) {
+	function updateXY(event) {
+		const distance = 5;
+		const offset = 3;
+
+		// by default set to right side
+		if (ref && event.target.nodeType == Node.ELEMENT_NODE) {
 			const rect = ref.getBoundingClientRect();
+
+			const elemRect = event.target.getBoundingClientRect();
+			const target = {
+				x: elemRect.left,
+				y: elemRect.top,
+				width: elemRect.width,
+				height: elemRect.height,
+			};
+			// console.log('updateXY', target);
+
+			if (!sticky) {
+				x = event.pageX + 15;
+				y = event.pageY + 5;
+			} else {
+				x = target.x + target.width + offset + distance;
+				if (handlingTouch(event)) {
+					y = event.pageY - touchY + target.y - offset;
+				} else {
+					// x = event.pageX + 15;
+					// y = event.pageY + 5;
+					y = event.pageY - event.y + target.y - offset;
+				}
+			}
 
 			let newX = x;
 			let newY = y;
+
+			if (sticky) {
+				// if it doesn't fit horizontally on right side, try placing tooltip on left side of the element
+				if (newX + rect.width > window.innerWidth && target.x - rect.width > distance + offset) {
+					newX = target.x - rect.width - distance - offset;
+				}
+				// if it doesn't fit below, try placing tooltip on top of the element
+				if (newY + rect.height > window.innerHeight + window.scrollY) {
+					newY = event.pageY - event.y + target.y + target.height - rect.height + offset;
+				}
+			} else {
+				// else try your best
+				if (newY + rect.height > window.innerHeight + window.scrollY) {
+					newY = y - rect.height - distance;
+				}
+			}
+			// else try your best
 			if (newX + rect.width > window.innerWidth) {
-				newX = window.innerWidth - rect.width - 10;
+				newX = window.innerWidth - rect.width + distance;
 			}
-			if (newY + rect.height > window.innerHeight + window.scrollY) {
-				newY = y - rect.height - 10;
+
+			if (newX && newY) {
+				ref.style.left = `${newX}px`;
+				ref.style.top = `${newY}px`;
 			}
-			ref.style.left = `${newX}px`;
-			ref.style.top = `${newY}px`;
+
+			left = sticky && newX < target.x;
+			above = sticky && newY - window.scrollY < target.y - distance;
 		}
 	}
 
@@ -213,14 +285,14 @@
 />
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-<div bind:this={ref} on:touchstart={tooltipTouchStart} class:visible class={autotooltipClass}>
+<div bind:this={ref} on:touchstart={tooltipTouchStart} class:visible class:left class:above class:sticky class={autotooltipClass}>
 	{@html title}
 </div>
 
 <style lang="scss">
 	div {
 		border: 1px solid #ddd;
-		box-shadow: var(--gw2helper-module-shadow);
+		box-shadow: var(--box-shadow-strong);
 		background: var(--gw2helper-module-white);
 		color: var(--gw2helper-module-text);
 		border-radius: 0.3125em;
@@ -229,9 +301,35 @@
 		min-width: 6.25em;
 		max-width: 18.75em;
 		z-index: 1000;
-		overflow: clip;
+		// overflow: clip;
 		display: none;
 		cursor: default;
+
+		// transition: all 0.2s ease-in-out;
+
+		&.sticky {
+			&::after {
+				content: ' ';
+				position: absolute;
+				top: 1em;
+				left: -20px;
+				border-width: 10px;
+				border-style: solid;
+				border-color: transparent white transparent transparent;
+			}
+			&.left {
+				&::after {
+					left: 100%;
+					border-color: transparent transparent transparent white;
+				}
+			}
+			&.above {
+				&::after {
+					top: auto;
+					bottom: 1em;
+				}
+			}
+		}
 		&.visible {
 			display: block;
 		}
