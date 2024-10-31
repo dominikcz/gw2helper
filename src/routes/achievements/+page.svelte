@@ -214,7 +214,7 @@
 				<span>{ $_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length} ) }</span>
 				<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 					{#each sort(_result.categories, sortBy) as category (category.id)}
-						<AchievGroup {category} {showApiLinks} {sortBy} on:toggle-todo={hndToggleTodo} />
+						<AchievGroup {category} {showApiLinks} {sortBy} { todoList }on:toggle-todo={hndToggleTodo} />
 					{/each}
 				</div>
 			</TabPanel>
