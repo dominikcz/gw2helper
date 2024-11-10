@@ -5,6 +5,10 @@
 	export let items;
 	export let todoList;
 
+	function isOnTodo(todoList, achievId){
+		return todoList.findIndex((x) => x == achievId) >= 0;
+	}
+
 	// console.log('achieveList ' + name, items);
 </script>
 
@@ -20,7 +24,7 @@
 			current={achiev.current}
 			max={achiev.max}
 			flags={achiev.flags}
-			todo={todoList.findIndex((x) => x == achiev.id) >= 0}
+			todo={isOnTodo(todoList, achiev.id)}
 			rewardsObj={achiev.rewardsObj}
 			done={achiev.done}
 			bits={achiev.bits}

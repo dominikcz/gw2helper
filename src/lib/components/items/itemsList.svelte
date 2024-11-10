@@ -23,7 +23,7 @@
 	<summary>{summary}</summary>
 	<article>
 		<Awaiter promise={items} let:result>
-			<div class="items autotooltip" use:autotooltip={tooltipOptions}>
+			<div class="items autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions} >
 				{#each helperUtils.filterCollection(result, fields, filter, { nonZero: true, nonZeroField: 'count' }) as item, index (`${item.id}-${index}`)}
 					<Item {item} />
 				{:else}

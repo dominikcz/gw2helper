@@ -1,21 +1,23 @@
 export async function load({ fetch, parent }) {
-	const { apiService } = await parent();
+	const { apiService, todo } = await parent();
 	const key = apiService.getApiKey();
+	const returnObj = {
+		wallet: [],
+		daily: {},
+		weekly: {},
+		special: {},
+		achievements: {},
+		todo,
+	};
 	if (key) {
-		return {
-			'wallet': key ? apiService.wallet() : [],
-			'daily': key ? apiService.wizardsVaultDaily() : {},
-			'weekly': key ? apiService.wizardsVaultWeekly() : {},
-			'special': key ? apiService.wizardsVaultSpecial() : {},
-			'achievements': key ? apiService.achievements() : [],
-		};
+		returnObj.wallet = apiService.wallet();
+		returnObj.daily = apiService.wizardsVaultDaily();
+		returnObj.weekly = apiService.wizardsVaultWeekly();
+		returnObj.special = apiService.wizardsVaultSpecial();
+		returnObj.achievements = apiService.achievements();
 	} else {
 		console.log('no api key :(');
-		return {
-			'wallet': [],
-			'daily': {},
-			'weekly': {},
-			'special': {},
-		};
+		
 	}
+	return returnObj;
 }

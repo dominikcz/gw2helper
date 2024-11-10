@@ -33,6 +33,7 @@ locale.subscribe(value => {
 	if (value != undefined) {
 		console.log('locales subscribe', value)
 		utils.saveLang(value);
+		document.documentElement.lang = value		
 	}
 });
 

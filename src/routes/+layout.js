@@ -36,6 +36,7 @@ export async function load({ fetch, url }) {
 		tokenInfo,
 		apiService,
 		apiLang,
+		todo: utils.readAchievementsToDo(),
 	};
 
 	console.log('key', key);
@@ -44,6 +45,7 @@ export async function load({ fetch, url }) {
 		try {
 			tokenInfo = await apiService.tokenInfo();
 			// console.log('tokenInfo', tokenInfo);
+
 			if (!tokenInfo.name) {
 				if (tokenInfo) {
 					returnObj.tokenInfo.error = tokenInfo;
@@ -53,7 +55,7 @@ export async function load({ fetch, url }) {
 			} else {
 				returnObj.tokenInfo = tokenInfo;
 				returnObj.reminders = await utils.readReminders();
-				returnObj.remindersSettings = await utils.readRemindersSettings();
+				returnObj.remindersSettings = await utils.readRemindersSettings();	
 			}
 		} catch (error) {
 			console.log('Layout load error', error)

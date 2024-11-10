@@ -3,10 +3,10 @@ export const ssr = false;
 import utils from '$lib/utils';
 
 export async function load({ fetch, parent }) {
-    const { apiService } = await parent();
+    const { apiService, todo } = await parent();
 	return {
 		achievements: apiService.getApiKey() ? apiService.achievements(false) : [],
-		todo: utils.readAchievementsToDo(),
+		todo,
 		settings: utils.readAchievementsSettings(),
 	};
 }

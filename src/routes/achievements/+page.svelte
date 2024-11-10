@@ -109,16 +109,7 @@
 		});
 	}
 
-	async function hndToggleTodo(event) {
-		const obj = event.detail;
-		if (obj.todo) {
-			todoList.push(obj.id);
-			todoList = todoList;
-		} else {
-			todoList = todoList.filter((x) => x !== obj.id);
-		}
-		await utils.saveAchievementsToDo(todoList);
-	}
+
 
 	function expandToDoList(all, list) {
 		const api = data.apiService;
@@ -136,7 +127,7 @@
 	}
 </script>
 
-<h1>{ $_('achievements.achievements') }</h1>
+<h1>{$_('achievements.achievements')}</h1>
 
 <Awaiter promise={data.achievements} let:result>
 	{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, [
@@ -156,18 +147,26 @@
 		weekly,
 	])}
 	<WidgetsGroup name={$_('achievements.achievements_completed')}>
-		<WidgetInfo title="{ $_('achievements.achievements_completed') }" value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
-		<WidgetInfo title="{ $_('achievements.daily_points') }" value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
-		<WidgetInfo title="{ $_('achievements.monthly_points') }" value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
-		<WidgetInfo title="{ $_('achievements.points_from_achievements') }" value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
+		<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
+		<WidgetInfo title={$_('achievements.points_from_achievements')} value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
 		<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
 	</WidgetsGroup>
 	<WidgetsGroup name={$_('achievements.achievements_todo')}>
-		<WidgetInfo title="{ $_('achievements.achievements_to_do') }" value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
-		<WidgetInfo title="{ $_('achievements.points_to_get') }" value={sum(result.categories, 'points_to_get')} image="{base}/assets/rewards/AP.png" />
-		<WidgetInfo title="{ $_('achievements.titles_to_get') }" value={result.rewards_to_get.get('title')} image="{base}/assets/rewards/Talk_collection_option.png" />
-		<WidgetInfo title="{ $_('achievements.items_to_get') }" value={result.rewards_to_get.get('item')} image="{base}/assets/rewards/Achievement_Chest_interface_icon.png" />
-		<WidgetInfo title="{ $_('achievements.gold_to_get') }" value={result.rewards_to_get.get('coins')} image="{base}/assets/rewards/Merchant_crop.png" let:value>
+		<WidgetInfo title={$_('achievements.achievements_to_do')} value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
+		<WidgetInfo title={$_('achievements.points_to_get')} value={sum(result.categories, 'points_to_get')} image="{base}/assets/rewards/AP.png" />
+		<WidgetInfo
+			title={$_('achievements.titles_to_get')}
+			value={result.rewards_to_get.get('title')}
+			image="{base}/assets/rewards/Talk_collection_option.png"
+		/>
+		<WidgetInfo
+			title={$_('achievements.items_to_get')}
+			value={result.rewards_to_get.get('item')}
+			image="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
+		/>
+		<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image="{base}/assets/rewards/Merchant_crop.png" let:value>
 			<Price {value} />
 		</WidgetInfo>
 	</WidgetsGroup>
@@ -175,33 +174,33 @@
 	<section class="tabs-container">
 		<Tabs>
 			<div class="tab-list">
-				<Tab>{ $_('achievements.list') }</Tab>
-				<Tab>{ $_('achievements.to_dos') }</Tab>
+				<Tab>{$_('achievements.list')}</Tab>
+				<Tab>{$_('achievements.to_dos')}</Tab>
 			</div>
 
 			<TabPanel>
 				<fieldset class="settings">
 					<legend>{$_('common.settings')}</legend>
 
-					<label><input type="checkbox" bind:checked={notCompleted} /> { $_('achievements.not_completed') }</label>
-					<label><input type="checkbox" bind:checked={withPoints} /> { $_('achievements.giving_points') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryCentral} /> { $_('achievements.central_tyria_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryHoT} /> { $_('achievements.hot_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryPoF} /> { $_('achievements.pof_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryIce} /> { $_('achievements.icebrood_saga_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryEoD} /> { $_('achievements.eod_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasterySofO} /> { $_('achievements.sofo_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withMasteryJW} /> { $_('achievements.janthir_wilds_mastery') }</label>
-					<label><input type="checkbox" bind:checked={withTitles} /> { $_('achievements.giving_titles') }</label>
-					<label><input type="checkbox" bind:checked={withItems} /> { $_('achievements.giving_items') }</label>
-					<label><input type="checkbox" bind:checked={withCoins} /> { $_('achievements.giving_gold') }</label>
-					<label><input type="checkbox" bind:checked={daily} /> { $_('achievements.daily') }</label>
-					<label><input type="checkbox" bind:checked={weekly} /> { $_('achievements.weekly') }</label>
+					<label><input type="checkbox" bind:checked={notCompleted} /> {$_('achievements.not_completed')}</label>
+					<label><input type="checkbox" bind:checked={withPoints} /> {$_('achievements.giving_points')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryCentral} /> {$_('achievements.central_tyria_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryHoT} /> {$_('achievements.hot_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryPoF} /> {$_('achievements.pof_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryIce} /> {$_('achievements.icebrood_saga_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryEoD} /> {$_('achievements.eod_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasterySofO} /> {$_('achievements.sofo_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withMasteryJW} /> {$_('achievements.janthir_wilds_mastery')}</label>
+					<label><input type="checkbox" bind:checked={withTitles} /> {$_('achievements.giving_titles')}</label>
+					<label><input type="checkbox" bind:checked={withItems} /> {$_('achievements.giving_items')}</label>
+					<label><input type="checkbox" bind:checked={withCoins} /> {$_('achievements.giving_gold')}</label>
+					<label><input type="checkbox" bind:checked={daily} /> {$_('achievements.daily')}</label>
+					<label><input type="checkbox" bind:checked={weekly} /> {$_('achievements.weekly')}</label>
 
 					<div class="group">
-						<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> { $_('achievements.sort_by_points') }</label>
-						<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> { $_('achievements.sort_by_name') }</label>
-						<label><input type="radio" name="sort" value="order" bind:group={sortBy} /> { $_('achievements.sort_by_in_game_order')}</label>
+						<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> {$_('achievements.sort_by_points')}</label>
+						<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> {$_('achievements.sort_by_name')}</label>
+						<label><input type="radio" name="sort" value="order" bind:group={sortBy} /> {$_('achievements.sort_by_in_game_order')}</label>
 					</div>
 
 					<button on:click={saveSettings}>{$_('common.save_settings')}</button>
@@ -211,18 +210,18 @@
 					<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')} />
 				</section>
 
-				<span>{ $_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length} ) }</span>
+				<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length })}</span>
 				<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
 					{#each sort(_result.categories, sortBy) as category (category.id)}
-						<AchievGroup {category} {showApiLinks} {sortBy} on:toggle-todo={hndToggleTodo} />
+						<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
 					{/each}
 				</div>
 			</TabPanel>
 
 			<TabPanel>
-				<h2>{ $_('achievements.your_list') }</h2>
-				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={hndToggleTodo}>
-					{@html $_('achievements.empty_list', {img_url: `${base}/assets/rewards/map_heart_empty.png`}) } 
+				<h2>{$_('achievements.your_list')}</h2>
+				<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList)}>
+					{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
 				</AchievList>
 			</TabPanel>
 		</Tabs>

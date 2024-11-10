@@ -361,7 +361,7 @@ const currencies = async (order = []) => {
     })
 }
 
-const wallet = async (order) => {
+const wallet = async (order=[]) => {
     return new Promise((resolve) => {
         Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
             resolve(mergeById(_curr, _wallet));

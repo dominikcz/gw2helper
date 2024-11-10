@@ -147,6 +147,20 @@ export function runsDesktop() {
     return desktop;
 }
 
+export 	async function hndToggleTodo(event, todoList) {
+    const obj = event.detail;
+    if (obj.todo) {
+        todoList.push(obj.id);
+        todoList = todoList;
+    } else {
+        todoList = todoList.filter((x) => x !== obj.id);
+    }
+    console.log('saveAchievementsToDo', todoList);
+    await saveAchievementsToDo(todoList);
+    console.log('after saveAchievementsToDo', todoList);
+    return todoList;
+}
+
 export default {
     readApiKey,
     saveApiKey,
@@ -175,4 +189,5 @@ export default {
     getQueryString,
     getQueryStringFlag,
     runsDesktop,
+    hndToggleTodo,
 }

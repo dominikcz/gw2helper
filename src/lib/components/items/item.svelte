@@ -8,9 +8,9 @@
 
 </script>
 
-<figure class={rarityClass()} >
+<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id} >
 	<a href={helperUtils.wikiLink(item.name)} target="_blank">
-		<img alt={item.name} src={item.icon} data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}/>
+		<img alt={item.name} src={item.icon} />
 	</a>
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>

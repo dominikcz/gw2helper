@@ -1,9 +1,38 @@
+achievement_can_get: >-
+  Sie können {pointsToGet, plural,
+    one {einen Punkt}
+    other {# Punkte}
+  } für diesen Erfolg erhalten
+achievement_tasks_left: >-
+  {left, plural,
+    one {Es ist noch eine Aufgabe}
+    other {Es sind noch # Aufgaben}
+  } zu erledigen
+achievement_is_collection: Diese Leistung ist mit einer Sammlung verknüpft
+achievement_is_hidden: Dies ist ein versteckter Erfolg
+achievement_is_item: Dieser Erfolg belohnt Gegenstände
+achievement_is_mastery_eod: Dieser Erfolg belohnt End of Dragons-Meisterschaftspunkte
+achievement_is_mastery_hot: Dieser Erfolg belohnt Heart of Thorns-Meisterschaftspunkte
+achievement_is_mastery_ice: Dieser Erfolg belohnt Icebrood Saga-Meisterschaftspunkte
+achievement_is_mastery_jw: Dieser Erfolg belohnt Janthir Wilds-Meisterschaftspunkte
+achievement_is_mastery_pof: Dieser Erfolg belohnt Path of Fire-Meisterschaftspunkte
+achievement_is_mastery_soto: Dieser Erfolg belohnt Secrets of the Obscure-Meisterschaftspunkte
+achievement_is_mastery_tyria: Dieser Erfolg belohnt Central Tyria-Meisterschaftspunkte
+achievement_is_title: Dieser Erfolg belohnt einen Titel
 achievements: Erfolge
 achievements_completed: Vollständige Leistungen
-achievements_todo: Erfolge zu tun
 achievements_completed_number: Anzahl der Leistungen
+achievements_left: |-
+  {todo, plural,
+    =0 {Du hast alle Erfolge erreicht}
+    one {noch ein Erfolg übrig}
+    other {# Erfolge übrig}
+  }
 achievements_to_do: Bleibt zu tun
+achievements_todo: Erfolge zu tun
 central_tyria_mastery: Zentraltyria Beherrschunge
+click_to_add_todo: Klicken Sie, um ihn zur TODO-Liste hinzuzufügen
+click_to_remove_todo: Klicken Sie, um ihn aus der TODO-Liste zu entfernen
 daily: Täglich
 daily_points: Tagespunkte
 empty_list: >-
@@ -26,6 +55,21 @@ not_completed: Nicht abgeschlossen
 pof_mastery: PoF Beherrschunge
 points_from_achievements: Punkte aus den Ergebnissen
 points_to_get: Punkte zu erhalten
+rewards_ap_left: |-
+  In dieser Kategorie können Sie {points, plural,
+    one {einen Punkt sammeln}
+    other {# Punkte sammeln}
+  } 
+rewards_gold: Münzen zum Verdienen
+rewards_items: Zu erhaltende Gegenstände
+rewards_mastery_eod: Es müssen End of Dragons-Meisterschaftspunkte verdient werden
+rewards_mastery_hot: Es müssen Heart of Thorns-Meisterschaftspunkte verdient werden
+rewards_mastery_ice: Es müssen Icebrood Saga-Meisterschaftspunkte verdient werden
+rewards_mastery_jw: Es müssen Janthir Wilds-Meisterschaftspunkte verdient werden
+rewards_mastery_pof: Es müssen Path of Fire-Meisterschaftspunkte verdient werden
+rewards_mastery_soto: Es müssen Secrets of the Obscure-Meisterschaftspunkte verdient werden
+rewards_mastery_tyria: Es müssen Central Tyria-Meisterschaftspunkte verdient werden
+rewards_title: Titel zu gewinnen
 showing_out_of: '{shown} Kategorien aus {total} anzeigen'
 sofo_mastery: SofO Beherrschunge
 sort_by_in_game_order: Sortieren nach Ingame-Bestellung

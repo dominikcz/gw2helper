@@ -62,6 +62,7 @@
 			flex-flow: column nowrap;
 			row-gap: 0.4em;
 			flex-grow: 1;
+			width: 100%;
 		}
 		.reward {
 			display: flex;

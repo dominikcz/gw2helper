@@ -1,12 +1,44 @@
+achievement_can_get: >-
+  You can get {pointsToGet, plural,
+    one {one point}
+    other {# points}
+  } from this achievement
+achievement_tasks_left: >-
+  There {left, plural,
+    one {is one task}
+    other {are # tasks}
+  } left to do
+achievement_is_collection: This achievement is linked to a collection
+achievement_is_hidden: This is a hidden achievement
+achievement_is_item: This achievement rewards items
+achievement_is_mastery_eod: This achievement rewards End of Dragons mastery points
+achievement_is_mastery_hot: This achievement rewards Heart of Thorns mastery points
+achievement_is_mastery_ice: This achievement rewards Icebrood Saga mastery points
+achievement_is_mastery_jw: This achievement rewards Janthir Wilds mastery points
+achievement_is_mastery_pof: This achievement rewards Path of Fire mastery points
+achievement_is_mastery_soto: This achievement rewards Secrets of the Obscure mastery points
+achievement_is_mastery_tyria: This achievement rewards Central Tyria mastery points
+achievement_is_title: This achievement rewards a title
 achievements: Achievements
 achievements_completed: Completed achievements
-achievements_todo: Achievements to do
 achievements_completed_number: Number of achievements
+achievements_left: |-
+  There {todo, plural,
+    =0 {are no achievements}
+    one {is one achievement}
+    other {are # achievements}
+  } left to do
 achievements_to_do: Left to do
+achievements_todo: Achievements to do
 central_tyria_mastery: Central Tyria mastery
+click_to_add_todo: Click to add to TODO list
+click_to_remove_todo: Click to remove from TODO list
 daily: Daily
 daily_points: Daily points
-empty_list: You have not added anything to the list yet. Add items by clicking <img src="{img_url}" alt="not on list" class="icon-small" /> icon on list of achievements.
+empty_list: >-
+  You have not added anything to the list yet. Add items by clicking <img
+  src="{img_url}" alt="not on list" class="icon-small" /> icon on list of
+  achievements.
 eod_mastery: EoD mastery
 giving_gold: Giving gold
 giving_items: Giving items
@@ -23,6 +55,21 @@ not_completed: Not completed
 pof_mastery: PoF mastery
 points_from_achievements: Points from achievements
 points_to_get: Points to get
+rewards_ap_left: |-
+  You can get {points, plural,
+    one {one achievement point}
+    other {# achievemnts points}
+  } from this category
+rewards_gold: This category rewards coins
+rewards_items: This category rewards items
+rewards_mastery_eod: This category rewards End of Dragons mastery points
+rewards_mastery_hot: This category rewards Heart of Thorns mastery points
+rewards_mastery_ice: This category rewards Icebrood Saga mastery points
+rewards_mastery_jw: This category rewards Janthir Wilds mastery points
+rewards_mastery_pof: This category rewards Path of Fire mastery points
+rewards_mastery_soto: This category rewards Secrets of the Obscure mastery points
+rewards_mastery_tyria: This category rewards Central Tyria mastery points
+rewards_title: This category rewards a title
 showing_out_of: showing {shown} categories out of {total}
 sofo_mastery: SofO mastery
 sort_by_in_game_order: sort by in-game order

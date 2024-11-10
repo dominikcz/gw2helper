@@ -1,9 +1,38 @@
+achievement_can_get: |-
+  Vous pouvez obtenir {pointsToGet, plural,
+    one {un point}
+    other {# points}
+  } grâce à ce succès
+achievement_is_collection: Ce succès est lié à une collection
+achievement_is_hidden: Il s'agit d'un succès caché
+achievement_is_item: Ce succès récompense des objets
+achievement_is_mastery_eod: Ce succès récompense des points de maîtrise End of Dragons
+achievement_is_mastery_hot: Ce succès récompense des points de maîtrise Heart of Thorns
+achievement_is_mastery_ice: Ce succès récompense des points de maîtrise Icebrood Saga
+achievement_is_mastery_jw: Ce succès récompense des points de maîtrise Janthir Wilds
+achievement_is_mastery_pof: Ce succès récompense des points de maîtrise Path of Fire
+achievement_is_mastery_soto: Ce succès récompense des points de maîtrise Secrets of The Obscure
+achievement_is_mastery_tyria: Ce succès récompense des points de maîtrise Central Tyria
+achievement_is_title: Ce succès récompense un titre
+achievement_tasks_left: >-
+  Il reste {left, plural,
+    one {une tâche}
+    other {# tâches}
+  } à accomplir
 achievements: Réalisations
 achievements_completed: Réalisations
-achievements_todo: Réalisations à accomplir
 achievements_completed_number: Nombre de réalisations
+achievements_left: |-
+  {todo, plural,
+    =0 {vous avez obtenu tous les succès}
+    one {une réussite restante}
+    other {# réalisations restantes}
+  } 
 achievements_to_do: Gauche à faire
+achievements_todo: Réalisations à accomplir
 central_tyria_mastery: Maîtrise de la Tyria centrale
+click_to_add_todo: Cliquez pour ajouter à la liste des tâches
+click_to_remove_todo: Cliquez pour supprimer de la liste des tâches
 daily: Tous les jours
 daily_points: Points quotidiens
 empty_list: >-
@@ -26,7 +55,22 @@ not_completed: Non achevée
 pof_mastery: Maîtrise du PoF
 points_from_achievements: Points positifs
 points_to_get: Points à obtenir
-showing_out_of: montrant les catégories {montrées} sur {total}
+rewards_ap_left: |-
+  Vous pouvez gagner {points, plural,
+    one {un point}
+    other {# points}
+  } dans cette catégorie
+rewards_gold: Pièces à gagner
+rewards_items: Objets à obtenir
+rewards_mastery_eod: Points de maîtrise End of Dragons à gagner
+rewards_mastery_hot: Points de maîtrise Heart of Thorns à gagner
+rewards_mastery_ice: Points de maîtrise Icebrood Saga à gagner
+rewards_mastery_jw: Points de maîtrise Janthir Wilds à gagner
+rewards_mastery_pof: Points de maîtrise Path of Fire à gagner
+rewards_mastery_soto: Points de maîtrise Secrets of the Obscure à gagner
+rewards_mastery_tyria: Points de maîtrise Central Tyria à gagner
+rewards_title: Titre à gagner
+showing_out_of: montrant les catégories {shown} sur {total}
 sofo_mastery: Maîtrise de la SofO
 sort_by_in_game_order: Tri par ordre dans le jeu
 sort_by_name: trier par nom

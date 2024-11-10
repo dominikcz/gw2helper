@@ -1,6 +1,7 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
 	import eventsUtils from './eventsUtils';
+	import { t as _ } from '$lib/services/i18n';
 
 	export let event;
 	export let showEventTimes = true;
@@ -17,7 +18,7 @@
 			style="width: {(segment.duration * 100) / 120}%; background: {eventsUtils.getColor(segment.bg, darkMode)};"
 		>
 			{#if segment.name}
-				<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - read more on Wiki`}>{segment.name}</a>
+				<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - ${$_('common.read_more_on_wiki')}`}>{segment.name}</a>
 				{#if showChatLinks && segment.chatlink}
 					<span class="chatlink">{segment.chatlink}</span>
 				{/if}

@@ -1,8 +1,9 @@
 achievements: 成绩
 achievements_completed: 完成成绩
-achievements_todo: 成就
 achievements_completed_number: 成就数目
+achievements_left: ''
 achievements_to_do: 左边做
+achievements_todo: 成就
 central_tyria_mastery: 中央泰利亚精通
 daily: 日报
 daily_points: 每日点数
@@ -25,6 +26,17 @@ not_completed: 未完成
 pof_mastery: PoF 熟练
 points_from_achievements: 来自成就的点数
 points_to_get: 要得到的点
+rewards_ap_left: ''
+rewards_gold: ''
+rewards_items: ''
+rewards_mastery_eod: ''
+rewards_mastery_hot: ''
+rewards_mastery_ice: ''
+rewards_mastery_jw: ''
+rewards_mastery_pof: ''
+rewards_mastery_soto: ''
+rewards_mastery_tyria: ''
+rewards_title: 赢得冠军
 showing_out_of: 显示 {shown} 类别中的 {total}
 sofo_mastery: SofO 掌握
 sort_by_in_game_order: 按游戏顺序排序

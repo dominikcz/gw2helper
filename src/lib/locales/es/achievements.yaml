@@ -1,33 +1,77 @@
-achievements: Logros
+achievement_can_get: >-
+  Puedes ganar {pointsToGet, plural,
+    one {un punto}
+    other {# puntos}
+  } con este logro
+achievement_tasks_left: >-
+  {left, plural,
+    one {Queda una tarea}
+    other {Quedan # tareas}
+  } por hacer
 achievements_completed: Logros completados
-achievements_todo: Logros por hacer
 achievements_completed_number: Número de logros
+achievement_is_collection: Este logro está vinculado a una colección
+achievement_is_hidden: Este es un logro oculto
+achievement_is_item: Este logro otorga objetos como recompensa
+achievement_is_mastery_eod: Este logro otorga End of Dragons puntos de maestría
+achievement_is_mastery_hot: Este logro otorga Heart of Thorns puntos de maestría
+achievement_is_mastery_ice: Este logro otorga Icebrood Saga puntos de maestría
+achievement_is_mastery_jw: Este logro otorga Janthir Wilds puntos de maestría
+achievement_is_mastery_pof: Este logro otorga Path of Fire puntos de maestría
+achievement_is_mastery_soto: Este logro otorga Secrets of the Obscure puntos de maestría
+achievement_is_mastery_tyria: Este logro otorga Central Tyria puntos de maestría
+achievement_is_title: Este logro otorga un título como recompensa
+achievements: Logros
+achievements_left: |-
+  {todo, plural,
+    =0 {Obtuviste todos los logros}
+    one {Queda un logro}
+    other {# logros restantes}
+  } 
 achievements_to_do: Izquierda a hacer
-central_tyria_mastery: Central Tyria mastery
+achievements_todo: Logros por hacer
+central_tyria_mastery: Maestría en Central Tyria
+click_to_add_todo: Haz clic para agregar a la lista de TODO
+click_to_remove_todo: Haz clic para eliminar de la lista de TODO
 daily: Diario
 daily_points: Puntos diarios
 empty_list: >-
   Aún no has añadido nada a la lista. Agregar elementos haciendo clic <img
   alt="not on list" class="icon-small" src="{img_url}"/> icono en la lista de
   logros.
-eod_mastery: EoD mastery
+eod_mastery: Maestría en EoD
 giving_gold: Dar oro
 giving_items: Envío de artículos
 giving_points: Puntos de entrega
 giving_titles: Dar títulos
 gold_to_get: Oro para conseguir
-hot_mastery: HoT mastery
-icebrood_saga_mastery: Icebrood Saga mastery
+hot_mastery: Maestría en HoT
+icebrood_saga_mastery: Maestría en Icebrood Saga
 items_to_get: Artículos para conseguir
-janthir_wilds_mastery: Janthir Wilds mastery
+janthir_wilds_mastery: Maestría en Janthir Wilds
 list: Lista
 monthly_points: Puntos mensuales
 not_completed: No terminada
-pof_mastery: PoF mastery
+pof_mastery: Maestría en PoF
 points_from_achievements: Puntos de logro
 points_to_get: Puntos para conseguir
+rewards_ap_left: |-
+  Puedes ganar {points, plural,
+    one {un punto}
+    other {# puntos}
+  } en esta categoría
+rewards_gold: Monedas para ganar
+rewards_items: Artículos para obtener
+rewards_mastery_eod: Puntos de maestría End of Dragons que se ganarán
+rewards_mastery_hot: Puntos de maestría Heart of Thorns que se ganarán
+rewards_mastery_ice: Puntos de maestría Icebrood Saga que se ganarán
+rewards_mastery_jw: Puntos de maestría Janthir Wilds que se ganarán
+rewards_mastery_pof: Puntos de maestría Path of Fire que se ganarán
+rewards_mastery_soto: Puntos de maestría Secrets of the Obscure que se ganarán
+rewards_mastery_tyria: Puntos de maestría Central Tyria que se ganarán
+rewards_title: Título por ganar
 showing_out_of: mostrando {shown} categorías de {total}
-sofo_mastery: SofO mastery
+sofo_mastery: Maestría en SofO
 sort_by_in_game_order: orden en el juego
 sort_by_name: por nombre
 sort_by_points: clasificación por puntos

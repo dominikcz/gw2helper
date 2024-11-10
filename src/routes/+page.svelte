@@ -28,7 +28,7 @@
 		showDepreciated = settings.showDepreciated;
 	});
 
-	function hndWalletReorder(ev) {
+	function hndWalletReorder(ev: CustomEvent) {
 		const order = ev.detail.order;
 		utils.saveWalletOrder(order);
 	}
