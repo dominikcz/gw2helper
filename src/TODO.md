@@ -16,3 +16,7 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 + przenieść ładowanie ustawień z poszczególnych stron do load w js
 - wydzielić więcej komponentów wizualnych
 - refaktoring apiservice by zajmowało się tylko api, a dodać nową warstwę do mapowania i zwracania obiektów dla frontu
+
+- zaimplementować [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) jeśli są aktywne powiadomienia
+- dodać możliwość rejestrowania poiadomień na konkretną godzinę bezpośrednio z widoku /events. Może użyć do tego akcji?
+- 
