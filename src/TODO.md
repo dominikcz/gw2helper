@@ -34,4 +34,5 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 
 - zaimplementować [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) jeśli są aktywne powiadomienia
 - dodać możliwość rejestrowania poiadomień na konkretną godzinę bezpośrednio z widoku /events. Może użyć do tego akcji?
-
+- dodać sekcję legendary armor/weapons?
+- dodać sekcję trading post (transactions)?
