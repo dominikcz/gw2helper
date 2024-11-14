@@ -11,6 +11,7 @@
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { base } from '$app/paths';
 
 	let filter = '';
 	const fields = ['name', 'description'];
@@ -50,6 +51,7 @@
 					<ItemsList summary={$_('home.items_for_pickup')} items={result.items} {filter} />
 				{/if}
 			</div>
+			<a href="{base}/trading-post/">{ $_('home.trading-post') }</a>
 		</details>
 	{/if}
 </Awaiter>

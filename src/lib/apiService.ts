@@ -182,17 +182,49 @@ const materials = async () => {
 };
 
 
+function
+    sumQuantities
+    (data) {
+    return
+    data.
+        reduce
+        (
+            (result, item) => {
+                // Create a unique key combining item_id and price
+                const
+                    key =
+                        `${item.item_id}-${item.price}`
+                    ;
+                // If the key already exists, add to the existing quantity
+                if
+                    (result[key]) { result[key].quantity += item.quantity; }
+                else {
+                    // Otherwise, initialize the quantity with the current item's quantity
+                    result[key] = { ...item };
+                }
+                return
+                result;
+            }, {});
+    // Initialize with an empty object
+}
+
 const _getTransactions = async (_transactions: any) => {
-    const transactions = _transactions.map(x=>({
-        ...x, 
+    const transactions = _transactions.map(x => ({
+        ...x,
         transId: x.id,
         id: x.item_id,
-        
+        count: x.quantity,
+
     }));
 
-    const transIds =  transactions.map(x => x.id);
 
-    return expandItems(transIds, transactions);
+    const transIds = transactions.map(x => x.id);
+
+    const exp = await expandItems(transIds, transactions);
+    let sum= sumQuantities(exp)
+    console.log("SUM", {exp, sum});
+    return exp;
+    
 }
 
 
@@ -203,19 +235,19 @@ const transactionsCurrent = async () => {
             apiClient("/v2/commerce/transactions/current/sells", "")
         ]).then(([_buys, _sells]) => {
 
-            Promise.all([_getTransactions(_buys), _getTransactions(_sells)]).then(([_buysExp, _sellsExp])=>{  
+            Promise.all([_getTransactions(_buys), _getTransactions(_sells)]).then(([_buysExp, _sellsExp]) => {
                 resolve({
-                    buys:  _buysExp,
+                    buys: _buysExp,
                     sells: _sellsExp,
                 });
             });
 
-          
+
         });
-    });    
-  
+    });
+
 }
-       
+
 
 const _getGuilds = async (full: boolean = false) => {
     return promiseMe(apiClient("/v2/account", ""), async (account) => {

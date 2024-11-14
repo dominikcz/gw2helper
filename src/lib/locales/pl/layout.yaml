@@ -30,11 +30,12 @@ nav:
   home: Start
   items: Przedmioty
   materials: Materiały
+  trading-post: Giełda
 no_audio: >-
   Masz skonfigurowane powiadomienia, ale przeglądarka zapobiega automatycznemu
   odtwarzaniu dźwięku bez interakcji użytkownika. Proszę zamknąć tę wiadomość,
   aby włączyć dźwięk.
-no_token: Brak klucza API  
+no_token: Brak klucza API
 paste_your_api_key_here: Wklej tutaj swój klucz API
 token_ok: Udane wczytanie klucza "{token}".
 waypoint_to_top: Teleportuj do góry
