@@ -70,6 +70,7 @@
 		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
 		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
 		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
+		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), visible: tokenInfo.permissions.includes('progression') },
 	];
 
 	$: currentPageVisible = devMode || navigation.find((x) => x.slug == active)?.visible || false;

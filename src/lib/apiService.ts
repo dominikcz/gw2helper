@@ -166,7 +166,7 @@ const charactersItems = async () => {
             charItems.forEach(x => {
                 addons.push(...(x.upgrades || []), ...(x.infusions || []));
             })
-            charItems.push(...addons.map(x => ({id: x, count: 1})))
+            charItems.push(...addons.map(x => ({ id: x, count: 1 })))
             let ids = charItems.map(x => x.id);
             char._items = await expandItems(ids, charItems);
         }
@@ -180,6 +180,42 @@ const materials = async () => {
         return expandItems(ids, rawData);
     })
 };
+
+
+const _getTransactions = async (_transactions: any) => {
+    const transactions = _transactions.map(x=>({
+        ...x, 
+        transId: x.id,
+        id: x.item_id,
+        
+    }));
+
+    const transIds =  transactions.map(x => x.id);
+
+    return expandItems(transIds, transactions);
+}
+
+
+const transactionsCurrent = async () => {
+    return new Promise((resolve) => {
+        Promise.all([
+            apiClient("/v2/commerce/transactions/current/buys", ""),
+            apiClient("/v2/commerce/transactions/current/sells", "")
+        ]).then(([_buys, _sells]) => {
+
+            Promise.all([_getTransactions(_buys), _getTransactions(_sells)]).then(([_buysExp, _sellsExp])=>{  
+                resolve({
+                    buys:  _buysExp,
+                    sells: _sellsExp,
+                });
+            });
+
+          
+        });
+    });    
+  
+}
+       
 
 const _getGuilds = async (full: boolean = false) => {
     return promiseMe(apiClient("/v2/account", ""), async (account) => {
@@ -355,13 +391,13 @@ const currencies = async (order = []) => {
         const _data = mergeById(_rawData, _dep);
         _data.forEach(x => {
             const idx = order.findIndex(y => y == x.id)
-            x.order = (idx >=0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
+            x.order = (idx >= 0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
         });
         return _data.sort((a, b) => a.order - b.order);
     })
 }
 
-const wallet = async (order=[]) => {
+const wallet = async (order = []) => {
     return new Promise((resolve) => {
         Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
             resolve(mergeById(_curr, _wallet));
@@ -666,4 +702,5 @@ export default {
     wizardsVaultDaily,
     wizardsVaultWeekly,
     wizardsVaultSpecial,
+    transactionsCurrent,
 };
