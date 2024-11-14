@@ -2,7 +2,7 @@ import Logger from "./logger";
 import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
 import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
-import { sum, getQueryStringFlag } from "./utils";
+import { sum, getQueryStringFlag, sumGroupBy } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 
@@ -182,30 +182,20 @@ const materials = async () => {
 };
 
 
-function
-    sumQuantities
-    (data) {
-    return
-    data.
-        reduce
-        (
-            (result, item) => {
-                // Create a unique key combining item_id and price
-                const
-                    key =
-                        `${item.item_id}-${item.price}`
-                    ;
-                // If the key already exists, add to the existing quantity
-                if
-                    (result[key]) { result[key].quantity += item.quantity; }
-                else {
-                    // Otherwise, initialize the quantity with the current item's quantity
-                    result[key] = { ...item };
-                }
-                return
-                result;
-            }, {});
-    // Initialize with an empty object
+function sumQuantities(data) {
+    // for more general function use sumGroupBy from utils.js
+    return Object.values(data.reduce((result, item) => {
+        // Create a unique key combining item_id and price
+        const key = `${item.item_id}-${item.price}`;
+        // If the key already exists, add to the existing quantity
+        if
+            (result[key]) { result[key].count += item.count; }
+        else {
+            // Otherwise, initialize the quantity with the current item's quantity
+            result[key] = { ...item };
+        }
+        return result;
+    }, {})); // Initialize with an empty object
 }
 
 const _getTransactions = async (_transactions: any) => {
@@ -221,10 +211,9 @@ const _getTransactions = async (_transactions: any) => {
     const transIds = transactions.map(x => x.id);
 
     const exp = await expandItems(transIds, transactions);
-    let sum= sumQuantities(exp)
-    console.log("SUM", {exp, sum});
-    return exp;
-    
+    // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
+    let sum = sumQuantities(exp);
+    return sum;
 }
 
 

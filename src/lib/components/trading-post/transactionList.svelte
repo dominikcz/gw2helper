@@ -34,7 +34,7 @@
         display: flex;
         flex-flow: column nowrap;
         row-gap: 0.6em;  
-
+		padding: 0.625em;
     }
 
     .transaction {

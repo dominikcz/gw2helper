@@ -1,19 +1,19 @@
 import idb from "$lib/wxjs_idb";
 import ls from "$lib/wxjs_localstorage";
 
-import { 
-    KEY_NAME, 
-    KEY_HIST, 
-    EVENT_TIMER_SETTINGS, 
-    ACHIEVEMENTS_SETTINGS, 
-    ACHIEVEMENTS_TODO, 
-    WALLET_SETTINGS, 
-    WATCHED_EVENTS, 
-    REMINDERS, 
-    REMINDERS_SETTINGS, 
-    WALLET_ORDER, 
-    API_LANG, 
-    LANG 
+import {
+    KEY_NAME,
+    KEY_HIST,
+    EVENT_TIMER_SETTINGS,
+    ACHIEVEMENTS_SETTINGS,
+    ACHIEVEMENTS_TODO,
+    WALLET_SETTINGS,
+    WATCHED_EVENTS,
+    REMINDERS,
+    REMINDERS_SETTINGS,
+    WALLET_ORDER,
+    API_LANG,
+    LANG
 } from "$lib/consts";
 
 async function readApiKey() {
@@ -85,7 +85,19 @@ async function saveWalletSettings(settings) {
 }
 
 export function sum(array, property) {
-    return array.reduce((acc, cur) => acc + cur[property], 0)
+    return array.reduce((acc, curr) => acc + curr[property], 0)
+}
+
+export function sumGroupBy(array, groupingKeys, sumProperty) {
+    const cache = array.reduce((acc, curr) => {
+        const key = groupingKeys.map(x => curr[x]).join('-');
+        if (acc[key]) { acc[key][sumProperty] += curr[sumProperty]; }
+        else {
+            acc[key] = { ...curr };
+        }
+        return acc;
+    }, {});
+    return Object.values(cache);
 }
 
 async function saveAchievementsToDo(list) {
@@ -147,7 +159,7 @@ export function runsDesktop() {
     return desktop;
 }
 
-export 	async function hndToggleTodo(event, todoList) {
+export async function hndToggleTodo(event, todoList) {
     const obj = event.detail;
     if (obj.todo) {
         todoList.push(obj.id);
