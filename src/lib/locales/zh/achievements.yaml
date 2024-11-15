@@ -1,3 +1,16 @@
+achievement_can_get: ''
+achievement_is_collection: ''
+achievement_is_hidden: ''
+achievement_is_item: ''
+achievement_is_mastery_eod: ''
+achievement_is_mastery_hot: ''
+achievement_is_mastery_ice: ''
+achievement_is_mastery_jw: ''
+achievement_is_mastery_pof: ''
+achievement_is_mastery_soto: ''
+achievement_is_mastery_tyria: ''
+achievement_is_title: ''
+achievement_tasks_left: ''
 achievements: 成绩
 achievements_completed: 完成成绩
 achievements_completed_number: 成就数目
@@ -5,6 +18,8 @@ achievements_left: ''
 achievements_to_do: 左边做
 achievements_todo: 成就
 central_tyria_mastery: 中央泰利亚精通
+click_to_add_todo: ''
+click_to_remove_todo: ''
 daily: 日报
 daily_points: 每日点数
 empty_list: >-

@@ -4,7 +4,7 @@ import parser from '@sveltekit-i18n/parser-icu';
 import languages from '$lib/locales/languages.json';
 import utils from '$lib/utils';
 
-const namespaces = ['common', 'home', 'layout', 'account', 'achievements', 'characters', 'daily', 'events', 'guilds', 'items', 'materials'];
+const namespaces = ['common', 'home', 'layout', 'account', 'achievements', 'characters', 'daily', 'events', 'guilds', 'items', 'materials', 'trading-post'];
 
 const loaders = [];
 Object.keys(languages).forEach((lang) => {

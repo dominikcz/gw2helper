@@ -25,6 +25,7 @@ nav:
   home: 页 次
   items: 项目
   materials: 材料
+  trading-post: 交易站
 no_audio: 已经设置了通知,但您的浏览器在没有用户互动的情况下防止自动播放音频. 请关闭此消息以启用声音 。
 no_token: 未提供 API 密钥
 paste_your_api_key_here: 在此粘贴您的 API 密钥
