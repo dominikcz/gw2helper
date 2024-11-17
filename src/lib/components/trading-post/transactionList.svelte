@@ -19,8 +19,10 @@
 		<div class="transaction">
 			<Item {item} />
 			<span class="item-name">{item.name}</span>
-			<Price value={item.price} />
-			<span class="item-time">{wxdates.friendlyDurationTillNow(new Date(item.created), false)}</span>
+			<div class="details">
+				<Price value={item.price} />
+				<span class="item-time">{wxdates.friendlyDurationTillNow(new Date(item.created), false)}</span>
+			</div>
 		</div>
 	{:else}
 		<slot name="no-results">
@@ -30,27 +32,39 @@
 </div>
 
 <style lang="scss">
-    .transaction-list {
-        display: flex;
-        flex-flow: column nowrap;
-        row-gap: 0.6em;  
+	.transaction-list {
+		display: flex;
+		flex-flow: column nowrap;
+		row-gap: 0.6em;
 		padding: 0.625em;
-    }
+	}
 
-    .transaction {
-        display: flex;
-        column-gap: 1em;
-        align-items: center;
-        justify-content: space-between;
-    }
+	.transaction {
+		display: flex;
+		column-gap: 1em;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-    .item-name {
-        flex-grow: 1;
-    }
+	.item-name {
+		flex-grow: 1;
+	}
 
 	.item-time {
 		width: 4em;
 		text-align: right;
 	}
 
+	.details {
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: flex-end;
+	}
+
+	@media (min-width: 500px) {
+		.details {
+			flex-flow: row nowrap;
+			column-gap: 1em;
+		}
+	}
 </style>
