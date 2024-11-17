@@ -4,6 +4,7 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let data;
 	let filter = '';
@@ -38,7 +39,7 @@
 	{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
 		{@const days = helperUtils.tillBirthday(char.created)}
 		{@const gender = char.gender.toLowerCase()}
-		<article class="character masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+		<article class="character" use:grungeBorder>
 			<h2>{char.name}</h2>
 			<section>
 				<h4>{char.profession} lvl. {char.level}</h4>

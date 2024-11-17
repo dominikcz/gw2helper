@@ -7,6 +7,7 @@
 	import AchievList from "./achievList.svelte";
     import { sort } from "./achievements";
     import { t as _ } from "$lib/services/i18n";
+	import { grungeBorder } from "$lib/actions/grungeBorder";
 
     export let category;
     export let todoList = [];
@@ -15,7 +16,7 @@
 
 </script>
 
-<details class="achiev-group masked" use:autotooltip style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+<details class="achiev-group" use:autotooltip use:grungeBorder>
     <summary>
         <img src={category.icon} alt={category.name} />
         <div class="descr">

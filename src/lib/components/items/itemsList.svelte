@@ -5,10 +5,12 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from './itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let summary: string;
 	export let items;
 	export let filter: string = '';
+	export let useBorder: boolean = true;
 	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity'];
 
 	const tooltipOptions = {
@@ -19,7 +21,7 @@
 
 </script>
 
-<details class="searchable masked" open style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+<details class="searchable" open use:grungeBorder={{grunge: useBorder}}>
 	<summary>{summary}</summary>
 	<article>
 		<Awaiter promise={items} let:result>

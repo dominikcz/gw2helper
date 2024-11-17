@@ -4,6 +4,7 @@
 	import AstralAcclaim from '../astralAcclaim.svelte';
 	import clock from '$lib/stores/clock';
 	import { t as _ } from '$lib/services/i18n';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let data;
 	export let targetTime;
@@ -31,7 +32,7 @@
 	console.log(`${title}: ${targetTime.toISOString()}`);
 </script>
 
-<details class="masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+<details use:grungeBorder>
 	<summary
 		>{title}
 		<div class="info">

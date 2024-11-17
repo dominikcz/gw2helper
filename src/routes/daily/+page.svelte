@@ -9,6 +9,7 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let data;
 
@@ -126,13 +127,13 @@
 	{@const dailies = extractDaily(result)}
 	{@const weeklies = extractWeekly(result)}
 	<h4>{ $_('daily.daily') }</h4>
-	<div class="achiev-container">
+	<div class="achiev-container" use:grungeBorder>
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
 		{/each}
 	</div>
 	<h4>{ $_('daily.weekly') }</h4>
-	<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+	<div class="achiev-container" use:grungeBorder>
 		{#each sort(weeklies.categories, sortBy) as category (category.id)}
 			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList) }/>
 		{/each}

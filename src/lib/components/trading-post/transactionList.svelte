@@ -20,7 +20,7 @@
 			<Item {item} />
 			<span class="item-name">{item.name}</span>
 			<Price value={item.price} />
-			<span>{wxdates.friendlyDurationTillNow(new Date(item.created))}</span>
+			<span class="item-time">{wxdates.friendlyDurationTillNow(new Date(item.created), false)}</span>
 		</div>
 	{:else}
 		<slot name="no-results">
@@ -47,5 +47,10 @@
     .item-name {
         flex-grow: 1;
     }
+
+	.item-time {
+		width: 4em;
+		text-align: right;
+	}
 
 </style>

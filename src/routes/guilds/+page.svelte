@@ -2,6 +2,7 @@
 	import GuildEmblem from '$lib/components/guildEmblem.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let data;
 </script>
@@ -9,7 +10,7 @@
 <h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} let:result>
 	{#each result as guild (guild.id)}
-		<section class="guild-info masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+		<section class="guild-info" use:grungeBorder>
 			<div class="guild-header">
 				<GuildEmblem emblem={guild.emblem} background="#777" />
 				<div class="guild-h">

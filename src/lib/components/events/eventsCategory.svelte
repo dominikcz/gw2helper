@@ -1,4 +1,5 @@
 <script>
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import EventsList from './eventsList.svelte';
 
 	export let events;
@@ -6,7 +7,7 @@
 	export let showChatLinks = false;
 </script>
 
-<details open class="masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+<details open use:grungeBorder>
 	<summary>{category}</summary>
 	<EventsList {events} {showChatLinks} on:toggle-watched />
 </details>

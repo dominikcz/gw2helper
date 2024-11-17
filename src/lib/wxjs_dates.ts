@@ -191,16 +191,16 @@ const wxdates = {
 			if (days > 0) text = `${days}d ` + text;
 		} else {
 			// TODO: dodać pluralizację
-			if (durationInSeconds === null) text = 'nieznany';
-			else if (durationInSeconds < 60) text = 'poniżej minuty';
+			if (durationInSeconds === null) text = '?';
+			else if (durationInSeconds < 60) text = '< 1m';
 			else if (durationInSeconds < 60 * 60)
-				text = `ponad ${Math.floor(durationInSeconds / 60)} minut`;
+				text = `${Math.floor(durationInSeconds / 60)}m`;
 			else if (durationInSeconds < 60 * 60 * 24)
-				text = `ponad ${Math.floor(durationInSeconds / 60 / 60)} godzin`;
+				text = `${Math.floor(durationInSeconds / 60 / 60)}h`;
 			else {
 				const d = 60 * 60 * 24;
 				const h = Math.floor((durationInSeconds % d) / 60 / 60);
-				text = `ponad ${Math.floor(durationInSeconds / d)} dni${h > 0 ? ` i ${h} godzin` : ''}`;
+				text = `${Math.floor(durationInSeconds / d)}d ${h > 0 ? ` ${h}h` : ''}`;
 			}
 		}
 
@@ -310,12 +310,12 @@ const wxdates = {
 		return new Date(new Date().getTime() - d.getTime());
 	},
 
-	friendlyDurationTill: function (d0, d1) {
-		return this.durationToFriendlyText(this.secondsBetween(d1, d0, true), true);
+	friendlyDurationTill: function (d0, d1, precise = true) {
+		return this.durationToFriendlyText(this.secondsBetween(d1, d0, true), precise);
 	},
 
-	friendlyDurationTillNow: function (d) {
-		return this.friendlyDurationTill(d, new Date());
+	friendlyDurationTillNow: function (d, precise = true) {
+		return this.friendlyDurationTill(d, new Date(), precise);
 	},
 
 	setTime,

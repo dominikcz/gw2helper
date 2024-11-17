@@ -83,7 +83,7 @@ summary {
     }
 }
 
-%masked {
+%grungeBorder {
     mask-image: url(/gw2helper/assets/footer_mask_inv.png), linear-gradient(180deg, rgba(0, 0, 0, 1) calc(100% - 42px), rgba(255, 255, 255, 0) 42px);
     mask-position: left bottom;
     mask-repeat: repeat-x;
@@ -91,16 +91,16 @@ summary {
     margin-bottom: 1em !important;
 }
 
-.masked {
-    @extend %masked;
+.grunge-border {
+    @extend %grungeBorder;
 }
 
-// details.masked{
+// details.grunge-border{
 //     padding-bottom: 0 !important;
 //     margin-bottom: 0 !important;
 //     mask: none;
 //     &[open]{
-//         @extend %masked;
+//         @extend %grungeBorder;
 //     }
 // }
 

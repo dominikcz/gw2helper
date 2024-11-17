@@ -14,6 +14,7 @@
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	export let data;
 
@@ -211,7 +212,7 @@
 				</section>
 
 				<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length })}</span>
-				<div class="achiev-container masked" style="mask-position: {Math.trunc(Math.random() * 1000)}px bottom;">
+				<div class="achiev-container" use:grungeBorder>
 					{#each sort(_result.categories, sortBy) as category (category.id)}
 						<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
 					{/each}
