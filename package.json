@@ -1,6 +1,6 @@
 {
 	"name": "gw2helper",
-	"version": "0.9.43",
+	"version": "0.9.44",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
