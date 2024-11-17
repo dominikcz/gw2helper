@@ -8,6 +8,8 @@
 	export let data;
 </script>
 
+<h1>{$_('layout.nav.trading-post')}</h1>
+
 <Awaiter promise={data.delivery} let:result>
 	<DeliveryBox coins={result.coins} items={result.items} showTradingPostLink={false}/>
 </Awaiter>
