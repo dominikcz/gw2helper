@@ -36,3 +36,4 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 - dodać możliwość rejestrowania poiadomień na konkretną godzinę bezpośrednio z widoku /events. Może użyć do tego akcji?
 - dodać sekcję legendary armor/weapons?
 + dodać sekcję trading post (transactions)?
+- na stronie daily powinna się znaleźć lista todo z achievements, ale ograniczona do daily i weekly
