@@ -5,7 +5,9 @@ import eventsUtils from './components/events/eventsUtils';
 let _reminders = await utils.readReminders(); // singleton ;)
 
 export default class Reminders {
+
     constructor() {
+
         this._store = writable(_reminders);
     }
 
@@ -37,7 +39,7 @@ export default class Reminders {
         return _reminders[eventName] != undefined;
     }
 
-    hasAny(){
+    hasAny() {
         return Object.keys(_reminders).length > 0;
     }
 
@@ -46,21 +48,37 @@ export default class Reminders {
         const test = new Date(currTime);
         const _active = [];
         Object.keys(_reminders).forEach(event => {
-            const time = _reminders[event].find(x => {
-                let [h, m] = x.split(':');
-                h = parseInt(h);
-                m = parseInt(m);
-                test.setHours(h, m, 0, 0);
-                test.setTime(test.getTime() - inAdvance * 60000);
-                const testHour = eventsUtils.getHour(test);
-                const res = (testHour == target);
-                return res;
-            })
-            if (time) {
-                _active.push(event);
+            if (typeof _reminders[event] != "function") {
+                const time = _reminders[event].find(x => {
+                    let [h, m] = x.split(':');
+                    h = parseInt(h);
+                    m = parseInt(m);
+                    test.setHours(h, m, 0, 0);
+                    test.setTime(test.getTime() - inAdvance * 60000);
+                    const testHour = eventsUtils.getHour(test);
+                    const res = (testHour == target);
+                    return res;
+                })
+                if (time) {
+                    _active.push(event);
+                }
             }
         });
+
         return _active;
+    }
+
+    addReminder(eventName, hour) {
+
+    }
+
+    isWatched(remindersStore, segment) {
+        const hour = eventsUtils.getHour(segment.start);
+        if (remindersStore[segment.name] != undefined) {
+            return remindersStore[segment.name].includes(hour);
+        }
+        return false;
+
     }
 
     get $store() {

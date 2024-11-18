@@ -5,6 +5,7 @@
 	import Chips from '../chips/chips.svelte';
 	import themeWatcher from '$lib/stores/themeWatcher';
 	import { t as _ } from '$lib/services/i18n.js';
+	import WatchState from '../watch-state/watch-state.svelte';
 
 	export let event;
 	export let showChatLinks = false;
@@ -39,7 +40,8 @@
 	<div class="header">
 		<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - ${$_('common.read_more_on_wiki')}`} target="_blank">{event.name}</a>
 		<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-		<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />
+		<!--<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />-->
+		<WatchState title={watchedState_title} active={event.watched} onClick={toggleWatched}/>
 	</div>
 	<div class="body">
 		{#if event.watched}
