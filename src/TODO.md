@@ -37,3 +37,5 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 - dodać sekcję legendary armor/weapons?
 + dodać sekcję trading post (transactions)?
 - na stronie daily powinna się znaleźć lista todo z achievements, ale ograniczona do daily i weekly
+- cache do items ignoruje język, więc można zobaczyć opisy z innego języka 😒
+

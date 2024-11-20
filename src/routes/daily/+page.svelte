@@ -10,6 +10,7 @@
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import AchievList from '$lib/components/achievements/achievList.svelte';
 
 	export let data;
 
@@ -122,6 +123,14 @@
 
 <h2>{ $_('daily.achievements') }</h2>
 <img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_construction') }" width="150px" alt="under construction" />
+<h2>{$_('achievements.your_list')}</h2>
+{#each todoList as todo}
+
+<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList)}>
+	{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
+</AchievList>
+
+{/each}
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}
