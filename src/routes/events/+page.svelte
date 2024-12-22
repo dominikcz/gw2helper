@@ -21,7 +21,11 @@
 
 	onMount(async () => {
 		// remove special events
-		eventsUtils.excludeEvents(['lc', 'db'/*, 'ha'*/]);
+		eventsUtils.excludeEvents([
+			'lc', // Labyrinthine Cliffs
+			'db', // Day and night
+			'ha'  // Halloween
+		]);
 		eventsUtils.init();
 		allEvents = eventsUtils.prepareDailyCalendar();
 		const settings = await utils.readEventTimerSettings();
