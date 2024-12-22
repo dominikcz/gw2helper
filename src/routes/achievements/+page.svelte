@@ -12,7 +12,7 @@
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
+	import { sort, filteredAchievements, expandToDoList } from '$lib/components/achievements/achievements.js';
 	import { t as _ } from '$lib/services/i18n.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
@@ -110,22 +110,6 @@
 		});
 	}
 
-
-
-	function expandToDoList(all, list) {
-		const api = data.apiService;
-		const _data = [];
-
-		all.categories.forEach((cat) => {
-			cat.achievements.forEach((x) => {
-				if (list.includes(x.id)) {
-					_data.push({ ...x, todo: true });
-				}
-			});
-		});
-		// console.log('expanded', _data)
-		return _data;
-	}
 </script>
 
 <h1>{$_('achievements.achievements')}</h1>

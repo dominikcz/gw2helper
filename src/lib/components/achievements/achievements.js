@@ -37,6 +37,20 @@ export const sumRewards = (rewardsToGet, rewards) => {
     });
 }
 
+export function expandToDoList(all, list) {
+    const _data = [];
+
+    all.categories.forEach((cat) => {
+        cat.achievements.forEach((x) => {
+            if (list.includes(x.id)) {
+                _data.push({ ...x, todo: true });
+            }
+        });
+    });
+    // console.log('expanded', _data)
+    return _data;
+}
+
 export function filteredAchievements(data, filter, callbackFn, categoriesCallbackFn, params) {
     // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
 

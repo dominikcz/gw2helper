@@ -39,3 +39,4 @@ x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materia
 - na stronie daily powinna się znaleźć lista todo z achievements, ale ograniczona do daily i weekly
 - cache do items ignoruje język, więc można zobaczyć opisy z innego języka 😒
 
+- trading post powinien pokazywać dodatkowo aktualną sytuację rynkową, czyli najbardziej konkurencyjną ofertę kupna/sprzedaży danego przedmiotu w stosunku do mojej oferty

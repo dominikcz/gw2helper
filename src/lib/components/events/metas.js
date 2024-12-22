@@ -2528,6 +2528,44 @@ export const wikiData = {
             ]
         }
     },
+    "cmb": {
+        "category": "Janthir Wilds",
+        "name": "Mount Balrior",
+        "link": "Convergence: Mount Balrior",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    196,
+                    212,
+                    255
+                ]
+            },
+            "1": {
+                "name": "Convergence: Mount Balrior",
+                "link": "Convergence: Mount Balrior",
+                "chatlink": "[\u0026BK4OAAA=]",
+                "bg": [
+                    146,
+                    170,
+                    235
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 10
+                },
+                {
+                    "r": 0,
+                    "d": 170
+                }
+            ]
+        }
+    },
     "lc": {
         "category": "Special Events",
         "name": "Labyrinthine Cliffs",

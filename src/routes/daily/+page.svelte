@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
+	import { expandToDoList } from '$lib/components/achievements/achievements.js';
 
 	export let data;
 
@@ -124,17 +125,16 @@
 <h2>{ $_('daily.achievements') }</h2>
 <img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_construction') }" width="150px" alt="under construction" />
 <h2>{$_('achievements.your_list')}</h2>
-{#each todoList as todo}
-
-<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList)}>
-	{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
-</AchievList>
-
-{/each}
 
 <Awaiter promise={data.achievements} let:result>
 	{@const dailies = extractDaily(result)}
 	{@const weeklies = extractWeekly(result)}
+	{@const todos = expandToDoList(result, todoList)}
+
+	<AchievList items={todos} {todoList} >
+		{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
+	</AchievList>
+	
 	<h4>{ $_('daily.daily') }</h4>
 	<div class="achiev-container" use:grungeBorder>
 		{#each sort(dailies.categories, sortBy) as category (category.id)}
