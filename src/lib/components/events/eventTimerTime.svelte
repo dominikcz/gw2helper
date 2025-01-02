@@ -1,7 +1,8 @@
 <script>
 	import eventsUtils from './eventsUtils';
 
-    export let dt0;
+    /** @type {{dt0: any}} */
+    let { dt0 } = $props();
 </script>
 
 <div class="event-bar compact time">

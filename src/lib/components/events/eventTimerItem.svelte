@@ -5,10 +5,13 @@
 	import WatchState from '../watch-state/watch-state.svelte';
 	import Reminders from '$lib/reminders';
 
-	export let event;
-	export let showEventTimes = true;
-	export let showChatLinks = true;
-	export let darkMode = false;
+	/** @type {{event: any, showEventTimes?: boolean, showChatLinks?: boolean, darkMode?: boolean}} */
+	let {
+		event,
+		showEventTimes = true,
+		showChatLinks = true,
+		darkMode = false
+	} = $props();
 
 	
 	let reminders = new Reminders();

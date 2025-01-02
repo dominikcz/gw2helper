@@ -10,7 +10,11 @@
 	}
 
 	import AstralAcclaim from '../astralAcclaim.svelte';
-	export let value: WizardsVaultObjective;
+	interface Props {
+		value: WizardsVaultObjective;
+	}
+
+	let { value }: Props = $props();
 
 	function getClasses() {
 		let cssClass = `category-${value.track}`;
@@ -24,7 +28,7 @@
 <div class="category {getClasses()}">
 	<div class="main">
 		<span>{value.title}</span>
-		<progress value={value.progress_current <= value.progress_complete ? value.progress_current : value.progress_complete} max={value.progress_complete} />
+		<progress value={value.progress_current <= value.progress_complete ? value.progress_current : value.progress_complete} max={value.progress_complete}></progress>
 	</div>
 	<div class="reward">
 		{value.acclaim}

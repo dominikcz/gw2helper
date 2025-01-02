@@ -2,17 +2,17 @@
 	import Chip from '$lib/components/chips/chip.svelte';
 	import Chips from '$lib/components/chips/chips.svelte';
 	import ItemTooltip from '$lib/components/items/itemTooltip.svelte';
-	import clock from '$lib/stores/clock.js';
+	import Clock from '$lib/services/clock.svelte';
 
 	let options0 = ['item 1a', 'item 2a', 'item 3a'];
-	let choice0 = [];
+	let choice0 = $state([]);
 
 	let options1 = [
 		{ label: 'item 1b', value: 'item-1b', selected: false },
 		{ label: 'item 2b', value: 'item-2b', selected: false },
 		{ label: 'item 3b', value: 'item-3b', selected: false },
 	];
-	let choice1 = [];
+	let choice1 = $state([]);
 
 	let options2 = {
 		'item-1c': 'item 1c',
@@ -20,13 +20,13 @@
 		'item-3c': 'item 3c',
 	};
 
-	let choice2 = [];
+	let choice2 = $state([]);
 
-	let item1 = true;
-	let item2 = false;
+	let item1 = $state(true);
+	let item2 = $state(false);
 
-	const time1 = clock({ interval: 15000 });
-	const time2 = clock({ interval: 500 });
+	const time1 = new Clock({ interval: 15000 });
+	const time2 = new Clock({ interval: 500 });
 
 	let itemTooltip1 = {
 		name: 'Omnomberry Bar',
@@ -103,11 +103,11 @@
 </script>
 
 <details>
-	<summary>Clock store</summary>
+	<summary>Clock service</summary>
 	<div class="test">
 		<ul>
-			<li>Current time (updated every 15 sec) is: {$time1.toISOString()}</li>
-			<li>Current time (updated every 500 msec) is: {$time2.toISOString()}</li>
+			<li>Current time (updated every 15 sec) is: {time1.value.toISOString()}</li>
+			<li>Current time (updated every 500 msec) is: {time2.value.toISOString()}</li>
 		</ul>
 	</div>
 </details>

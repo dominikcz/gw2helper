@@ -1,10 +1,14 @@
 <script lang="ts">
-	export let currency;
 
 	import Price from '$lib/components/price.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
     import { dragHandle } from 'svelte-dnd-action';
 	import { t as _ } from '$lib/services/i18n';
+	interface Props {
+		currency: any;
+	}
+
+	let { currency }: Props = $props();
 
 	function getTitle(currency) {
 		return `<h4>${currency.name} (${currency.id}) - <a class="autotooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">${$_('common.click_for_wiki')}</a></h4>

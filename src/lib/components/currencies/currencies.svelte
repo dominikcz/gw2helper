@@ -6,7 +6,11 @@
 	import Currency from './currency.svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	export let items = [];
+	interface Props {
+		items?: any;
+	}
+
+	let { items = $bindable([]) }: Props = $props();
 
 	const flipDurationMs = 200;
 
@@ -21,7 +25,7 @@
 	}
 </script>
 
-<section class="wallet autotooltip" use:autotooltip use:dragHandleZone={{ items, flipDurationMs }} on:consider={handleSort} on:finalize={handleSort}>
+<section class="wallet autotooltip" use:autotooltip use:dragHandleZone={{ items, flipDurationMs }} onconsider={handleSort} onfinalize={handleSort}>
 	{#each items as currency (currency.id)}
 		<a href={helperUtils.wikiLink(currency.name)} target="_blank" class="autotooltip" animate:flip={{ duration: flipDurationMs }}>
 			<Currency {currency} />

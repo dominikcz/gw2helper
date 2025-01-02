@@ -3,13 +3,23 @@
 	import wxjs_types from '$lib/wxjs_types';
 	import Chip from './chip.svelte';
 
-	export let name: string = '';
-	export let help: string = '';
-	export let options: object = {};
-	export let value = [];
-	export let className: string = '';
+	interface Props {
+		name?: string;
+		help?: string;
+		options?: object;
+		value?: any;
+		className?: string;
+	}
 
-	let choice = [];
+	let {
+		name = '',
+		help = '',
+		options = {},
+		value = $bindable([]),
+		className = ''
+	}: Props = $props();
+
+	let choice = $state([]);
 	const dispatch = createEventDispatcher();
 
 	// data model's normalization

@@ -3,42 +3,43 @@
 	import { onMount } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';
 	import eventsUtils from './eventsUtils';
-	import clock from '$lib/stores/clock';
+	import Clock from '$lib/services/clock.svelte';
 	import themeWatcher from '$lib/stores/themeWatcher';
 	import EventTimerItem from './eventTimerItem.svelte';
 	import EventTimerTime from './eventTimerTime.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let showEventTimes = true;
-	export let showChatLinks = true;
-	export let showCategories = true;
-	export let showHeadings = true;
-	export let autoScroll = false;
-	export let updateInterval = 10;
+	/** @type {{showEventTimes?: boolean, showChatLinks?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean, updateInterval?: number}} */
+	let { showEventTimes = true, showChatLinks = true, showCategories = true, showHeadings = true, autoScroll = false, updateInterval = 10 } = $props();
 
-	let eventsRef;
-	let pointerHeight = 0;
+	let eventsRef = $state();
+	let pointerHeight = $state(0);
 
-	let currentTimePos = 0;
-	let currTime = new Date();
+	let currentTimePos = $state(0);
+	let currTime = new Clock({ interval: updateInterval * 1000 });
 	let darkMode = themeWatcher();
-	let dt0;
-	let time = clock({ interval: updateInterval * 1000 });
-	$: $time, updatePointerPos();
+	let dt0 = $state();
+	let oldTime = 0;
 
 	onMount(() => {
 		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 	});
 
+	$effect(() => {
+		if (oldTime != currTime.value) {
+			updatePointerPos();
+			oldTime = currTime.value;
+		}
+	});
 	function updatePointerPos(firstRun = false) {
+		console.log('updatePointerPos');
 		dt0 = eventsUtils.getDt0();
 		if (!eventsRef) return;
 		if (dt0) {
 			const rect = eventsRef.getBoundingClientRect();
 			pointerHeight = Math.trunc(rect.height);
-			currTime = new Date();
-			const diff = wxdates.minutesBetween(dt0, currTime);
-			if (dt0.getHours() != currTime.getHours()) {
+			const diff = wxdates.minutesBetween(dt0, currTime.value);
+			if (dt0.getHours() != currTime.value.getHours()) {
 				console.log('reset.');
 				currentTimePos = 0;
 				eventsRef.scrollLeft = 0;
@@ -46,7 +47,7 @@
 				setTimeout(updatePointerPos, 0);
 			} else {
 				currentTimePos = 100 * (diff / 120);
-				const timePosPx = currentTimePos * eventsRef.scrollWidth /100;
+				const timePosPx = (currentTimePos * eventsRef.scrollWidth) / 100;
 
 				// scroll to center if out of view
 				// keep pointer positioned at center and scroll background
@@ -64,7 +65,7 @@
 	<div class="category time-container" class:no-headings={!showHeadings}>
 		<div class="event-bar compact">
 			<div class="event-pointer" title={$_('events.current_time')} style="left: {currentTimePos}%; height: {pointerHeight}px">
-				<span class="event-pointer-time" style="right: inherit;">{eventsUtils.getHour(currTime)}</span>
+				<span class="event-pointer-time" style="right: inherit;">{eventsUtils.getHour(currTime.value)}</span>
 			</div>
 		</div>
 		<EventTimerTime {dt0} />
@@ -78,7 +79,9 @@
 			{#each eventsList as event}
 				{#if showHeadings}
 					{#if event.link}
-						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank" title={`${event.name} - ${$_('common.read_more_on_wiki')}`}>{event.name}</a>
+						<a class="heading" href={helperUtils.wikiLink(event.link)} target="_blank" title={`${event.name} - ${$_('common.read_more_on_wiki')}`}
+							>{event.name}
+						</a>
 					{:else}
 						<span class="heading">{event.name}</span>
 					{/if}
@@ -206,7 +209,7 @@
 	}
 
 	@media (min-width: 900px) {
-		.event-timer{
+		.event-timer {
 			overflow-x: hidden;
 		}
 		.category {
@@ -251,5 +254,4 @@
 			}
 		}
 	}
-
 </style>

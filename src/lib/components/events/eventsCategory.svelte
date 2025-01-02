@@ -2,9 +2,8 @@
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import EventsList from './eventsList.svelte';
 
-	export let events;
-	export let category = '';
-	export let showChatLinks = false;
+	/** @type {{events: any, category?: string, showChatLinks?: boolean}} */
+	let { events, category = '', showChatLinks = false } = $props();
 </script>
 
 <details open use:grungeBorder>

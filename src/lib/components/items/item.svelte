@@ -1,6 +1,10 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	export let item: object;
+	interface Props {
+		item: object;
+	}
+
+	let { item }: Props = $props();
 
 	function rarityClass() {
 		return item.rarity ? `rarity rarity-${item.rarity.toLowerCase()}` : 'rarity';

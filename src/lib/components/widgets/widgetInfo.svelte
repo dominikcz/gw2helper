@@ -1,7 +1,19 @@
 <script lang="ts">
-	export let title: string;
-	export let value: string;
-	export let image: string = '';
+	interface Props {
+		title: string;
+		value: string;
+		image?: string;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
+
+	let {
+		title,
+		value,
+		image = '',
+		children,
+		...rest
+	}: Props = $props();
 
 	function getImageStyle() {
 		return image ? `background-image: url(${image});` : '';
@@ -9,11 +21,11 @@
 
 </script>
 
-<div class="widget" style={getImageStyle()} {...$$restProps}>
+<div class="widget" style={getImageStyle()} {...rest}>
 	<div class="title">{title}</div>
 	<div class="value">
-		<slot {value}>
+		{#if children}{@render children({ value, })}{:else}
 			{value}
-		</slot>
+		{/if}
 	</div>
 </div>

@@ -24,7 +24,8 @@
 <details class="searchable" open use:grungeBorder={{grunge: useBorder}}>
 	<summary>{summary}</summary>
 	<article>
-		<Awaiter promise={items} let:result>
+		<Awaiter promise={items} >
+			{#snippet children(result)}
 			<div class="items autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions} >
 				{#each helperUtils.filterCollection(result, fields, filter, { nonZero: true, nonZeroField: 'count' }) as item, index (`${item.id}-${index}`)}
 					<Item {item} />
@@ -34,6 +35,8 @@
 					</slot>
 				{/each}
 			</div>
+				
+			{/snippet}
 		</Awaiter>
 	</article>
 </details>

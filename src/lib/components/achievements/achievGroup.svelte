@@ -9,10 +9,13 @@
     import { t as _ } from "$lib/services/i18n";
 	import { grungeBorder } from "$lib/actions/grungeBorder";
 
-    export let category;
-    export let todoList = [];
-    export let showApiLinks = false;
-    export let sortBy = 'ap';
+    /** @type {{category: any, todoList?: any, showApiLinks?: boolean, sortBy?: string}} */
+    let {
+        category,
+        todoList = [],
+        showApiLinks = false,
+        sortBy = 'ap'
+    } = $props();
 
 </script>
 

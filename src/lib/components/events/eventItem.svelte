@@ -7,11 +7,11 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import WatchState from '../watch-state/watch-state.svelte';
 
-	export let event;
-	export let showChatLinks = false;
+	/** @type {{event: any, showChatLinks?: boolean}} */
+	let { event = $bindable(), showChatLinks = false } = $props();
 
-	$: watchedState_class = event.watched ? 'watched' : '';
-	$: watchedState_title = event.watched ? $_('events.click_to_remove') : $_('events.click_to_add');
+	let watchedState_class = $derived(event.watched ? 'watched' : '');
+	let watchedState_title = $derived(event.watched ? $_('events.click_to_remove') : $_('events.click_to_add'));
 	// $: event.alarms, toggleAlarm();
 
 	let darkMode = themeWatcher();
@@ -39,7 +39,7 @@
 <div class="event" style="background: {eventsUtils.getColor(event.bg, $darkMode)};">
 	<div class="header">
 		<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - ${$_('common.read_more_on_wiki')}`} target="_blank">{event.name}</a>
-		<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
+		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
 		<!--<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />-->
 		<WatchState title={watchedState_title} watched={event.watched} onClick={toggleWatched}/>
 	</div>

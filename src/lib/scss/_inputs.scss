@@ -1,6 +1,7 @@
 %focus {
 	box-shadow: inset 0 0 3px #c1c1c1, 0 0 3px var(--button-outline);
 	outline: 1px solid var(--button-outline);
+	outline-offset: -1px;
 	background-color: var(--button-focused-bg);
 }
 
@@ -20,12 +21,13 @@
 	--search-input-selected-text: #000;
 }
 
-.focusable:focus {
+.focusable:focus-visible {
 	@extend %focus;
 }
 
-*:focus {
+*:focus-visible {
 	outline: 1px dashed var(--button-outline);
+	outline-offset: -1px;
 }
 
 input,
@@ -40,7 +42,7 @@ button {
 	font-family: sans-serif;
 	height: 2em;
 
-	&:focus {
+	&:focus-visible {
 		@extend %focus;
 	}
 }

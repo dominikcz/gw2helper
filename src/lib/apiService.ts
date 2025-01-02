@@ -674,6 +674,9 @@ const toHtml = (text: string | null): string => {
 
 const additionalMapping = (data) => {
     data.forEach((element) => {
+        if (element.charges) {
+            element.count = element.charges;
+        }
         element.description = toHtml(element.description);
         if (element.details) {
             if (element.details.type) {

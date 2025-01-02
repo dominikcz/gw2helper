@@ -4,28 +4,31 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 </script>
 
 <h1>{ $_('guilds.guilds') }</h1>
-<Awaiter promise={data.guilds} let:result>
-	{#each result as guild (guild.id)}
-		<section class="guild-info" use:grungeBorder>
-			<div class="guild-header">
-				<GuildEmblem emblem={guild.emblem} background="#777" />
-				<div class="guild-h">
-					<h2>{guild.name} [{guild.tag}]</h2>
-					<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>
+<Awaiter promise={data.guilds} >
+	{#snippet children(result)}
+		{#each result as guild (guild.id)}
+			<section class="guild-info" use:grungeBorder>
+				<div class="guild-header">
+					<GuildEmblem emblem={guild.emblem} background="#777" />
+					<div class="guild-h">
+						<h2>{guild.name} [{guild.tag}]</h2>
+						<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>
+					</div>
 				</div>
-			</div>
-			<div class="details">
-				<span>{$_('guilds.level')}: <span class="big">{guild.level}</span></span>
-				<span>{$_('guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
-				<span>{$_('guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
-				<span>{$_('guilds.favor')}: <span class="big">{guild.favor}</span></span>
-			</div>
-		</section>
-	{/each}
+				<div class="details">
+					<span>{$_('guilds.level')}: <span class="big">{guild.level}</span></span>
+					<span>{$_('guilds.members')}: <span class="big">{guild.member_count}/{guild.member_capacity}</span></span>
+					<span>{$_('guilds.aetherium')}: <span class="big">{guild.aetherium}</span></span>
+					<span>{$_('guilds.favor')}: <span class="big">{guild.favor}</span></span>
+				</div>
+			</section>
+		{/each}
+	{/snippet}
 </Awaiter>
 
 <style lang="scss">

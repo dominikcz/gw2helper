@@ -2,8 +2,8 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
-	export let items;
-	export let todoList;
+	/** @type {{items: any, todoList: any, children?: import('svelte').Snippet}} */
+	let { items, todoList, children } = $props();
 
 	function isOnTodo(todoList, achievId){
 		return todoList.findIndex((x) => x == achievId) >= 0;
@@ -34,7 +34,7 @@
 		/>
 	{:else}
 		<span class="no-results">
-			<slot>{$_('common.nothing_found')}</slot>
+			{#if children}{@render children()}{:else}{$_('common.nothing_found')}{/if}
 		</span>
 	{/each}
 </div>

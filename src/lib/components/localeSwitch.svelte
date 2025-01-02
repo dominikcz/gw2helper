@@ -1,7 +1,6 @@
 <script>
-    export let languages = {};
-    export let value;
-    export let keysOnly = false;
+	/** @type {{languages?: any, value: any, keysOnly?: boolean}} */
+	let { languages = {}, value = $bindable(), keysOnly = false } = $props();
 </script>
 
 <select bind:value id="locale-switch">

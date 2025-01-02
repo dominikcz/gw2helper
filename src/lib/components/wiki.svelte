@@ -1,9 +1,9 @@
 <script>
-	export let width = 128;
-	export let height = 128;
+	/** @type {{width?: number, height?: number, [key: string]: any}} */
+	let { width = 128, height = 128, ...rest } = $props();
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" version="1.0" height={height} width={width} fill="currentColor" {...$$restProps}>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" version="1.0" height={height} width={width} fill="currentColor" {...rest}>
 	<g>
 		<path
 			d="M96.869 23.91v2.138c-2.822.501-4.957 1.388-6.407 2.66-2.077 1.888-4.525 4.778-6.132 8.67l-32.685 66.713H49.47L16.657 36.51c-1.528-3.468-3.606-5.588-4.233-6.358a10.28 10.28 0 00-3.614-2.804c-1.43-.675-3.36-1.108-5.79-1.3v-2.14h31.928v2.14c-3.683.346-5.44.963-6.537 1.849-1.097.886-1.645 2.023-1.645 3.41 0 1.928.9 4.934 2.703 9.019l24.233 45.959 23.692-45.38c1.842-4.471 3.37-7.574 3.37-9.308 0-1.118-.568-2.187-1.705-3.209-1.136-1.02-2.422-1.744-5.125-2.168a37.477 37.477 0 00-1-.173V23.91H96.87z"

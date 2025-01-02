@@ -22,19 +22,20 @@
 	import { onMount } from 'svelte';
 
 	import eventsUtils from '$lib/components/events/eventsUtils.js';
-	import clock from '$lib/stores/clock.js';
+	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
 
-	export let data;
+	/** @type {{data: any, children?: import('svelte').Snippet}} */
+	let { data, children } = $props();
 
 	const defaultTitle = 'GW2 Helper';
-	let apiKey = data.apiKey;
+	let apiKey = $state(data.apiKey);
 	let reminders = new Reminders();
 	let lastNotify = '';
 	let confirmedNotify = '';
 	let noAudio = 0;
-	let apiLang = data.apiLang;
+	let apiLang = $state(data.apiLang);
 
 	const apiLanguages = {
 		en: 'English',
@@ -56,24 +57,8 @@
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
-	$: tokenInfo = data.tokenInfo;
-	$: active = $page.url.pathname;
-	$: title = [defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - ');
 
-	$: navigation = [
-		{ slug: `${base}/`, label: $_('layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/events/`, label: $_('layout.nav.events'), visible: true },
-		{ slug: `${base}/items/`, label: $_('layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
-		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), visible: tokenInfo.permissions.includes('progression') },
-	];
 
-	$: currentPageVisible = devMode || navigation.find((x) => x.slug == active)?.visible || false;
 
 	onMount(async () => {
 		$remindersSettings = await data.remindersSettings;
@@ -121,18 +106,17 @@
 		location.reload(true);
 	}
 
-	let time = clock({ interval: 10 * 1000 });
-	$: $time, onTimeChange();
+	let time = new Clock({ interval: 10 * 1000 });
 
 	function onTimeChange() {
 		if (!$remindersSettings) return;
 		const inAdvance = $remindersSettings.inAdvance;
-		const list = reminders.activeAlarms($time, inAdvance);
+		const list = reminders.activeAlarms(time.value, inAdvance);
 		// const list = ['event 1', 'event 2']; // test
 		if (list.length) {
 			// we repeat alarm till it's active, unless confirmed by user (by closing associated toast message)
 			playAlarm({
-				time: eventsUtils.getHour($time),
+				time: eventsUtils.getHour(time.value),
 				eventsList: list.join(', '),
 				inAdvance,
 				immediate: inAdvance == 0,
@@ -188,13 +172,32 @@
 		sounds.stop();
 		sounds.play($remindersSettings.sound);
 	}
+	let tokenInfo = $derived(data.tokenInfo);
+	let active = $derived($page.url.pathname);
+	let title = $derived([defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - '));
+	let navigation = $derived([
+		{ slug: `${base}/`, label: $_('layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/events/`, label: $_('layout.nav.events'), visible: true },
+		{ slug: `${base}/items/`, label: $_('layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
+		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
+		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
+		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
+		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
+		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), visible: tokenInfo.permissions.includes('progression') },
+	]);
+	let currentPageVisible = $derived(devMode || navigation.find((x) => x.slug == active)?.visible || false);
+	$effect(() => {
+		onTimeChange();
+	});
 </script>
 
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
 
-<svelte:window on:notification-test={hndNotificationTest} />
+<svelte:window onnotification-test={hndNotificationTest} />
 
 <Alert />
 <SvelteToast />
@@ -212,7 +215,7 @@
 
 		{#if currentPageVisible}
 			<main>
-				<slot />
+				{@render children?.()}
 			</main>
 		{/if}
 
@@ -240,9 +243,9 @@
 						{/each}
 					</select>
 					<p>
-						<button on:click={() => saveApiSettings()}>{$_('layout.apply')}</button>
-						<button on:click={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
-						<button on:click={refresh}>{$_('layout.clear_cache')}</button>
+						<button onclick={() => saveApiSettings()}>{$_('layout.apply')}</button>
+						<button onclick={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
+						<button onclick={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
 						<p><em>{$_('layout.token_ok', {token: tokenInfo.name})}</em></p>

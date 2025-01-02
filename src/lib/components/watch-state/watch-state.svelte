@@ -1,11 +1,10 @@
 <script>
-	export let watched;
-	export let title;
-	export let onClick;
+	/** @type {{watched: any, title: any, onClick: any}} */
+	let { watched, title, onClick } = $props();
 
 </script>
 
-<div class= "watched-state" class:watched {title} on:click={onClick} />
+<div class= "watched-state" class:watched {title} onclick={onClick}></div>
 
 <style lang="scss">
 	.watched-state {

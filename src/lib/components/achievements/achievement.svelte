@@ -7,31 +7,34 @@
 	import { getQueryStringFlag } from '$lib/utils';
 	import {t as _} from "$lib/services/i18n";
 
-	export let id;
-	export let icon;
-	export let name;
-	export let type = 'Default';
-	export let description;
-	export let requirement;
-	export let current;
-	export let max;
-	export let flags = [];
-	export let todo = false;
-	export let rewardsObj = {};
-	export let done = false;
-	export let bits = [];
-	export let bitsDone = [];
-	export let pointsToGet = 0;
-	export let tiers = [];
+	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any}} */
+	let {
+		id,
+		icon,
+		name,
+		type = 'Default',
+		description,
+		requirement,
+		current,
+		max,
+		flags = [],
+		todo = $bindable(false),
+		rewardsObj = {},
+		done = false,
+		bits = [],
+		bitsDone = [],
+		pointsToGet = 0,
+		tiers = []
+	} = $props();
 
 	const dispatch = createEventDispatcher();
 
 	const showApiLinks = getQueryStringFlag('show-api-links');
 
-	$: todoState_class = todo ? 'todo' : '';
-	$: todoState_title = todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo');
-	$: _bits = bits ? bits.length : 0;
-	$: _bitsDone = bits ? (done ? bits.length : (bitsDone || []).length) : 0;
+	let todoState_class = $derived(todo ? 'todo' : '');
+	let todoState_title = $derived(todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo'));
+	let _bits = $derived(bits ? bits.length : 0);
+	let _bitsDone = $derived(bits ? (done ? bits.length : (bitsDone || []).length) : 0);
 
 	const _title = getTitle();
 
@@ -66,7 +69,7 @@
 		{/if}
 
 		{#if current && max}
-			<progress value={current <= max ? current : max} {max} title={_title} />
+			<progress value={current <= max ? current : max} {max} title={_title}></progress>
 			<span title={_title}>{current <= max ? current : max} / {max}</span>
 		{/if}
 
@@ -83,8 +86,8 @@
 	<div class="body">
 		<div class="title-bar">
 			<h3>{name}</h3>
-			<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-			<div class={`todo-state ${todoState_class}`} title={todoState_title} on:click={toggleTodo} />
+			<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
+			<div class={`todo-state ${todoState_class}`} title={todoState_title} onclick={toggleTodo}></div>
 		</div>
 		{#if description}<span>{@html description}</span>{/if}
 		{#if requirement}<span>{requirement}</span>{/if}

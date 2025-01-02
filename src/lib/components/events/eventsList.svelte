@@ -2,8 +2,8 @@
 	import EventItem from './eventItem.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let events;
-	export let showChatLinks = false;
+	/** @type {{events: any, showChatLinks?: boolean, children?: import('svelte').Snippet}} */
+	let { events, showChatLinks = false, children } = $props();
 </script>
 
 <div class="events-list">
@@ -11,7 +11,7 @@
 		<EventItem {event} {showChatLinks} on:toggle-watched on:alarms-change />
 	{:else}
 		<span class="no-results">
-			<slot>{$_('common.nothing_found')}</slot>
+			{#if children}{@render children()}{:else}{$_('common.nothing_found')}{/if}
 		</span>
 	{/each}
 </div>

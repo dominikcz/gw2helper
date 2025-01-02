@@ -1,5 +1,6 @@
 <script>
-	export let item;
+	/** @type {{item: any}} */
+	let { item } = $props();
 
 	let flags = getFlags();
 

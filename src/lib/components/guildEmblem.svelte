@@ -1,13 +1,22 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 
-	export let emblem;
-	export let width = 128;
-	export let height = 128;
-	export let background = '#000';
+	interface Props {
+		emblem: any;
+		width?: number;
+		height?: number;
+		background?: string;
+	}
 
-	let canvas: HTMLCanvasElement;
-	let ctx: CanvasRenderingContext2D | null;
+	let {
+		emblem,
+		width = 128,
+		height = 128,
+		background = '#000'
+	}: Props = $props();
+
+	let canvas: HTMLCanvasElement = $state();
+	let ctx: CanvasRenderingContext2D | null = $state();
 
 	interface LayerData {
 		img: HTMLImageElement;
@@ -15,9 +24,6 @@
 		flipV: boolean;
 	}
 
-	$: {
-		prepareEmblem();
-	}
 
 	function renderImages(images: Array<LayerData>) {
 		images.forEach((item) => {
@@ -67,9 +73,11 @@
 
 	onDestroy(() => {});
 
-	$: if (ctx) {
-		prepareEmblem();
-	}
+	$effect(() => {
+		if (ctx) {
+			prepareEmblem();
+		}
+	});
 </script>
 
-<canvas {width} {height} style:background bind:this={canvas} />
+<canvas {width} {height} style:background bind:this={canvas}></canvas>

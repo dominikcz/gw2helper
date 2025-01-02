@@ -2,20 +2,18 @@
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
 	import AstralAcclaim from '../astralAcclaim.svelte';
-	import clock from '$lib/stores/clock';
+	import Clock from '$lib/services/clock.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	export let data;
-	export let targetTime;
-	export let title;
+	/** @type {{data: any, targetTime: any, title: any}} */
+	let { data = $bindable(), targetTime, title } = $props();
 
-	let timeLeft;
-	let time = clock({ interval: 1000 });
-	$: $time, updateTime();
+	let timeLeft = $state();
+	let time = new Clock({ interval: 1000 });
 
 	function updateTime(){
-		timeLeft = wxdates.friendlyDurationTill($time, targetTime);
+		timeLeft = wxdates.friendlyDurationTill(time.value, targetTime);
 	}
 
 	function notClaimed() {
@@ -30,6 +28,9 @@
 	}
 
 	console.log(`${title}: ${targetTime.toISOString()}`);
+	$effect(() => {
+		updateTime();
+	});
 </script>
 
 <details use:grungeBorder>
@@ -38,7 +39,7 @@
 		<div class="info">
 			<div class="timer">{timeLeft}</div>
 			{#if data.meta_progress_current}
-				<progress value={data.meta_progress_current} max={data.meta_progress_complete} />
+				<progress value={data.meta_progress_current} max={data.meta_progress_complete}></progress>
 			{:else}
 				<span>{$_('daily.objectives_left', {objectivesCount: notClaimed()}) }</span>
 			{/if}

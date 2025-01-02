@@ -13,12 +13,17 @@
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import { expandToDoList } from '$lib/components/achievements/achievements.js';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 	let sortBy = 'ap';
 	let showApiLinks = false;
-	let todoList=[];
+	let todoList=$state([]);
 
+	// svelte-ignore non_reactive_update
 	enum Period {
 		daily = 'daily',
 		weekly = 'weekly',
@@ -101,8 +106,10 @@
 
 <h2>{ $_('daily.wizards_vault') }</h2>
 
-<Awaiter promise={data.wallet} let:result>
-	<WidgetInfo title="{ $_('daily.your_astral_acclaims') }" value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+<Awaiter promise={data.wallet} >
+	{#snippet children(result)}
+		<WidgetInfo title={ $_('daily.your_astral_acclaims') } value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+	{/snippet}
 </Awaiter>
 
 <div class="info-block">
@@ -110,41 +117,49 @@
 	<p>{ $_('daily.info.hint-content') }</p>
 </div>
 
-<Awaiter promise={data.daily} let:result>
-	<WizardsVaultCategory title="{ $_('daily.daily') }" data={result} targetTime={getTimerTarget(Period.daily)} />
+<Awaiter promise={data.daily} >
+	{#snippet children(result)}
+		<WizardsVaultCategory title={ $_('daily.daily') } data={result} targetTime={getTimerTarget(Period.daily)} />
+	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.weekly} let:result>
-	<WizardsVaultCategory title="{ $_('daily.weekly') }" data={result} targetTime={getTimerTarget(Period.weekly)} />
+<Awaiter promise={data.weekly} >
+	{#snippet children(result)}
+		<WizardsVaultCategory title={ $_('daily.weekly') } data={result} targetTime={getTimerTarget(Period.weekly)} />
+	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.special} let:result>
-	<WizardsVaultCategory title="{ $_('daily.special') }" data={result} targetTime={getTimerTarget(Period.special)} />
+<Awaiter promise={data.special} >
+	{#snippet children(result)}
+		<WizardsVaultCategory title={ $_('daily.special') } data={result} targetTime={getTimerTarget(Period.special)} />
+	{/snippet}
 </Awaiter>
 
 <h2>{ $_('daily.achievements') }</h2>
-<img src="/gw2helper/assets/150px-construction.png" title="{ $_('common.under_construction') }" width="150px" alt="under construction" />
+<img src="/gw2helper/assets/150px-construction.png" title={ $_('common.under_construction') } width="150px" alt="under construction" />
 <h2>{$_('achievements.your_list')}</h2>
 
-<Awaiter promise={data.achievements} let:result>
-	{@const dailies = extractDaily(result)}
-	{@const weeklies = extractWeekly(result)}
-	{@const todos = expandToDoList(result, todoList)}
+<Awaiter promise={data.achievements} >
+	{#snippet children(result)}
+		{@const dailies = extractDaily(result)}
+		{@const weeklies = extractWeekly(result)}
+		{@const todos = expandToDoList(result, todoList)}
 
-	<AchievList items={todos} {todoList} >
-		{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
-	</AchievList>
-	
-	<h4>{ $_('daily.daily') }</h4>
-	<div class="achiev-container" use:grungeBorder>
-		{#each sort(dailies.categories, sortBy) as category (category.id)}
-			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
-		{/each}
-	</div>
-	<h4>{ $_('daily.weekly') }</h4>
-	<div class="achiev-container" use:grungeBorder>
-		{#each sort(weeklies.categories, sortBy) as category (category.id)}
-			<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList) }/>
-		{/each}
-	</div>
+		<AchievList items={todos} {todoList} >
+			{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
+		</AchievList>
+		
+		<h4>{ $_('daily.daily') }</h4>
+		<div class="achiev-container" use:grungeBorder>
+			{#each sort(dailies.categories, sortBy) as category (category.id)}
+				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
+			{/each}
+		</div>
+		<h4>{ $_('daily.weekly') }</h4>
+		<div class="achiev-container" use:grungeBorder>
+			{#each sort(weeklies.categories, sortBy) as category (category.id)}
+				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList) }/>
+			{/each}
+		</div>
+	{/snippet}
 </Awaiter>

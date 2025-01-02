@@ -1,11 +1,12 @@
 <script>
-	export let data;
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	/** @type {{data: any}} */
+	let { data } = $props();
 
-	let filter = '';
+	let filter = $state('');
 </script>
 
 <h1>{$_('materials.materials')}</h1>

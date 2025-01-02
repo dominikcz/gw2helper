@@ -5,28 +5,30 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import EventsCategory from './eventsCategory.svelte';
 	import eventsUtils from './eventsUtils';
-	import clock from '$lib/stores/clock';
+	import Clock from '$lib/services/clock.svelte';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let events;
-	export let showChatLinks = false;
-	export let updateInterval = 60;
 
-	export let inAdvance = 5;
-	export let sound = 'trumpet';
+	/** @type {{events: any, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string}} */
+	let {
+		events = $bindable(),
+		showChatLinks = false,
+		updateInterval = 60,
+		inAdvance = $bindable(5),
+		sound = $bindable('trumpet')
+	} = $props();
 
-	let filter = '';
+	let filter = $state('');
 
-	let time = clock({ interval: updateInterval * 1000 });
+	let time = new Clock({ interval: updateInterval * 1000 });
 	let reminders = new Reminders();
 
 	const remindersStore = reminders.$store;
 
-	let version = 0;
+	let version = $state(0);
 
-	$: $time, onTimeChange();
 
 	function hndAlarmsChange(event) {
 		const ev = event.detail;
@@ -67,7 +69,7 @@
 			const cat = events[catKey];
 			let changed = false;
 			cat.forEach((event) => {
-				const newNext = eventsUtils.getNextOccurence(event.startTimes, $time);
+				const newNext = eventsUtils.getNextOccurence(event.startTimes, time.value);
 				if (event.next != newNext) {
 					event.next = newNext;
 					changed = true;
@@ -111,6 +113,9 @@
 			})
 		);
 	}
+	$effect(() => {
+		onTimeChange();
+	});
 </script>
 
 <h2>{$_('events.watched.watched')}</h2>
@@ -133,8 +138,8 @@
 			</label>
 		{/each}
 	</div>
-	<button on:click={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
-	<button on:click={saveNotifySettings}>{$_('common.save')}</button>
+	<button onclick={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
+	<button onclick={saveNotifySettings}>{$_('common.save')}</button>
 </fieldset>
 
 <h2>{$_('events.available')}</h2>

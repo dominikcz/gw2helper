@@ -1,19 +1,20 @@
 <!-- Originally posted on https://webjeda.com/blog/back-to-top-svelte-component/ -->
 <script>
-	export let showAtPixel = 1000;
+	/** @type {{showAtPixel?: number, children?: import('svelte').Snippet}} */
+	let { showAtPixel = 1000, children } = $props();
 
-	let scrollHeight = 0;
+	let scrollHeight = $state(0);
 
 	const gotoTop = () => {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
-	$: showGotoTop = scrollHeight > showAtPixel;
+	let showGotoTop = $derived(scrollHeight > showAtPixel);
 </script>
 
 {#if showGotoTop}
-	<button class="back-to-top" on:click={gotoTop}>
-		<slot><h1>🔝</h1></slot>
+	<button class="back-to-top" onclick={gotoTop}>
+		{#if children}{@render children()}{:else}<h1>🔝</h1>{/if}
 	</button>
 {/if}
 
@@ -33,7 +34,7 @@
 		height: fit-content;
 		font-size: 1em;
 
-        &:focus, &:active{
+        &:focus-visible, &:active{
             border:none !important;
             box-shadow: none !important;
             outline: none !important;

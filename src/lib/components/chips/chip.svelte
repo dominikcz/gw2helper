@@ -1,49 +1,49 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	interface Props {
+		name?: string;
+		id?: string;
+		label: string;
+		title?: string;
+		value: any;
+		selected?: boolean;
+		onChipToggle?: CallableFunction;
+	}
 
-    export let name: string = '';
-    export let id: string = '';
-    export let label: string;
-    export let title: string = '';
-    export let value: any;
-    export let selected: boolean = false;
+	let { name = '', id = '', label, title = '', value, selected = $bindable(false), onChipToggle = null }: Props = $props();
 
-	const dispatch = createEventDispatcher();
-
-    function toggleSelected(){
-        selected = !selected;
-        dispatch('toggle-chip', {
-				name,
-				id,
-                label,
-                value,
-                selected
-			});
-    }
-
+	function toggleSelected() {
+		selected = !selected;
+		onChipToggle({
+			name,
+			id,
+			label,
+			value,
+			selected,
+		});
+	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-<span class="formkit-chip" class:selected on:click={toggleSelected} {id} {title} data-name={name} data-value={value} >
-    {label}
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
+<span class="formkit-chip" class:selected onclick={toggleSelected} {id} {title} data-name={name} data-value={value}>
+	{label}
 </span>
 
 <style lang="scss">
-    .formkit-chip{
-        font-size: 0.8em;
-        border-radius: 5px;
-        padding: 0.3em 0.6em;
-        background-color: var(--gw2helper-module);
-        color: var(--gw2helper-module-text);
-        width: 5em;
-        text-align: right;
-        user-select: none;
-        cursor: pointer;
-        &.selected{
-            background-color: var(--gw2helper-module-white); 
-            &::before {
-                content: "\2713\ ";
-            }
-        }
-    }
+	.formkit-chip {
+		font-size: 0.8em;
+		border-radius: 5px;
+		padding: 0.3em 0.6em;
+		background-color: var(--gw2helper-module);
+		color: var(--gw2helper-module-text);
+		width: 5em;
+		text-align: right;
+		user-select: none;
+		cursor: pointer;
+		&.selected {
+			background-color: var(--gw2helper-module-white);
+			&::before {
+				content: '\2713\ ';
+			}
+		}
+	}
 </style>

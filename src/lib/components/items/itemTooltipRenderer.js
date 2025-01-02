@@ -1,15 +1,16 @@
 import ItemTooltip from "./itemTooltip.svelte";
+import { mount, unmount } from "svelte";
 
 export function itemTooltipRenderer(node, item) {
-    let component = new ItemTooltip({
-        props: { item },
-        target: node,
-    });
+    let component = mount(ItemTooltip, {
+            props: { item },
+            target: node,
+        });
 
     return {
         update() { },
         destroy() {
-            component.$destroy();
+            unmount(component);
         },
     };
 }

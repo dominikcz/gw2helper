@@ -2,14 +2,13 @@
 	import { onMount } from 'svelte';
 	import ArrowBack from './arrowBack.svelte';
 	import ArrowForward from './arrowForward.svelte';
-	export let items = [];
-	export let active;
-	export let showScrollButtons = true;
+	/** @type {{items?: any, active: any, showScrollButtons?: boolean}} */
+	let { items = [], active, showScrollButtons = true } = $props();
 
-	let navLeftVisible = false;
-	let navRightVisible = showScrollButtons;
+	let navLeftVisible = $state(false);
+	let navRightVisible = $state(showScrollButtons);
 
-	let navRef;
+	let navRef = $state();
 	onMount(() => {
 		hndScroll();
 	});
@@ -71,11 +70,11 @@
 
 </script>
 
-<svelte:window on:resize={hndScroll} />
+<svelte:window onresize={hndScroll} />
 
-<nav id="main-nav" bind:this={navRef} on:scroll={hndScroll} >
+<nav id="main-nav" bind:this={navRef} onscroll={hndScroll} >
 	{#if showScrollButtons && navLeftVisible}
-		<a class="nav-btn left" href={'#'} on:click={navLeft} on:keydown={navLeft} role="button" tabindex="0"><ArrowBack /></a>
+		<a class="nav-btn left" href={'#'} onclick={navLeft} onkeydown={navLeft} role="button" tabindex="0"><ArrowBack /></a>
 	{/if}
 	{#each items as item, i}
 		{#if !!item.visible}
@@ -83,7 +82,7 @@
 		{/if}
 	{/each}
 	{#if showScrollButtons && navRightVisible}
-		<a class="nav-btn right" href={'#'} on:click={navRight} on:keydown={navRight} role="button" tabindex="0"><ArrowForward /></a>
+		<a class="nav-btn right" href={'#'} onclick={navRight} onkeydown={navRight} role="button" tabindex="0"><ArrowForward /></a>
 	{/if}
 </nav>
 

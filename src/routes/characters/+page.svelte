@@ -6,8 +6,9 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	export let data;
-	let filter = '';
+	/** @type {{data: any}} */
+	let { data } = $props();
+	let filter = $state('');
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
 	function professionIcon(name) {
@@ -35,48 +36,50 @@
 <h1>{$_('characters.characters')}</h1>
 <SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.what_are_you_looking_for')} />
 
-<Awaiter promise={data.characters} let:result>
-	{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
-		{@const days = helperUtils.tillBirthday(char.created)}
-		{@const gender = char.gender.toLowerCase()}
-		<article class="character" use:grungeBorder>
-			<h2>{char.name}</h2>
-			<section>
-				<h4>{char.profession} lvl. {char.level}</h4>
-				<div class="sect-img" style="background-image: url({professionIcon(char.profession)});"></div>
-				<div class="sect-info">
-					<div class="info">{char.gender} {char.race}</div>
-					{#if char.crafting}
-						<ul class="info icons">
-							{#each char.crafting as craft}
-								<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
-							{:else}
-								<li class="no-results">{$_('characters.no_crafting_professions')}</li>
-							{/each}
-						</ul>
-					{/if}
-					<div class="info">{$_('characters.hours_played')}</div>
-					<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
-				</div>
-			</section>
-			<section>
-				<div class="sect-img" style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"></div>
-				<div class="sect-info">
-					<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) } )}</div>
-					<div class="info">{$_('characters.next_birthday_in')}</div>
-					<div class="counter">{days} <span class="info">{$_('characters.days', {days})}</span></div>
-				</div>
-			</section>
-			<section>
-				<div class="sect-img" style="background-image: url({icon('Grave_Finisher.png')});"></div>
-				<div class="sect-info">
-					<div class="info">{$_('characters.died', {gender})}</div>
-					<div class="counter">{char.deaths} <span class="info">{$_('characters.times', {times: char.deaths})}</span></div>
-					<div class="info">({deathsPerHour(char)}/h)</div>
-				</div>
-			</section>
-		</article>
-	{/each}
+<Awaiter promise={data.characters} >
+	{#snippet children(result)}
+		{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
+			{@const days = helperUtils.tillBirthday(char.created)}
+			{@const gender = char.gender.toLowerCase()}
+			<article class="character" use:grungeBorder>
+				<h2>{char.name}</h2>
+				<section>
+					<h4>{char.profession} lvl. {char.level}</h4>
+					<div class="sect-img" style="background-image: url({professionIcon(char.profession)});"></div>
+					<div class="sect-info">
+						<div class="info">{char.gender} {char.race}</div>
+						{#if char.crafting}
+							<ul class="info icons">
+								{#each char.crafting as craft}
+									<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
+								{:else}
+									<li class="no-results">{$_('characters.no_crafting_professions')}</li>
+								{/each}
+							</ul>
+						{/if}
+						<div class="info">{$_('characters.hours_played')}</div>
+						<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
+					</div>
+				</section>
+				<section>
+					<div class="sect-img" style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"></div>
+					<div class="sect-info">
+						<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) } )}</div>
+						<div class="info">{$_('characters.next_birthday_in')}</div>
+						<div class="counter">{days} <span class="info">{$_('characters.days', {days})}</span></div>
+					</div>
+				</section>
+				<section>
+					<div class="sect-img" style="background-image: url({icon('Grave_Finisher.png')});"></div>
+					<div class="sect-info">
+						<div class="info">{$_('characters.died', {gender})}</div>
+						<div class="counter">{char.deaths} <span class="info">{$_('characters.times', {times: char.deaths})}</span></div>
+						<div class="info">({deathsPerHour(char)}/h)</div>
+					</div>
+				</section>
+			</article>
+		{/each}
+	{/snippet}
 </Awaiter>
 
 <style lang="scss">

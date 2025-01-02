@@ -1,14 +1,20 @@
 <script lang="ts">
-	export let link: string;
-	export let linkTitle: string = '';
+	interface Props {
+		link: string;
+		linkTitle?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { link, linkTitle = '', children, ...rest }: Props = $props();
 </script>
 
 {#if link}
-	<a href={link} title={linkTitle || ''} target="_blank" {...$$restProps}>
-		<slot />
+	<a href={link} title={linkTitle || ''} target="_blank" {...rest}>
+		{@render children?.()}
 	</a>
 {:else}
-	<slot />
+	{@render children?.()}
 {/if}
 
 <style>

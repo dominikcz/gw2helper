@@ -5,9 +5,13 @@
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
 
-	let filter = '';
+	let { data }: Props = $props();
+
+	let filter = $state('');
 	enum SortType {
 		AsIs,
 		Slots,
@@ -25,7 +29,7 @@
 
 <h1>{ $_('items.items') }</h1>
 
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder="{ $_('common.too_much_data') }">
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder={ $_('common.too_much_data') }>
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 		<button on:click={sortBySlots}>sort by quantity</button> -->
 	<SearchHelp />
@@ -37,15 +41,19 @@
 <ItemsList summary={ $_('items.shared_inventory') } items={data.shared} {filter} />
 
 <h3>{ $_('items.guild_items') }</h3>
-<Awaiter promise={data.guildItems} let:result>
-	{#each result as guild}
-		<ItemsList summary={guild.name} items={guild.stash} {filter} />
-	{/each}
+<Awaiter promise={data.guildItems} >
+	{#snippet children(result)}
+		{#each result as guild}
+			<ItemsList summary={guild.name} items={guild.stash} {filter} />
+		{/each}
+	{/snippet}
 </Awaiter>
 
 <h3>{ $_('items.characters_items') }</h3>
-<Awaiter promise={data.characterItems} let:result>
-	{#each result as char}
-		<ItemsList summary={char.name} items={char._items} {filter} />
-	{/each}
+<Awaiter promise={data.characterItems} >
+	{#snippet children(result)}
+		{#each result as char}
+			<ItemsList summary={char.name} items={char._items} {filter} />
+		{/each}
+	{/snippet}
 </Awaiter>

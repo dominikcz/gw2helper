@@ -9,15 +9,16 @@
 	import eventsUtils from '$lib/components/events/eventsUtils';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data = $bindable() } = $props();
 
-	let showChatLinks = utils.runsDesktop();
-	let showEventTimes = false;
-	let showCategories = true;
-	let showHeadings = true;
-	let autoScroll = false;
+	let showChatLinks = $state(utils.runsDesktop());
+	let showEventTimes = $state(false);
+	let showCategories = $state(true);
+	let showHeadings = $state(true);
+	let autoScroll = $state(false);
 
-	let allEvents = []; // here we hold all events' data
+	let allEvents = $state([]); // here we hold all events' data
 
 	onMount(async () => {
 		// remove special events
@@ -64,7 +65,7 @@
 			<label><input type="checkbox" id="categories" bind:checked={showCategories} /> { $_('events.show_categories') }</label>
 			<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> { $_('events.show_headings') }</label>
 			<label><input type="checkbox" id="auto-scroll" bind:checked={autoScroll} /> { $_('events.auto_scroll') }</label>
-			<button on:click={saveSettings}>{ $_('common.save_settings') }</button>
+			<button onclick={saveSettings}>{ $_('common.save_settings') }</button>
 		</fieldset>
 	</TabPanel>
 

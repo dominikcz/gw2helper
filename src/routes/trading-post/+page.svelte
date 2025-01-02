@@ -5,27 +5,32 @@
 	import TransactionList from '$lib/components/trading-post/transactionList.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 </script>
 
 <h1>{$_('layout.nav.trading-post')}</h1>
 
-<Awaiter promise={data.delivery} let:result>
-	<DeliveryBox coins={result.coins} items={result.items} showTradingPostLink={false}/>
+<Awaiter promise={data.delivery} >
+	{#snippet children(result)}
+		<DeliveryBox coins={result.coins} items={result.items} showTradingPostLink={false}/>
+	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.current} let:result>
-	<div class="trading-container">
-		<details open use:grungeBorder >
-			<summary>{$_('trading-post.buying')}</summary>
-			<TransactionList items={result.buys} />
-		</details>
+<Awaiter promise={data.current} >
+	{#snippet children(result)}
+		<div class="trading-container">
+			<details open use:grungeBorder >
+				<summary>{$_('trading-post.buying')}</summary>
+				<TransactionList items={result.buys} />
+			</details>
 
-		<details open use:grungeBorder >
-			<summary>{$_('trading-post.selling')}</summary>
-			<TransactionList items={result.sells} />
-		</details>
-	</div>
+			<details open use:grungeBorder >
+				<summary>{$_('trading-post.selling')}</summary>
+				<TransactionList items={result.sells} />
+			</details>
+		</div>
+	{/snippet}
 </Awaiter>
 
 <style lang="scss" global>

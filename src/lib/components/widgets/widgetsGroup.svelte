@@ -1,12 +1,17 @@
 <script lang="ts">
-    export let name : string = '';
+    interface Props {
+        name?: string;
+        children?: import('svelte').Snippet;
+    }
+
+    let { name = '', children }: Props = $props();
 
 </script>
 
 <div class="widgets-group">
     <h3>{name}</h3>
     <div class="widgets">
-        <slot />
+        {@render children?.()}
     </div>
 </div>
 

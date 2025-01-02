@@ -7,9 +7,8 @@
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	export let showTradingPostLink = true;
-	export let coins = 0;
-	export let items = [];
+	/** @type {{showTradingPostLink?: boolean, coins?: number, items?: any}} */
+	let { showTradingPostLink = true, coins = 0, items = [] } = $props();
 </script>
 
 {#if coins || items.length}
@@ -17,8 +16,10 @@
 		<summary>{$_('home.delivery_box')}</summary>
 		<div class="delivery-box autotooltip" use:autotooltip>
 			{#if coins}
-				<WidgetInfo title={$_('home.coins_for_pickup')} value={coins} let:value id="bltc-coins">
-					<Price {value} />
+				<WidgetInfo title={$_('home.coins_for_pickup')} value={coins}  id="bltc-coins">
+					{#snippet children({ value })}
+						<Price {value} />
+					{/snippet}
 				</WidgetInfo>
 			{/if}
 			{#if items.length}

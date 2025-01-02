@@ -1,24 +1,27 @@
 <script>
+	import { nonpassive } from 'svelte/legacy';
+
 	import { autoTooltipInit } from './autotooltip-utils';
 
-	export let title = '';
+	/** @type {{title?: string}} */
+	let { title = $bindable('') } = $props();
 
 	let customContent = false;
-	let visible = title != '';
+	let visible = $state(title != '');
 
 	let x;
 	let y;
-	let ref;
-	let autotooltipClass = '';
+	let ref = $state();
+	let autotooltipClass = $state('');
 
 	let touchStartTime;
 	let touchEventIsTap;
 	let touchInProgress;
 	let touchX;
 	let touchY;
-	let left = false;
-	let above = false;
-	let sticky = true;
+	let left = $state(false);
+	let above = $state(false);
+	let sticky = $state(true);
 
 	let touchMode = 'ontouchstart' in window;
 
@@ -275,17 +278,17 @@
 </script>
 
 <svelte:window
-	on:mouseover|capture={mouseOver}
-	on:mouseleave={mouseLeave}
-	on:mousemove|capture={mouseMove}
-	on:touchstart|nonpassive={touchStart}
-	on:touchmove={touchMove}
-	on:touchend={touchEnd}
-	on:touchcancel={touchCancel}
+	onmouseovercapture={mouseOver}
+	onmouseleave={mouseLeave}
+	onmousemovecapture={mouseMove}
+	use:nonpassive={['touchstart', () => touchStart]}
+	ontouchmove={touchMove}
+	ontouchend={touchEnd}
+	ontouchcancel={touchCancel}
 />
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions svelte-ignore a11y-no-static-element-interactions-->
-<div bind:this={ref} on:touchstart={tooltipTouchStart} class:visible class:left class:above class:sticky class={autotooltipClass}>
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
+<div bind:this={ref} ontouchstart={tooltipTouchStart} class:visible class:left class:above class:sticky class={autotooltipClass}>
 	{@html title}
 </div>
 

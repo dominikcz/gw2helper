@@ -4,7 +4,7 @@
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		$alert = `<h3>${$_('common.search_help.title')}</h3>
             <p>${$_('common.search_help.prompt')}</p>
             <ul>
