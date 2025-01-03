@@ -211,11 +211,12 @@ const _getTransactions = async (_transactions: any) => {
     const transIds = transactions.map(x => x.id);
 
     const exp = await expandItems(transIds, transactions);
+    const expWithPrices = await expandPrices(transIds, exp);
     // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
-    let sum = sumQuantities(exp);
+    let sum = sumQuantities(expWithPrices);
+    // console.log('_getTransactions', sum)
     return sum;
 }
-
 
 const transactionsCurrent = async () => {
     return new Promise((resolve) => {
@@ -330,6 +331,10 @@ const guilds = async () => {
 
 const items = (x: string) => {
     return apiClient("/v2/items", `ids=${x}`);
+};
+
+const prices = (x: string) => {
+    return apiClient("/v2/commerce/prices", `ids=${x}`);
 };
 
 const account = () => {
@@ -529,6 +534,25 @@ const expandItems = async (ids: Array<number>, collection) => {
     }
     additionalMapping(data);
 
+    return data;
+};
+
+const expandPrices = async (ids: Array<number>, collection) => {
+    ids = ids.filter((x) => !INVALID_IDS.includes(x));
+
+    const data = [];
+    const batches = [];
+    do {
+        let batch = ids.splice(0, 200);
+        if (batch.length > 0) {
+            batches.push(batch.join(","));
+        }
+    } while (ids.length > 0);
+    if (batches.length) {
+        const tasks = batches.map((ids) => prices(ids));
+        const resp = (await Promise.all(tasks)).flat();
+        data.push(...mergeById(resp, collection));
+    }
     return data;
 };
 

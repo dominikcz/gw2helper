@@ -10,6 +10,7 @@ export async function load({ fetch, parent }) {
 		todo,
 	};
 	if (key) {
+		returnObj.account = apiService.account();
 		returnObj.wallet = apiService.wallet();
 		returnObj.daily = apiService.wizardsVaultDaily();
 		returnObj.weekly = apiService.wizardsVaultWeekly();

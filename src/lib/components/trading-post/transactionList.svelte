@@ -1,11 +1,13 @@
 <script>
-	export let items;
 	import wxdates from '$lib/wxjs_dates.ts';
 	import Item from '$lib/components/items/item.svelte';
 	import Price from '$lib/components/price.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n.js';
+
+	export let items;
+	export let offerType = '';
 
 	const tooltipOptions = {
 		customRenderers: {
@@ -14,57 +16,147 @@
 	};
 </script>
 
-<div class="transaction-list autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions}>
-	{#each items as item, index (`${item.id}-${index}`)}
-		<div class="transaction">
-			<Item {item} />
-			<span class="item-name">{item.name}</span>
-			<div class="details">
-				<Price value={item.price} />
-				<span class="item-time">{wxdates.friendlyDurationTillNow(new Date(item.created), false)}</span>
-			</div>
-		</div>
-	{:else}
-		<slot name="no-results">
-			<span class="no-results">{$_('common.nothing_found')}</span>
-		</slot>
-	{/each}
-</div>
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th>My offer</th>
+			<th>Age</th>
+			<th>Best offer</th>
+			<th># ordered</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each items as item, index (`${item.id}-${index}`)}
+			{@const offer = item[offerType]}
+			<tr>
+				<td class="item">
+					<Item {item} />
+					<span class="item-name">{item.name}</span>
+				</td>
+				<td>
+					<Price value={item.price} />
+				</td>
+				<td class="item-time">
+					{wxdates.friendlyDurationTillNow(new Date(item.created), false)}
+				</td>
+				<td>
+					<Price value={offer.unit_price} />
+				</td>
+				<td>
+					{offer.quantity}
+				</td>
+			</tr>
+		{:else}
+			<tr>
+				<td colspan="5">
+					<span class="no-results">{$_('common.nothing_found')}</span>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
 
 <style lang="scss">
-	.transaction-list {
-		display: flex;
-		flex-flow: column nowrap;
-		row-gap: 0.6em;
-		padding: 0.625em;
-	}
+	// .transaction-list {
+	// 	display: flex;
+	// 	flex-flow: column nowrap;
+	// 	row-gap: 0.6em;
+	// 	padding: 0.625em;
+	// }
 
-	.transaction {
+	.item {
 		display: flex;
 		column-gap: 1em;
 		align-items: center;
 		justify-content: space-between;
+		text-align: left;
 	}
 
 	.item-name {
 		flex-grow: 1;
 	}
 
-	.item-time {
-		width: 4em;
+	table {
+		border-collapse: collapse;
+		border-spacing: 2em 0.6rem;
+		width: 100%;
 		text-align: right;
 	}
 
-	.details {
-		display: flex;
-		flex-flow: column nowrap;
-		align-items: flex-end;
+	thead {
+		border-bottom: 1px solid var(--gw2helper-module-text);
+
+		th {
+			padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+			text-align: right;
+			&:first-of-type{
+				text-align: left;
+			}
+		}
 	}
 
-	@media (min-width: 500px) {
-		.details {
-			flex-flow: row nowrap;
-			column-gap: 1em;
+	tbody {
+		tr {
+			&:nth-child(even) {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
+		}
+		td {
+			padding: 0 0.6rem;
+			margin: 0.6rem 0;
+		}
+	}
+
+	@media screen and (max-width: 880px) {
+		thead {
+			display: none;
+		}
+
+		table,
+		tbody,
+		tbody tr,
+		tbody td,
+		caption {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			word-break: break-all;
+		}
+
+		table {
+			background-color: transparent;
+			border-width: 0;
+		}
+
+		tbody {
+			border: 2px solid var(--color-tertiary);
+			background-color: rgba(255, 255, 255, 0.2);
+		}
+
+		table tr {
+			padding-bottom: 1rem;
+		}
+
+		table tr td:first-child {
+			margin-bottom: calc(-1 * var(--step-0));
+			flex-direction: row;
+			align-items: center;
+		}
+
+		table tr td:not(:first-child) {
+			padding-left: calc(6rem);
+			padding-top: 0;
+		}
+
+		.table-wrapper {
+			max-width: 568px;
+		}
+
+		tbody tr td:not(:first-child)::before {
+			font-weight: 600;
+			font-size: var(--step--1);
+			display: block;
 		}
 	}
 </style>

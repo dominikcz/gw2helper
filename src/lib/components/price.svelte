@@ -1,13 +1,14 @@
 <script>
-	/** @type {{value: any, compact?: boolean}} */
-	let { value, compact = true } = $props();
+	/** @type {{value: any, compact?: boolean, class?: string}} */
+	let { value, compact = true, class: className = '' } = $props();
+
 	const s = (value / 100).toFixed(2);
 	const [decimal, copper] = s.split('.');
 	const silver = decimal.slice(-2);
 	const gold = decimal.slice(0, -2);
 </script>
 
-<span class="price">
+<span class="price {className}">
 	{#if value == 0}
 		<span class="copper">0 </span><i class="copper" title="copper coin"></i>
 	{:else}

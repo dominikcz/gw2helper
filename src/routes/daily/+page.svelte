@@ -100,6 +100,12 @@
 	function extractWeekly(achievements) {
 		return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
 	}
+
+	function currentDay(dt){
+		const day = dt.substring(0, 10);
+		const currDay = new Date().toISOString().substring(0, 10);
+		return day == currDay;
+	}
 </script>
 
 <h1>{ $_('daily.daily_and_weekly') }</h1>
@@ -112,10 +118,16 @@
 	{/snippet}
 </Awaiter>
 
-<div class="info-block">
-	<h4>{ $_('daily.info.hint') }</h4>
-	<p>{ $_('daily.info.hint-content') }</p>
-</div>
+<Awaiter promise={data.account} >
+	{#snippet children(result)}
+	{#if !currentDay(result.last_modified)}
+	<div class="info-block">
+		<h4>{ $_('daily.info.hint') }</h4>
+		<p>{ $_('daily.info.hint-content') }</p>
+	</div>
+	{/if}
+	{/snippet}
+</Awaiter>
 
 <Awaiter promise={data.daily} >
 	{#snippet children(result)}

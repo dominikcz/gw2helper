@@ -22,12 +22,12 @@
 		<div class="trading-container">
 			<details open use:grungeBorder >
 				<summary>{$_('trading-post.buying')}</summary>
-				<TransactionList items={result.buys} />
+				<TransactionList items={result.buys} offerType="buys" />
 			</details>
 
 			<details open use:grungeBorder >
 				<summary>{$_('trading-post.selling')}</summary>
-				<TransactionList items={result.sells} />
+				<TransactionList items={result.sells} offerType="sells" />
 			</details>
 		</div>
 	{/snippet}
