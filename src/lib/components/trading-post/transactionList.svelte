@@ -40,10 +40,10 @@
 				<td class="item-time">
 					{wxdates.friendlyDurationTillNow(new Date(item.created), false)}
 				</td>
-				<td>
+				<td class="offer">
 					<Price value={offer.unit_price} />
 				</td>
-				<td>
+				<td class="offer-qty">
 					{offer.quantity}
 				</td>
 			</tr>
@@ -90,7 +90,7 @@
 		th {
 			padding: 0.6rem 0.6rem 0.3rem 0.6rem;
 			text-align: right;
-			&:first-of-type{
+			&:first-of-type {
 				text-align: left;
 			}
 		}
@@ -153,10 +153,21 @@
 			max-width: 568px;
 		}
 
-		tbody tr td:not(:first-child)::before {
-			font-weight: 600;
-			font-size: var(--step--1);
-			display: block;
+		tbody tr td:not(:first-child) {
+			&::before {
+				font-weight: 600;
+				font-size: var(--step--1);
+			}
+			&.offer {
+				&::before {
+					content: 'best offer';
+				}
+			}
+			&.offer-qty {
+				&::before {
+					content: '# ordered';
+				}
+			}
 		}
 	}
 </style>

@@ -11,6 +11,10 @@
 
 	/** @type {{data: any}} */
 	let { data = $bindable() } = $props();
+	let {remindersSettings} = $state(data)
+    $effect(() => {
+        remindersSettings = data.remindersSettings;
+    });
 
 	let showChatLinks = $state(utils.runsDesktop());
 	let showEventTimes = $state(false);
@@ -70,6 +74,6 @@
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={data.remindersSettings.inAdvance} bind:sound={data.remindersSettings.sound} />
+		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={remindersSettings.inAdvance} bind:sound={remindersSettings.sound} />
 	</TabPanel>
 </Tabs>
