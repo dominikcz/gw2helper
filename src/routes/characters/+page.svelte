@@ -114,9 +114,6 @@
 			ul {
 				margin: 0.2em 0;
 			}
-			h4 {
-				margin: 0;
-			}
 		}
 		section {
 			min-width: 9.375em;

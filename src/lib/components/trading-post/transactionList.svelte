@@ -17,6 +17,7 @@
 </script>
 
 <table>
+	<caption></caption>
 	<thead>
 		<tr>
 			<th>Item</th>
@@ -147,10 +148,6 @@
 		table tr td:not(:first-child) {
 			padding-left: calc(6rem);
 			padding-top: 0;
-		}
-
-		.table-wrapper {
-			max-width: 568px;
 		}
 
 		tbody tr td:not(:first-child) {
