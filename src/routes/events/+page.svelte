@@ -16,11 +16,11 @@
         remindersSettings = data.remindersSettings;
     });
 
-	let showChatLinks = $state(utils.runsDesktop());
-	let showEventTimes = $state(false);
+	let showChatLinks = $state(false); // utils.runsDesktop()
+	let showEventTimes = $state(true);
 	let showCategories = $state(true);
 	let showHeadings = $state(true);
-	let autoScroll = $state(false);
+	let autoScroll = $state(!utils.runsDesktop());
 
 	let allEvents = $state([]); // here we hold all events' data
 

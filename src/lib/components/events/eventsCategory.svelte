@@ -2,13 +2,13 @@
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import EventsList from './eventsList.svelte';
 
-	/** @type {{events: any, category?: string, showChatLinks?: boolean}} */
-	let { events, category = '', showChatLinks = false } = $props();
+	/** @type {{events: any, category?: string, showChatLinks?: boolean, onToggleWatched?: CallableFunction}} */
+	let { events, category = '', showChatLinks = false, onToggleWatched = () => {} } = $props();
 </script>
 
 <details open use:grungeBorder>
 	<summary>{category}</summary>
-	<EventsList {events} {showChatLinks} on:toggle-watched />
+	<EventsList {events} {showChatLinks} {onToggleWatched} />
 </details>
 
 <style lang="scss">

@@ -5,14 +5,14 @@ click_to_remove: Click to remove from watched list
 current_time: Current time
 event_timers: Event timers
 events: Events
+next_event: 'Next:'
 reminders: Reminders
 show_categories: Show categories
 show_chat_links: Show chat links
 show_event_times: Show event times
 show_headings: Show headings
-tts: >-
-  It is {time}.
-  {plural, select,
+tts: |-
+  It is {time}. {plural, select,
     true {
       {inAdvance, plural,
         =0 {Events: {eventsList} are starting now}
@@ -30,12 +30,11 @@ tts: >-
   }
 watched:
   alarm_sound: Alarm sound
-  choose_times: >- 
-    Choose the times for your alarms:
+  choose_times: 'Choose the times for your alarms:'
   empty_list: >-
     You have not added anything to the list yet. Add items by clicking {image}
     icon on any of the events below.
-  notify_me: >-
+  notify_me: |-
     Notify me {inAdvance, plural,
         =0 {when the event starts}
         one {one minute before the event}

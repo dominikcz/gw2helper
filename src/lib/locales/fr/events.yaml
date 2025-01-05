@@ -5,6 +5,7 @@ click_to_remove: Cliquez pour supprimer de la liste de surveillance
 current_time: Heure actuelle
 event_timers: Calendrier des événements
 events: Événements
+next_event: 'Suivant:'
 reminders: Rappels
 show_categories: Afficher les catégories
 show_chat_links: Afficher les liens de chat

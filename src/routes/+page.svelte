@@ -29,9 +29,8 @@
 		showDepreciated = settings.showDepreciated;
 	});
 
-	function hndWalletReorder(ev: CustomEvent) {
-		const order = ev.detail.order;
-		utils.saveWalletOrder(order);
+	function hndWalletReorder(ev: object) {
+		utils.saveWalletOrder(ev.order);
 	}
 </script>
 
@@ -53,7 +52,7 @@
 	{#snippet children(result)}
 		<Currencies
 			items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })}
-			on:wallet-reorder={hndWalletReorder}
+			onWalletReorder={hndWalletReorder}
 		/>
 	{/snippet}
 </Awaiter>

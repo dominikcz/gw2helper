@@ -5,6 +5,7 @@ click_to_remove: Klicken Sie hier, um es aus der Beobachtungsliste zu entfernen
 current_time: Aktuelle Zeit
 event_timers: Event-Kalender
 events: Events
+next_event: 'Nächste:'
 reminders: Erinnerungen
 show_categories: Kategorien anzeigen
 show_chat_links: Chat-Links anzeigen

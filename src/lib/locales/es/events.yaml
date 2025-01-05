@@ -5,14 +5,14 @@ click_to_remove: Haga clic para eliminar de la lista de vigilancia
 current_time: Hora actual
 event_timers: temporizadores del evento
 events: Eventos
+next_event: 'Próximo:'
 reminders: Recordadores
 show_categories: Mostrar categorías
 show_chat_links: Mostrar enlaces de chat
 show_event_times: Mostrar tiempos de evento
 show_headings: Mostrar títulos
-tts: >-
-  Es {time}.
-  {plural, select,
+tts: |-
+  Es {time}. {plural, select,
     true {
       {inAdvance, plural,
         =0 {Eventos: {eventsList} acaba de comenzar }
@@ -35,7 +35,7 @@ watched:
     Aún no has añadido nada a la lista. Agregar elementos haciendo clic <img
     alt="not on list" class="icon-small" src="{img_url}"/> icono en cualquiera
     de los eventos a continuación.
-  notify_me: >-
+  notify_me: |-
     Avísame {inAdvance, plural,
       =0 {cuando el evento comience}
       one {minuto antes del evento}

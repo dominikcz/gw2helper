@@ -10,4 +10,4 @@
     }
 </script>
 
-<Modal showModal={visible} on:modal-close={hndCloseModal}>{@html $alert}</Modal>
+<Modal showModal={visible} onModalClose={hndCloseModal}>{@html $alert}</Modal>

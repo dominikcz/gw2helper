@@ -1,7 +1,7 @@
 export type BorderOptions = {
-    grunge: boolean;
-    maskWidth: number;
-    minDiff: number;
+    grunge?: boolean;
+    maskWidth?: number;
+    minDiff?: number;
 }
 
 const DEF_OPTIONS: BorderOptions = {
@@ -13,6 +13,7 @@ const DEF_OPTIONS: BorderOptions = {
 let lastVal = 0;
 
 export function grungeBorder(elem: HTMLElement, options: BorderOptions = DEF_OPTIONS) {
+    options = {...DEF_OPTIONS, ...options};
     let newVal = Math.trunc(Math.random() * options.maskWidth);
     if (Math.abs(lastVal - newVal) < options.minDiff){
         // make sure it is not too similar to previous one

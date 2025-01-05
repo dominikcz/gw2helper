@@ -2,7 +2,7 @@ import { wikiData } from './metas';
 import wxdates from '$lib/wxjs_dates';
 
 const et = new Map();
-const ignored = ['t', 'dn', 'cdn'];
+const ignored = ['t'];
 let dt0;
 
 function init() {
@@ -127,7 +127,7 @@ function darkerColor(p, c) {
 
 function getColor(colors, darkMode) {
     const output = [];
-    const _colors = colors.flat();
+    const _colors = (colors || [0, 0, 0]).flat();
     do {
         const color = _colors.splice(0, 3);
         const cstr = `rgb(${color.join(',')})`;

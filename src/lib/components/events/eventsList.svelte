@@ -2,13 +2,13 @@
 	import EventItem from './eventItem.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	/** @type {{events: any, showChatLinks?: boolean, children?: import('svelte').Snippet}} */
-	let { events, showChatLinks = false, children } = $props();
+	/** @type {{events: any, showChatLinks?: boolean, onToggleWatched?: CallableFunction, onAlarmsChange?: CallableFunction, children?: import('svelte').Snippet}} */
+	let { events, showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {}, children } = $props();
 </script>
 
 <div class="events-list">
 	{#each events as event (event.name)}
-		<EventItem {event} {showChatLinks} on:toggle-watched on:alarms-change />
+		<EventItem {event} {showChatLinks} {onToggleWatched} {onAlarmsChange} />
 	{:else}
 		<span class="no-results">
 			{#if children}{@render children()}{:else}{$_('common.nothing_found')}{/if}
@@ -30,5 +30,4 @@
 			flex-flow: row wrap;
 		}
 	}
-
 </style>

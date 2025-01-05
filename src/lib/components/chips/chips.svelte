@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import wxjs_types from '$lib/wxjs_types';
 	import Chip from './chip.svelte';
 
@@ -9,6 +8,7 @@
 		options?: object;
 		value?: any;
 		className?: string;
+		onChipsChange: CallableFunction;
 	}
 
 	let {
@@ -16,11 +16,11 @@
 		help = '',
 		options = {},
 		value = $bindable([]),
-		className = ''
+		className = '',
+		onChipsChange = () => {},
 	}: Props = $props();
 
 	let choice = $state([]);
-	const dispatch = createEventDispatcher();
 
 	// data model's normalization
 	// `options` might be:
@@ -57,12 +57,11 @@
 	}
 
 	function hndToggleChip(ev) {
-		const obj = ev.details;
 		value = choice.filter((item) => item.selected).map((item) => item.value).sort();
-		dispatch('chips-change', {
+		onChipsChange({
 			name,
 			value,
-			trigger: obj,
+			trigger: ev,
 		});
 	}
 </script>
@@ -76,7 +75,7 @@
 			value={item.value}
 			label={item.label}
 			title={item.help || help}
-			on:toggle-chip={hndToggleChip}
+			onChipToggle={hndToggleChip}
 		/>
 	{/each}
 </div>

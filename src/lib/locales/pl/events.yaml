@@ -5,6 +5,7 @@ click_to_remove: Kliknij, aby usunąć z listy obserwowanych
 current_time: Bieżący czas
 event_timers: Harmonogram wydarzeń
 events: Wydarzenia
+next_event: 'Następne:'
 reminders: Przypomnienia
 show_categories: Pokaż kategorie
 show_chat_links: Pokaż linki do czatu

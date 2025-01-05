@@ -1,5 +1,4 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
 	import eventsUtils from './eventsUtils';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';
@@ -7,8 +6,8 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import WatchState from '../watch-state/watch-state.svelte';
 
-	/** @type {{event: any, showChatLinks?: boolean}} */
-	let { event = $bindable(), showChatLinks = false } = $props();
+	/** @type {{event: any, onToggleWatched?: CallableFunction, onAlarmsChange?: CallableFunction, showChatLinks?: boolean}} */
+	let { event = $bindable(), showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {} } = $props();
 
 	let watchedState_class = $derived(event.watched ? 'watched' : '');
 	let watchedState_title = $derived(event.watched ? $_('events.click_to_remove') : $_('events.click_to_add'));
@@ -16,32 +15,32 @@
 
 	let darkMode = themeWatcher();
 
-	const dispatch = createEventDispatcher();
-
 	function toggleWatched() {
 		event.watched = !event.watched;
-		dispatch('toggle-watched', {
+		onToggleWatched({
 			name: event.name,
 			watched: event.watched,
 		});
 	}
 
 	function hndHoursChange(ev) {
-		const obj = ev.detail;
-		dispatch('alarms-change', {
-			name: obj.name,
-			alarms: [...obj.value],
+		onAlarmsChange({
+			name: ev.name,
+			alarms: [...ev.value],
 		});
 	}
-
 </script>
 
 <div class="event" style="background: {eventsUtils.getColor(event.bg, $darkMode)};">
 	<div class="header">
-		<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - ${$_('common.read_more_on_wiki')}`} target="_blank">{event.name}</a>
+		{#if event.link}
+			<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - ${$_('common.read_more_on_wiki')}`} target="_blank">{event.name}</a>
+		{:else}
+			<span>{event.name}</span>
+		{/if}
 		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
 		<!--<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />-->
-		<WatchState title={watchedState_title} watched={event.watched} onClick={toggleWatched}/>
+		<WatchState title={watchedState_title} watched={event.watched} onClick={toggleWatched} />
 	</div>
 	<div class="body">
 		{#if event.watched}
@@ -49,9 +48,9 @@
 				<span>{event.chatlink}</span>
 			{/if}
 			<h5>{$_('events.watched.choose_times')}</h5>
-			<Chips name={event.name} options={event.startTimes} value={event.alarms} on:chips-change={hndHoursChange} />
-		{:else}
-			<span>Next: {event.next}</span>
+			<Chips name={event.name} options={event.startTimes} value={event.alarms} onChipsChange={hndHoursChange} />
+		{:else if event.next}
+			<span>{$_('events.next_event')} {event.next}</span>
 		{/if}
 	</div>
 </div>
@@ -96,19 +95,6 @@
 
 		&:hover {
 			box-shadow: var(--gw2helper-module-shadow-hover);
-		}
-	}
-	.watched-state {
-		background: url(/gw2helper/assets/rewards/map_heart-sprite.png) no-repeat top center;
-		padding: 0;
-		border-radius: 0;
-		margin: 0;
-		width: 2em;
-		height: 2em;
-		cursor: pointer;
-		flex-shrink: 0;
-		&.watched {
-			background-position-y: -2em;
 		}
 	}
 

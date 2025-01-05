@@ -4,22 +4,20 @@
 	import { flip } from 'svelte/animate';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Currency from './currency.svelte';
-	import { createEventDispatcher } from 'svelte';
 
 	interface Props {
 		items?: any;
+		onWalletReorder?: CallableFunction;
 	}
 
-	let { items = $bindable([]) }: Props = $props();
+	let { items = $bindable([]), onWalletReorder = () => {} }: Props = $props();
 
 	const flipDurationMs = 200;
-
-	const dispatch = createEventDispatcher();
 
 	function handleSort(e) {
 		items = e.detail.items;
 		const order = items.map((x) => x.id);
-		dispatch('wallet-reorder', {
+		onWalletReorder({
 			order,
 		});
 	}

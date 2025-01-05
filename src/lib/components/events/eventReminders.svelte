@@ -10,15 +10,8 @@
 	import utils from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n.js';
 
-
 	/** @type {{events: any, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string}} */
-	let {
-		events = $bindable(),
-		showChatLinks = false,
-		updateInterval = 60,
-		inAdvance = $bindable(5),
-		sound = $bindable('trumpet')
-	} = $props();
+	let { events = $bindable(), showChatLinks = false, updateInterval = 60, inAdvance = $bindable(5), sound = $bindable('trumpet') } = $props();
 
 	let filter = $state('');
 
@@ -29,24 +22,37 @@
 
 	let version = $state(0);
 
-
 	function hndAlarmsChange(event) {
-		const ev = event.detail;
-		reminders.updateAlarms(ev.name, ev.alarms);
+		reminders.updateAlarms(event.name, event.alarms);
 	}
 
 	function getWatched(ver) {
+		// const _watched = [];
+		// Object.keys(events).forEach((cat) => {
+		// 	events[cat].forEach((x) => {
+		// 		const hours = reminders.getAlarms(x.name);
+		// 		if (x.watched || hours != undefined) {
+		// 			x.watched = true;
+		// 			x.alarms = [...(hours || [])];
+		// 			_watched.push(x);
+		// 		}
+		// 	});
+		// });
+		// return _watched;
+
 		const _watched = [];
-		Object.keys(events).forEach((cat) => {
-			events[cat].forEach((x) => {
-				const hours = reminders.getAlarms(x.name);
-				if (x.watched || hours != undefined) {
-					x.watched = true;
-					x.alarms = [...(hours || [])];
-					_watched.push(x);
-				}
-			});
+		const alarms = reminders.getAllAlarms();
+		const allObserved = Object.keys(alarms);
+		const filteredEvents = Object.values(events).flat();
+
+		allObserved.forEach((ev) => {
+			const hours = alarms[ev];
+			const found = filteredEvents.find((x) => x.name == ev) || { name: ev, startTimes: hours };
+			found.alarms = [...(hours || [])];
+			found.watched = true;
+			_watched.push(found);
 		});
+
 		return _watched;
 	}
 
@@ -86,15 +92,16 @@
 	}
 
 	async function hndToggleWatched(event) {
-		const obj = event.detail;
-		const _event = getEvent(obj.name);
-		if (obj.watched) {
+		const _event = getEvent(event.name);
+		if (event.watched) {
 			_event.alarms = [];
 			_event.watched = true;
-			reminders.addEvent(obj.name);
+			reminders.addEvent(event.name);
 		} else {
-			_event.watched = false;
-			reminders.deleteEvent(obj.name);
+			if (_event) {
+				_event.watched = false;
+			}
+			reminders.deleteEvent(event.name);
 		}
 		version++;
 	}
@@ -119,16 +126,16 @@
 </script>
 
 <h2>{$_('events.watched.watched')}</h2>
-<EventsList events={getWatched(version)} on:toggle-watched={hndToggleWatched} on:alarms-change={hndAlarmsChange}>
-	{@html $_('events.watched.empty_list', { 
-		image: `<img src="${base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />` 
-	 })}
+<EventsList events={getWatched(version)} onToggleWatched={hndToggleWatched} onAlarmsChange={hndAlarmsChange}>
+	{@html $_('events.watched.empty_list', {
+		image: `<img src="${base}/assets/rewards/map_heart_empty.png" alt="not on list" class="icon-small" />`,
+	})}
 </EventsList>
 
 <fieldset class="settings">
 	<legend>{$_('events.watched.reminder_settings')}</legend>
 	<input type="range" name="vol" min="0" max="10" step="1" bind:value={inAdvance} />
-	<p>{$_('events.watched.notify_me', {inAdvance})}</p>
+	<p>{$_('events.watched.notify_me', { inAdvance })}</p>
 	<div class="group">
 		<h4>{$_('events.watched.alarm_sound')}</h4>
 		{#each ['trumpet', 'squeeze', 'notif3', 'notif9'] as name}
@@ -138,7 +145,7 @@
 			</label>
 		{/each}
 	</div>
-	<button onclick={() => testAlarm()}>{$_('events.watched.test_alarm', { sound } )}</button>
+	<button onclick={() => testAlarm()}>{$_('events.watched.test_alarm', { sound })}</button>
 	<button onclick={saveNotifySettings}>{$_('common.save')}</button>
 </fieldset>
 
@@ -150,7 +157,7 @@
 {#each Object.keys(events) as cat}
 	{@const notWatched = getNotWatched(events[cat], filter, version)}
 	{#if notWatched}
-		<EventsCategory events={notWatched} {showChatLinks} category={cat} on:toggle-watched={hndToggleWatched} />
+		<EventsCategory events={notWatched} {showChatLinks} category={cat} onToggleWatched={hndToggleWatched} />
 	{/if}
 {/each}
 

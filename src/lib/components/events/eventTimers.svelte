@@ -10,7 +10,7 @@
 	import { t as _ } from '$lib/services/i18n.js';
 
 	/** @type {{showEventTimes?: boolean, showChatLinks?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean, updateInterval?: number}} */
-	let { showEventTimes = true, showChatLinks = true, showCategories = true, showHeadings = true, autoScroll = false, updateInterval = 10 } = $props();
+	let { showEventTimes = true, showChatLinks = false, showCategories = true, showHeadings = true, autoScroll = false, updateInterval = 10 } = $props();
 
 	let eventsRef = $state();
 	let pointerHeight = $state(0);
@@ -32,7 +32,6 @@
 		}
 	});
 	function updatePointerPos(firstRun = false) {
-		console.log('updatePointerPos');
 		dt0 = eventsUtils.getDt0();
 		if (!eventsRef) return;
 		if (dt0) {

@@ -30,6 +30,10 @@ export default class Reminders {
         return _reminders[eventName];
     }
 
+    getAllAlarms() {
+        return _reminders;
+    }
+
     deleteEvent(eventName) {
         delete _reminders[eventName];
         this.#save();

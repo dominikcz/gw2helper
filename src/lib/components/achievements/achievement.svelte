@@ -2,12 +2,11 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import { base } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
-	import { createEventDispatcher } from 'svelte';
 	import Wiki from '../wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
-	import {t as _} from "$lib/services/i18n";
+	import { t as _ } from '$lib/services/i18n';
 
-	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any}} */
+	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any, onToggleTodo?: CallableFunction}} */
 	let {
 		id,
 		icon,
@@ -24,10 +23,9 @@
 		bits = [],
 		bitsDone = [],
 		pointsToGet = 0,
-		tiers = []
+		tiers = [],
+		onToggleTodo = () => {},
 	} = $props();
-
-	const dispatch = createEventDispatcher();
 
 	const showApiLinks = getQueryStringFlag('show-api-links');
 
@@ -40,7 +38,7 @@
 
 	function toggleTodo() {
 		todo = !todo;
-		dispatch('toggle-todo', {
+		onToggleTodo({
 			id,
 			todo,
 		});
@@ -63,7 +61,7 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div class="head autotooltip" >
+	<div class="head autotooltip">
 		{#if icon}
 			<img src={icon} alt={name} title={_title} />
 		{/if}
@@ -74,7 +72,12 @@
 		{/if}
 
 		{#if flags && flags.includes('Hidden')}
-			<img class="icon" src="{base}/assets/rewards/Achievements_Watch_List.png" alt="hidden achievement" title={$_('achievements.achievement_is_hidden')} />
+			<img
+				class="icon"
+				src="{base}/assets/rewards/Achievements_Watch_List.png"
+				alt="hidden achievement"
+				title={$_('achievements.achievement_is_hidden')}
+			/>
 		{/if}
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
@@ -182,17 +185,17 @@
 			{#if pointsToGet}
 				<div class="reward-item">
 					<span>{pointsToGet}</span>
-					<img
-						src="{base}/assets/rewards/AP.png"
-						alt="achievement points"
-						title={$_('achievements.achievement_can_get', {pointsToGet})}
-					/>
+					<img src="{base}/assets/rewards/AP.png" alt="achievement points" title={$_('achievements.achievement_can_get', { pointsToGet })} />
 				</div>
 			{/if}
 			{#if _bits}
 				<div class="reward-item">
 					<span>{_bitsDone} / {_bits}</span>
-					<img src="{base}/assets/rewards/Achievements_Summary.png" alt="achievements" title={$_('achievements.achievement_tasks_left', {left: _bits - _bitsDone})} />
+					<img
+						src="{base}/assets/rewards/Achievements_Summary.png"
+						alt="achievements"
+						title={$_('achievements.achievement_tasks_left', { left: _bits - _bitsDone })}
+					/>
 				</div>
 			{/if}
 		</div>

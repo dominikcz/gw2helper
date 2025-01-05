@@ -9,7 +9,7 @@
 		onChipToggle?: CallableFunction;
 	}
 
-	let { name = '', id = '', label, title = '', value, selected = $bindable(false), onChipToggle = null }: Props = $props();
+	let { name = '', id = '', label, title = '', value, selected = $bindable(false), onChipToggle = () => {} }: Props = $props();
 
 	function toggleSelected() {
 		selected = !selected;

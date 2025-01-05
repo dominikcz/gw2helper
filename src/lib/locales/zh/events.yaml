@@ -5,6 +5,7 @@ click_to_remove: 点击从观看列表中删除
 current_time: 当前时间
 event_timers: 事件计时器
 events: 活动
+next_event: '下一个:'
 reminders: 提醒
 show_categories: 显示类别
 show_chat_links: 显示聊天链接
