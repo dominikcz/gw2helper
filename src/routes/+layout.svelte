@@ -9,7 +9,6 @@
 
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
-	import { remindersSettings } from '$lib/stores/reminders.js';
 	import Reminders from '$lib/reminders';
 
 	import { Howl } from 'howler';
@@ -61,7 +60,6 @@
 
 
 	onMount(async () => {
-		$remindersSettings = await data.remindersSettings;
 		checkIfAudioPlayable();
 	});
 
@@ -109,8 +107,7 @@
 	let time = new Clock({ interval: 10 * 1000 });
 
 	function onTimeChange() {
-		if (!$remindersSettings) return;
-		const inAdvance = $remindersSettings.inAdvance;
+		const inAdvance = data.remindersSettings.inAdvance;
 		const list = reminders.activeAlarms(time.value, inAdvance);
 		// const list = ['event 1', 'event 2']; // test
 		if (list.length) {
@@ -170,7 +167,7 @@
 			window.speechSynthesis.speak(msg);
 		});
 		sounds.stop();
-		sounds.play($remindersSettings.sound);
+		sounds.play(data.remindersSettings.sound);
 	}
 	let tokenInfo = $derived(data.tokenInfo);
 	let active = $derived($page.url.pathname);

@@ -1,7 +1,7 @@
 details {
     margin: 0 0 0.5em 0;
     background-color: var(--gw2helper-module);
-    display: flex;
+    // display: flex;
 
     &[open] {
         background-color: var(--gw2helper-module);
@@ -33,6 +33,10 @@ summary {
     // font-weight: bold;
     font-family: Menomonia, "Helvetica Neue", Helvetica, Arial, sans-serif;
     cursor: pointer;
+}
+
+details summary > * { 
+    display: inline;
 }
 
 .items {

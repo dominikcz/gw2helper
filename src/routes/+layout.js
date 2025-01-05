@@ -6,6 +6,7 @@ import utils from "$lib/utils";
 import apiService from "$lib/apiService";
 
 import { loadTranslations, t as _ } from '$lib/services/i18n';
+import ReminderSettings from "$lib/services/reminderSettings.svelte";
 
 console.log(__NAME__, __VERSION__);
 
@@ -50,13 +51,12 @@ export async function load({ fetch, url }) {
 				if (tokenInfo) {
 					returnObj.tokenInfo.error = tokenInfo;
 					returnObj.reminders = {};
-					returnObj.remindersSettings = {};
 				}
 			} else {
 				returnObj.tokenInfo = tokenInfo;
 				returnObj.reminders = await utils.readReminders();
-				returnObj.remindersSettings = await utils.readRemindersSettings();	
 			}
+			returnObj.remindersSettings = new ReminderSettings();
 		} catch (error) {
 			console.log('Layout load error', error)
 		}
