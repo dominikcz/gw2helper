@@ -124,8 +124,7 @@
 </Awaiter>
 
 <h2>{ $_('daily.achievements') }</h2>
-<img src="/gw2helper/assets/150px-construction.png" title={ $_('common.under_construction') } width="150px" alt="under construction" />
-<h2>{$_('achievements.your_list')}</h2>
+<h3>{$_('achievements.your_list')}</h3>
 
 <Awaiter promise={data.achievements} >
 	{#snippet children(result)}
@@ -138,13 +137,13 @@
 			{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
 		</AchievList>
 		
-		<h4>{ $_('daily.daily') }</h4>
+		<h3>{ $_('daily.daily') }</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(dailies.categories, sortBy) as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
-		<h4>{ $_('daily.weekly') }</h4>
+		<h3>{ $_('daily.weekly') }</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(weeklies.categories, sortBy) as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList) }/>
