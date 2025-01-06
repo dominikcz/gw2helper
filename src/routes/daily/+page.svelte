@@ -31,7 +31,7 @@
 	}
 
 	onMount(async () => {
-		todoList = await data.todo;
+		todoList = await data.toDoList;
 	});
 
 	function astralAcclaimAvailable(wallet) {

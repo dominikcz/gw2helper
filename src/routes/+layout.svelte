@@ -133,7 +133,6 @@
 		lastNotify = tts;
 
 		const dur = soundSprites[data.remindersSettings.sound][1];
-		console.log('howl', dur, sounds);
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10) + dur,
 			onpop: (id, details) => {

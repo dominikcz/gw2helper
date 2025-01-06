@@ -160,14 +160,17 @@ export function runsDesktop() {
 }
 
 export async function hndToggleTodo(event, todoList) {
-    console.log('hndToggleTodo', {event, todoList})
+    // console.log('hndToggleTodo', {event, todoList})
     if (event.todo) {
         todoList.push(event.id);
     } else {
-        todoList = todoList.filter((x) => x !== event.id);
+        const index = todoList.indexOf(event.id);
+        const x = todoList.splice(index, 1);
+        //DC: filter breaks reactivity :(
+        // todoList.re = todoList.filter((x) => x !== event.id);
     }
     const clone = [...todoList];
-    console.log('saveAchievementsToDo', clone);
+    // console.log('saveAchievementsToDo', clone);
     await saveAchievementsToDo(clone);
 }
 

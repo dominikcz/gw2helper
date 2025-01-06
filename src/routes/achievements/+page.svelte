@@ -20,7 +20,6 @@
 	let { data } = $props();
 
 	let filter = $state('');
-	let todoList = $state([]);
 	let showApiLinks = $state(false);
 
 	let notCompleted = $state(true);
@@ -38,6 +37,7 @@
 	let daily = $state(false);
 	let weekly = $state(false);
 	let sortBy = $state('ap');
+	let todoList=$state([]);
 
 	onMount(async () => {
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
@@ -58,7 +58,7 @@
 		if (settings.weekly !== undefined) weekly = settings.weekly;
 		if (settings.sortBy !== undefined) sortBy = settings.sortBy;
 
-		todoList = await data.todo;
+		todoList = await data.toDoList;
 		// console.log('todo', todoList);
 	});
 
