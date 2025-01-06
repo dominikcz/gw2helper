@@ -44,20 +44,19 @@
 		zh: '中国人',
 	};
 
+	const soundSprites = {
+		trumpet: [0, 5923],
+		squeeze: [5924, 850],
+		notif3: [6834, 1160],
+		notif9: [8000, 2182],
+	};
+
 	let sounds = new Howl({
 		src: [`${base}/assets/sounds/alarms.mp3`],
-		sprite: {
-			trumpet: [0, 5923],
-			squeeze: [5924, 850],
-			notif3: [6834, 1160],
-			notif9: [8000, 2182],
-		},
+		sprite: soundSprites,
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
-
-
-
 
 	onMount(async () => {
 		checkIfAudioPlayable();
@@ -66,12 +65,9 @@
 	function checkIfAudioPlayable(dummmy) {
 		let dummyAudio = new AudioContext();
 		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
-			noAudio = toast.push(
-				$_('layout.no_audio'),
-				{
-					initial: 0,
-				}
-			);
+			noAudio = toast.push($_('layout.no_audio'), {
+				initial: 0,
+			});
 		} else {
 			toast.pop(noAudio);
 		}
@@ -131,13 +127,15 @@
 	function playAlarm(info) {
 		if (!info) return;
 		// console.log('info', info)
-		let tts = $_('events.tts', {...info})
+		let tts = $_('events.tts', { ...info });
 		// ignoring request with the same text, as we were not able to speak previous one yet and excessive queuing doesn't help ;)
 		if ([lastNotify, confirmedNotify].includes(tts)) return;
 		lastNotify = tts;
 
+		const dur = soundSprites[data.remindersSettings.sound][1];
+		console.log('howl', dur, sounds);
 		toast.push(tts, {
-			duration: 1000 * (tts.length / 10),
+			duration: 1000 * (tts.length / 10) + dur,
 			onpop: (id, details) => {
 				// console.log('onpop', details);
 				if (details.event != undefined) {
@@ -245,7 +243,7 @@
 						<button onclick={refresh}>{$_('layout.clear_cache')}</button>
 					</p>
 					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok', {token: tokenInfo.name})}</em></p>
+						<p><em>{$_('layout.token_ok', { token: tokenInfo.name })}</em></p>
 					{/if}
 					{#if tokenInfo.error}
 						<p><em>{@html tokenInfo.error}</em></p>
@@ -337,6 +335,7 @@
 		--toastContainerTop: auto;
 		--toastContainerRight: auto;
 		--toastContainerBottom: 1em;
-		--toastContainerLeft: calc(50vw - 8rem);
+		--toastContainerLeft: calc(50vw - 12rem);
+		--toastWidth: 24rem;
 	}
 </style>

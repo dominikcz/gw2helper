@@ -160,17 +160,15 @@ export function runsDesktop() {
 }
 
 export async function hndToggleTodo(event, todoList) {
-    const obj = event.detail;
-    if (obj.todo) {
-        todoList.push(obj.id);
-        todoList = todoList;
+    console.log('hndToggleTodo', {event, todoList})
+    if (event.todo) {
+        todoList.push(event.id);
     } else {
-        todoList = todoList.filter((x) => x !== obj.id);
+        todoList = todoList.filter((x) => x !== event.id);
     }
-    console.log('saveAchievementsToDo', todoList);
-    await saveAchievementsToDo(todoList);
-    console.log('after saveAchievementsToDo', todoList);
-    return todoList;
+    const clone = [...todoList];
+    console.log('saveAchievementsToDo', clone);
+    await saveAchievementsToDo(clone);
 }
 
 export default {

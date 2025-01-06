@@ -9,12 +9,13 @@
     import { t as _ } from "$lib/services/i18n";
 	import { grungeBorder } from "$lib/actions/grungeBorder";
 
-    /** @type {{category: any, todoList?: any, showApiLinks?: boolean, sortBy?: string}} */
+    /** @type {{category: any, todoList?: any, showApiLinks?: boolean, sortBy?: string, onToggleTodo?: CallableFunction }} */
     let {
         category,
         todoList = [],
         showApiLinks = false,
-        sortBy = 'ap'
+        sortBy = 'ap',
+        onToggleTodo = () => {},
     } = $props();
 
 </script>
@@ -150,7 +151,7 @@
         </div>
     </summary>
     {#if category.description}<p>{category.description}</p>{/if}
-    <AchievList items={sort(category.achievements, sortBy)} {todoList} on:toggle-todo />
+    <AchievList items={sort(category.achievements, sortBy)} {todoList} {onToggleTodo} />
 </details>
 
 <style lang="scss">

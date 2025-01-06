@@ -5,7 +5,7 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { base } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, filteredAchievements } from '$lib/components/achievements/achievements.js';
+	import { sort, extractDaily, extractWeekly, extractDailyAndWeekly } from '$lib/components/achievements/achievements.js';
 	import { t as _ } from '$lib/services/i18n.js';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
@@ -77,30 +77,6 @@
 		return target;
 	}
 
-	function filterDaily(x){
-		return x.flags.includes('Daily');
-	}
-
-	function filterWeekly(x){
-		return x.flags.includes('Weekly');
-	}
-
-	function onlyActiveCategories(x) {
-		// it should be done on the level of an additional layer over api, but for now just quick reset of rewards
-		x.rewards_to_get.clear();
-		x.points_to_get = 0;
-
-		return !x.ignore;
-	}
-
-	function extractDaily(achievements) {
-		return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories );
-	}
-
-	function extractWeekly(achievements) {
-		return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
-	}
-
 	function currentDay(dt){
 		const day = dt.substring(0, 10);
 		const currDay = new Date().toISOString().substring(0, 10);
@@ -155,22 +131,23 @@
 	{#snippet children(result)}
 		{@const dailies = extractDaily(result)}
 		{@const weeklies = extractWeekly(result)}
-		{@const todos = expandToDoList(result, todoList)}
+		{@const dailiesWeeklies = extractDailyAndWeekly(result)}
+		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
 
-		<AchievList items={todos} {todoList} >
+		<AchievList items={todos} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
 			{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
 		</AchievList>
 		
 		<h4>{ $_('daily.daily') }</h4>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(dailies.categories, sortBy) as category (category.id)}
-				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
+				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
 		<h4>{ $_('daily.weekly') }</h4>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(weeklies.categories, sortBy) as category (category.id)}
-				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList) }/>
+				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList) }/>
 			{/each}
 		</div>
 	{/snippet}

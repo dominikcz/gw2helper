@@ -51,6 +51,42 @@ export function expandToDoList(all, list) {
     return _data;
 }
 
+function filterDaily(x){
+    return filterFlags(x, ['Daily']);
+}
+
+function filterWeekly(x){
+    return filterFlags(x, ['Weekly']);
+}
+
+function filterDailyWeekly(x){
+    return filterFlags(x, ['Daily', 'Weekly']);
+}
+
+function filterFlags(x, expected){
+    return x.flags.some(item => expected.includes(item));
+}
+
+function onlyActiveCategories(x) {
+    // it should be done on the level of an additional layer over api, but for now just quick reset of rewards
+    x.rewards_to_get.clear();
+    x.points_to_get = 0;
+
+    return !x.ignore;
+}
+
+export function extractDaily(achievements) {
+    return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories );
+}
+
+export function extractWeekly(achievements) {
+    return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
+}
+
+export function extractDailyAndWeekly(achievements) {
+    return filteredAchievements(achievements, '', filterDailyWeekly, onlyActiveCategories );
+}
+
 export function filteredAchievements(data, filter, callbackFn, categoriesCallbackFn, params) {
     // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
 

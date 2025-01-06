@@ -2,8 +2,8 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
-	/** @type {{items: any, todoList: any, children?: import('svelte').Snippet}} */
-	let { items, todoList, children } = $props();
+	/** @type {{items: any, todoList: any, onToggleTodo?: CallableFunction,  children?: import('svelte').Snippet}} */
+	let { items, todoList, onToggleTodo, children } = $props();
 
 	function isOnTodo(todoList, achievId){
 		return todoList.findIndex((x) => x == achievId) >= 0;
@@ -30,7 +30,7 @@
 			bits={achiev.bits}
 			bitsDone={achiev.bits_done}
 			pointsToGet={achiev.points_to_get}
-			on:toggle-todo
+			{onToggleTodo}
 		/>
 	{:else}
 		<span class="no-results">

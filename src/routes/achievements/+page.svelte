@@ -110,12 +110,11 @@
 			sortBy,
 		});
 	}
-
 </script>
 
 <h1>{$_('achievements.achievements')}</h1>
 
-<Awaiter promise={data.achievements} >
+<Awaiter promise={data.achievements}>
 	{#snippet children(result)}
 		{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, [
 			notCompleted,
@@ -133,11 +132,16 @@
 			daily,
 			weekly,
 		])}
+		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
 			<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
 			<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
-			<WidgetInfo title={$_('achievements.points_from_achievements')} value={sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} />
+			<WidgetInfo
+				title={$_('achievements.points_from_achievements')}
+				value={sum(result.categories, 'points_done')}
+				image={`${base}/assets/rewards/AP.png`}
+			/>
 			<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
 		</WidgetsGroup>
 		<WidgetsGroup name={$_('achievements.achievements_todo')}>
@@ -153,11 +157,11 @@
 				value={result.rewards_to_get.get('item')}
 				image="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
 			/>
-			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image="{base}/assets/rewards/Merchant_crop.png" >
+			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image="{base}/assets/rewards/Merchant_crop.png">
 				{#snippet children({ value })}
 					<Price {value} />
 				{/snippet}
-				</WidgetInfo>
+			</WidgetInfo>
 		</WidgetsGroup>
 
 		<section class="tabs-container">
@@ -202,14 +206,14 @@
 					<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length })}</span>
 					<div class="achiev-container" use:grungeBorder>
 						{#each sort(_result.categories, sortBy) as category (category.id)}
-							<AchievGroup {category} {showApiLinks} {sortBy} {todoList} on:toggle-todo= {(event) => utils.hndToggleTodo(event, todoList)} />
+							<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
 						{/each}
 					</div>
 				</TabPanel>
 
 				<TabPanel>
 					<h2>{$_('achievements.your_list')}</h2>
-					<AchievList items={expandToDoList(result, todoList)} {todoList} on:toggle-todo={(event) => utils.hndToggleTodo(event, todoList)}>
+					<AchievList items={myItems} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
 						{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
 					</AchievList>
 				</TabPanel>
