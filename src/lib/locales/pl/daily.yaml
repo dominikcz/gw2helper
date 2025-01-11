@@ -3,7 +3,7 @@ daily: Codzienne
 daily_and_weekly: Codzienne i tygodniowe
 info:
   hint: Wskazówka
-  hint-content: Aby zobaczyć aktualne cele, musisz najpierw zalogować się do gry i otworzyć Skarbiec Czarnoksiężnika.
+  hint-content: Aby zobaczyć aktualne cele, musisz najpierw zalogować się do gry.
 objectives_left: >-
   {objectivesCount, plural,
         =0 {wszystko zrobione}
