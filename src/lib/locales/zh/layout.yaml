@@ -9,12 +9,12 @@ forget_stored_key: 忘记存储的密钥
 invalid_token: 键“ { token} ” 无效
 legal:
   copyright: >
-    ArenaNet有限责任公司。 版权所有。 NCSOFT, ArenaNet, Guild Wars, GULD Wars 2, GW2, GULD
-    Wars 2: Thorns之心, GULD Wars 2: 火路, GULD Wars 2: 灭龙, GULD Wars 2: Ond of
-    Dragons, GULD Wars 2: 淫秽的秘密和所有相关的标志,设计和复合标志都是NCSOFT公司的商标或注册商标.
+    ArenaNet有限责任公司。 版权所有。 NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, GULD
+    Wars 2: Thorns之心, Guild Wars 2: 火路, Guild Wars 2: 灭龙, Guild Wars 2: End of
+    Dragons, Guild Wars 2: 淫秽的秘密和所有相关的标志,设计和复合标志都是NCSOFT公司的商标或注册商标.
   unofficial_site: >-
     这个非官方网站包括艺术和其他资产,即2015 ArenaNet Inc. 版权所有。 其他商标均为各自所有者的财产. 该网站还使用来自 <a
-    href="https://wiki.guildwars2.com/">关节战争 2 维基语录</a>
+    href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
 nav:
   account: 账户
   achievements: 成绩

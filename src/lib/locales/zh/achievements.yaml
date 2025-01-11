@@ -1,25 +1,36 @@
-achievement_can_get: ''
-achievement_is_collection: ''
-achievement_is_hidden: ''
-achievement_is_item: ''
-achievement_is_mastery_eod: ''
-achievement_is_mastery_hot: ''
-achievement_is_mastery_ice: ''
-achievement_is_mastery_jw: ''
-achievement_is_mastery_pof: ''
-achievement_is_mastery_soto: ''
-achievement_is_mastery_tyria: ''
-achievement_is_title: ''
-achievement_tasks_left: ''
+achievement_can_get: |-
+  您可以从此成就中获得 {pointsToGet, plural,
+  other {# 分}
+  }
+achievement_is_collection: 此成就与收藏相关
+achievement_is_hidden: 这是一个隐藏的成就
+achievement_is_item: 此成就奖励物品
+achievement_is_mastery_eod: 此成就奖励 Endof Dragons 精通点数
+achievement_is_mastery_hot: 此成就奖励 Heart of Thorns 点精通点数
+achievement_is_mastery_ice: 此成就奖励 Icebrood Saga 点精通点数
+achievement_is_mastery_jw: 此成就奖励 Janthir Wilds 点精通点数
+achievement_is_mastery_pof: 此成就奖励 Path of Fire 点精通点数
+achievement_is_mastery_soto: 此成就奖励 Secrets of the Obscure 点精通点数
+achievement_is_mastery_tyria: 此成就奖励 Central Tyria 点精通点数
+achievement_is_title: 此成就奖励一个头衔
+achievement_tasks_left: |-
+  还剩 {left, plural,
+    other {#}
+  } 项任务要做
 achievements: 成绩
 achievements_completed: 完成成绩
 achievements_completed_number: 成就数目
-achievements_left: ''
+achievements_left: |-
+  还有{todo, plural, 
+    =0 {剩余}
+    one {一}
+    other {#}
+  }没有剩余成就可完成
 achievements_to_do: 左边做
 achievements_todo: 成就
 central_tyria_mastery: 中央泰利亚精通
-click_to_add_todo: ''
-click_to_remove_todo: ''
+click_to_add_todo: 单击添加到待办事项列表
+click_to_remove_todo: 单击从 TODO 列表中删除
 daily: 日报
 daily_points: 每日点数
 empty_list: >-
@@ -41,16 +52,20 @@ not_completed: 未完成
 pof_mastery: PoF 熟练
 points_from_achievements: 来自成就的点数
 points_to_get: 要得到的点
-rewards_ap_left: ''
-rewards_gold: ''
-rewards_items: ''
-rewards_mastery_eod: ''
-rewards_mastery_hot: ''
-rewards_mastery_ice: ''
-rewards_mastery_jw: ''
-rewards_mastery_pof: ''
-rewards_mastery_soto: ''
-rewards_mastery_tyria: ''
+rewards_ap_left: |-
+  {points, plural,
+    one {您可以从此类别获得 1 个成就点}
+    other {您可以从此类别获得 # 个成就点}
+  }
+rewards_gold: 此类别奖励硬币
+rewards_items: 此类别奖励物品
+rewards_mastery_eod: 此类别奖励 End of Dragons 精通点数
+rewards_mastery_hot: 此类别奖励 Heart of Thorns 精通点数
+rewards_mastery_ice: 此类别奖励 Icebrood Saga 精通点数
+rewards_mastery_jw: 此类别奖励 Janthir Wilds 精通点数
+rewards_mastery_pof: 此类别奖励 Path of Fire 精通点数
+rewards_mastery_soto: 此类别奖励 Secrets of the Obscure 精通点数
+rewards_mastery_tyria: 此类别奖励 Central Tyria 精通点数
 rewards_title: 赢得冠军
 showing_out_of: 显示 {shown} 类别中的 {total}
 sofo_mastery: SofO 掌握
