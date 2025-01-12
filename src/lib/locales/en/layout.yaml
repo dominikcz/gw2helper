@@ -31,6 +31,7 @@ nav:
   items: Items
   materials: Materials
   trading-post: Trading post
+  legendary: Legendary
 no_audio: >-
   You've got notifications set up but your browser prevents auto-playing audio
   without user interaction. Please close this message to enable sound.

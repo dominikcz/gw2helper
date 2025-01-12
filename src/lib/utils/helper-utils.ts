@@ -96,15 +96,44 @@ function wikiLink(name) {
     return name ? `https://wiki.guildwars2.com/wiki/${name}`.replaceAll(' ', '_') : '#';
 }
 
-export default {
-    match,
-    filterCollection,
-    fullTextSearch,
-    generateId,
-    dec2hex,
-    diff,
-    tillBirthday,
-    age,
-    hoursPlayed,
-    wikiLink,
+function getDeepProp(obj, str) {
+    if (typeof obj !== 'object' || obj === undefined) return obj;
+    const fields = str.split(".");
+    return getDeepProp(obj[fields[0]], fields.slice(1).join("."));
 }
+
+function mapFields(obj, fields){
+    if (fields.length) {
+        const res = {};
+        fields.forEach(x => {
+            res[x] = getDeepProp(obj, x);
+        })
+        return res;
+    }
+    return obj;
+}
+
+export function groupBy(collection, groups = [], mappings) {
+    const grouped = {};
+    collection.forEach((x) => {
+        groups.reduce((o, g, i) => {
+            let v = getDeepProp(x, g);
+            o[v] = o[v] || (i + 1 === groups.length ? [] : {});
+            return o[v];
+        }, grouped).push(mapFields(x, mappings));
+    });
+    return grouped;
+}
+
+export default {
+        match,
+        filterCollection,
+        fullTextSearch,
+        generateId,
+        dec2hex,
+        diff,
+        tillBirthday,
+        age,
+        hoursPlayed,
+        wikiLink,
+    }

@@ -180,6 +180,7 @@
 		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
 		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
 		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), visible: tokenInfo.permissions.includes('progression') },
+		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), visible: tokenInfo.permissions.includes('unlocks') },
 	]);
 	let currentPageVisible = $derived(devMode || navigation.find((x) => x.slug == active)?.visible || false);
 	$effect(() => {

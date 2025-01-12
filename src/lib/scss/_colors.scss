@@ -72,6 +72,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--toastBackground: var(--gw2helper-info);
 	--toastColor: var(--gw2helper-module-text);
 	--toastBarBackground: #308800;
+	--gw2helper-unlocked: #308800;
+	--gw2helper-locked: #00000050;
 
 	--nav-bg: #222;
 	--nav-fg: #aaa;
@@ -112,6 +114,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		
 		--rarity-basic: rgba(232, 230, 227, 0.4);
 		--toastBarBackground: #18500c;
+		--gw2helper-unlocked: #18500c;
+		--gw2helper-locked: #00000050;
 
 		// --rarity-rare: #fcd00bdd;
 	}

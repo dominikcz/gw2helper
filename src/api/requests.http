@@ -82,6 +82,17 @@ GET {{baseUrl}}/v2/items/100137
 GET {{baseUrl}}/v2/achievements/6333
 Authorization: Bearer {{key}}
 
+
+###
+https://api.guildwars2.com/v2/legendaryarmory?ids=all
+
+
+###
+
+GET {{baseUrl}}/v2/account/legendaryarmory
+Authorization: Bearer {{key}}
+
+
 ###
         - https://api.guildwars2.com/v2/achievements/6344
         - https://api.guildwars2.com/v2/achievements/7802

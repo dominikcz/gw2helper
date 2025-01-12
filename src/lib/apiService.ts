@@ -5,6 +5,7 @@ import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/
 import { sum, getQueryStringFlag, sumGroupBy } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
+import { groupBy } from "./utils/helper-utils";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -331,6 +332,21 @@ const guilds = async () => {
 
 const items = (x: string) => {
     return apiClient("/v2/items", `ids=${x}`);
+};
+
+const legendaries = async (x: string) => {
+    return new Promise((resolve) => {
+        Promise.all([
+            apiClient("/v2/legendaryarmory", `ids=all`),
+            apiClient("/v2/account/legendaryarmory", ``)
+        ]).then(async ([available, unlocked]) => {
+            const ids = available.map((x) => x.id);
+            const expanded = await expandItems(ids, available);
+            const data = mergeById(expanded, unlocked);
+            const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count']);
+            resolve({armor});
+        });
+    });
 };
 
 const prices = (x: string) => {
@@ -751,4 +767,5 @@ export default {
     wizardsVaultWeekly,
     wizardsVaultSpecial,
     transactionsCurrent,
+    legendaries,
 };

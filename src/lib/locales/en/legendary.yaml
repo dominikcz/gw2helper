@@ -1,0 +1,11 @@
+legendary: Legendary
+armor: Armor
+armor_type:
+  light: Light armor
+  medium: Medium armor
+  heavy: Heavy armor
+armor_set:
+  pve: PvE armor set
+  raid: Raid armor set
+  pvp: PvP armor set
+  wvw: WvW armor set
