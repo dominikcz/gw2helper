@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
-	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import { autotooltip } from '$lib/actions/autotooltip';
@@ -15,23 +13,21 @@
 
 	let { data }: Props = $props();
 
-	let filter = $state('');
-
 	const minReqWeapons = {
 		Axe: 2,
 		Dagger: 2,
 		Focus: 1,
 		Greatsword: 1,
 		Hammer: 1,
-		Harpoon: 1,
-		LongBow: 1,
+		'Harpoon gun': 1,
+		'Long bow': 1,
 		Mace: 2,
 		Pistol: 2,
 		Rifle: 1,
 		Scepter: 1,
 		Shield: 1,
-		ShortBow: 1,
-		Speargun: 1,
+		'Short bow': 1,
+		Spear: 1,
 		Staff: 1,
 		Sword: 2,
 		Torch: 1,
@@ -84,14 +80,6 @@
 </script>
 
 <h1>{$_('legendary.legendary')}</h1>
-
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')}>
-	<!-- <button on:click={sortAsIs}>original sort order</button>
-		<button on:click={sortBySlots}>sort by quantity</button> -->
-	<SearchHelp />
-</SearchInput>
-
-<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
 
 <h3>{$_('legendary.armor')}</h3>
 

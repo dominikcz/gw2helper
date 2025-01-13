@@ -348,7 +348,15 @@ const legendaries = async (x: string) => {
             const trinkets = groupBy(data.filter(x => x.type === "Trinket"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
             const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
-            const weapons = groupBy(data.filter(x => x.type === "Weapon"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+            const _weapons = data.filter(x => x.type === "Weapon");
+            _weapons.forEach(x => {
+                // change subtype naming to match current one in game & Wiki
+                if (x.subtype == 'Harpoon') x.subtype = 'Spear';
+                else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
+                else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
+                else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
+            })
+            const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             // console.log('weapons', weapons)
             resolve({armor, trinkets, back, upgrades, weapons});
         });
