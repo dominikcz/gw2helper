@@ -17,9 +17,6 @@
 	let filter = $state('');
 
 	function done(items, allRequired, caption) {
-		if (!items) {
-			console.log('done', caption, items)
-		}
 		return allRequired ? items.every((x) => x.count) : items.some((x) => x.count);
 	}
 
@@ -42,8 +39,8 @@
 
 <h3>{$_('legendary.armor')}</h3>
 
-{#snippet unlocksList(caption, items, all = false)}
-	<div class="equip" class:done={done(items, all, caption)}>
+{#snippet unlocksList(caption, items, all = false, restricted = false)}
+	<div class="equip" class:done={done(items, all, caption)} class:restricted={restricted}>
 		<h4>{caption}</h4>
 		<div class="unlocks">
 			{#each items as item}
@@ -58,12 +55,12 @@
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>{caption}</summary>
 			<article>
-				{@render unlocksList('Helm', weightData.Helm)}
-				{@render unlocksList('Shoulders', weightData.Shoulders)}
-				{@render unlocksList('Coat', weightData.Coat)}
-				{@render unlocksList('Gloves', weightData.Gloves)}
-				{@render unlocksList('Leggings', weightData.Leggings)}
-				{@render unlocksList('Boots', weightData.Boots)}
+				{@render unlocksList('Helm', weightData.Helm, false, true)}
+				{@render unlocksList('Shoulders', weightData.Shoulders, false, true)}
+				{@render unlocksList('Coat', weightData.Coat, false, true)}
+				{@render unlocksList('Gloves', weightData.Gloves, false, true)}
+				{@render unlocksList('Leggings', weightData.Leggings, false, true)}
+				{@render unlocksList('Boots', weightData.Boots, false, true)}
 			</article>
 		</details>
 	{/snippet}
@@ -133,7 +130,6 @@
 	.equip {
 		background-color: var(--gw2helper-locked);
 		padding: 1rem;
-		max-width: 305px;
 		&.done {
 			background-color: var(--gw2helper-unlocked);
 			padding: 1rem;
@@ -144,5 +140,13 @@
 		display: flex;
 		flex-flow: row wrap;
 		gap: 0.625em;
+	}
+
+	@media (min-width: 900px) {
+		.equip {
+			&.restricted {
+				max-width: 305px;
+			}
+		}
 	}
 </style>
