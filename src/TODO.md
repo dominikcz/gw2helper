@@ -26,17 +26,11 @@
 
 x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
 
-+ handle 403 errors
 - pvp
-+ przenieść ładowanie ustawień z poszczególnych stron do load w js
 - wydzielić więcej komponentów wizualnych
 - refaktoring apiservice by zajmowało się tylko api, a dodać nową warstwę do mapowania i zwracania obiektów dla frontu
 
 - zaimplementować [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) jeśli są aktywne powiadomienia
-- dodać możliwość rejestrowania poiadomień na konkretną godzinę bezpośrednio z widoku /events. Może użyć do tego akcji?
-- dodać sekcję legendary armor/weapons?
-+ dodać sekcję trading post (transactions)?
-+ na stronie daily powinna się znaleźć lista todo z achievements, ale ograniczona do daily i weekly
++ dodać możliwość rejestrowania poiadomień na konkretną godzinę bezpośrednio z widoku /events. Może użyć do tego akcji?
++ dodać sekcję legendary armor/weapons?
 - cache do items ignoruje język, więc można zobaczyć opisy z innego języka 😒
-
-+ trading post powinien pokazywać dodatkowo aktualną sytuację rynkową, czyli najbardziej konkurencyjną ofertę kupna/sprzedaży danego przedmiotu w stosunku do mojej oferty

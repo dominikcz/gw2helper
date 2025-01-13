@@ -85,7 +85,7 @@ async function saveWalletSettings(settings) {
 }
 
 export function sum(array, property) {
-    return array.reduce((acc, curr) => acc + curr[property], 0)
+    return array.reduce((acc, curr) => acc + (curr[property] || 0), 0)
 }
 
 export function sumGroupBy(array, groupingKeys, sumProperty) {

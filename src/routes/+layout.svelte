@@ -200,9 +200,9 @@
 <div id="content-wrapper">
 	<div id="content">
 		<header>
-			<img src="{base}/assets/heart.png" alt="logo" />
+			<a href="/gw2helper/"><img src="{base}/assets/heart.png" alt="logo" /></a>
 			<div class="line">
-				<h1>GW2 Helper</h1>
+				<a href="/gw2helper/" title={$_('layout.nav.home')}><h1>GW2 Helper</h1></a>
 				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>
 			</div>
 		</header>
@@ -286,6 +286,10 @@
 		flex-flow: row nowrap;
 		align-items: center;
 		column-gap: 0.5em;
+		a{
+			text-decoration: none;
+			color: rgb(214, 211, 205);
+		}
 		h1 {
 			margin: 0;
 			text-wrap: nowrap;

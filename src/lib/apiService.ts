@@ -2,7 +2,7 @@ import Logger from "./logger";
 import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
 import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
-import { sum, getQueryStringFlag, sumGroupBy } from "./utils";
+import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 import { groupBy, mapFields } from "./utils/helper-utils";
