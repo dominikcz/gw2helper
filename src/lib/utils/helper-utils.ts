@@ -102,7 +102,7 @@ function getDeepProp(obj, str) {
     return getDeepProp(obj[fields[0]], fields.slice(1).join("."));
 }
 
-function mapFields(obj, fields){
+export function mapFields(obj, fields){
     if (fields.length) {
         const res = {};
         fields.forEach(x => {

@@ -3,6 +3,10 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import { autotooltip } from '$lib/actions/autotooltip';
+	import Legendary from '$lib/components/items/legendary.svelte';
+	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 
 	interface Props {
 		data: any;
@@ -12,9 +16,18 @@
 
 	let filter = $state('');
 
-	function done(items) {
-		return items.some((x) => x.count);
+	function done(items, allRequired, caption) {
+		if (!items) {
+			console.log('done', caption, items)
+		}
+		return allRequired ? items.every((x) => x.count) : items.some((x) => x.count);
 	}
+
+	const tooltipOptions = {
+		customRenderers: {
+			'img.item': itemTooltipRenderer,
+		},
+	};
 </script>
 
 <h1>{$_('legendary.legendary')}</h1>
@@ -25,69 +38,111 @@
 	<SearchHelp />
 </SearchInput>
 
-<img src="/gw2helper/assets/150px-construction.png" title={ $_('common.under_construction') } width="150px" alt="under construction" />
+<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
 
 <h3>{$_('legendary.armor')}</h3>
 
-<Awaiter promise={data.legendaries}>
-	{#snippet unlocksList(items)}
-		<td class:done={done(items)}>
+{#snippet unlocksList(caption, items, all = false)}
+	<div class="equip" class:done={done(items, all, caption)}>
+		<h4>{caption}</h4>
+		<div class="unlocks">
 			{#each items as item}
-				<img src={item.icon} alt={JSON.stringify(item)} class:locked={!item.count} />
+				<Legendary {item} />
 			{/each}
-		</td>
-	{/snippet}
+		</div>
+	</div>
+{/snippet}
 
-	{#snippet unlocksByWeight(weight, items)}
-		<tr>
-			<th>{weight}</th>
-			{@render unlocksList(items.Helm)}
-			{@render unlocksList(items.Shoulders)}
-			{@render unlocksList(items.Coat)}
-			{@render unlocksList(items.Gloves)}
-			{@render unlocksList(items.Leggings)}
-			{@render unlocksList(items.Boots)}
-		</tr>
+<Awaiter promise={data.legendaries}>
+	{#snippet unlockGroup(caption, weightData)}
+		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+			<summary>{caption}</summary>
+			<article>
+				{@render unlocksList('Helm', weightData.Helm)}
+				{@render unlocksList('Shoulders', weightData.Shoulders)}
+				{@render unlocksList('Coat', weightData.Coat)}
+				{@render unlocksList('Gloves', weightData.Gloves)}
+				{@render unlocksList('Leggings', weightData.Leggings)}
+				{@render unlocksList('Boots', weightData.Boots)}
+			</article>
+		</details>
 	{/snippet}
 
 	{#snippet children(result)}
-		<table>
-			<thead>
-				<tr>
-					<th>Weight </th>
-					<th>Helm</th>
-					<th>Shoulders</th>
-					<th>Coat</th>
-					<th>Gloves</th>
-					<th>Leggings</th>
-					<th>Boots</th>
-				</tr>
-			</thead>
-			<tbody>
-				{@render unlocksByWeight('Light', result.armor.Light)}
-				{@render unlocksByWeight('Medium', result.armor.Medium)}
-				{@render unlocksByWeight('Heavy', result.armor.Heavy)}
-			</tbody>
-		</table>
+		{@render unlockGroup('Light', result.armor.Light)}
+		{@render unlockGroup('Medium', result.armor.Medium)}
+		{@render unlockGroup('Heavy', result.armor.Heavy)}
+
+		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+			<summary>{$_('legendary.trinkets')}</summary>
+			<article>
+				{@render unlocksList('Back', result.back)}
+				{@render unlocksList('Accessory', result.trinkets.Accessory)}
+				{@render unlocksList('Ring', result.trinkets.Ring, true)}
+				{@render unlocksList('Amulet', result.trinkets.Amulet)}
+			</article>
+		</details>
+
+		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+			<summary>{$_('legendary.upgrades')}</summary>
+			<article>
+				{@render unlocksList('Upgrades', result.upgrades, true)}
+			</article>
+		</details>
+	{/snippet}
+</Awaiter>
+
+<h3>{$_('legendary.weapons')}</h3>
+
+<Awaiter promise={data.legendaries}>
+	{#snippet children(result)}
+		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+			<summary>{$_('legendary.weapons')}</summary>
+			<article>
+				{@render unlocksList('Axe', result.weapons.Axe)}
+				{@render unlocksList('Dagger', result.weapons.Dagger)}
+				{@render unlocksList('Focus', result.weapons.Focus)}
+				{@render unlocksList('Greatsword', result.weapons.Greatsword)}
+				{@render unlocksList('Hammer', result.weapons.Hammer)}
+				{@render unlocksList('Harpoon gun/Spear', result.weapons.Harpoon)}
+				{@render unlocksList('Longbow', result.weapons.LongBow)}
+				{@render unlocksList('Mace', result.weapons.Mace)}
+				{@render unlocksList('Pistol', result.weapons.Pistol)}
+				{@render unlocksList('Rifle', result.weapons.Rifle)}
+				{@render unlocksList('Scepter', result.weapons.Scepter)}
+				{@render unlocksList('Shield', result.weapons.Shield)}
+				{@render unlocksList('Short bow', result.weapons.ShortBow)}
+				{@render unlocksList('Speargun', result.weapons.Speargun)}
+				{@render unlocksList('Staff', result.weapons.Staff)}
+				{@render unlocksList('Sword', result.weapons.Sword)}
+				{@render unlocksList('Torch', result.weapons.Torch)}
+				{@render unlocksList('Trident', result.weapons.Trident)}
+				{@render unlocksList('Warhorn', result.weapons.Warhorn)}
+			</article>
+		</details>
 	{/snippet}
 </Awaiter>
 
 <style lang="scss">
-	table {
-		border-collapse: collapse;
+	article {
+		display: flex;
+		flex-flow: row wrap;
+		gap: 0.6rem;
 	}
-	th {
-		padding: 1rem;
-	}
-	td {
+
+	.equip {
 		background-color: var(--gw2helper-locked);
-		padding: 0 1rem;
+		padding: 1rem;
+		max-width: 305px;
 		&.done {
 			background-color: var(--gw2helper-unlocked);
 			padding: 1rem;
 		}
 	}
-	img.locked {
-		filter: grayscale(100%) opacity(50%);
+
+	.unlocks {
+		display: flex;
+		flex-flow: row wrap;
+		gap: 0.625em;
 	}
 </style>

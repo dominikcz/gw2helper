@@ -5,7 +5,7 @@ import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/
 import { sum, getQueryStringFlag, sumGroupBy } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
-import { groupBy } from "./utils/helper-utils";
+import { groupBy, mapFields } from "./utils/helper-utils";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -343,8 +343,14 @@ const legendaries = async (x: string) => {
             const ids = available.map((x) => x.id);
             const expanded = await expandItems(ids, available);
             const data = mergeById(expanded, unlocked);
-            const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count']);
-            resolve({armor});
+            // console.log('leg', data);
+            const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
+            const trinkets = groupBy(data.filter(x => x.type === "Trinket"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+            const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
+            const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
+            const weapons = groupBy(data.filter(x => x.type === "Weapon"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+            // console.log('weapons', weapons)
+            resolve({armor, trinkets, back, upgrades, weapons});
         });
     });
 };

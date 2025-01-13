@@ -5,17 +5,13 @@
 	}
 
 	let { item }: Props = $props();
-
-	function rarityClass() {
-		return item.rarity ? `rarity rarity-${item.rarity.toLowerCase()}` : 'rarity';
-	}
 </script>
 
-<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}>
+<figure data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}>
 	<a href={helperUtils.wikiLink(item.name)} target="_blank">
-		<img alt={item.name} src={item.icon} class:locked={item.locked} />
+		<img alt={item.name} src={item.icon} class:locked={!item.count} />
 	</a>
-	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
+	{#if item.count && item.count !== item.max_count}<figcaption>{item.count}/{item.max_count}</figcaption>{/if}
 </figure>
 
 <style lang="scss">
@@ -24,6 +20,7 @@
 		height: 3.75em;
 		outline-width: 0.1875em;
 		outline-style: solid;
+		outline-color: rgba(0, 0, 0, 0.6);
 		position: relative;
 		margin: 0;
 		padding: 0;
@@ -41,7 +38,7 @@
 			top: 0;
 			right: 0;
 			color: #fff;
-			background: rgba(0, 0, 0, 0.5);
+			background: rgba(0, 0, 0, 0.7);
 			font-size: 80%;
 			padding: 0 0 0 0.2em;
 		}
