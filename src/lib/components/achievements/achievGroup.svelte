@@ -161,6 +161,9 @@
 		gap: 1em;
 		margin: 0;
 		background-color: var(--gw2helper-module);
+        p{
+            margin-left: 1rem;;
+        }
 		summary {
 			padding: 0.4em 0.4em;
 			display: flex;

@@ -79,9 +79,55 @@ Authorization: Bearer {{key}}
 GET {{baseUrl}}/v2/items/100137
 
 ###
-GET {{baseUrl}}/v2/achievements/6333
+GET {{baseUrl}}/v2/achievements/8521
 Authorization: Bearer {{key}}
 
+###
+
+GET {{baseUrl}}/v2/achievements/categories?ids=all&v=2022-03-23T19:00:00.000Z
+
+###
+
+https://api.guildwars2.com/v2/achievements/groups
+
+###
+https://api.guildwars2.com/v2/achievements/groups/18DB115A-8637-4290-A636-821362A3C4A8
+###
+
+https://api.guildwars2.com/v2/achievements/groups/1CAFA333-0C2B-4782-BC4C-7DA30E9CE289
+###
+https://api.guildwars2.com/v2/achievements/groups/345BA893-F022-40B8-A881-DB7422D95AE5
+###
+https://api.guildwars2.com/v2/achievements/groups/3A185655-09A5-4F6C-8B21-F1FCF62587B1
+###
+https://api.guildwars2.com/v2/achievements/groups/43167413-6A41-4407-8A42-EEB33825EDC5
+###
+https://api.guildwars2.com/v2/achievements/groups/45410F60-AB66-4146-A0F7-CE99250C4CB0
+###
+https://api.guildwars2.com/v2/achievements/groups/4E6A6CE7-B131-40BB-81A3-235CDBACDAA9
+###
+https://api.guildwars2.com/v2/achievements/groups/56A82BB9-6B07-4AB0-89EE-E4A6D68F5C47
+###
+https://api.guildwars2.com/v2/achievements/groups/65B4B678-607E-4D97-B458-076C3E96A810
+###
+https://api.guildwars2.com/v2/achievements/groups/9B66605F-6589-4CBD-8E19-5368C9F33338
+###
+https://api.guildwars2.com/v2/achievements/groups/A4ED8379-5B6B-4ECC-B6E1-70C350C902D2
+###
+https://api.guildwars2.com/v2/achievements/groups/A9F7378E-9C8A-48CC-9505-3094E661D5F6
+###
+# bonus
+https://api.guildwars2.com/v2/achievements/groups/AACBCEF3-BFEE-405B-967D-30A989589AD7
+###
+https://api.guildwars2.com/v2/achievements/groups/B1311A68-2F67-4718-AB57-5E1750C1410B
+###
+https://api.guildwars2.com/v2/achievements/groups/B42E2379-9599-46CA-9D4A-40A27E192BBE
+###
+https://api.guildwars2.com/v2/achievements/groups/BE8B9954-5B55-4FCB-9022-B871AD00EAAB
+###
+https://api.guildwars2.com/v2/achievements/groups/EFADEE67-588F-412F-A1BD-6C9AFF782988
+###
+https://api.guildwars2.com/v2/achievements/groups/F59FFE23-4616-47D2-86B4-00F15819AD45
 
 ###
 https://api.guildwars2.com/v2/legendaryarmory?ids=all

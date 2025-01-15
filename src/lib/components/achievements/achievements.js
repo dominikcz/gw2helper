@@ -1,5 +1,5 @@
 import helperUtils from "$lib/utils/helper-utils";
-import {sum} from "$lib/utils";
+import { sum } from "$lib/utils";
 
 export function sort(collection, sortBy) {
     console.log('sorting...');
@@ -51,19 +51,19 @@ export function expandToDoList(all, list) {
     return _data;
 }
 
-function filterDaily(x){
+function filterDaily(x) {
     return filterFlags(x, ['Daily']);
 }
 
-function filterWeekly(x){
+function filterWeekly(x) {
     return filterFlags(x, ['Weekly']);
 }
 
-function filterDailyWeekly(x){
+function filterDailyWeekly(x) {
     return filterFlags(x, ['Daily', 'Weekly']);
 }
 
-function filterFlags(x, expected){
+function filterFlags(x, expected) {
     return x.flags.some(item => expected.includes(item));
 }
 
@@ -76,15 +76,15 @@ function onlyActiveCategories(x) {
 }
 
 export function extractDaily(achievements) {
-    return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories );
+    return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories);
 }
 
 export function extractWeekly(achievements) {
-    return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories );
+    return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories);
 }
 
 export function extractDailyAndWeekly(achievements) {
-    return filteredAchievements(achievements, '', filterDailyWeekly, onlyActiveCategories );
+    return filteredAchievements(achievements, '', filterDailyWeekly, onlyActiveCategories);
 }
 
 export function filteredAchievements(data, filter, callbackFn, categoriesCallbackFn, params) {
@@ -113,7 +113,7 @@ export function filteredAchievements(data, filter, callbackFn, categoriesCallbac
     //            |- [] we filter here too
 
     // new categories (1)
-    const _categories = categoriesCallbackFn ? data.categories.filter(categoriesCallbackFn) : data.categories.filter((x) => !x.ignore);
+    const _categories = categoriesCallbackFn ? data.categories.filter(categoriesCallbackFn) : params.ignoreUnavilable ? data.categories.filter((x) => !x.ignore) : data.categories;
 
     _data.categories = _categories.map(({ achievements, ...rest }) => {
         let _cat = { ...rest }; // (1) clone categories without achievements

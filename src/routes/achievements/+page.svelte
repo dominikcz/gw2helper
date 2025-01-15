@@ -114,9 +114,11 @@
 
 <h1>{$_('achievements.achievements')}</h1>
 
+<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
+
 <Awaiter promise={data.achievements}>
 	{#snippet children(result)}
-		{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, [
+		{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, {
 			notCompleted,
 			withPoints,
 			withMasteryCentral,
@@ -131,7 +133,7 @@
 			withCoins,
 			daily,
 			weekly,
-		])}
+		})}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />

@@ -358,7 +358,7 @@ const legendaries = async (x: string) => {
             })
             const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             // console.log('weapons', weapons)
-            resolve({armor, trinkets, back, upgrades, weapons});
+            resolve({ armor, trinkets, back, upgrades, weapons });
         });
     });
 };
@@ -631,6 +631,26 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         }
     })
 
+    const achievsInCategories = [];
+    const noCategory = [];
+    categories.forEach(cat => {
+        achievsInCategories.push(...cat.achievements.map(x => x.id));
+    });
+    allIds.forEach(id => {
+        if (!ignored_achievements.includes(id) && !achievsInCategories.includes(id)) {
+            noCategory.push(id)
+        }
+    });
+    // console.log('noCategory', noCategory);
+
+    categories.push({
+        id: 0,
+        name: "__MISSING__",
+        description: "Achievements with no category",
+        icon: "/gw2helper/assets/rewards/Daily_Achievement.png",
+        achievements: noCategory.map(x => ({id: x}))
+    });
+
     categories.forEach(cat => {
         // if (ACHIEVEMENTS_NOT_IN_API[cat.id]) {
         //     const tmp = cat.achievements;
@@ -639,9 +659,6 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // }
         _log += `${cat.id}, // ${cat.name}\n`;
         cat.ignore = (ignored_achievements.includes(cat.id)) ? true : false;
-        if (!cat.ignore) {
-            cat.ignore
-        }
         cat.achievements = cat.achievements.map(x => {
             let achiev = achievementsCache.get(x.id);
             if (!achiev) {
@@ -681,6 +698,13 @@ const expandAchievements = async (account, categories, accountAchievements, allI
                 points_to_get,
             }
         });
+        // missing 
+        if (cat.id == 0) {
+            console.log('missing...')
+            // remove daily and weekly from missing achievements
+            cat.achievements = cat.achievements.filter(x => !(x.flags.includes('Daily') || x.flags.includes('Weekly')));
+            console.log('missing', cat.achievements)
+        }
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
         cat._rewards_to_get = cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)
