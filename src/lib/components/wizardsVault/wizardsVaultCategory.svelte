@@ -5,6 +5,7 @@
 	import Clock from '$lib/services/clock.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import Progress from '../progress/progress.svelte';
 
 	/** @type {{data: any, targetTime: any, title: any}} */
 	let { data = $bindable(), targetTime, title } = $props();
@@ -16,10 +17,6 @@
 		timeLeft = wxdates.friendlyDurationTill(time.value, targetTime);
 	}
 
-	function notClaimed() {
-		return data.objectives.filter((x) => !x.claimed).length;
-	}
-
 	function acclaimLeft() {
 		const points = data.objectives.filter((x) => !x.claimed).reduce((acc, val) => acc + val.acclaim, 0);
 		data.meta_reward_claimed ??= false;
@@ -27,7 +24,15 @@
 		return data.meta_reward_claimed ? points : points + data.meta_reward_astral;
 	}
 
-	console.log(`${title}: ${targetTime.toISOString()}`);
+	function progressValue(){
+		return (data.meta_progress_current) ? data.meta_progress_current : data.objectives.filter((x) => x.claimed).length;
+	}
+
+	function progressMax(){
+		return (data.meta_progress_complete) ? data.meta_progress_complete : data.objectives.length;
+	}
+
+	console.log(`${title}: ${targetTime.toISOString()}`, data);
 	$effect(() => {
 		updateTime();
 	});
@@ -37,12 +42,7 @@
 	<summary
 		>{title}
 		<div class="info">
-			<div class="timer">{timeLeft}</div>
-			{#if data.meta_progress_current}
-				<progress value={data.meta_progress_current} max={data.meta_progress_complete}></progress>
-			{:else}
-				<span>{$_('daily.objectives_left', {objectivesCount: notClaimed()}) }</span>
-			{/if}
+			<Progress value={progressValue()} max={progressMax()} label={timeLeft} />
 			<div class="reward">
 				{acclaimLeft()}
 				<AstralAcclaim />
@@ -56,68 +56,3 @@
 	</article>
 </details>
 
-<style lang="scss">
-	details {
-		display: flex;
-		flex-flow: column wrap;
-		gap: 1em;
-		margin: 0;
-		background-color: var(--gw2helper-module);
-		summary {
-			display: flex;
-			flex-flow: row nowrap;
-			column-gap: 0.6em;
-			justify-content: flex-start;
-			align-items: center;
-			&::before {
-				content: '\25b6';
-				transition: 0.2s;
-			}
-			.info {
-				display: flex;
-				flex-flow: column nowrap;
-				justify-content: end;
-				align-items: end;
-				flex-grow: 1;
-				@media screen and (min-width: 30em) {
-					flex-flow: row nowrap;
-					column-gap: 1em;
-					justify-content: end;
-					align-items: center;
-				}
-			}
-			.reward {
-				display: flex;
-				flex-flow: row nowrap;
-				align-items: center;
-				justify-content: end;
-				width: 4em;
-			}
-		}
-		&[open] summary::before {
-			transform: rotate(90deg);
-		}
-	}
-	progress[value] {
-		height: 1em;
-		width: 8em;
-		border: none;
-		color: var(--gw2helper-module-text) !important;
-		background-color: var(--gw2helper-module-dark);
-		&::-moz-progress-bar {
-			background: var(--gw2helper-module-text);
-		}
-		&::-webkit-progress-value {
-			background: var(--gw2helper-module-text);
-		}
-		&::-webkit-progress-bar {
-			background: var(--gw2helper-module-dark);
-		}
-	}
-
-	article {
-		display: flex;
-		flex-flow: column nowrap;
-		row-gap: 0.6em;
-	}
-</style>

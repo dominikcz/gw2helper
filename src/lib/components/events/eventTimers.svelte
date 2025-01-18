@@ -8,6 +8,7 @@
 	import EventTimerItem from './eventTimerItem.svelte';
 	import EventTimerTime from './eventTimerTime.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import utils from '$lib/utils';
 
 	/** @type {{showEventTimes?: boolean, showChatLinks?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean, updateInterval?: number}} */
 	let { showEventTimes = true, showChatLinks = false, showCategories = true, showHeadings = true, autoScroll = false, updateInterval = 10 } = $props();
@@ -21,7 +22,10 @@
 	let dt0 = $state();
 	let oldTime = 0;
 
-	onMount(() => {
+	let categoriesState = {};
+
+	onMount(async () => {
+		categoriesState = await utils.readEventTimerCategories();
 		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 	});
 
@@ -31,6 +35,7 @@
 			oldTime = currTime.value;
 		}
 	});
+
 	function updatePointerPos(firstRun = false) {
 		dt0 = eventsUtils.getDt0();
 		if (!eventsRef) return;
@@ -58,6 +63,18 @@
 			}
 		}
 	}
+
+	function hndCatToggle(cat, ev){
+		// console.log('hndCatToggle', cat, ev.newState);
+		categoriesState[cat] = ev.newState == "open";
+		utils.saveEventTimerCategories(categoriesState);
+	}
+
+	function getCatState(cat){
+		const state = categoriesState[cat];
+		if (state == undefined) return true;
+		return state;
+	}
 </script>
 
 <div class="event-timer" bind:this={eventsRef}>
@@ -70,11 +87,8 @@
 		<EventTimerTime {dt0} />
 	</div>
 
-	{#each eventsUtils.getEntries(dt0) as [cat, eventsList]}
+	{#snippet category(eventsList)}
 		<div class="category" class:no-headings={!showHeadings}>
-			{#if showCategories}
-				<h3>{cat}</h3>
-			{/if}
 			{#each eventsList as event}
 				{#if showHeadings}
 					{#if event.link}
@@ -88,6 +102,17 @@
 				<EventTimerItem {event} {showChatLinks} {showEventTimes} darkMode={$darkMode} />
 			{/each}
 		</div>
+	{/snippet}
+
+	{#each eventsUtils.getEntries(dt0) as [cat, eventsList]}
+		{#if showCategories}
+			<details class="secondary" open={getCatState(cat)} ontoggle={(ev) => hndCatToggle(cat, ev)}>
+				<summary>{cat}</summary>
+				{@render category(eventsList)}
+			</details>
+		{:else}
+			{@render category(eventsList)}
+		{/if}
 	{/each}
 
 	<div class="category time-container bottom" class:no-headings={!showHeadings}>
@@ -95,7 +120,11 @@
 	</div>
 </div>
 
-<style lang="scss" global>
+<style lang="scss">
+	details {
+		width: 100%;
+		min-width: 75em;
+	}
 	.event-timer {
 		// position: relative;
 		display: flex;
@@ -108,11 +137,6 @@
 		margin-bottom: 1em;
 		width: 100%;
 		min-width: 75em;
-		h3 {
-			background-color: var(--gw2helper-module-dark);
-			padding: 0.3em 0.6em;
-			margin: 0 0 0.3125em 0;
-		}
 	}
 	.heading {
 		padding: 0.6em 0.6em;
@@ -172,38 +196,6 @@
 		&.compact {
 			min-height: auto;
 			height: 1.6em;
-			.event {
-				margin: 0;
-				padding: 0.3em 0 0.3em 0.4em;
-			}
-		}
-		.event {
-			display: flex;
-			flex-flow: column nowrap;
-			padding: 0.3125em;
-			// word-break: break-all;
-			overflow-wrap: break-word;
-
-			// height: 4em;
-			// overflow: hidden;
-			// text-overflow: clip;
-
-			&.real {
-				border-left: 1px solid rgba(255, 255, 255, 0.3);
-			}
-			a {
-				color: var(--gw2helper-link-color);
-			}
-		}
-		&.time {
-			position: sticky;
-			top: 0;
-			background-color: var(--gw2helper-module-white);
-			z-index: 1;
-			.event {
-				border-left: 1px solid var(--gw2helper-module-dark);
-				color: var(--gw2helper-module-text);
-			}
 		}
 	}
 
@@ -232,22 +224,16 @@
 			grid-template-rows: minmax(3em, fit-content);
 			gap: 0 0;
 			grid-auto-rows: minmax(3em, fit-content);
-			h3 {
-				grid-column: span 2;
-			}
 			.heading {
 				grid-column: 1;
 				margin-bottom: 0.3125em;
 			}
-			.event-bar {
+			:global(.event-bar) {
 				grid-column: 2;
 			}
 			&.no-headings {
 				grid-template-columns: 1fr;
-				.event-bar {
-					grid-column: 1;
-				}
-				h3 {
+				:global(.event-bar) {
 					grid-column: 1;
 				}
 			}

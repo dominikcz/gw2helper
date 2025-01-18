@@ -14,3 +14,30 @@
         </div>
     {/each}
 </div>
+
+<style lang="scss">
+	.event-bar {
+		position: relative;
+		display: flex;
+		flex-flow: row nowrap;
+		min-height: 3em;
+		min-width: 75em;
+		margin-bottom: 0.3125em;
+		color: #222;
+		&.compact {
+			min-height: auto;
+			height: 1.6em;
+		}
+		&.time {
+			position: sticky;
+			top: 0;
+			background-color: var(--gw2helper-module-white);
+			z-index: 1;
+			.event {
+				border-left: 1px solid var(--gw2helper-module-dark);
+				color: var(--gw2helper-module-text);
+			}
+		}
+	}
+
+</style>

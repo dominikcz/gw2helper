@@ -5,6 +5,7 @@ import {
     KEY_NAME,
     KEY_HIST,
     EVENT_TIMER_SETTINGS,
+    EVENT_TIMER_CATEGORIES,
     ACHIEVEMENTS_SETTINGS,
     ACHIEVEMENTS_TODO,
     WALLET_SETTINGS,
@@ -66,6 +67,14 @@ async function readEventTimerSettings() {
 
 async function saveEventTimerSettings(settings) {
     return await idb.set(EVENT_TIMER_SETTINGS, settings);
+}
+
+async function readEventTimerCategories() {
+    return await idb.getObject(EVENT_TIMER_CATEGORIES, {});
+}
+
+async function saveEventTimerCategories(settings) {
+    return await idb.set(EVENT_TIMER_CATEGORIES, settings);
 }
 
 async function readAchievementsSettings() {
@@ -185,6 +194,8 @@ export default {
     getKeyHist,
     readEventTimerSettings,
     saveEventTimerSettings,
+    readEventTimerCategories,
+    saveEventTimerCategories,
     readAchievementsSettings,
     saveAchievementsSettings,
     readAchievementsToDo,

@@ -57,7 +57,7 @@
 
 <style lang="scss">
 	.event {
-		max-width: 20em;
+		max-width: 24em;
 		display: flex;
 		flex-flow: column nowrap;
 		padding: 0.5em;
@@ -100,7 +100,7 @@
 
 	@media (min-width: 40em) {
 		.event {
-			width: 21em;
+			width: 24em;
 		}
 	}
 </style>

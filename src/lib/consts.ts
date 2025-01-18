@@ -6,6 +6,7 @@ export const ITEMS_CACHE = "dominikcz/gw2helper.items_cache";
 export const ACHIEVEMENTS_CACHE = "dominikcz/gw2helper.achievements_cache";
 export const KEY_HIST = 'dominikcz/gw2helper.apiKeys';
 export const EVENT_TIMER_SETTINGS = 'dominikcz/gw2helper.event_timer_settings';
+export const EVENT_TIMER_CATEGORIES = 'dominikcz/gw2helper.event_timer_categories';
 export const ACHIEVEMENTS_SETTINGS = 'dominikcz/gw2helper.achievements_settings';
 export const ACHIEVEMENTS_TODO = 'dominikcz/gw2helper.achievements_todo';
 export const WALLET_SETTINGS = 'dominikcz/gw2helper.wallet_settings';

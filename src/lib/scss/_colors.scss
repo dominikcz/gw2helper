@@ -47,6 +47,7 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 :root {
 	/* Colors */
+	--body-background: #bbb;
 
 	--rarity-junk: #{$junk};
 	--rarity-basic: #{$basic};
@@ -80,6 +81,10 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--nav-active: #fff;
 }
 
+body {
+	background-color: var(--body-background);
+}
+
 .karma {
 	color: #d93cd9;
 }
@@ -98,7 +103,7 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		/* Colors */	
+		/* Colors */
 		--gw2helper-module: #484E51;
 		--gw2helper-module-text: rgb(232, 230, 227);
 		--gw2helper-module-dark: #2E3234;
@@ -118,8 +123,6 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		--gw2helper-locked: #00000050;
 
 		// --rarity-rare: #fcd00bdd;
-	}
-	body{
-		background-color: #2C2F31
+		--body-background: #2C2F31;
 	}
 }

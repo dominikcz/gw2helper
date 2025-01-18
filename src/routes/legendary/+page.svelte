@@ -6,6 +6,7 @@
 	import Legendary from '$lib/components/items/legendary.svelte';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { sum } from '$lib/utils';
+	import Progress from '$lib/components/progress/progress.svelte';
 
 	interface Props {
 		data: any;
@@ -66,9 +67,9 @@
 
 	function completionWeapons(data) {
 		let completed = 0;
-		Object.keys(minReqWeapons).forEach(x => {
+		Object.keys(minReqWeapons).forEach((x) => {
 			completed += Math.min(minReqWeapons[x], sum(data[x], 'count'));
-		})
+		});
 		return completed;
 	}
 
@@ -101,8 +102,7 @@
 			<summary
 				>{caption}
 				<div class="info">
-					<progress value={progressArmor} max={6}></progress>
-					<span>{progressArmor} / 6</span>
+					<Progress value={progressArmor} max={6} label={`${progressArmor} / 6`} />
 				</div>
 			</summary>
 			<article>
@@ -127,8 +127,7 @@
 			<summary>
 				{$_('legendary.trinkets')}
 				<div class="info">
-					<progress value={progressTrinkets} max={5}></progress>
-					<span>{`${progressTrinkets} / 5`}</span>
+					<Progress value={progressTrinkets} max={5} label={`${progressTrinkets} / 5`} />
 				</div>
 			</summary>
 			<article>
@@ -143,8 +142,7 @@
 			<summary>
 				{$_('legendary.upgrades')}
 				<div class="info">
-					<progress value={progressUpgrades} max={3}></progress>
-					<span>{progressUpgrades} / 3</span>
+					<Progress value={progressUpgrades} max={3} label={`${progressUpgrades} / 3`} />
 				</div>
 			</summary>
 			<article>
@@ -163,13 +161,12 @@
 			<summary>
 				{$_('legendary.weapons')}
 				<div class="info">
-					<progress value={progressWeapons} max={24}></progress>
-					<span>{progressWeapons} / 24</span>
+					<Progress value={progressWeapons} max={24} label={`${progressWeapons} / 24`} />
 				</div>
 			</summary>
 			<article>
 				{#each Object.keys(minReqWeapons) as x}
-					{@render unlocksList(x, result.weapons[x], minReqWeapons[x])}	
+					{@render unlocksList(x, result.weapons[x], minReqWeapons[x])}
 				{/each}
 			</article>
 		</details>
@@ -177,63 +174,6 @@
 </Awaiter>
 
 <style lang="scss">
-	details {
-		display: flex;
-		flex-flow: column wrap;
-		gap: 1em;
-		margin: 0;
-		background-color: var(--gw2helper-module);
-		summary {
-			display: flex;
-			flex-flow: row nowrap;
-			column-gap: 0.6em;
-			justify-content: flex-start;
-			align-items: center;
-			&::before {
-				content: '\25b6';
-				transition: 0.2s;
-			}
-			.info {
-				display: flex;
-				flex-flow: column nowrap;
-				justify-content: end;
-				align-items: end;
-				flex-grow: 1;
-				@media screen and (min-width: 30em) {
-					flex-flow: row nowrap;
-					column-gap: 1em;
-					justify-content: end;
-					align-items: center;
-				}
-			}
-		}
-		&[open] summary::before {
-			transform: rotate(90deg);
-		}
-	}
-	progress[value] {
-		height: 1em;
-		width: 8em;
-		border: none;
-		color: var(--gw2helper-module-text) !important;
-		background-color: var(--gw2helper-module-dark);
-		&::-moz-progress-bar {
-			background: var(--gw2helper-module-text);
-		}
-		&::-webkit-progress-value {
-			background: var(--gw2helper-module-text);
-		}
-		&::-webkit-progress-bar {
-			background: var(--gw2helper-module-dark);
-		}
-	}
-
-	article {
-		display: flex;
-		flex-flow: row wrap;
-		gap: 0.6rem;
-	}
-
 	.equip {
 		background-color: var(--gw2helper-locked);
 		padding: 1rem;
@@ -247,6 +187,14 @@
 		display: flex;
 		flex-flow: row wrap;
 		gap: 0.625em;
+	}
+
+	@media (min-width: 480px) {
+		article {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 0.6rem;
+		}
 	}
 
 	@media (min-width: 900px) {

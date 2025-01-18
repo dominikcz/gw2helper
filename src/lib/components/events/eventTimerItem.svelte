@@ -66,6 +66,15 @@
 		justify-content: space-between;
 		align-items: center;
 	}
+	.event-bar {
+		position: relative;
+		display: flex;
+		flex-flow: row nowrap;
+		min-height: 3em;
+		min-width: 75em;
+		margin-bottom: 0.3125em;
+		color: #222;
+	}
 
 	.event-time {
 		font-size: 80%;
@@ -75,5 +84,23 @@
 	}
 	.chatlink {
 		font-size: 80%;
+	}
+	.event {
+		display: flex;
+		flex-flow: column nowrap;
+		padding: 0.3125em;
+		// word-break: break-all;
+		overflow-wrap: break-word;
+
+		// height: 4em;
+		// overflow: hidden;
+		// text-overflow: clip;
+
+		&.real {
+			border-left: 1px solid rgba(255, 255, 255, 0.3);
+		}
+		a {
+			color: var(--gw2helper-link-color);
+		}
 	}
 </style>

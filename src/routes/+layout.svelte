@@ -214,43 +214,41 @@
 			</main>
 		{/if}
 
-		<section>
-			<details open={!tokenInfo.name} class="secondary">
-				<summary>{$_('layout.api_settings')}</summary>
-				<fieldset class="api-settings">
-					<legend>{$_('layout.api_settings')}</legend>
-					<p>
-						{@html $_('layout.api_key_required')}
-					</p>
-					<label for="api-key">{$_('layout.your_api_key')}</label>
-					<SearchInput
-						name="api-key"
-						id="api-key"
-						class="apikey"
-						placeholder={$_('layout.paste_your_api_key_here')}
-						bind:value={apiKey}
-						options={data.apiKeyHist}
-					/>
-					<label for="api-lang">{$_('layout.api_language')}</label>
-					<select name="api-lang" id="api-lang" bind:value={apiLang}>
-						{#each Object.entries(apiLanguages) as [key, label]}
-							<option value={key}>{label}</option>
-						{/each}
-					</select>
-					<p>
-						<button onclick={() => saveApiSettings()}>{$_('layout.apply')}</button>
-						<button onclick={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
-						<button onclick={refresh}>{$_('layout.clear_cache')}</button>
-					</p>
-					{#if tokenInfo.name}
-						<p><em>{$_('layout.token_ok', { token: tokenInfo.name })}</em></p>
-					{/if}
-					{#if tokenInfo.error}
-						<p><em>{@html tokenInfo.error}</em></p>
-					{/if}
-				</fieldset>
-			</details>
-		</section>
+		<details open={!tokenInfo.name} class="secondary" >
+			<summary>{$_('layout.api_settings')}</summary>
+			<fieldset class="api-settings">
+				<legend>{$_('layout.api_settings')}</legend>
+				<p>
+					{@html $_('layout.api_key_required')}
+				</p>
+				<label for="api-key">{$_('layout.your_api_key')}</label>
+				<SearchInput
+					name="api-key"
+					id="api-key"
+					class="apikey"
+					placeholder={$_('layout.paste_your_api_key_here')}
+					bind:value={apiKey}
+					options={data.apiKeyHist}
+				/>
+				<label for="api-lang">{$_('layout.api_language')}</label>
+				<select name="api-lang" id="api-lang" bind:value={apiLang}>
+					{#each Object.entries(apiLanguages) as [key, label]}
+						<option value={key}>{label}</option>
+					{/each}
+				</select>
+				<p>
+					<button onclick={() => saveApiSettings()}>{$_('layout.apply')}</button>
+					<button onclick={() => deleteApiKey()}>{$_('layout.forget_stored_key')}</button>
+					<button onclick={refresh}>{$_('layout.clear_cache')}</button>
+				</p>
+				{#if tokenInfo.name}
+					<p><em>{$_('layout.token_ok', { token: tokenInfo.name })}</em></p>
+				{/if}
+				{#if tokenInfo.error}
+					<p><em>{@html tokenInfo.error}</em></p>
+				{/if}
+			</fieldset>
+		</details>
 
 		<BackToTop>
 			<div class="waypoint" title={$_('layout.waypoint_to_top')}></div>
@@ -264,14 +262,14 @@
 
 <AutoTooltip />
 
-<style lang="scss" global>
+<style lang="scss">
 	.line {
 		display: flex;
 		flex-flow: row nowrap;
 		column-gap: 1em;
 		align-items: baseline;
 	}
-	#api-key {
+	:global(#api-key) {
 		margin: 0.4em 0;
 	}
 	em {
@@ -286,7 +284,7 @@
 		flex-flow: row nowrap;
 		align-items: center;
 		column-gap: 0.5em;
-		a{
+		a {
 			text-decoration: none;
 			color: rgb(214, 211, 205);
 		}
