@@ -23,10 +23,11 @@
 </div>
 
 <style lang="scss">
+	$height: 1.2em;
 	div {
 		padding: 0;
 		margin: 0;
-		height: 1em;
+		height: $height;
 		width: 8em;
 		position: relative;
 
@@ -35,21 +36,21 @@
             padding: 0;
             display: block;
 			width: 100%;
-            height: 1em;
+            height: $height;
 			border: none;
-			color: var(--gw2helper-module-text) !important;
-			background-color: var(--gw2helper-module-dark);
+			color: var(--gw2helper-progress-value) !important;
+			background-color: var(--gw2helper-progress-background);
 
 			&::-moz-progress-bar {
-				background: var(--gw2helper-module-text);
+				background: var(--gw2helper-progress-value);
 			}
 
 			&::-webkit-progress-value {
-				background: var(--gw2helper-module-text);
+				background: var(--gw2helper-progress-value);
 			}
 
 			&::-webkit-progress-bar {
-				background: var(--gw2helper-module-dark);
+				background: var(--gw2helper-progress-background);
 			}
 		}
 		span {
@@ -57,7 +58,7 @@
 			top: 0;
 			left: 0;
 
-            mix-blend-mode: difference;
+            mix-blend-mode: exclusion;
 			font-size: 80%;
 
             white-space: nowrap;
@@ -65,8 +66,9 @@
             overflow: hidden;
 
 			width: 100%;
-            line-height: 1.25em;
+            line-height: $height+0.25em;
             text-align: center;
+			color:var(--gw2helper-progress-text);
 		}
 	}
 </style>
