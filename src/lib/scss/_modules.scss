@@ -23,8 +23,18 @@ details {
         font-size: 110%;
 
         &::before {
-            content: '\25b6';
+            // chevron from unicode char
+            content: '►';
             transition: 0.2s;
+
+            // chevron from borders
+            // content: ' ';
+            // display: inline-block;
+            // border-style: solid;
+            // border-width: 0 0.12rem 0.12rem 0;
+            // width: 0.4rem;
+            // height: 0.4rem;
+            // transform: rotate(-45deg);
         }
 
         .info {
@@ -48,6 +58,7 @@ details {
     }
 
     &[open] summary::before {
+        // for chevron from borders: transform: rotate(45deg);
         transform: rotate(90deg);
     }
 
