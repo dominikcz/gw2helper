@@ -12,6 +12,7 @@
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import { expandToDoList } from '$lib/components/achievements/achievements.js';
+	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 
 	interface Props {
 		data: any;
@@ -97,10 +98,7 @@
 <Awaiter promise={data.account} >
 	{#snippet children(result)}
 	{#if !currentDay(result.last_modified)}
-	<div class="info-block">
-		<h4>{ $_('daily.info.hint') }</h4>
-		<p>{ $_('daily.info.hint-content') }</p>
-	</div>
+	<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
 	{/if}
 	{/snippet}
 </Awaiter>

@@ -24,6 +24,37 @@ const unique = function (tab) {
     });
 };
 
+const REQUIRED_SCOPES = {
+    "/v2/account": ['account' /*, 'progression' */],
+    "/v2/account/achievements": ['account', 'progression'],
+    "/v2/account/bank": ['account', 'inventories'],
+    "/v2/account/inventory": ['account', 'inventories'],
+    "/v2/account/legendaryarmory": ['account', 'inventories', 'unlocks'],
+    "/v2/account/materials": ['account', 'inventories'],
+    "/v2/account/wallet": ['account', 'wallet'],
+    "/v2/account/wizardsvault/*": ['account', 'progression'],
+    "/v2/characters": ['account', 'characters'],
+    "/v2/commerce": ['account', 'tradingpost'],
+    "/v2/guild/*": ['account', 'guilds'],
+}
+
+function getScopes(req) {
+    if (REQUIRED_SCOPES[req]) return REQUIRED_SCOPES[req];
+    const rs = Object.keys(REQUIRED_SCOPES).find(x => req.startsWith(x.replace('*', '')));
+    return rs ? REQUIRED_SCOPES[rs] : [];
+}
+
+interface ScopeError extends Error {
+    missingScopes: string[]
+}
+
+function ScopeError(missingScopes: string[]) {
+    const error = new Error("Missing permissions: " + missingScopes.join(', ')) as ScopeError;
+    error.name = "ScopeError";
+    error.missingScopes = missingScopes
+    return error;
+}
+
 const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 
 const ignoreCache = getQueryStringFlag('ignore-cache');
@@ -37,11 +68,23 @@ interface CacheEntry {
     data: object;
 }
 
+interface TokenInfo {
+    id: string;
+    name: string;
+    permissions: string[];
+    missingScopes: string[];
+}
+
 let _items;
 let _achievements;
 let itemsCache;
 let achievementsCache;
 let requestCache: Map<string, CacheEntry>;
+let _tokenInfo: TokenInfo = {
+    id: '',
+    name: '',
+    permissions: []
+};
 
 let _apiKey = "";
 let fetchOptions = {
@@ -102,6 +145,11 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     if (!_apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
         return null;
+    }
+    let missingScopes = getScopes(req).filter(x => !_tokenInfo.permissions.includes(x));
+    if (missingScopes.length) {
+        _tokenInfo.missingScopes.push(...missingScopes);
+        throw ScopeError(missingScopes)
     }
     query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
@@ -220,7 +268,7 @@ const _getTransactions = async (_transactions: any) => {
 }
 
 const transactionsCurrent = async () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         Promise.all([
             apiClient("/v2/commerce/transactions/current/buys", ""),
             apiClient("/v2/commerce/transactions/current/sells", "")
@@ -231,19 +279,18 @@ const transactionsCurrent = async () => {
                     buys: _buysExp,
                     sells: _sellsExp,
                 });
-            });
+            }).catch(error => reject(error));
 
 
-        });
+        }).catch(error => reject(error));
     });
 
 }
 
-
 const _getGuilds = async (full: boolean = false) => {
     return promiseMe(apiClient("/v2/account", ""), async (account) => {
         // concat and remove duplicates
-        const _guilds = [...new Set([...account.guild_leader, ...account.guilds])];
+        const _guilds = [...new Set([...(account.guild_leader || []), ...account.guilds])];
 
         let tasks = [];
         for (const guild of _guilds) {
@@ -335,7 +382,7 @@ const items = (x: string) => {
 };
 
 const legendaries = async (x: string) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         Promise.all([
             apiClient("/v2/legendaryarmory", `ids=all`),
             apiClient("/v2/account/legendaryarmory", ``)
@@ -359,7 +406,7 @@ const legendaries = async (x: string) => {
             const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             // console.log('weapons', weapons)
             resolve({ armor, trinkets, back, upgrades, weapons });
-        });
+        }).catch(error => reject(error));
     });
 };
 
@@ -368,14 +415,11 @@ const prices = (x: string) => {
 };
 
 const account = () => {
-    return new Promise((resolve) => {
-        Promise.all([apiClient("/v2/account", `v=${SCHEMA_VERSION}`), wallet()]).then(([_acc, _wal]) => {
-            // console.log('acc', {_acc, _wal})
-            _acc.created_local = new Date(_acc.created).toLocaleString();
-            _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
-
-            resolve(_acc)
-        });
+    return promiseMe(apiClient("/v2/account", `v=${SCHEMA_VERSION}`), _acc => {
+        // console.log('acc', {_acc, _wal})
+        _acc.created_local = new Date(_acc.created).toLocaleString();
+        _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
+        return _acc;
     });
 };
 
@@ -397,14 +441,14 @@ const bank = async () => {
     });
 };
 
-const tokenInfo = async () => {
+const tokenInfo = async (): Promise<TokenInfo> => {
     return apiClient("/v2/tokeninfo", "").catch(reason => {
         console.log('reason', reason)
     });
 };
 
 const achievements = async (all: boolean = false) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         Promise.all([
             apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
             apiClient("/v2/account", ""),
@@ -416,7 +460,7 @@ const achievements = async (all: boolean = false) => {
                     delete x.bits;
                 });
                 resolve(expandAchievements(account, categories, account_achievements, allIds));
-            });
+            }).catch(error => reject(error));
     });
 };
 
@@ -454,9 +498,11 @@ const currencies = async (order = []) => {
 }
 
 const wallet = async (order = []) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
             resolve(mergeById(_curr, _wallet));
+        }).catch(error => {
+            reject(error);
         });
     });
 }
@@ -470,7 +516,7 @@ const promiseMe = async (APromise: Promise<any>, job) => {
             } else {
                 reject();
             }
-        });
+        }).catch(error => reject(error));
     });
 };
 
@@ -517,6 +563,8 @@ const init = async (newApiKey: string, options?: object) => {
     const _req = await ls.getObject(requestCacheName(), []);
 
     requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
+    _tokenInfo = await tokenInfo();
+    // console.log('tokenInfo', _tokenInfo)
 };
 
 const mergeById = (a1, a2) => {
@@ -648,7 +696,7 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         name: "__MISSING__",
         description: "Achievements with no category",
         icon: "/gw2helper/assets/rewards/Daily_Achievement.png",
-        achievements: noCategory.map(x => ({id: x}))
+        achievements: noCategory.map(x => ({ id: x }))
     });
 
     categories.forEach(cat => {
@@ -700,10 +748,10 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         });
         // missing 
         if (cat.id == 0) {
-            console.log('missing...')
+            // console.log('missing...')
             // remove daily and weekly from missing achievements
             cat.achievements = cat.achievements.filter(x => !(x.flags.includes('Daily') || x.flags.includes('Weekly')));
-            console.log('missing', cat.achievements)
+            // console.log('missing', cat.achievements)
         }
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
@@ -793,7 +841,6 @@ export default {
     account,
     guildItems,
     materials,
-    tokenInfo,
     achievements,
     guilds,
     currencies,
@@ -806,4 +853,8 @@ export default {
     wizardsVaultSpecial,
     transactionsCurrent,
     legendaries,
+    startSession: () => {
+        _tokenInfo.missingScopes = [];
+    },
+    tokenInfo: () => _tokenInfo,
 };

@@ -161,24 +161,6 @@ details {
     margin: 0 0 1em 0;
 }
 
-.info-block {
-    margin: 1em 0;
-    color: var(--gw2helper-module-text);
-    border-color: var(--gw2helper-info);
-    border-radius: 0.3125em;
-    background: url(/gw2helper/assets/Report_icon.png) 0.5em center no-repeat;
-    background-color: var(--gw2helper-info);
-
-    h4 {
-        margin: 0.5em 0.6em 0 3em;
-    }
-
-    p {
-        margin: 0.3em 0.6em 0.5em 3em;
-        padding: 0;
-    }
-}
-
 @media (min-width: 420px) {
     .widget {
         width: 13.75em;

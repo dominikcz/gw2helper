@@ -170,19 +170,19 @@
 	let active = $derived($page.url.pathname);
 	let title = $derived([defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
-		{ slug: `${base}/`, label: $_('layout.nav.home'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/events/`, label: $_('layout.nav.events'), visible: true },
-		{ slug: `${base}/items/`, label: $_('layout.nav.items'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), visible: tokenInfo.permissions.includes('inventories') },
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/account/`, label: $_('layout.nav.account'), visible: tokenInfo.permissions.includes('account') },
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), visible: tokenInfo.permissions.includes('characters') },
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), visible: tokenInfo.permissions.includes('guilds') },
-		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), visible: tokenInfo.permissions.includes('progression') },
-		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), visible: tokenInfo.permissions.includes('unlocks') },
+		{ slug: `${base}/`, label: $_('layout.nav.home')},
+		{ slug: `${base}/daily/`, label: $_('layout.nav.daily')},
+		{ slug: `${base}/events/`, label: $_('layout.nav.events')},
+		{ slug: `${base}/items/`, label: $_('layout.nav.items') },
+		{ slug: `${base}/materials/`, label: $_('layout.nav.materials') },
+		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements') },
+		{ slug: `${base}/account/`, label: $_('layout.nav.account') },
+		{ slug: `${base}/characters/`, label: $_('layout.nav.characters') },
+		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds') },
+		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post') },
+		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary') },
 	]);
-	let currentPageVisible = $derived(devMode || navigation.find((x) => x.slug == active)?.visible || false);
+	
 	$effect(() => {
 		onTimeChange();
 	});
@@ -208,7 +208,14 @@
 		</header>
 		<Navigation items={navigation} {active} />
 
-		{#if currentPageVisible}
+		{#if data.missingScopes}
+			<h2>Your token is missing the following scopes:</h2>
+			<ul>
+				{#each missingScopes as scope}
+					<li>{scope}</li>				
+				{/each}
+			</ul>
+		{:else}
 			<main>
 				{@render children?.()}
 			</main>

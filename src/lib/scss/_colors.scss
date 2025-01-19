@@ -72,6 +72,7 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 	--gw2helper-link-color: blue;
 	--gw2helper-info: #bae8a2;
+	--gw2helper-error: #cc6363;
 
 	--toastBackground: var(--gw2helper-info);
 	--toastColor: var(--gw2helper-module-text);
@@ -80,7 +81,7 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--gw2helper-locked: #00000050;
 
 	--gw2helper-progress-value: #333;
-	--gw2helper-progress-background: #aaa;
+	--gw2helper-progress-background: #eee;
 	--gw2helper-progress-text: #fff; // regardless of color theme!
 
 	--nav-bg: #222;
@@ -119,7 +120,8 @@ body {
 		--gw2helper-module-shadow: #{$box-shadow};
 		--gw2helper-module-shadow-hover: #{$box-shadow-hover};
 		--gw2helper-info: #47703e;
-	
+		--gw2helper-error: #cc2626;
+
 		--gw2helper-link-color: #fff;
 
 		--nav-active: #e8e6e3;

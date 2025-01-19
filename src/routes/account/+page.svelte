@@ -6,21 +6,28 @@
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 	import { base } from '$app/paths';
 	import { t as _ } from '$lib/services/i18n.js';
+	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		data: any;
 	}
 
 	let { data }: Props = $props();
+	let perm = $state([]);
 
 	function has(account, content: string): boolean {
 		return account.access.includes(content);
 	}
+
+	onMount(async () => {
+		perm = await data.tokenInfo.permissions;
+	})
 </script>
 
 <h1>{$_('account.account_info')}</h1>
 
-<Awaiter promise={data.account} >
+<Awaiter promise={data.account}>
 	{#snippet children(result)}
 		<h3>{result.name}</h3>
 		<ul>
@@ -109,9 +116,13 @@
 			{/if}
 		</WidgetsGroup>
 
-		<WidgetsGroup name={$_('account.levels')}>
-			<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image="{base}/assets/rewards/Daily_Fractals.png" />
-			<WidgetInfo title="WvW" value={result.wvw_rank} image="{base}/assets/rewards/WvW_Ability_Point.png" />
-		</WidgetsGroup>
+		{#if perm.includes('progression')}
+			<WidgetsGroup name={$_('account.levels')}>
+				<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image="{base}/assets/rewards/Daily_Fractals.png" />
+				<WidgetInfo title="WvW" value={result.wvw_rank} image="{base}/assets/rewards/WvW_Ability_Point.png" />
+			</WidgetsGroup>
+		{:else}
+			<InfoBlock caption={$_('account.info.hint')}>{@html $_('account.info.hint-content')}</InfoBlock>
+		{/if}
 	{/snippet}
 </Awaiter>

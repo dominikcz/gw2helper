@@ -8,6 +8,9 @@ end_of_dragons: End Of Dragons
 fractals: Fractals
 heart_of_thorns: Heart Of Thorns
 hours_played: Hours played
+info:
+  hint: Hint
+  hint-content: If you want to see more make sure your token has <strong>progression</strong> permission
 janthir_wilds: Janthir Wilds
 last_change: 'Last change:'
 levels: Levels

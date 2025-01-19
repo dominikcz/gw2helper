@@ -24,8 +24,8 @@
 <div class="widget" style={getImageStyle()} {...rest}>
 	<div class="title">{title}</div>
 	<div class="value">
-		{#if children}{@render children({ value, })}{:else}
-			{value}
+		{#if children}{@render children({ value })}{:else}
+			{@html value || '&nbsp;'}
 		{/if}
 	</div>
 </div>

@@ -67,19 +67,16 @@
 			scrollRight();
 		}
 	}
-
 </script>
 
 <svelte:window onresize={hndScroll} />
 
-<nav id="main-nav" bind:this={navRef} onscroll={hndScroll} >
+<nav id="main-nav" bind:this={navRef} onscroll={hndScroll}>
 	{#if showScrollButtons && navLeftVisible}
 		<a class="nav-btn left" href={'#'} onclick={navLeft} onkeydown={navLeft} role="button" tabindex="0"><ArrowBack /></a>
 	{/if}
 	{#each items as item, i}
-		{#if !!item.visible}
-			<a href={item.slug} data-sveltekit-preload-data="tap" class:active={active == item.slug}>{item.label}</a>
-		{/if}
+		<a href={item.slug} data-sveltekit-preload-data="tap" class:active={active == item.slug}>{item.label}</a>
 	{/each}
 	{#if showScrollButtons && navRightVisible}
 		<a class="nav-btn right" href={'#'} onclick={navRight} onkeydown={navRight} role="button" tabindex="0"><ArrowForward /></a>

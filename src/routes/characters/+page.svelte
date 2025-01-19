@@ -41,7 +41,7 @@
 		{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
 			{@const days = helperUtils.tillBirthday(char.created)}
 			{@const gender = char.gender.toLowerCase()}
-			<details use:grungeBorder>
+			<details use:grungeBorder open>
 				<summary>{char.name}</summary>
 				<article class="character">
 					<section>

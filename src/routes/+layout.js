@@ -21,20 +21,13 @@ export async function load({ fetch, url }) {
 
 	const key = await utils.readApiKey();
 	// const apiService = await import("$lib/apiService.ts");
-	const dummyTokenInfo = {
-		name: null,
-		permissions: [],
-		error: no_token,
-	};
 	let apiLang = await utils.readApiLang();
 	const apiKeyHist = await utils.getKeyHist();
-	let tokenInfo = dummyTokenInfo;
 
 	const returnObj = {
 		version: __VERSION__,
 		apiKey: key,
 		apiKeyHist,
-		tokenInfo,
 		apiService,
 		apiLang,
 		toDoList: utils.readAchievementsToDo(),
@@ -43,23 +36,19 @@ export async function load({ fetch, url }) {
 
 	console.log('key', key);
 	if (key) {
-		await apiService.init(key, { apiLang, fetchFunction: fetch });
 		try {
-			tokenInfo = await apiService.tokenInfo();
-			// console.log('tokenInfo', tokenInfo);
-
-			if (!tokenInfo.name) {
-				if (tokenInfo) {
-					returnObj.tokenInfo.error = tokenInfo;
-					returnObj.reminders = {};
-				}
+			await apiService.init(key, { apiLang, fetchFunction: fetch });
+			returnObj.tokenInfo = apiService.tokenInfo();
+			if (!returnObj.tokenInfo.name) {
+				returnObj.tokenInfo.error = no_token;
+				returnObj.reminders = {};
 			} else {
-				returnObj.tokenInfo = tokenInfo;
+				apiService.startSession();
 				returnObj.reminders = await utils.readReminders();
 			}
 		} catch (error) {
-			console.log('Layout load error', error)
+			console.warn('Layout load error', error)
 		}
-	} 
+	}
 	return returnObj;
 }
