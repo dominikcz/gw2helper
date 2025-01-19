@@ -29,7 +29,7 @@
 	</div>
 </div>
 
-<style lang="scss" global>
+<style lang="scss">
 	.item-descr {
 		width: 100%;
 		height: fit-content;
@@ -37,7 +37,8 @@
 		flex-flow: column nowrap;
 		margin: 0;
 		padding: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.8);
+		color: rgba(255, 255, 255, 0.85);
         padding: 0 0.4em 0.4em 0;
 		.head {
 			display: flex;

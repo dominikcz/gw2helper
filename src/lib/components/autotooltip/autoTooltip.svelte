@@ -296,8 +296,8 @@
 	div {
 		border: 1px solid #ddd;
 		box-shadow: var(--box-shadow-strong);
-		background: var(--gw2helper-module-white);
-		color: var(--gw2helper-module-text);
+		background: var(--gw2helper-tooltip-background);
+		color: var(--gw2helper-tooltip-text);
 		border-radius: 0.3125em;
 		padding: 0.625em;
 		position: absolute;
@@ -338,6 +338,7 @@
 		}
 	}
 	:global(.autotooltip-link) {
+		color: skyblue;
 		font-size: smaller;
 		cursor: help;
 	}

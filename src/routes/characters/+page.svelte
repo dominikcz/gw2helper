@@ -25,7 +25,7 @@
 	}
 
 	function iconScale(createdAt) {
-		return 28 + ((365 - helperUtils.tillBirthday(createdAt)) / 365) * 100;
+		return Math.round(28 + ((365 - helperUtils.tillBirthday(createdAt)) / 365) * 100)+"px";
 	}
 
 	function deathsPerHour(char) {
@@ -41,46 +41,52 @@
 		{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
 			{@const days = helperUtils.tillBirthday(char.created)}
 			{@const gender = char.gender.toLowerCase()}
-			<article class="character" use:grungeBorder>
-				<h2>{char.name}</h2>
-				<section>
-					<h4>{char.profession} lvl. {char.level}</h4>
-					<div class="sect-img" style="background-image: url({professionIcon(char.profession)});"></div>
-					<div class="sect-info">
-						<div class="info">{char.gender} {char.race}</div>
-						{#if char.crafting}
-							<ul class="info icons">
-								{#each char.crafting as craft}
-									<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
-								{:else}
-									<li class="no-results">{$_('characters.no_crafting_professions')}</li>
-								{/each}
-							</ul>
-						{/if}
-						<div class="info">{$_('characters.hours_played')}</div>
-						<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
-					</div>
-				</section>
-				<section>
-					<div
-						class="sect-img"
-						style="background-image: url({icon('Present_quaggan_icon.png')}); background-size: {iconScale(char.created)}px;"
-					></div>
-					<div class="sect-info">
-						<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) })}</div>
-						<div class="info">{$_('characters.next_birthday_in')}</div>
-						<div class="counter">{days} <span class="info">{$_('characters.days', { days })}</span></div>
-					</div>
-				</section>
-				<section>
-					<div class="sect-img" style="background-image: url({icon('Grave_Finisher.png')});"></div>
-					<div class="sect-info">
-						<div class="info">{$_('characters.died', { gender })}</div>
-						<div class="counter">{char.deaths} <span class="info">{$_('characters.times', { times: char.deaths })}</span></div>
-						<div class="info">({deathsPerHour(char)}/h)</div>
-					</div>
-				</section>
-			</article>
+			<details use:grungeBorder>
+				<summary>{char.name}</summary>
+				<article class="character">
+					<section>
+						<div class="sect-prof">
+							<span>{char.profession}</span>
+							<img src={professionIcon(char.profession)} alt={char.profession} />
+							<span>lvl. {char.level}</span>
+						</div>
+						<div class="sect-info">
+							<div class="info">{char.gender} {char.race}</div>
+							{#if char.crafting}
+								<ul class="info icons">
+									{#each char.crafting as craft}
+										<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
+									{:else}
+										<li class="no-results">{$_('characters.no_crafting_professions')}</li>
+									{/each}
+								</ul>
+							{/if}
+							<div class="info">{$_('characters.hours_played')}</div>
+							<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
+						</div>
+					</section>
+					<section>
+						<div class="sect-prof">
+							<img src={icon('Present_quaggan_icon.png')} alt="present" style:width={iconScale(char.created)} />
+						</div>
+						<div class="sect-info">
+							<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) })}</div>
+							<div class="info">{$_('characters.next_birthday_in')}</div>
+							<div class="counter">{days} <span class="info">{$_('characters.days', { days })}</span></div>
+						</div>
+					</section>
+					<section>
+						<div class="sect-prof">
+							<img src={icon('Grave_Finisher.png')} alt="gravestone" />
+						</div>
+						<div class="sect-info">
+							<div class="info">{$_('characters.died', { gender })}</div>
+							<div class="counter">{char.deaths} <span class="info">{$_('characters.times', { times: char.deaths })}</span></div>
+							<div class="info">({deathsPerHour(char)}/h)</div>
+						</div>
+					</section>
+				</article>
+			</details>
 		{/each}
 	{/snippet}
 </Awaiter>
@@ -95,20 +101,23 @@
 		padding-bottom: 1em;
 
 		flex-flow: column nowrap;
-		justify-content: space-around;
+		justify-content: space-between;
 		align-items: center;
 		background-color: var(--gw2helper-module);
 		color: var(--gw2helper-module-text);
 		height: fit-content;
 
-		h2 {
-			width: 100%;
-			margin: 0;
-			padding: 0;
-			text-align: left;
-		}
-		h4 {
-			margin: 0;
+		.sect-prof {
+			display: flex;
+			width: 128px;
+			flex-flow: column nowrap;
+			justify-content: center;
+			align-items: center;
+			min-height: 128px;
+			span {
+				font-weight: bold;
+				text-align: center;
+			}
 		}
 
 		.sect-info {
@@ -122,43 +131,8 @@
 			}
 		}
 
-		.sect-img {
-			width: 8em;
-			height: 8em;
-			background-repeat: no-repeat;
-			background-position: bottom center;
-		}
-		section {
-			margin: 0;
-			padding: 0;
-			display: flex;
-			flex-flow: column wrap;
-			column-gap: 0.5em;
-			max-height: 13.75em;
-			min-width: 23.125em;
-			align-items: flex-start;
-			justify-content: center;
-			align-content: flex-start;
-			overflow: hidden;
-			row-gap: 0.6em;
-			column-gap: 2em;
-
-			ul {
-				margin: 1em 0;
-				list-style-type: none;
-				list-style-position: inside;
-				padding: 0;
-				&.icons {
-					img {
-						width: 2em;
-						vertical-align: middle;
-						margin: 0.125em 0.3125em 0.125em 0;
-					}
-				}
-			}
-		}
 		.counter {
-			padding: 0.5em 0;
+			padding: 0 0 0.5em 0;
 			font-size: x-large;
 			font-weight: bold;
 		}
@@ -168,13 +142,42 @@
 		}
 	}
 
-	@media (min-width: 800px) {
+	section {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-flow: row nowrap;
+		column-gap: 0.5em;
+		max-height: 13.75em;
+		min-width: 20em;
+		align-items: flex-start;
+		justify-content: flex-start;
+		align-content: flex-start;
+		row-gap: 0.6em;
+
+		ul {
+			margin: 1em 0;
+			list-style-type: none;
+			list-style-position: inside;
+			padding: 0;
+			&.icons {
+				img {
+					width: 2em;
+					vertical-align: middle;
+					margin: 0.125em 0.3125em 0.125em 0;
+				}
+			}
+		}
+	}
+
+	@media (min-width: 700px) {
 		.character {
 			flex-flow: row wrap;
-			align-items: flex-start;
+			align-items: center;
+			justify-content: space-evenly;
 
 			section {
-				min-width: 23.125em;
+				// min-width: 23.125em;
 				flex-flow: column wrap;
 			}
 		}
