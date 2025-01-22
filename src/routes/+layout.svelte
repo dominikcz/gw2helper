@@ -170,19 +170,20 @@
 	let active = $derived($page.url.pathname);
 	let title = $derived([defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
-		{ slug: `${base}/`, label: $_('layout.nav.home')},
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily')},
-		{ slug: `${base}/events/`, label: $_('layout.nav.events')},
-		{ slug: `${base}/items/`, label: $_('layout.nav.items') },
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials') },
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements') },
-		{ slug: `${base}/account/`, label: $_('layout.nav.account') },
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters') },
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds') },
-		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post') },
-		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary') },
+		{ slug: `${base}/`, label: $_('layout.nav.home'), requiresKey: true},
+		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), requiresKey: true},
+		{ slug: `${base}/events/`, label: $_('layout.nav.events'), requiresKey: false },
+		{ slug: `${base}/items/`, label: $_('layout.nav.items'), requiresKey: true},
+		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), requiresKey: true},
+		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), requiresKey: true},
+		{ slug: `${base}/account/`, label: $_('layout.nav.account'), requiresKey: true},
+		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), requiresKey: true},
+		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), requiresKey: true},
+		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), requiresKey: true},
+		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), requiresKey: true},
 	]);
-	
+	let currentPageRequiresKey = $derived(navigation.find((x) => x.slug == active)?.requiresKey || false);
+
 	$effect(() => {
 		onTimeChange();
 	});
@@ -208,20 +209,21 @@
 		</header>
 		<Navigation items={navigation} {active} />
 
-		{#if data.missingScopes}
-			<h2>Your token is missing the following scopes:</h2>
-			<ul>
-				{#each missingScopes as scope}
-					<li>{scope}</li>				
-				{/each}
-			</ul>
-		{:else}
-			<main>
-				{@render children?.()}
-			</main>
+		{#if tokenInfo.name || !currentPageRequiresKey}
+			{#if data.missingScopes}
+				<h2>Your token is missing the following scopes:</h2>
+				<ul>
+					{#each missingScopes as scope}
+						<li>{scope}</li>
+					{/each}
+				</ul>
+			{:else}
+				<main>
+					{@render children?.()}
+				</main>
+			{/if}
 		{/if}
-
-		<details open={!tokenInfo.name} class="secondary" >
+		<details open={!tokenInfo.name} class="secondary">
 			<summary>{$_('layout.api_settings')}</summary>
 			<fieldset class="api-settings">
 				<legend>{$_('layout.api_settings')}</legend>
