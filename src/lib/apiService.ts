@@ -257,13 +257,13 @@ const _getTransactions = async (_transactions: any) => {
     }));
 
 
-    const transIds = transactions.map(x => x.id);
+    const ids = transactions.map(x => x.id);
 
-    const exp = await expandItems(transIds, transactions);
-    const expWithPrices = await expandPrices(transIds, exp);
     // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
-    let sum = sumQuantities(expWithPrices);
-    // console.log('_getTransactions', sum)
+    let sum = sumQuantities(transactions);
+    sum = await expandItems(ids, sum);
+    sum = await expandPrices(ids, sum);
+
     return sum;
 }
 
@@ -629,7 +629,7 @@ const expandPrices = async (ids: Array<number>, collection) => {
     if (batches.length) {
         const tasks = batches.map((ids) => prices(ids));
         const resp = (await Promise.all(tasks)).flat();
-        data.push(...mergeById(resp, collection));
+        data.push(...mergeById(collection, resp)); // have to merge based on collection, not list of prices because it otherwise ommits transactions with other asking price
     }
     return data;
 };

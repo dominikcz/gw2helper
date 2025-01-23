@@ -32,7 +32,7 @@ GET {{baseUrl}}/v2/items/24836
 Authorization: Bearer {{key}}
 
 ###
-GET {{baseUrl}}/v2/items?ids=97730
+GET {{baseUrl}}/v2/items?ids=100442
 Authorization: Bearer {{key}}
 
 ###
@@ -73,6 +73,10 @@ Authorization: Bearer {{key}}
 
 ###
 GET {{baseUrl}}/v2/account/wizardsvault/weekly
+Authorization: Bearer {{key}}
+
+###
+GET {{baseUrl}}/v2/commerce/transactions/current/buys
 Authorization: Bearer {{key}}
 
 ###
