@@ -202,7 +202,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
 const charactersItems = async () => {
     return promiseMe(apiClient("/v2/characters", "ids=all"), async (rawData) => {
         const tasks = [];
-        console.log('charactersItems', rawData)
+        // console.log('charactersItems', rawData)
         for (const char of rawData) {
             let bags = char.bags.filter(x => x != null).map(x => ({ id: x.id, size: x.size, count: 1 }));
             let itemsInBags = char.bags
