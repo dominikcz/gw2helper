@@ -11,6 +11,10 @@ show_categories: Show categories
 show_chat_links: Show chat links
 show_event_times: Show event times
 show_headings: Show headings
+sort_by:
+  sort: Sort by
+  time: Event time
+  name: Event name
 tts: |-
   It is {time}. {plural, select,
     true {

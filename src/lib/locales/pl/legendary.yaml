@@ -1,0 +1,14 @@
+legendary: Legendarne
+armor: Zbroje
+armor_type:
+  light: Zbroje lekkie
+  medium: Zbroje średnie
+  heavy: Zbroje ciężkie
+armor_set:
+  pve: Zestaw PvE
+  raid: Zestaw Raid
+  pvp: Zestaw PvP
+  wvw: Zestaw WvW
+trinkets: Biżuteria
+upgrades: Ulepszenia
+weapons: Bronie

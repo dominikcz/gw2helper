@@ -1,0 +1,14 @@
+legendary: 传奇
+armor: 护甲
+armor_type:
+  light: 轻型护甲
+  medium: 中型护甲
+  heavy: 重型护甲
+armor_set:
+  pve: PvE护甲套装
+  raid: 突袭护甲套装
+  pvp: PvP护甲套装
+  wvw: WvW护甲套装
+trinkets: 饰品
+upgrades: 升级
+weapons: 武器

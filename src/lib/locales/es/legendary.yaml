@@ -1,0 +1,14 @@
+legendary: Legendario
+armor: Armadura
+armor_type:
+  light: Armadura ligera
+  medium: Armadura media
+  heavy: Armadura pesada
+armor_set:
+  pve: Conjunto de armadura PvE
+  raid: Conjunto de armadura de incursión
+  pvp: Conjunto de armadura PvP
+  wvw: Conjunto de armadura WvW
+trinkets: Baratijas
+upgrades: Mejoras
+weapons: Armas

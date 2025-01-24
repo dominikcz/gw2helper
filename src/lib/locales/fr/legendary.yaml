@@ -1,0 +1,14 @@
+legendary: Légendaire
+armor: Armure
+armor_type:
+  light: Armure légère
+  medium: Armure moyenne
+  heavy: Armure lourde
+armor_set:
+  pve: Ensemble d'armure PvE
+  raid: Ensemble d'armure Raid
+  pvp: Ensemble d'armure PvP
+  wvw: Ensemble d'armure WvW
+trinkets: Les colifichets
+upgrades: Composant d'amélioration
+weapons: Armes

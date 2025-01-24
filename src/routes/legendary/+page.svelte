@@ -100,7 +100,7 @@
 		{@const progressArmor = completionArmor(weightData)}
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary
-				>{caption}
+				>{$_('legendary.armor_type.'+caption.toLowerCase())}
 				<div class="info">
 					<Progress value={progressArmor} max={6} label={`${progressArmor} / 6`} />
 				</div>

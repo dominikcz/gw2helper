@@ -1,0 +1,14 @@
+legendary: Legendär
+armor: Rüstung
+armor_type:
+  light: Leichte Rüstung
+  medium: Mittlere Rüstung
+  heavy: Schwere Rüstung
+armor_set:
+  pve: PvE-Rüstungsset
+  raid: Raid-Rüstungsset
+  pvp: PvP-Rüstungsset
+  wvw: WvW-Rüstungsset
+trinkets: Schmuckstücke
+upgrades: Upgrades
+weapons: Waffen

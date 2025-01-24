@@ -10,8 +10,15 @@
 	import utils from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	/** @type {{events: any, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string}} */
-	let { events = $bindable(), showChatLinks = false, updateInterval = 60, inAdvance = $bindable(5), sound = $bindable('trumpet') } = $props();
+	/** @type {{events: any, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string, sortBy?: 'time' | 'name'}} */
+	let {
+		events = $bindable(),
+		showChatLinks = false,
+		updateInterval = 60,
+		inAdvance = $bindable(5),
+		sound = $bindable('trumpet'),
+		sortBy = $bindable('time'),
+	} = $props();
 
 	let filter = $state('');
 
@@ -53,12 +60,21 @@
 			_watched.push(found);
 		});
 
-		return _watched;
+		return sort(_watched, 'name');
 	}
 
-	function getNotWatched(events, filter, ver) {
+	function sort(collection, sortBy) {
+		if (sortBy == 'name') {
+			collection.sort((a, b) => a.name.localeCompare(b.name));
+		} else {
+			collection.sort((a, b) => a.next.localeCompare(b.next));
+		}
+		return collection;
+	}
+
+	function getNotWatched(events, filter, sortBy, ver) {
 		const notWatched = events.filter((x) => !x.watched);
-		return helperUtils.filterCollection(notWatched, ['name'], filter);
+		return sort(helperUtils.filterCollection(notWatched, ['name'], filter), sortBy);
 	}
 
 	function getEvent(name) {
@@ -106,8 +122,8 @@
 		version++;
 	}
 
-	async function saveNotifySettings() {
-		await utils.saveRemindersSettings({ inAdvance, sound });
+	async function saveSettings() {
+		await utils.saveRemindersSettings({ inAdvance, sound, sortBy });
 	}
 
 	function testAlarm() {
@@ -145,17 +161,23 @@
 			</label>
 		{/each}
 	</div>
+	<div class="group">
+		<h4>{$_('events.sort_by.sort')}</h4>
+		<label><input type="radio" name="sort" value="time" bind:group={sortBy} /> {$_('events.sort_by.time')}</label>
+		<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> {$_('events.sort_by.name')}</label>
+	</div>
 	<button onclick={() => testAlarm()}>{$_('events.watched.test_alarm', { sound })}</button>
-	<button onclick={saveNotifySettings}>{$_('common.save')}</button>
+	<button onclick={saveSettings}>{$_('common.save')}</button>
 </fieldset>
 
 <h2>{$_('events.available')}</h2>
+
 <section>
 	<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.list_too_long')} />
 </section>
 
 {#each Object.keys(events) as cat}
-	{@const notWatched = getNotWatched(events[cat], filter, version)}
+	{@const notWatched = getNotWatched(events[cat], filter, sortBy, version)}
 	{#if notWatched}
 		<EventsCategory events={notWatched} {showChatLinks} category={cat} onToggleWatched={hndToggleWatched} />
 	{/if}

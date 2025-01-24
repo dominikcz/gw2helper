@@ -11,10 +11,10 @@
 
 	/** @type {{data: any}} */
 	let { data = $bindable() } = $props();
-	let {remindersSettings} = $state(data)
-    $effect(() => {
-        remindersSettings = data.remindersSettings;
-    });
+	let { remindersSettings } = $state(data);
+	$effect(() => {
+		remindersSettings = data.remindersSettings;
+	});
 
 	let showChatLinks = $state(false); // utils.runsDesktop()
 	let showEventTimes = $state(true);
@@ -29,7 +29,7 @@
 		eventsUtils.excludeEvents([
 			'lc', // Labyrinthine Cliffs
 			'db', // Day and night
-			'ha'  // Halloween
+			'ha', // Halloween
 		]);
 		eventsUtils.init();
 		allEvents = eventsUtils.prepareDailyCalendar();
@@ -52,28 +52,34 @@
 	}
 </script>
 
-<h1>{ $_('events.events') }</h1>
+<h1>{$_('events.events')}</h1>
 <Tabs>
 	<div class="tab-list">
-		<Tab>{ $_('events.event_timers') }</Tab>
-		<Tab>{ $_('events.reminders') }</Tab>
+		<Tab>{$_('events.event_timers')}</Tab>
+		<Tab>{$_('events.reminders')}</Tab>
 	</div>
 
 	<TabPanel>
 		<EventTimers updateInterval={15} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
 		<fieldset class="settings">
-			<legend>{ $_('common.settings') }</legend>
+			<legend>{$_('common.settings')}</legend>
 
-			<label><input type="checkbox" id="chat-links" bind:checked={showChatLinks} /> { $_('events.show_chat_links') }</label>
-			<label><input type="checkbox" id="event-times" bind:checked={showEventTimes} /> { $_('events.show_event_times') }</label>
-			<label><input type="checkbox" id="categories" bind:checked={showCategories} /> { $_('events.show_categories') }</label>
-			<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> { $_('events.show_headings') }</label>
-			<label><input type="checkbox" id="auto-scroll" bind:checked={autoScroll} /> { $_('events.auto_scroll') }</label>
-			<button onclick={saveSettings}>{ $_('common.save_settings') }</button>
+			<label><input type="checkbox" id="chat-links" bind:checked={showChatLinks} /> {$_('events.show_chat_links')}</label>
+			<label><input type="checkbox" id="event-times" bind:checked={showEventTimes} /> {$_('events.show_event_times')}</label>
+			<label><input type="checkbox" id="categories" bind:checked={showCategories} /> {$_('events.show_categories')}</label>
+			<label><input type="checkbox" id="headings" bind:checked={showHeadings} /> {$_('events.show_headings')}</label>
+			<label><input type="checkbox" id="auto-scroll" bind:checked={autoScroll} /> {$_('events.auto_scroll')}</label>
+			<button onclick={saveSettings}>{$_('common.save_settings')}</button>
 		</fieldset>
 	</TabPanel>
 
 	<TabPanel>
-		<EventReminders events={allEvents} {showChatLinks} bind:inAdvance={remindersSettings.inAdvance} bind:sound={remindersSettings.sound} />
+		<EventReminders
+			events={allEvents}
+			{showChatLinks}
+			bind:inAdvance={remindersSettings.inAdvance}
+			bind:sound={remindersSettings.sound}
+			bind:sortBy={remindersSettings.sortBy}
+		/>
 	</TabPanel>
 </Tabs>
