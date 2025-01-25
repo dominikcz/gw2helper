@@ -264,7 +264,7 @@ const _getTransactions = async (_transactions: any) => {
     let sum = sumQuantities(transactions);
     sum = await expandItems(ids, sum);
     sum = await expandPrices(ids, sum);
-
+    // console.log('sum', sum, transactions)
     return sum;
 }
 
@@ -606,10 +606,10 @@ const expandItems = async (ids: Array<number>, collection) => {
             }
         });
         await ls.set(ITEMS_CACHE, [...itemsCache.entries()]);
-        data.push(...mergeById(resp, collection));
+        data.push(...mergeById(collection, resp));
     }
     if (alreadyKnown.length) {
-        data.push(...mergeById(alreadyKnown, collection));
+        data.push(...mergeById(collection, alreadyKnown));
     }
     additionalMapping(data);
 
