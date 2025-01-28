@@ -39,9 +39,10 @@
 	function updatePointerPos(firstRun = false) {
 		dt0 = eventsUtils.getDt0();
 		if (!eventsRef) return;
+		const rect = eventsRef.getBoundingClientRect();
+		pointerHeight = Math.trunc(rect.height);
+		// console.log('h', pointerHeight);
 		if (dt0) {
-			const rect = eventsRef.getBoundingClientRect();
-			pointerHeight = Math.trunc(rect.height);
 			const diff = wxdates.minutesBetween(dt0, currTime.value);
 			if (dt0.getHours() != currTime.value.getHours()) {
 				console.log('reset.');
@@ -64,13 +65,14 @@
 		}
 	}
 
-	function hndCatToggle(cat, ev){
+	function hndCatToggle(cat, ev) {
 		// console.log('hndCatToggle', cat, ev.newState);
-		categoriesState[cat] = ev.newState == "open";
+		categoriesState[cat] = ev.newState == 'open';
 		utils.saveEventTimerCategories(categoriesState);
+		updatePointerPos();
 	}
 
-	function getCatState(cat){
+	function getCatState(cat) {
 		const state = categoriesState[cat];
 		if (state == undefined) return true;
 		return state;

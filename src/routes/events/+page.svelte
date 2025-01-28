@@ -60,7 +60,7 @@
 	</div>
 
 	<TabPanel>
-		<EventTimers updateInterval={15} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
+		<EventTimers updateInterval={5} {showChatLinks} {showEventTimes} {showCategories} {showHeadings} {autoScroll} />
 		<fieldset class="settings">
 			<legend>{$_('common.settings')}</legend>
 
