@@ -1,7 +1,4 @@
-# TODO
-- event timer 
-    - pomyśleć jednak o jakiejś formie sticky dla godzin
-        
+# TODO        
 - achievs 
     - planowanie wg zysku/pracochłonności/kosztów
     - w todo sortowanie po ilości ap i postępie malejąco
@@ -20,9 +17,7 @@
             - https://api.guildwars2.com/v2/minis/809
             ...
 
-    - czasem nie pokazują się prawidłowo wartośći postępu w bitsDone
-    - wyswietlanie postępu działa w miarę sensownie tylko dla achievement.type == "Default". asowałoby obsłużyć type == "ItemSet"
-
+    - wyswietlanie postępu działa w miarę sensownie tylko dla achievement.type == "Default". Pasowałoby obsłużyć type == "ItemSet"
 
 x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
 
