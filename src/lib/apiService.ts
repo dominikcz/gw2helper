@@ -1,7 +1,7 @@
 import Logger from "./logger";
 import ls from "./wxjs_idb";
 import wx from "./wxjs_types";
-import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, REQUESTS_CACHE } from "$lib/consts";
+import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, MINIS_CACHE, REQUESTS_CACHE, SKINS_CACHE } from "$lib/consts";
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
@@ -76,8 +76,12 @@ interface TokenInfo {
 }
 
 let _items;
+let _minis;
+let _skins;
 let _achievements;
 let itemsCache;
+let minisCache;
+let skinsCache;
 let achievementsCache;
 let requestCache: Map<string, CacheEntry>;
 let _tokenInfo: TokenInfo = {
@@ -469,6 +473,50 @@ const achievementsInfo = async (ids: string) => {
     return apiClient("/v2/achievements", "ids=" + ids);
 };
 
+const minis = async (ids) => {
+    ids = ids.filter(x => !itemsCache.has(x));
+    const batches = [];
+    do {
+        let batch = ids.splice(0, 200);
+        if (batch.length > 0) {
+            batches.push(batch.join(","));
+        }
+    } while (ids.length > 0);
+    if (batches.length) {
+        const tasks = batches.map((ids) => apiClient("/v2/minis", "ids="+ ids));
+        const resp = (await Promise.all(tasks)).flat();
+        resp.forEach((x) => {
+            if (x) {
+                minisCache.set(x.id, x);
+            }
+        });
+        await ls.set(MINIS_CACHE, [...minisCache.entries()]);
+    }
+
+}
+
+const skins = async (ids) => {
+    ids = ids.filter(x => !skinsCache.has(x));
+    const batches = [];
+    do {
+        let batch = ids.splice(0, 200);
+        if (batch.length > 0) {
+            batches.push(batch.join(","));
+        }
+    } while (ids.length > 0);
+    if (batches.length) {
+        const tasks = batches.map((ids) => apiClient("/v2/skins", "ids="+ ids));
+        const resp = (await Promise.all(tasks)).flat();
+        resp.forEach((x) => {
+            if (x) {
+                skinsCache.set(x.id, x);
+            }
+        });
+        await ls.set(SKINS_CACHE, [...skinsCache.entries()]);
+    }
+
+}
+
 const currencies = async (order = []) => {
     const depreciated = [
         {
@@ -555,7 +603,11 @@ const wizardsVaultSpecial = async () => {
 const init = async (newApiKey: string, options?: object) => {
     _items = await ls.getObject(ITEMS_CACHE, []);
     _achievements = await ls.getObject(ACHIEVEMENTS_CACHE, []);
+    _minis = await ls.getObject(MINIS_CACHE, []);
+    _skins = await ls.getObject(SKINS_CACHE, []);
     itemsCache = _items ? new Map(_items) : new Map();
+    minisCache = _minis ? new Map(_minis) : new Map();
+    skinsCache = _skins ? new Map(_skins) : new Map();
     achievementsCache = _achievements ? new Map(_achievements) : new Map();
 
     Logger.log("apiService.init", newApiKey);
@@ -585,7 +637,8 @@ const addPropertiesById = (base: object, details: array) => {
 
 const expandItems = async (ids: Array<number>, collection) => {
     const knownIds = [...itemsCache.keys()];
-    ids = ids.filter((x) => !INVALID_IDS.includes(x));
+    // get rid of nulls, invalid ids and duplicates
+    ids = [...new Set(ids.filter((x) => x && !INVALID_IDS.includes(x)))];
     const missingIds = ids.filter((x) => !knownIds.includes(x));
     const alreadyKnown = ids.filter((x) => knownIds.includes(x)).map((x) => itemsCache.get(x));
 
@@ -658,15 +711,29 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // and make requests in parallel
         const tasks = batches.map((ids) => achievementsInfo(ids));
         const resp = (await Promise.all(tasks)).filter(x => wxjs_types.isArray(x)).flat();
-        resp.forEach((x) => {
+        const itemIds = [];
+        const skinIds = [];
+        const miniIds = [];
+        resp.forEach(async (x) => {
             if (x) {
                 x.description = toHtml(x.description)
+                if (x.type == 'ItemSet' && x.bits) {
+
+                    itemIds.push(...(x.bits.filter(xx => xx.type == "Item").map(xxx => xxx.id)));
+                    skinIds.push(...(x.bits.filter(xx => xx.type == "Skin").map(xxx => xxx.id)));
+                    miniIds.push(...(x.bits.filter(xx => xx.type == "Minipet").map(xxx => xxx.id)));
+                }
                 achievementsCache.set(x.id, x);
             }
         });
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
+        expandItems(itemIds, itemIds.map(x => ({id: x})))
+        console.log('expanding minis from achieves...', miniIds);
+        minis(miniIds); 
+        console.log('expanding skins from achieves...', skinIds);
+        skins(skinIds); 
     }
 
     let _log = '';
@@ -719,7 +786,8 @@ const expandAchievements = async (account, categories, accountAchievements, allI
                 current: 0,
                 repeated: 0,
                 bits_done: [],
-                done: false
+                done: false,
+                max: achiev.bits != undefined ? achiev.bits.length : 0,
             };
             mine.repeated ??= 0;
             let points_per_tier: number | null = null;
@@ -820,11 +888,15 @@ const clearCache = async () => {
     Logger.log('clearing cache...');
     await ls.delete(requestCacheName());
     await ls.delete(ITEMS_CACHE);
+    await ls.delete(MINIS_CACHE);
+    await ls.delete(SKINS_CACHE);
     await ls.delete(ACHIEVEMENTS_CACHE);
     await ls.delete(KEY_HIST);
     itemsCache.clear();
     achievementsCache.clear();
     requestCache.clear();
+    minisCache.clear();
+    skinsCache.clear();
 }
 
 const getApiKey = () => {
@@ -858,4 +930,7 @@ export default {
         _tokenInfo.missingScopes = [];
     },
     tokenInfo: () => _tokenInfo,
+    itemsCache: (id) => itemsCache.get(id),
+    minisCache: (id) => minisCache.get(id),
+    skinsCache: (id) => skinsCache.get(id),
 };
