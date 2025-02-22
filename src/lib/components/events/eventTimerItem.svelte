@@ -36,6 +36,8 @@
 
 <div class="event-bar">
 	{#each Object.values(event.segments) as segment}
+	{@const _watched = reminders.isWatched($remindersStore, segment)}
+	{@const _title = `${$_(_watched ? 'events.click_to_remove' : 'events.click_to_add')} - ${segment.name}`}
 		<div
 			class="event"
 			class:real={segment.name}
@@ -46,7 +48,7 @@
 				<div class="header">
 					<a href={helperUtils.wikiLink(segment.link)} target="_blank" title={`${segment.name} - ${$_('common.read_more_on_wiki')}`}>{segment.name}</a
 					>
-					<WatchState title={segment.name} watched={reminders.isWatched($remindersStore, segment)} onClick={() => toggleSegmentWatched(segment)} />
+					<WatchState title={_title} watched={_watched} onClick={() => toggleSegmentWatched(segment)} />
 				</div>
 				{#if showChatLinks && segment.chatlink}
 					<span class="chatlink">{segment.chatlink}</span>

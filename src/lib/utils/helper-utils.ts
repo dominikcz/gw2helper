@@ -25,7 +25,11 @@ function match(word: string, obj: object, properties: Array<string>) {
                 return obj.count ? obj.count <= parseInt(word.slice(2)) : false;
             }
         } else {
-            if (typeof obj[x] === 'string' && obj[x].toLowerCase().includes(word)) {
+            const t = typeof obj[x];
+            if (t === 'string' && obj[x].toLowerCase().includes(word)) {
+                return true;
+            }
+            if (t === 'number' && (''+obj[x]).includes(word)) {
                 return true;
             }
         }

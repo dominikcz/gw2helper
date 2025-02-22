@@ -7,7 +7,7 @@
 	let { item }: Props = $props();
 </script>
 
-<figure data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}>
+<figure data-autotooltip-renderer="img.item" data-autotooltip-id={item.id}>
 	<a href={helperUtils.wikiLink(item.name)} target="_blank">
 		<img alt={item.name} src={item.icon} class:locked={!item.count} />
 	</a>

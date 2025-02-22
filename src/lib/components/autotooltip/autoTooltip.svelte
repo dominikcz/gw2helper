@@ -30,15 +30,20 @@
 	};
 
 	function processCustomRenderers(node) {
+		const id = node.getAttribute('data-autotooltip-id')
 		const customRendererId = node.getAttribute('data-autotooltip-renderer') || '';
 		// console.log('customRendererId', customRendererId, node)
 		if (customRendererId) {
 			const renderer = window.__autotooltip.customRenderers[customRendererId];
-			const params = JSON.parse(node.getAttribute('data-autotooltip-params') || {});
+			let params = id;
+			const strParams = node.getAttribute('data-autotooltip-params');
+			if (strParams){
+				params = JSON.parse(strParams);
+			}
 			// console.log('autotooltip', customRendererId, window.__autotooltip.customRenderers, params);
 			if (renderer) {
 				ref.textContent = '';
-				renderer(ref, params);
+				renderer(ref, id, params);
 				return true;
 			}
 		} else {

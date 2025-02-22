@@ -88,7 +88,13 @@ details {
 .items {
     display: flex;
     flex-flow: row wrap;
-    gap: 0.625em;
+    gap: 0.625rem;
+    &.condensed{
+        gap: 0px;
+    }
+    a {
+        line-height: 0;
+    }
 }
 
 .no-results {

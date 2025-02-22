@@ -81,7 +81,7 @@
 
 		const withMasteryOK = !requiredRegions.length || mastery.find((x) => requiredRegions.includes(x.region));
 
-		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement']);
+		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement', 'id']);
 
 		const achiev_res = notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && dailyWeeklyOK && filterOK;
 
@@ -110,6 +110,7 @@
 			sortBy,
 		});
 	}
+
 </script>
 
 <h1>{$_('achievements.achievements')}</h1>

@@ -11,7 +11,7 @@
 	}
 </script>
 
-<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-params={JSON.stringify(item)} data-id={item.id}>
+<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-id={item.id} >
 	<a href={helperUtils.wikiLink(item.name)} target="_blank">
 		<img alt={item.name} src={item.icon} class:locked={item.locked} />
 	</a>

@@ -16,9 +16,7 @@
 {/snippet}
 
 {#snippet progressItemSet(bits, bitsDone)}
-	<div class="items autotooltip autotooltip-sticky">
-		<h2>itemset</h2>
-		<pre>{JSON.stringify(bitsDone)}</pre>
+	<div class="items condensed autotooltip autotooltip-sticky">
 		{#each bits as x, idx}
 			{@const item = x.type == 'Item' ? itemsCache(x.id) : x.type == 'Minipet' ? minisCache(x.id) : x.type == 'Skin' ? skinsCache(x.id) : {}}
 			{#if item}
@@ -46,8 +44,12 @@
 			filter: none;
 		}
 	}
-	li.done {
-		text-decoration: line-through;
-		color: var(--gw2helper-not-important);
+
+	li {
+		font-size: 80%;
+		&.done {
+			text-decoration: line-through;
+			color: var(--gw2helper-not-important);
+		}
 	}
 </style>

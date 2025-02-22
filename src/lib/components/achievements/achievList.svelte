@@ -2,6 +2,8 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { achievProgressRenderer } from './achievRenderers';
+
 	/** @type {{items: any, todoList: any, onToggleTodo?: CallableFunction,  children?: import('svelte').Snippet}} */
 	let { items, todoList, onToggleTodo, children } = $props();
 
@@ -10,9 +12,15 @@
 	}
 
 	// console.log('achieveList ' + name, items);
+	const tooltipOptions = {
+		customRenderers: {
+			'achiev.progress': achievProgressRenderer,
+		},
+	};	
+
 </script>
 
-<div class="achiev-list" use:autotooltip>
+<div class="achiev-list" use:autotooltip={tooltipOptions}>
 	{#each items as achiev (achiev.id)}
 		<Achievement
 			id={achiev.id}

@@ -4,9 +4,10 @@ export function autoTooltipInit(node, options) {
     }
     let count = 0;
     node ??= document;
-    node.querySelectorAll('.autotooltip [title], .autotooltip[title]').forEach((elem) => {
+    node.querySelectorAll('.autotooltip [title], .autotooltip[title], .autotooltip[data-autotooltip-id], autotooltip [data-autotooltip-id]').forEach((elem) => {
         const t = elem.getAttribute('title');
-        if (t && !elem.getAttribute('data-autotooltip')) {
+        const id = elem.getAttribute('data-autotooltip-id');
+        if ((t || id) && !elem.getAttribute('data-autotooltip')) {
             elem.setAttribute('title', '');
             elem.setAttribute('data-autotooltip', t);
             count++;

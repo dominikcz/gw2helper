@@ -5,8 +5,6 @@
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
 	import AchievementRewards from './achievementRewards.svelte';
-	import AchievementProgress from './achievementProgress.svelte';
-	import apiService from '$lib/apiService';
 
 	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any, onToggleTodo?: CallableFunction}} */
 	let {
@@ -45,9 +43,9 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div class="head autotooltip">
+	<div class="head autotooltip" data-autotooltip-renderer="achiev.progress" data-autotooltip-id={id} data-autotooltip-params={JSON.stringify(bitsDone)}>
 		{#if icon}
-			<img src={icon} alt={name} data-autotooltip-id={id} />
+			<img src={icon} alt={name} />
 		{/if}
 
 		{#if max}
@@ -83,9 +81,6 @@
 	</div>
 </div>
 
-<div>
-	<AchievementProgress {bits} {bitsDone} {type} itemsCache={apiService.itemsCache} minisCache={apiService.minisCache} skinsCache={apiService.skinsCache} /> 
-</div>
 <style lang="scss">
 	.achiev {
 		width: 21em;

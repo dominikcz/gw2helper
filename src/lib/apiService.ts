@@ -930,7 +930,8 @@ export default {
         _tokenInfo.missingScopes = [];
     },
     tokenInfo: () => _tokenInfo,
-    itemsCache: (id) => itemsCache.get(id),
-    minisCache: (id) => minisCache.get(id),
-    skinsCache: (id) => skinsCache.get(id),
+    itemsCache: (id) => itemsCache.get(parseInt(id)),
+    minisCache: (id) => minisCache.get(parseInt(id)),
+    skinsCache: (id) => skinsCache.get(parseInt(id)),
+    achievementsCache: (id) => achievementsCache.get(parseInt(id)),
 };
