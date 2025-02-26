@@ -5,19 +5,7 @@
     - brakuje achievs (np. rift hunting vs https://wiki.guildwars2.com/wiki/Rift_Hunting_(achievements)). Napisać skrypcik do wyciągania różnic pomiędzy api a wiki i użyć wyniku do wypeniania luk.
     - dodać listę niestandardowych linków do wiki, np. w achieves często zamiast "xxx" mamy "xxx_(achievements)"
     + rozróżniać achiev czasowe, np. dragon bash, halloween itp. i je odpowiednio ukrywać. Na razie tylk ręcznie...
-    - nie działa prawidłowo ładowanie bits_done
-    - dodać tooltip z komponentem dla różnych typów bits. Przykłady: 
-        - https://api.guildwars2.com/v2/achievements/6333
-        - https://api.guildwars2.com/v2/achievements/6344
-        - https://api.guildwars2.com/v2/achievements/7802
-            - https://api.guildwars2.com/v2/skins/12030
-            ...
-        - https://api.guildwars2.com/v2/achievements/5188
-            - https://api.guildwars2.com/v2/minis/806
-            - https://api.guildwars2.com/v2/minis/809
-            ...
-
-    - wyswietlanie postępu działa w miarę sensownie tylko dla achievement.type == "Default". Pasowałoby obsłużyć type == "ItemSet"
+    + nie działa prawidłowo ładowanie bits_done
 
 x colors (dyes) - miałoby moze sens pokazanie wyglądu w 3D na różnyh materiałach.. ale nie wiem czy warto
 

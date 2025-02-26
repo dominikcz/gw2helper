@@ -39,7 +39,6 @@
 			todo,
 		});
 	}
-
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
@@ -77,7 +76,7 @@
 		{#if description}<span>{@html description}</span>{/if}
 		{#if requirement}<span>{requirement}</span>{/if}
 
-		<AchievementRewards {rewardsObj} {type} {pointsToGet} {done} {bits} {bitsDone}/>
+		<AchievementRewards {rewardsObj} {type} {pointsToGet} {done} {bits} {bitsDone} />
 	</div>
 </div>
 
@@ -167,5 +166,4 @@
 			background-position-y: -24px;
 		}
 	}
-
 </style>
