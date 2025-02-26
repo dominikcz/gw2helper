@@ -43,8 +43,7 @@
 			// console.log('autotooltip', customRendererId, window.__autotooltip.customRenderers, params);
 			if (renderer) {
 				ref.textContent = '';
-				renderer(ref, id, params);
-				return true;
+				return (renderer(ref, id, params) === false) ? false : true;
 			}
 		} else {
 			if (customContent) {
@@ -189,7 +188,7 @@
 						_class = __class;
 					}
 					if (!_title) {
-						if (elem.classList.contains('autotooltip') && (title || customContent)) {
+						if (elem.classList.contains('autotooltip') && ((_title && _title.length > 0) || customContent)) {
 							_visible = true;
 						}
 						elem = elem.parentElement;
@@ -203,10 +202,11 @@
 			if (_visible) {
 				if (!customContent) {
 					// ref.textContent = '';
+					title = _title;
 				}
-				title = _title;
 			}
-			visible = _visible && (title || customContent);
+			visible = _visible && ((_title && _title.length > 0) || customContent);
+			// console.log('_##_', {visible, _title, title, _visible, customContent})
 			sticky = _sticky;
 		} catch (error) {
 			console.warn('autotooltip', { elem, error });
