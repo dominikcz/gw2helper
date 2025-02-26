@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 	interface Props {
 		item: object;
@@ -11,10 +12,14 @@
 	}
 </script>
 
-<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-id={item.id} >
-	<a href={helperUtils.wikiLink(item.name)} target="_blank">
-		<img alt={item.name} src={item.icon} class:locked={item.locked} />
-	</a>
+<figure class={rarityClass()} data-autotooltip-renderer="img.item" data-autotooltip-id={item.id}>
+	{#if item.name}
+		<a href={helperUtils.wikiLink(item.name)} target="_blank">
+			<img alt={item.name} src={item.icon} class:locked={item.locked} />
+		</a>
+	{:else}
+		<img alt="invalid id: {item.id}" src="{base}/assets/Talk_question_mark_option.png" />
+	{/if}
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>
 

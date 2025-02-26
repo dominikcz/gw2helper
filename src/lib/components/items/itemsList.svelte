@@ -11,7 +11,7 @@
 	export let items;
 	export let filter: string = '';
 	export let useBorder: boolean = true;
-	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity'];
+	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity', 'count'];
 
 	const tooltipOptions = {
 		customRenderers: {

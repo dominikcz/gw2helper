@@ -11,19 +11,18 @@ const DEFAULT_FILTER_OPTIONS: FilterOptions = {
 function match(word: string, obj: object, properties: Array<string>) {
     // at least one property has to match
     return properties.some((x) => {
-        if (obj['count'] != undefined && ['>', '<'].includes(word.charAt(0))) {
-            if (word.startsWith('>')) {
-                return obj.count ? obj.count > parseInt(word.slice(1)) : false;
-            }
-            if (word.startsWith('>=')) {
+        if (obj['count'] != undefined && ['>', '<', '='].includes(word.charAt(0))) {
+            if (word.startsWith('=')) {
+                return obj.count ? obj.count == parseInt(word.slice(1)) : false;
+            } else if (word.startsWith('>=')) {
                 return obj.count ? obj.count >= parseInt(word.slice(2)) : false;
-            }
-            if (word.startsWith('<')) {
-                return obj.count ? obj.count < parseInt(word.slice(1)) : false;
-            }
-            if (word.startsWith('<=')) {
+            } else if (word.startsWith('>')) {
+                return obj.count ? obj.count > parseInt(word.slice(1)) : false;
+            } else if (word.startsWith('<=')) {
                 return obj.count ? obj.count <= parseInt(word.slice(2)) : false;
-            }
+            } else if (word.startsWith('<')) {
+                return obj.count ? obj.count < parseInt(word.slice(1)) : false;
+            } 
         } else {
             const t = typeof obj[x];
             if (t === 'string' && obj[x].toLowerCase().includes(word)) {
