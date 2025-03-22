@@ -12,6 +12,7 @@
 
 	let timeLeft = $state();
 	let time = new Clock({ interval: 1000 });
+	let accLeft = acclaimLeft();
 
 	function updateTime(){
 		timeLeft = wxdates.friendlyDurationTill(time.value, targetTime);
@@ -44,7 +45,7 @@
 		<div class="info">
 			<Progress value={progressValue()} max={progressMax()} label={timeLeft} />
 			<div class="reward">
-				{acclaimLeft()}
+				{accLeft}
 				<AstralAcclaim />
 			</div>
 		</div>

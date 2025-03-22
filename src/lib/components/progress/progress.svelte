@@ -16,9 +16,9 @@
 </script>
 
 <div>
-	<progress {value} {max}></progress>
+	<progress {value} {max} title={`${value} / ${max}`}></progress>
 	{#if label}
-		<span>{labelValue()}</span>
+		<span title={`${value} / ${max}`}>{labelValue()}</span>
 	{/if}
 </div>
 

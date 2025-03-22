@@ -4,6 +4,7 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	import { sum } from '$lib/utils';
 
 	interface Props {
 		data: any;
@@ -25,23 +26,27 @@
 	function sortBySlots() {
 		sortBy = SortType.Slots;
 	}
+
+	function sizes(bags) {
+		return bags.map((x) => x.size).join(', ');
+	}
 </script>
 
-<h1>{ $_('items.items') }</h1>
+<h1>{$_('items.items')}</h1>
 
-<SearchInput bind:value={filter} name="filter" id="filter" placeholder={ $_('common.too_much_data') }>
+<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')}>
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 		<button on:click={sortBySlots}>sort by quantity</button> -->
 	<SearchHelp />
 </SearchInput>
 
-<h3>{ $_('items.common_items') }</h3>
+<h3>{$_('items.common_items')}</h3>
 
-<ItemsList summary={ $_('items.bank') } items={data.bank} {filter} />
-<ItemsList summary={ $_('items.shared_inventory') } items={data.shared} {filter} />
+<ItemsList summary={$_('items.bank')} items={data.bank} {filter} />
+<ItemsList summary={$_('items.shared_inventory')} items={data.shared} {filter} />
 
-<h3>{ $_('items.guild_items') }</h3>
-<Awaiter promise={data.guildItems} >
+<h3>{$_('items.guild_items')}</h3>
+<Awaiter promise={data.guildItems}>
 	{#snippet children(result)}
 		{#each result as guild}
 			<ItemsList summary={guild.name} items={guild.stash} {filter} />
@@ -49,11 +54,16 @@
 	{/snippet}
 </Awaiter>
 
-<h3>{ $_('items.characters_items') }</h3>
-<Awaiter promise={data.characterItems} >
+<h3>{$_('items.characters_items')}</h3>
+<Awaiter promise={data.charactersItems}>
 	{#snippet children(result)}
 		{#each result as char}
-			<ItemsList summary={char.name} items={char._items} {filter} />
+			<!-- `${char.name} - ${char.bags.length} bags (${}) - ${sum(char.bags, 'size')} slots total` -->
+			<ItemsList
+				summary={$_('items.bags', { name: char.name, count: char.bags.length, sizes: sizes(char.bags), capacity: sum(char.bags, 'size') })}
+				items={char._items}
+				{filter}
+			/>
 		{/each}
 	{/snippet}
 </Awaiter>

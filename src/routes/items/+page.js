@@ -4,7 +4,7 @@ export async function load({ fetch, parent }) {
 	return {
 		bank: key ? apiService.bank() : [],
 		shared: key ? apiService.sharedInventory() : [],
-		characterItems: key ? apiService.charactersItems() : [],
+		charactersItems: key ? apiService.charactersItems() : [],
 		guildItems: key ? apiService.guildItems() : [],
 	};
 }
