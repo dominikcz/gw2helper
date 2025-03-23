@@ -1,3 +1,5 @@
+import wxjs_types from "$lib/wxjs_types";
+
 export type FilterOptions = {
     nonZero?: boolean,
     nonZeroField?: string,
@@ -22,13 +24,13 @@ function match(word: string, obj: object, properties: Array<string>) {
                 return obj.count ? obj.count <= parseInt(word.slice(2)) : false;
             } else if (word.startsWith('<')) {
                 return obj.count ? obj.count < parseInt(word.slice(1)) : false;
-            } 
+            }
         } else {
             const t = typeof obj[x];
             if (t === 'string' && obj[x].toLowerCase().includes(word)) {
                 return true;
             }
-            if (t === 'number' && (''+obj[x]).includes(word)) {
+            if (t === 'number' && ('' + obj[x]).includes(word)) {
                 return true;
             }
         }
@@ -105,11 +107,17 @@ function getDeepProp(obj, str) {
     return getDeepProp(obj[fields[0]], fields.slice(1).join("."));
 }
 
-export function mapFields(obj, fields){
+export function mapFields(obj, fields) {
     if (fields.length) {
         const res = {};
         fields.forEach(x => {
-            res[x] = getDeepProp(obj, x);
+            if (wxjs_types.isObject(x)) {
+                for (const [key, value] of Object.entries(x)) {
+                    res[key] = value;
+                }
+            } else {
+                res[x] = getDeepProp(obj, x);
+            }
         })
         return res;
     }
@@ -129,14 +137,14 @@ export function groupBy(collection, groups = [], mappings) {
 }
 
 export default {
-        match,
-        filterCollection,
-        fullTextSearch,
-        generateId,
-        dec2hex,
-        diff,
-        tillBirthday,
-        age,
-        hoursPlayed,
-        wikiLink,
-    }
+    match,
+    filterCollection,
+    fullTextSearch,
+    generateId,
+    dec2hex,
+    diff,
+    tillBirthday,
+    age,
+    hoursPlayed,
+    wikiLink,
+}

@@ -5,6 +5,7 @@
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 	import { sum } from '$lib/utils';
+	import InventoryCleanupAdvice from '$lib/components/inventoryCleanupAdvice/inventoryCleanupAdvice.svelte';
 
 	interface Props {
 		data: any;
@@ -40,6 +41,8 @@
 	<SearchHelp />
 </SearchInput>
 
+<InventoryCleanupAdvice bank={data.bank} shared={data.shared} charactersItems={data.charactersItems} />
+
 <h3>{$_('items.common_items')}</h3>
 
 <ItemsList summary={$_('items.bank')} items={data.bank} {filter} />
@@ -58,9 +61,10 @@
 <Awaiter promise={data.charactersItems}>
 	{#snippet children(result)}
 		{#each result as char}
+			{@const bags = char.bags.filter(Boolean)}
 			<!-- `${char.name} - ${char.bags.length} bags (${}) - ${sum(char.bags, 'size')} slots total` -->
 			<ItemsList
-				summary={$_('items.bags', { name: char.name, count: char.bags.length, sizes: sizes(char.bags), capacity: sum(char.bags, 'size') })}
+				summary={$_('items.bags', { name: char.name, count: char.bags.length, sizes: sizes(bags), capacity: sum(bags, 'size') })}
 				items={char._items}
 				{filter}
 			/>

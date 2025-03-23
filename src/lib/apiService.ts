@@ -214,13 +214,13 @@ const charactersItems = async () => {
                 .map((bag) => bag.inventory)
                 .flat()
                 .filter((x) => x != null);
-            let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1 }));
+            let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1, equipped: true }));
             let charItems = bags.concat(itemsInBags).concat(equipment);
             const addons = [];
             charItems.forEach(x => {
                 addons.push(...(x.upgrades || []), ...(x.infusions || []));
             })
-            charItems.push(...addons.map(x => ({ id: x, count: 1 })))
+            charItems.push(...addons.map(x => ({ id: x, count: 1, equipped: true })))
             let ids = charItems.map(x => x.id);
             char._items = await expandItems(ids, charItems);
         }
@@ -399,7 +399,7 @@ const legendaries = async (x: string) => {
             const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
             const trinkets = groupBy(data.filter(x => x.type === "Trinket"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
-            const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
+            const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
             const _weapons = data.filter(x => x.type === "Weapon");
             _weapons.forEach(x => {
                 // change subtype naming to match current one in game & Wiki
@@ -483,7 +483,7 @@ const minis = async (ids) => {
         }
     } while (ids.length > 0);
     if (batches.length) {
-        const tasks = batches.map((ids) => apiClient("/v2/minis", "ids="+ ids));
+        const tasks = batches.map((ids) => apiClient("/v2/minis", "ids=" + ids));
         const resp = (await Promise.all(tasks)).flat();
         resp.forEach((x) => {
             if (x) {
@@ -505,7 +505,7 @@ const skins = async (ids) => {
         }
     } while (ids.length > 0);
     if (batches.length) {
-        const tasks = batches.map((ids) => apiClient("/v2/skins", "ids="+ ids));
+        const tasks = batches.map((ids) => apiClient("/v2/skins", "ids=" + ids));
         const resp = (await Promise.all(tasks)).flat();
         resp.forEach((x) => {
             if (x) {
@@ -729,11 +729,11 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
-        expandItems(itemIds, itemIds.map(x => ({id: x})))
+        expandItems(itemIds, itemIds.map(x => ({ id: x })))
         console.log('expanding minis from achieves...', miniIds);
-        minis(miniIds); 
+        minis(miniIds);
         console.log('expanding skins from achieves...', skinIds);
-        skins(skinIds); 
+        skins(skinIds);
     }
 
     let _log = '';
