@@ -162,9 +162,7 @@
 
 {#snippet itemAdvice(adv, idx)}
 	<div class="item-cleanup">
-		{idx}<Item item={{...adv.item, count: sum(adv.usage, 'count')}} />
-		{adv.item.id}
-		{adv.advice}
+		<Item item={{...adv.item, count: sum(adv.usage, 'count')}} />
 		<ul>
 			{#each adv.usage as usage}
 				<li>{usage.count} - {usage.source}</li>
@@ -191,7 +189,7 @@
 		<details class="searchable" open use:grungeBorder>
 			<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
 			<article use:autotooltip={tooltipOptions}>
-				<p>Below you can find items that you should consider geting rid of. Uset them, sell or just destroy if not worth selling</p>
+				<p>Below you can find items that you should consider geting rid of. Use them, sell or just destroy if not worth selling</p>
 				<p>You can save up to {result.getRidSavings} slots this way</p>
 				{#each result.itemsToGetRidOf as item, idx}
 					{@render itemAdvice(item, idx)}
