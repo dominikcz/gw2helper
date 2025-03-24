@@ -177,7 +177,7 @@
 		{#if result.stackSavings + result.getRidSavings > 0}
 			<h3>Inventory cleanup advice</h3>
 			<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
-			<details class="searchable info" use:grungeBorder>
+			<details class="info" use:grungeBorder>
 				<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
 				<article use:autotooltip={tooltipOptions}>
 					<p>Below you can find items that can be compacted to occupy less space. You can save up to {result.stackSavings} slots this way.</p>
@@ -186,7 +186,7 @@
 					{/each}
 				</article>
 			</details>
-			<details class="searchable info" use:grungeBorder>
+			<details class="info" use:grungeBorder>
 				<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
 				<article use:autotooltip={tooltipOptions}>
 					<p>
@@ -217,10 +217,10 @@
 		padding-inline-start: 1.2rem;
 	}
 
-	.item-cleanup{
+	.item-cleanup {
 		padding: 0 0 0 0.8rem;
 	}
-	.odd{
+	.odd {
 		background-color: color-mix(in srgb, black 30%, transparent);
 	}
 
