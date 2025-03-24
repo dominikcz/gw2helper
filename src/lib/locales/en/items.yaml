@@ -1,8 +1,11 @@
-bags: |-
-  {name} - {count} {count, plural,
-    one {one bag slot}
-    other {# bag slots}
-  } (Sizes of equipped bags: {sizes} = {capacity} slots total)
+bags:
+  summary: |-
+    {name} - Free slots: {available} out of {capacity} 
+  details: |-
+    {count} {count, plural,
+      one {bag slot}
+      other {bag slots}
+    }. Sizes of equipped bags: {sizes}. {capacity} slots total
 bank: Bank
 characters_items: Characters' items
 common_items: Common items

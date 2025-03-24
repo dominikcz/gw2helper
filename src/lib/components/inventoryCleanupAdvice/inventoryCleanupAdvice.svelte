@@ -152,8 +152,8 @@
 		return saved;
 	}
 
-	function getRidSavings(items){
-		items.forEach(x => {
+	function getRidSavings(items) {
+		items.forEach((x) => {
 			x.savings = x.usage.length;
 		});
 		return sum(items, 'savings');
@@ -162,7 +162,7 @@
 
 {#snippet itemAdvice(adv, idx)}
 	<div class="item-cleanup">
-		<Item item={{...adv.item, count: sum(adv.usage, 'count')}} />
+		<Item item={{ ...adv.item, count: sum(adv.usage, 'count') }} />
 		<ul>
 			{#each adv.usage as usage}
 				<li>{usage.count} - {usage.source}</li>
@@ -174,26 +174,31 @@
 
 <Awaiter promise={allData}>
 	{#snippet children(result)}
-		<h3>Inventory cleanup advice</h3>
-		<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
-		<details class="searchable" open use:grungeBorder>
-			<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
-			<article use:autotooltip={tooltipOptions}>
-				<p>Below you can find items that can be compacted to occupy less space. You can save up to {result.stackSavings} slots this way.</p>
-				{#each result.itemsToStack as item, idx}
-					{@render itemAdvice(item, idx)}
-				{/each}
-			</article>
-		</details>
-		<details class="searchable" open use:grungeBorder>
-			<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
-			<article use:autotooltip={tooltipOptions}>
-				<p>Below you can find items that you should consider geting rid of. Use them, sell or just destroy if not worth selling. You can save up to {result.getRidSavings} slots this way.</p>
-				{#each result.itemsToGetRidOf as item, idx}
-					{@render itemAdvice(item, idx)}
-				{/each}
-			</article>
-		</details>
+		{#if result.stackSavings + result.getRidSavings > 0}
+			<h3>Inventory cleanup advice</h3>
+			<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
+			<details class="searchable info" use:grungeBorder>
+				<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
+				<article use:autotooltip={tooltipOptions}>
+					<p>Below you can find items that can be compacted to occupy less space. You can save up to {result.stackSavings} slots this way.</p>
+					{#each result.itemsToStack as item, idx}
+						{@render itemAdvice(item, idx)}
+					{/each}
+				</article>
+			</details>
+			<details class="searchable info" use:grungeBorder>
+				<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
+				<article use:autotooltip={tooltipOptions}>
+					<p>
+						Below you can find items that you should consider geting rid of. Use them, sell or just destroy if not worth selling. You can save up to {result.getRidSavings}
+						slots this way.
+					</p>
+					{#each result.itemsToGetRidOf as item, idx}
+						{@render itemAdvice(item, idx)}
+					{/each}
+				</article>
+			</details>
+		{/if}
 	{/snippet}
 </Awaiter>
 
@@ -205,14 +210,15 @@
 		gap: 1rem;
 	}
 
-	ul{
+	ul {
 		width: 16rem;
 		padding-left: 0;
 		list-style-position: outside;
 		padding-inline-start: 1.2rem;
 	}
 
-	.savings{
 
+	.info {
+		background-color: var(--gw2helper-info);
 	}
 </style>

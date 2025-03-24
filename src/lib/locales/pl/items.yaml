@@ -1,9 +1,12 @@
-bags: |-
-  {name} - {count} {count, plural,
-    one {slot}
-    few {sloty}
-    other {slotów}
-  } na torby (Rozmiary użytych toreb: {sizes} = {capacity} miejsc ogółem)
+bags:
+  summary: |-
+    {name} - Dostępnych slotów: {available} z {capacity} 
+  details: |-
+    {count} {count, plural,
+      one {slot}
+      few {sloty}
+      other {slotów}
+    } na torby. Rozmiary użytych toreb: {sizes}. {capacity} miejsc ogółem
 bank: Bank
 characters_items: Przedmioty postaci
 common_items: Wspólne przedmioty

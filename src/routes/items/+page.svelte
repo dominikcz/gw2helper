@@ -31,6 +31,14 @@
 	function sizes(bags) {
 		return bags.map((x) => x.size).join(', ');
 	}
+
+	function availableSlots(bags) {
+		return bags
+			.filter(Boolean)
+			.map((x) => x.inventory)
+			.flat()
+			.filter((x) => x === null).length;
+	}
 </script>
 
 <h1>{$_('items.items')}</h1>
@@ -62,9 +70,12 @@
 	{#snippet children(result)}
 		{#each result as char}
 			{@const bags = char.bags.filter(Boolean)}
+			{@const capacity = sum(bags, 'size')}
+			{@const available = availableSlots(char.bags)}
 			<!-- `${char.name} - ${char.bags.length} bags (${}) - ${sum(char.bags, 'size')} slots total` -->
 			<ItemsList
-				summary={$_('items.bags', { name: char.name, count: char.bags.length, sizes: sizes(bags), capacity: sum(bags, 'size') })}
+				summary={$_('items.bags.summary', { name: char.name, available, capacity })}
+				additionalInfo={$_('items.bags.details', { count: char.bags.length, sizes: sizes(bags), capacity })}
 				items={char._items}
 				{filter}
 			/>

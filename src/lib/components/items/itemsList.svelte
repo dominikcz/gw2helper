@@ -11,6 +11,8 @@
 	export let items;
 	export let filter: string = '';
 	export let useBorder: boolean = true;
+	export let additionalInfo: string = '';
+
 	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity', 'count'];
 
 	const tooltipOptions = {
@@ -27,6 +29,9 @@
 		<Awaiter promise={items} >
 			{#snippet children(result)}
 			<div class="items autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions} >
+				{#if additionalInfo}
+					<span class="additional-info">{additionalInfo}</span>
+				{/if}
 				{#each helperUtils.filterCollection(result, fields, filter, { nonZero: true, nonZeroField: 'count' }) as item, index (`${item.id}-${index}`)}
 					<Item {item} />
 				{:else}
@@ -40,3 +45,10 @@
 		</Awaiter>
 	</article>
 </details>
+
+<style>
+	.additional-info{
+		width: 100%;
+		margin-bottom: 1rem;
+	}
+</style>
