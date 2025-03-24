@@ -161,7 +161,7 @@
 </script>
 
 {#snippet itemAdvice(adv, idx)}
-	<div class="item-cleanup">
+	<div class="item-cleanup" class:odd={idx % 2}>
 		<Item item={{ ...adv.item, count: sum(adv.usage, 'count') }} />
 		<ul>
 			{#each adv.usage as usage}
@@ -217,6 +217,12 @@
 		padding-inline-start: 1.2rem;
 	}
 
+	.item-cleanup{
+		padding: 0 0 0 0.8rem;
+	}
+	.odd{
+		background-color: color-mix(in srgb, black 30%, transparent);
+	}
 
 	.info {
 		background-color: var(--gw2helper-info);
