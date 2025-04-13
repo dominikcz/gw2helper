@@ -2447,7 +2447,8 @@ export const wikiData = {
     },
     "con": {
         "category": "Secrets of the Obscure",
-        "name": "Convergences",
+        "name": "Conv.: Outer Nayos",
+        "link": "Convergence: Outer Nayos",
         "segments": {
             "0": {
                 "name": "",
@@ -2458,8 +2459,8 @@ export const wikiData = {
                 ]
             },
             "1": {
-                "name": "Convergences (Public)",
-                "link": "Convergences",
+                "name": "Convergence: Outer Nayos",
+                "link": "Convergence: Outer Nayos",
                 "chatlink": "[\u0026BB8OAAA=]",
                 "bg": [
                     226,
@@ -2530,7 +2531,7 @@ export const wikiData = {
     },
     "cmb": {
         "category": "Janthir Wilds",
-        "name": "Mount Balrior",
+        "name": "Conv.: Mount Balrior",
         "link": "Convergence: Mount Balrior",
         "segments": {
             "0": {
