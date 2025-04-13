@@ -397,7 +397,7 @@ const legendaries = async (x: string) => {
             const data = mergeById(expanded, unlocked);
             // console.log('leg', data);
             const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
-            const trinkets = groupBy(data.filter(x => x.type === "Trinket"), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+            const trinkets = groupBy(data.filter(x => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
             const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
             const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
             const _weapons = data.filter(x => x.type === "Weapon");

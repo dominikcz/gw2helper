@@ -11,7 +11,7 @@
 	<a href={helperUtils.wikiLink(item.name)} target="_blank">
 		<img alt={item.name} src={item.icon} class:locked={!item.count} />
 	</a>
-	{#if item.count && item.count !== item.max_count}<figcaption>{item.count}/{item.max_count}</figcaption>{/if}
+	{#if item.count && item.max_count > 1}<figcaption>{item.count}/{item.max_count}</figcaption>{/if}
 </figure>
 
 <style lang="scss">
