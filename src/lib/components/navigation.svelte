@@ -90,9 +90,11 @@
 		display: flex;
 		flex-flow: row nowrap;
 		overflow-x: auto;
+		overflow-y: hidden;
 		-webkit-overflow-scrolling: touch;
 		gap: 2em;
 		height: 3em;
+		scrollbar-width: thin;
 
 		&.css-scroll-indicators {
 			background:
@@ -116,6 +118,7 @@
 			text-decoration: none;
 			transition: border 0.4s ease-in-out;
 			white-space: nowrap;
+			height: 2rem;
 			// border-radius: 5px;
 			&:hover {
 				border-bottom: 0.25em dotted var(--nav-active, #fff);

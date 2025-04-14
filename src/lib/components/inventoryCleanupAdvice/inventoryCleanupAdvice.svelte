@@ -215,10 +215,12 @@
 		padding-left: 0;
 		list-style-position: outside;
 		padding-inline-start: 1.2rem;
+		margin: 0.2rem 0;
 	}
 
 	.item-cleanup {
 		padding: 0 0 0 0.8rem;
+		min-height: 80px;
 	}
 	.odd {
 		background-color: color-mix(in srgb, black 30%, transparent);

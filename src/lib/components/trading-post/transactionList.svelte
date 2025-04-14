@@ -16,47 +16,49 @@
 	};
 </script>
 
-<table>
-	<caption></caption>
-	<thead>
-		<tr>
-			<th>Item</th>
-			<th>My offer</th>
-			<th>Age</th>
-			<th>Best offer</th>
-			<th># ordered</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each items as item, index (`${item.id}-${index}`)}
-			{@const offer = item[offerType]}
+<div class="container">
+	<table>
+		<caption></caption>
+		<thead>
 			<tr>
-				<td class="item">
-					<Item {item} />
-					<span class="item-name">{item.name}</span>
-				</td>
-				<td>
-					<Price value={item.price} />
-				</td>
-				<td class="item-time">
-					{wxdates.friendlyDurationTillNow(new Date(item.created), false)}
-				</td>
-				<td class="offer">
-					<Price value={offer.unit_price} />
-				</td>
-				<td class="offer-qty">
-					{offer.quantity}
-				</td>
+				<th>Item</th>
+				<th>My offer</th>
+				<th>Age</th>
+				<th>Best offer</th>
+				<th># ordered</th>
 			</tr>
-		{:else}
-			<tr>
-				<td colspan="5">
-					<span class="no-results">{$_('common.nothing_found')}</span>
-				</td>
-			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each items as item, index (`${item.id}-${index}`)}
+				{@const offer = item[offerType]}
+				<tr>
+					<td class="item">
+						<Item {item} />
+						<span class="item-name">{item.name}</span>
+					</td>
+					<td>
+						<Price value={item.price} />
+					</td>
+					<td class="item-time">
+						{wxdates.friendlyDurationTillNow(new Date(item.created), false)}
+					</td>
+					<td class="offer">
+						<Price value={offer.unit_price} />
+					</td>
+					<td class="offer-qty">
+						{offer.quantity}
+					</td>
+				</tr>
+			{:else}
+				<tr>
+					<td colspan="5">
+						<span class="no-results">{$_('common.nothing_found')}</span>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style lang="scss">
 	// .transaction-list {
@@ -68,20 +70,27 @@
 
 	.item {
 		display: flex;
-		column-gap: 1em;
+		column-gap: 1rem;
 		align-items: center;
 		justify-content: space-between;
 		text-align: left;
+		margin-left: 0.1rem;
 	}
 
 	.item-name {
 		flex-grow: 1;
 	}
 
+	.container {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	table {
 		border-collapse: collapse;
-		border-spacing: 2em 0.6rem;
-		width: 100%;
+		width: calc(100% - 1.2rem);
 		text-align: right;
 	}
 
@@ -121,7 +130,6 @@
 		caption {
 			display: flex;
 			flex-direction: column;
-			width: 100%;
 			word-break: break-all;
 		}
 
@@ -132,7 +140,7 @@
 
 		tbody {
 			border: 2px solid var(--color-tertiary);
-			background-color: rgba(255, 255, 255, 0.2);
+			// background-color: rgba(255, 255, 255, 0.2);
 		}
 
 		table tr {
