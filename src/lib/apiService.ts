@@ -4,7 +4,7 @@ import wx from "./wxjs_types";
 import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, MINIS_CACHE, REQUESTS_CACHE, SKINS_CACHE } from "$lib/consts";
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
-import { CURRENT_SEASON, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
+import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 import { groupBy, mapFields } from "./utils/helper-utils";
 
 const defaultApiUrl = "https://api.guildwars2.com";
@@ -17,6 +17,14 @@ const ACHIEVEMENTS_NOT_IN_API = {
     // TODO: will have to change to list of objects and get achievements' descriptions from wiki :(
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
+
+type GW2HelperSettings = {
+    currentSeason: string;
+};
+
+let _settings: GW2HelperSettings = {
+    currentSeason: '',
+};
 
 const unique = function (tab) {
     return tab.filter(function (el, i, self) {
@@ -125,7 +133,9 @@ const secondsBetween = (d1: Date | string, d2: Date): number => {
 const tryCache = (req: string): object | undefined => {
     if (_apiKey && requestCache.has(req)) {
         let info = requestCache.get(req);
-        if (secondsBetween(info!.time, new Date()) < CACHE_TIMEOUT) {
+        let secs = secondsBetween(info!.time, new Date());
+        if (secs < CACHE_TIMEOUT) {
+            console.log('tryCache', req, secs, 'reusing cache')
             return info;
         }
     }
@@ -143,6 +153,16 @@ const cacheRequest = async (req: string, value: any) => {
 
 const getFromAchievementsCache = (key: string): object => {
     return achievementsCache.get(key);
+}
+
+const readSettings = async () => {
+    const response = await fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
+        Logger.error('error', error);
+    });
+    if (response.ok) {
+        let data = await response.json();
+        _settings = Object.assign({}, _settings, data);
+    }
 }
 
 const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
@@ -616,6 +636,7 @@ const init = async (newApiKey: string, options?: object) => {
     const _req = await ls.getObject(requestCacheName(), []);
 
     requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
+    await readSettings();
     _tokenInfo = await tokenInfo();
     // console.log('tokenInfo', _tokenInfo)
 };
@@ -741,8 +762,9 @@ const expandAchievements = async (account, categories, accountAchievements, allI
     // we don't want categories of achievements that are not obtainable anymore
     const ignored_achievements = [...INACTIVE_ACHIEVEMENTS_CATEGORIES];
     // so we also ignore seasonal ones (appart from current season ofc)
+    console.log('current season:', _settings.currentSeason)
     Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach(season => {
-        if (season != CURRENT_SEASON) {
+        if (season != _settings.currentSeason) {
             ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season]);
         }
     })

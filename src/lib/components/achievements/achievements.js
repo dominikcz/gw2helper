@@ -141,10 +141,8 @@ export function filteredAchievements(data, filter, callbackFn, categoriesCallbac
     return _data;
 }
 
-export const CURRENT_SEASON = '';
-
 export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
-    'sab': [
+    'sab': [ // Super Adventure Box
         22, // Super Adventure Box: World 1
         45, // Super Adventure Box: World 2
         46, // Super Adventure Box: Tribulation Mode
@@ -152,13 +150,13 @@ export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
         205, // Super Adventure Box: Nostalgia
         351, // Super Adventure Box: Quality Testing
     ],
-    'db': [
+    'db': [ // Dragon Bash
         25, // Dragon Bash
         231, // Dragon Bash
         232, // Dragon Bash Feats
         233, // Daily Dragon Bash
     ],
-    'lc': [
+    'lc': [ // Labyrinthine Cliffs
         34, // Bazaar of the Four Winds
         42, // The Queen's Gauntlet
         67, // Festival of the Four Winds
@@ -168,7 +166,7 @@ export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
         213, // Daily Festival of the Four Winds
         214, // Queen's Gauntlet
     ],
-    'ha': [
+    'ha': [ // Halloween
         29, // Shadow of the Mad King
         52, // Blood and Madness
         78, // Blood and Madness
@@ -178,17 +176,22 @@ export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
         191, // Halloween Rituals
         193, // Shadow of the Mad King
     ],
-    'wd': [
+    'wd': [ // Wintersday
         98, // Wintersday Daily
         197, // Wintersday Traditions
         198, // Winter's Presence
     ],
-    'lny': [
+    'lny': [ // Lunar New Year
         102, // Lunar New Year Dailies
         199, // Dragon Ball
         200, // New Year's Customs
         201, // Daily Lunar New Year
         202, // Lunar New Year
+    ],
+    'fool': [
+        413, // Heights of Glory
+        447, // Cozy Café
+        448, // Daily Fooling
     ]
 }
 
@@ -240,4 +243,3 @@ export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
     401, // World vs. World Rush
     402, // New Hero Jump Start
 ]
-
