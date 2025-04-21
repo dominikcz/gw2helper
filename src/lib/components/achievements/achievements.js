@@ -245,7 +245,7 @@ export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
 ]
 
 export const ACHIEVEMENT_LINKS = {
-    4181: `Daily Sunken Treasure Hunter`, // Daily Blood in the Water
+    4181: `Sunken_Treasure_Hunter#achievement4181`, // Daily Blood in the Water
     4474: `Roller_Beetle_Time_Trial:_Lakeside_Loop`, // Daily Racer: Lakeside Loop
     4475: `Roller_Beetle_Time_Trial:_Tropic_Valley_Raceway`, // Daily Racer: Tropic Valley Raceway
     4478: `Roller_Beetle_Time_Trial:_Infernal_Leap`, // Daily Racer: Infernal Leap
