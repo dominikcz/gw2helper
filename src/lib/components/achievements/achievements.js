@@ -243,3 +243,14 @@ export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
     401, // World vs. World Rush
     402, // New Hero Jump Start
 ]
+
+export const ACHIEVEMENT_LINKS = {
+    4181: `Daily Sunken Treasure Hunter`, // Daily Blood in the Water
+    4474: `Roller_Beetle_Time_Trial:_Lakeside_Loop`, // Daily Racer: Lakeside Loop
+    4475: `Roller_Beetle_Time_Trial:_Tropic_Valley_Raceway`, // Daily Racer: Tropic Valley Raceway
+    4478: `Roller_Beetle_Time_Trial:_Infernal_Leap`, // Daily Racer: Infernal Leap
+    4480: `Roller_Beetle_Time_Trial:_Ghostfire_Run`, // Daily Racer: Ghostfire Run
+    4482: `Mount_race#Roller_beetle_races`, // Daily Rolling Racer
+    4484: `Roller_Beetle_Time_Trial:_Jormag's_Fang`, // Daily Racer: Jormag's Fang
+    6683: `Defeat_the_invading_minions_of_Scarlet_Briar`, // Daily Portal Closer
+}

@@ -5,6 +5,7 @@
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
 	import AchievementRewards from './achievementRewards.svelte';
+	import { ACHIEVEMENT_LINKS } from './achievements';
 
 	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any, onToggleTodo?: CallableFunction}} */
 	let {
@@ -31,6 +32,8 @@
 
 	let todoState_class = $derived(todo ? 'todo' : '');
 	let todoState_title = $derived(todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo'));
+
+	let link = ACHIEVEMENT_LINKS[id] ? ACHIEVEMENT_LINKS[id] : name;
 
 	function toggleTodo() {
 		todo = !todo;
@@ -63,7 +66,7 @@
 		{#if showApiLinks}
 			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
 		{/if}
-		<a href={helperUtils.wikiLink(name)} target="_blank" title={$_('common.read_more_on_wiki')}>
+		<a href={helperUtils.wikiLink(link)} target="_blank" title={$_('common.read_more_on_wiki')}>
 			<Wiki width="1.5em" height="1.5em" />
 		</a>
 	</div>
