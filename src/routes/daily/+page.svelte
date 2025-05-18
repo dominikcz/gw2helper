@@ -22,7 +22,7 @@
 
 	let sortBy = 'ap';
 	let showApiLinks = false;
-	let todoList=$state([]);
+	let todoList = $state([]);
 
 	// svelte-ignore non_reactive_update
 	enum Period {
@@ -41,7 +41,6 @@
 	}
 
 	function gw2NextQuarter() {
-		// TODO: maybe it would be better to get end time from /v2/wizardsvault?
 		const today = new Date();
 		const y = today.getFullYear();
 
@@ -78,53 +77,53 @@
 		return target;
 	}
 
-	function currentDay(dt){
-		const day = dt.substring(0, 10);
-		const currDay = new Date().toISOString().substring(0, 10);
-		return day == currDay;
+	function currentDay(dt) {
+		dt = new Date(dt)
+		const currDay = Date.prototype.wxToday(true, 0, 0, 0)
+		return wxdates.secondsBetween(dt, currDay, false) >= 0
 	}
 </script>
 
-<h1>{ $_('daily.daily_and_weekly') }</h1>
+<h1>{$_('daily.daily_and_weekly')}</h1>
 
-<h2>{ $_('daily.wizards_vault') }</h2>
+<h2>{$_('daily.wizards_vault')}</h2>
 
-<Awaiter promise={data.wallet} >
+<Awaiter promise={data.wallet}>
 	{#snippet children(result)}
-		<WidgetInfo title={ $_('daily.your_astral_acclaims') } value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.account} >
+<Awaiter promise={data.account}>
 	{#snippet children(result)}
-	{#if !currentDay(result.last_modified)}
-	<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
-	{/if}
+		{#if !currentDay(result.last_modified)}
+			<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
+		{/if}
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.daily} >
+<Awaiter promise={data.daily}>
 	{#snippet children(result)}
-		<WizardsVaultCategory title={ $_('daily.daily') } data={result} targetTime={getTimerTarget(Period.daily)} />
+		<WizardsVaultCategory title={$_('daily.daily')} data={result} targetTime={getTimerTarget(Period.daily)} />
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.weekly} >
+<Awaiter promise={data.weekly}>
 	{#snippet children(result)}
-		<WizardsVaultCategory title={ $_('daily.weekly') } data={result} targetTime={getTimerTarget(Period.weekly)} />
+		<WizardsVaultCategory title={$_('daily.weekly')} data={result} targetTime={getTimerTarget(Period.weekly)} />
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.special} >
+<Awaiter promise={data.special}>
 	{#snippet children(result)}
-		<WizardsVaultCategory title={ $_('daily.special') } data={result} targetTime={getTimerTarget(Period.special)} />
+		<WizardsVaultCategory title={$_('daily.special')} data={result} targetTime={getTimerTarget(Period.special)} />
 	{/snippet}
 </Awaiter>
 
-<h2>{ $_('daily.achievements') }</h2>
+<h2>{$_('daily.achievements')}</h2>
 <h3>{$_('achievements.your_list')}</h3>
 
-<Awaiter promise={data.achievements} >
+<Awaiter promise={data.achievements}>
 	{#snippet children(result)}
 		{@const dailies = extractDaily(result)}
 		{@const weeklies = extractWeekly(result)}
@@ -134,17 +133,17 @@
 		<AchievList items={todos} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
 			{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
 		</AchievList>
-		
-		<h3>{ $_('daily.daily') }</h3>
+
+		<h3>{$_('daily.daily')}</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(dailies.categories, sortBy) as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
-		<h3>{ $_('daily.weekly') }</h3>
+		<h3>{$_('daily.weekly')}</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sort(weeklies.categories, sortBy) as category (category.id)}
-				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList) }/>
+				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
 	{/snippet}

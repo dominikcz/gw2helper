@@ -59,10 +59,22 @@ function setTime(dt, utc, atHour, atMinute, atSecond) {
 	return dt;
 }
 
+function setDate(daysAdd, utc, atHour, atMinute, atSecond){
+	let newDate = new Date();
+	newDate.setDate(newDate.getDate() + daysAdd);
+	return setTime(newDate, utc, atHour, atMinute, atSecond);
+}
+
 Date.prototype.wxTomorrow = function (utc, atHour, atMinute, atSecond) {
-	const tomorrow = new Date();
-	tomorrow.setDate(tomorrow.getDate() + 1);
-	return setTime(tomorrow, utc, atHour, atMinute, atSecond);
+	return setDate(1, utc, atHour, atMinute, atSecond);
+}
+
+Date.prototype.wxYesterday = function (utc, atHour, atMinute, atSecond) {
+	return setDate(-1, utc, atHour, atMinute, atSecond);
+}
+
+Date.prototype.wxToday = function (utc, atHour, atMinute, atSecond) {
+	return setDate(0, utc, atHour, atMinute, atSecond);
 }
 
 Date.prototype.wxNextWeekDay = function (weekDay = 1, utc, atHour, atMinute, atSecond) {

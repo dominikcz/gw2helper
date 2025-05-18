@@ -92,6 +92,10 @@ GET {{baseUrl}}/v2/account/wizardsvault/weekly
 Authorization: Bearer {{key}}
 
 ###
+GET {{baseUrl}}/v2/account/wizardsvault/special
+Authorization: Bearer {{key}}
+
+###
 GET {{baseUrl}}/v2/commerce/transactions/current/buys
 Authorization: Bearer {{key}}
 
