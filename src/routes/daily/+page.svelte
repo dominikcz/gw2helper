@@ -78,9 +78,14 @@
 	}
 
 	function currentDay(dt) {
-		dt = new Date(dt)
-		const currDay = Date.prototype.wxToday(true, 0, 0, 0)
-		return wxdates.secondsBetween(dt, currDay, false) >= 0
+		dt = new Date(dt);
+		const currDay = Date.prototype.wxToday(true, 0, 0, 0);
+		return wxdates.secondsBetween(dt, currDay, false) >= 0;
+	}
+	function currentWeek(dt) {
+		dt = new Date(dt);
+		const startOfWeek = wxdates.dateAdd(Date.prototype.wxNextWeekDay(1, true, 0, 0, 0), 'day', -7);
+		return wxdates.secondsBetween(dt, startOfWeek, false) >= 0;
 	}
 </script>
 
@@ -99,18 +104,21 @@
 		{#if !currentDay(result.last_modified)}
 			<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
 		{/if}
-	{/snippet}
-</Awaiter>
+		<Awaiter promise={data.daily}>
+			{#snippet children(resultDaily)}
+				{#if currentDay(result.last_modified)}
+					<WizardsVaultCategory title={$_('daily.daily')} data={resultDaily} targetTime={getTimerTarget(Period.daily)} />
+				{/if}
+			{/snippet}
+		</Awaiter>
 
-<Awaiter promise={data.daily}>
-	{#snippet children(result)}
-		<WizardsVaultCategory title={$_('daily.daily')} data={result} targetTime={getTimerTarget(Period.daily)} />
-	{/snippet}
-</Awaiter>
-
-<Awaiter promise={data.weekly}>
-	{#snippet children(result)}
-		<WizardsVaultCategory title={$_('daily.weekly')} data={result} targetTime={getTimerTarget(Period.weekly)} />
+		<Awaiter promise={data.weekly}>
+			{#snippet children(resultWeekly)}
+				{#if currentWeek(result.last_modified)}
+					<WizardsVaultCategory title={$_('daily.weekly')} data={resultWeekly} targetTime={getTimerTarget(Period.weekly)} />
+				{/if}
+			{/snippet}
+		</Awaiter>
 	{/snippet}
 </Awaiter>
 
