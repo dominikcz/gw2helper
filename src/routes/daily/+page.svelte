@@ -48,9 +48,9 @@
 		const quarters = [
 			new Date(y, 2, 4), 
 			new Date(y, 5, 4), 
-			new Date(y, 8, 4), 
-			new Date(y, 11, 4), 
-			new Date(y + 1, 2, 4)
+			new Date(y, 9,  29), 
+			new Date(y, 12, 29), 
+			new Date(y + 1, 3, 29)
 		];
 
 		quarters.forEach((q) => {
