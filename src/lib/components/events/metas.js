@@ -1,7 +1,7 @@
 
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
 // https://wiki.guildwars2.com/index.php?title=Widget:Event_timer/data.json&action=raw
-// last update: 2024-10-15
+// last update: 2025-06-07
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
@@ -2515,6 +2515,47 @@ export const wikiData = {
                 {
                     "r": 0,
                     "d": 30
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 25
+                },
+                {
+                    "r": 0,
+                    "d": 95
+                }
+            ]
+        }
+    },
+    "bn": {
+        "category": "Janthir Wilds",
+        "name": "Bava Nisos",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    196,
+                    212,
+                    255
+                ]
+            },
+            "1": {
+                "name": "A Titanic Voyage",
+                "chatlink": "[\u0026BGEPAAA=]",
+                "bg": [
+                    146,
+                    170,
+                    235
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 0,
+                    "d": 80
                 }
             ],
             "pattern": [
