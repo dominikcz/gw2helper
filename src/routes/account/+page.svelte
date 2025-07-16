@@ -114,6 +114,17 @@
 					class="autotooltip"
 				/>
 			{/if}
+
+			{#if has(result, 'VisionsOfEternity')}
+				<WidgetImg
+					title={$_('account.visions_of_eternity')}
+					url={`${base}/assets/400px-Visions_of_Eternity_logo.png`}
+					link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Visions_of_Eternity"
+					linkTitle={$_('common.read_more_on_wiki')}
+					class="autotooltip"
+				/>
+			{/if}
+			
 		</WidgetsGroup>
 
 		{#if perm.includes('progression')}
