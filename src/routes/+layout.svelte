@@ -324,7 +324,7 @@
 			background-position-y: -4em;
 		}
 	}
-	.autotooltip-wide {
+	:global(.autotooltip-wide) {
 		width: 18.75em;
 	}
 
