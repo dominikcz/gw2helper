@@ -1,8 +1,11 @@
 <script>
+	import utils from "$lib/utils";
+
 	/** @type {{item: any}} */
 	let { item } = $props();
 
 	let flags = getFlags();
+	let showApiLinks = utils.getQueryStringFlag('show-api-links');
 
 	function getFlags() {
 		if (item.flags) {
@@ -19,7 +22,7 @@
 <div class="item-descr">
 	<div class="head">
 		<img alt={item.name} src={item.icon} />
-		<div class="caption {rarityClass()}">{item.count > 1 ? item.count : ''} {item.name}</div>
+		<div class="caption {rarityClass()}">{item.count > 1 ? item.count : ''} {item.name} {#if showApiLinks}(id: {item.id}){/if}</div>
 	</div>
 
 	<div class="details">

@@ -13,7 +13,7 @@
 	export let useBorder: boolean = true;
 	export let additionalInfo: string = '';
 
-	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity', 'count'];
+	const fields = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity', 'count', 'flags'];
 
 	const tooltipOptions = {
 		customRenderers: {

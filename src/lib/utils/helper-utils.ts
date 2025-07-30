@@ -33,6 +33,9 @@ function match(word: string, obj: object, properties: Array<string>) {
             if (t === 'number' && ('' + obj[x]).includes(word)) {
                 return true;
             }
+            if (Array.isArray(obj[x]) && (obj[x].join(',').toLowerCase()).includes(word)) {
+                return true;
+            }
         }
         return false;
     });
