@@ -124,7 +124,9 @@
 		list-style: none;
 		background-color: var(--search-input-dropdown-bg);
 		box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
-		z-index: 1;
+		z-index: 1000;
+		overflow-y: scroll;
+		max-height: 10em;
 	}
 
 	li {

@@ -6,6 +6,7 @@
 	import { t as _, t } from '$lib/services/i18n.js';
 	import Item from '../items/item.svelte';
 	import { sum } from '$lib/utils';
+	import SearchInput from '../searchInput.svelte';
 
 	type ItemUsage = {
 		count: number;
@@ -30,6 +31,8 @@
 			})
 			.catch((error) => reject(error));
 	});
+
+	let char = $state('--- any ---');
 
 	const tooltipOptions = {
 		customRenderers: {
@@ -158,6 +161,26 @@
 		});
 		return sum(items, 'savings');
 	}
+
+	function getCharacters(itemsToStack) {
+		const list = ['--- any ---'];
+
+		const sources = new Set();
+		itemsToStack.forEach((element) => {
+			element.usage.forEach((u) => {
+				if (u.source != 'bank' && u.source != 'shared') {
+					sources.add(u.source);
+				}
+			});
+		});
+		list.push(...Array.from(sources).sort((a, b) => a.localeCompare(b)));
+		return list;
+	}
+
+	function filteredItems(items) {
+		if (!char || char == '--- any ---') return items;
+		return items.filter((x) => x.usage.some((u) => u.source == char));
+	}
 </script>
 
 {#snippet itemAdvice(adv, idx)}
@@ -165,7 +188,7 @@
 		<Item item={{ ...adv.item, count: sum(adv.usage, 'count') }} />
 		<ul>
 			{#each adv.usage as usage}
-				<li>{usage.count} - {usage.source}</li>
+				<li class:highlight={usage.source == char}>{usage.count} - {usage.source}</li>
 			{/each}
 		</ul>
 		<span class="savings">Slots to save: {adv.savings}</span>
@@ -177,11 +200,16 @@
 		{#if result.stackSavings + result.getRidSavings > 0}
 			<h3>Inventory cleanup advice</h3>
 			<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
+			<p>
+				Show only items of character:
+				<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />
+			</p>
+
 			<details class="info" use:grungeBorder>
 				<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
 				<article use:autotooltip={tooltipOptions}>
 					<p>Below you can find items that can be compacted to occupy less space. You can save up to {result.stackSavings} slots this way.</p>
-					{#each result.itemsToStack as item, idx}
+					{#each filteredItems(result.itemsToStack) as item, idx}
 						{@render itemAdvice(item, idx)}
 					{/each}
 				</article>
@@ -193,7 +221,7 @@
 						Below you can find items that you should consider geting rid of. Use them, sell or just destroy if not worth selling. You can save up to {result.getRidSavings}
 						slots this way.
 					</p>
-					{#each result.itemsToGetRidOf as item, idx}
+					{#each filteredItems(result.itemsToGetRidOf) as item, idx}
 						{@render itemAdvice(item, idx)}
 					{/each}
 				</article>
@@ -228,5 +256,10 @@
 
 	.info {
 		background-color: var(--gw2helper-info);
+	}
+
+	.highlight {
+		background-color: var(--gw2helper-highlight-background);
+		color: var(--gw2helper-highlight-text);
 	}
 </style>
