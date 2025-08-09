@@ -162,6 +162,8 @@ const readSettings = async () => {
     if (response.ok) {
         let data = await response.json();
         _settings = Object.assign({}, _settings, data);
+    } else {
+        Logger.warn('error loading settings', { status: response.status, url: response.url });
     }
 }
 
@@ -762,7 +764,7 @@ const expandAchievements = async (account, categories, accountAchievements, allI
     // we don't want categories of achievements that are not obtainable anymore
     const ignored_achievements = [...INACTIVE_ACHIEVEMENTS_CATEGORIES];
     // so we also ignore seasonal ones (appart from current season ofc)
-    console.log('current season:', _settings.currentSeason)
+    // console.log('current season:', _settings.currentSeason)
     Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach(season => {
         if (season != _settings.currentSeason) {
             ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season]);
@@ -956,4 +958,5 @@ export default {
     minisCache: (id) => minisCache.get(parseInt(id)),
     skinsCache: (id) => skinsCache.get(parseInt(id)),
     achievementsCache: (id) => achievementsCache.get(parseInt(id)),
+    currentSeason: () => _settings.currentSeason,
 };

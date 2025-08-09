@@ -25,13 +25,17 @@
 	let allEvents = $state([]); // here we hold all events' data
 
 	onMount(async () => {
-		// remove special events
-		eventsUtils.excludeEvents([
+		const currentSeason = data.apiService.currentSeason();
+		const specialEvents = [
 			'lc', // Labyrinthine Cliffs
 			'db', // Day and night
 			'ha', // Halloween
-		]);
+		].filter((season) => season !== currentSeason);
+		console.log('Current season:', currentSeason);
+		// remove all special events but currentSeason
+		eventsUtils.excludeEvents(specialEvents);
 		eventsUtils.init();
+
 		allEvents = eventsUtils.prepareDailyCalendar();
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
