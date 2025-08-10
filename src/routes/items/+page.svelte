@@ -14,6 +14,8 @@
 	let { data }: Props = $props();
 
 	let filter = $state('');
+	let filterFlags = $state(false);
+
 	enum SortType {
 		AsIs,
 		Slots,
@@ -47,20 +49,21 @@
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 		<button on:click={sortBySlots}>sort by quantity</button> -->
 	<SearchHelp />
+	<label><input type="checkbox" bind:checked={filterFlags} /> search in item flags</label>
 </SearchInput>
 
 <InventoryCleanupAdvice bank={data.bank} shared={data.shared} charactersItems={data.charactersItems} />
 
 <h3>{$_('items.common_items')}</h3>
 
-<ItemsList summary={$_('items.bank')} items={data.bank} {filter} />
-<ItemsList summary={$_('items.shared_inventory')} items={data.shared} {filter} />
+<ItemsList summary={$_('items.bank')} items={data.bank} {filter} {filterFlags}/>
+<ItemsList summary={$_('items.shared_inventory')} items={data.shared} {filter} {filterFlags} />
 
 <h3>{$_('items.guild_items')}</h3>
 <Awaiter promise={data.guildItems}>
 	{#snippet children(result)}
 		{#each result as guild}
-			<ItemsList summary={guild.name} items={guild.stash} {filter} />
+			<ItemsList summary={guild.name} items={guild.stash} {filter} {filterFlags} />
 		{/each}
 	{/snippet}
 </Awaiter>
@@ -78,6 +81,7 @@
 				additionalInfo={$_('items.bags.details', { count: char.bags.length, sizes: sizes(bags), capacity })}
 				items={char._items}
 				{filter}
+				{filterFlags}
 			/>
 		{/each}
 	{/snippet}
