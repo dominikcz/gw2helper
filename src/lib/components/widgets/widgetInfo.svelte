@@ -4,7 +4,7 @@
 		value: string;
 		image?: string;
 		children?: import('svelte').Snippet<[any]>;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let {
@@ -25,7 +25,7 @@
 	<div class="title">{title}</div>
 	<div class="value">
 		{#if children}{@render children({ value })}{:else}
-			{@html value || '&nbsp;'}
+			{@html value}
 		{/if}
 	</div>
 </div>
