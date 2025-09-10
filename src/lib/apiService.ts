@@ -26,13 +26,13 @@ let _settings: GW2HelperSettings = {
     currentSeason: '',
 };
 
-const unique = function (tab) {
-    return tab.filter(function (el, i, self) {
-        return self.indexOf(el) === i;
-    });
-};
+// const unique = function (tab) {
+//     return tab.filter(function (el, i, self) {
+//         return self.indexOf(el) === i;
+//     });
+// };
 
-const REQUIRED_SCOPES = {
+const REQUIRED_SCOPES: Record<string, string[]> = {
     "/v2/account": ['account' /*, 'progression' */],
     "/v2/account/achievements": ['account', 'progression'],
     "/v2/account/bank": ['account', 'inventories'],
@@ -46,7 +46,7 @@ const REQUIRED_SCOPES = {
     "/v2/guild/*": ['account', 'guilds'],
 }
 
-function getScopes(req) {
+function getScopes(req: string) {
     if (REQUIRED_SCOPES[req]) return REQUIRED_SCOPES[req];
     const rs = Object.keys(REQUIRED_SCOPES).find(x => req.startsWith(x.replace('*', '')));
     return rs ? REQUIRED_SCOPES[rs] : [];
@@ -80,7 +80,7 @@ interface TokenInfo {
     id: string;
     name: string;
     permissions: string[];
-    missingScopes: string[];
+    missingScopes?: string[];
 }
 
 let _items;
@@ -105,8 +105,8 @@ let fetchOptions = {
     timeout: 10000,
     expectJson: true,
     apiLang: 'en',
-    onError(request, response, options) {
-        Logger.error(`apiClient response error ${response.status}: ${response.statusText ? response.statusText : '(HTTP status: ' + response.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
+    onError(request: Request, response: Response, options: object) {
+        Logger.error(`apiClient response error ${response?.status}: ${response?.statusText ? response?.statusText : '(HTTP status: ' + response?.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
     },
     fetchFunction: fetch,
     debug: false,
@@ -116,11 +116,11 @@ const requestCacheName = (): string => {
     return `${REQUESTS_CACHE}.${_apiKey}`;
 }
 
-const notifyOnError = (req, error, options) => {
-    if (fetchOptions.onError) {
-        fetchOptions.onError(req, error, options);
-    }
-};
+// const notifyOnError = (req, error, options) => {
+//     if (fetchOptions.onError) {
+//         fetchOptions.onError(req, error, options);
+//     }
+// };
 
 const secondsBetween = (d1: Date | string, d2: Date): number => {
     if (typeof d1 == 'string') {
@@ -159,11 +159,11 @@ const readSettings = async () => {
     const response = await fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
         Logger.error('error', error);
     });
-    if (response.ok) {
+    if (response?.ok) {
         let data = await response.json();
         _settings = Object.assign({}, _settings, data);
     } else {
-        Logger.warn('error loading settings', { status: response.status, url: response.url });
+        Logger.warn('error loading settings', { status: response?.status, url: response?.url });
     }
 }
 
@@ -197,12 +197,12 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options).catch(error => {
             Logger.error('error', error);
         });
-        if (response.status >= 400) {
-            const body = await response.text();
-            Logger.warn('error loading data', { status: response.status, url: response.url, body });
+        if (response?.status >= 400) {
+            const body = await response?.text();
+            Logger.warn('error loading data', { status: response?.status, url: response?.url, body });
             // notifyOnError(req, response, _options);
             cachedValue = body || [];
-        } else if (response.ok) {
+        } else if (response?.ok) {
             let data;
             if (_options.expectJson) {
                 data = await response.json();
@@ -218,7 +218,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             }
             Logger.log(`requestCache for ${origReq} updated`, cachedValue);
         } else {
-            Logger.log(`got response.status = ${response.status}... ignoring`);
+            Logger.log(`got response.status = ${response?.status}... ignoring`);
             cachedValue = query ? [] : {};
         }
     }
@@ -623,6 +623,7 @@ const wizardsVaultSpecial = async () => {
 }
 
 const init = async (newApiKey: string, options?: object) => {
+    if (newApiKey === _apiKey && _tokenInfo) return;
     _items = await ls.getObject(ITEMS_CACHE, []);
     _achievements = await ls.getObject(ACHIEVEMENTS_CACHE, []);
     _minis = await ls.getObject(MINIS_CACHE, []);

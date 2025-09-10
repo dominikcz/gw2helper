@@ -623,6 +623,94 @@ export const wikiData = {
             ]
         }
     },
+    "fi": {
+        "category": "Core Tyria",
+        "name": "Fractal Incursions",
+        "link": "Fractal Incursion",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    251,
+                    132,
+                    152
+                ]
+            },
+            "1": {
+                "name": "Diessa Plateau",
+                "chatlink": "[\u0026BN0AAAA=]",
+                "bg": [
+                    234,
+                    98,
+                    121
+                ]
+            },
+            "2": {
+                "name": "Brisban Wildlands",
+                "chatlink": "[\u0026BHUAAAA=]",
+                "bg": [
+                    234,
+                    98,
+                    121
+                ]
+            },
+            "3": {
+                "name": "Snowden Drifts",
+                "chatlink": " [\u0026BLQAAAA=]",
+                "bg": [
+                    234,
+                    98,
+                    121
+                ]
+            },
+            "4": {
+                "name": "Kessex Hills",
+                "chatlink": "[\u0026BBIAAAA=]",
+                "bg": [
+                    234,
+                    98,
+                    121
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [],
+            "pattern": [
+                {
+                    "r": 4,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 45
+                },
+                {
+                    "r": 1,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 45
+                },
+                {
+                    "r": 2,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 45
+                },
+                {
+                    "r": 3,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 45
+                }
+            ]
+        }
+    },
     "euat": {
         "category": "Core Tyria",
         "name": "EU PvP Tournaments",

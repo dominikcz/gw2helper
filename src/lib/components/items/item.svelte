@@ -18,7 +18,10 @@
 			<img alt={item.name} src={item.icon} class:locked={item.locked} />
 		</a>
 	{:else}
-		<img alt="invalid id: {item.id}" src="{base}/assets/Talk_question_mark_option.png" />
+		<a href={helperUtils.apiItemLink(item.id)} target="_blank">
+			<img alt="invalid id: {item.id}" title="id: {item.id}" src="{base}/assets/Talk_question_mark_option.png" />
+		</a>
+		<figcaption>id: {item.id}</figcaption>
 	{/if}
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>

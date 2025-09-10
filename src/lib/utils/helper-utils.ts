@@ -104,6 +104,10 @@ function wikiLink(name) {
     return name ? `https://wiki.guildwars2.com/wiki/${name}`.replaceAll(' ', '_') : '#';
 }
 
+function apiItemLink(id) {
+    return `https://api.guildwars2.com/v2/items/${id}`;
+}
+
 function getDeepProp(obj, str) {
     if (typeof obj !== 'object' || obj === undefined) return obj;
     const fields = str.split(".");
@@ -150,4 +154,5 @@ export default {
     age,
     hoursPlayed,
     wikiLink,
+    apiItemLink,
 }
