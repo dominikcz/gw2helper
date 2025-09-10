@@ -1,7 +1,7 @@
 
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
 // https://wiki.guildwars2.com/index.php?title=Widget:Event_timer/data.json&action=raw
-// last update: 2025-06-07
+// last update: 2025-09-10
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
