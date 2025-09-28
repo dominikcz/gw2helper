@@ -15,5 +15,6 @@
         background-color: #222;
         color: inherit;
         margin-left: 1em;
+        user-select: none;
     }
 </style>

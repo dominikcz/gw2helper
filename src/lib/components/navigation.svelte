@@ -95,6 +95,7 @@
 		gap: 2em;
 		height: 3em;
 		scrollbar-width: thin;
+		user-select: none;
 
 		&.css-scroll-indicators {
 			background:

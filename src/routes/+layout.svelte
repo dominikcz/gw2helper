@@ -1,7 +1,7 @@
 <script>
 	import '$lib/scss/gw2.scss';
 	import { base } from '$app/paths';
-	import { beforeNavigate, invalidateAll } from '$app/navigation';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	import languages from '$lib/locales/languages.json';
@@ -58,13 +58,12 @@
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 
-	onMount(async () => {
+	afterNavigate(() => {
 		checkIfAudioPlayable();
 	});
 
-	function checkIfAudioPlayable(dummmy) {
-		let dummyAudio = new AudioContext();
-		if (dummyAudio.state == 'suspended' && reminders.hasAny()) {
+	function checkIfAudioPlayable() {
+		if (!navigator.userActivation.hasBeenActive && reminders.hasAny()) {
 			noAudio = toast.push($_('layout.no_audio'), {
 				initial: 0,
 			});

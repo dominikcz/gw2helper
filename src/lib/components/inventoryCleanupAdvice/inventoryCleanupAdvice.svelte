@@ -208,7 +208,7 @@
 			<details class="info" use:grungeBorder>
 				<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
 				<article use:autotooltip={tooltipOptions}>
-					<p>Below you can find items that can be compacted to occupy less space. You can save up to {result.stackSavings} slots this way.</p>
+					<p>Below you can find items that can be compacted to occupy less space. This can save you up to {result.stackSavings} slots.</p>
 					{#each filteredItems(result.itemsToStack) as item, idx}
 						{@render itemAdvice(item, idx)}
 					{/each}
@@ -218,8 +218,8 @@
 				<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
 				<article use:autotooltip={tooltipOptions}>
 					<p>
-						Below you can find items that you should consider geting rid of. Use them, sell or just destroy if not worth selling. You can save up to {result.getRidSavings}
-						slots this way.
+						Below you can find items that you should consider getting rid of. You can use, sell, or discard them if they are not worth selling.
+						You can save up to {result.getRidSavings} slots this way.
 					</p>
 					{#each filteredItems(result.itemsToGetRidOf) as item, idx}
 						{@render itemAdvice(item, idx)}

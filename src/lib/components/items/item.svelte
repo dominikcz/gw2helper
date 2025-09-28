@@ -51,7 +51,7 @@
 			color: #fff;
 			background: rgba(0, 0, 0, 0.5);
 			font-size: 80%;
-			padding: 0 0 0 0.2em;
+			padding: 0 0.2em;
 		}
 	}
 </style>

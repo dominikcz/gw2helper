@@ -127,6 +127,7 @@
 		z-index: 1000;
 		overflow-y: scroll;
 		max-height: 10em;
+		user-select: none;
 	}
 
 	li {
