@@ -199,9 +199,15 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         });
         if (response?.status >= 400) {
             const body = await response?.text();
-            Logger.warn('error loading data', { status: response?.status, url: response?.url, body });
             // notifyOnError(req, response, _options);
-            cachedValue = body || [];
+            // cachedValue = body || [];
+            const errorMsg = JSON.parse(body)?.text;
+            if (errorMsg !== "") {
+                throw new Error(errorMsg);
+            } else {
+                throw new Error(`${response?.status}: ${response?.statusText} ${body}`);
+            }
+            
         } else if (response?.ok) {
             let data;
             if (_options.expectJson) {
