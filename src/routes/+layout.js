@@ -34,23 +34,21 @@ export async function load({ fetch, url }) {
 		remindersSettings: new ReminderSettings(),
 	};
 
-	returnObj.tokenInfo = apiService.tokenInfo();
 	console.log('key', key);
 	if (key) {
-		try {
-			await apiService.init(key, { apiLang, fetchFunction: fetch });
-			returnObj.tokenInfo = apiService.tokenInfo();
-			// console.log(returnObj.tokenInfo)
-		} catch (error) {
-			console.warn('Layout load error', error)
+		await apiService.init(key, { apiLang, fetchFunction: fetch });
+		returnObj.tokenInfo = apiService.tokenInfo();
+		if (!returnObj.tokenInfo.name) {
+			if (!returnObj.tokenInfo.error) {
+				returnObj.tokenInfo.error = no_token;
+			}
+			returnObj.reminders = {};
+		} else {
+			apiService.startSession();
+			returnObj.reminders = await utils.readReminders();
 		}
+		// console.log(returnObj.tokenInfo)
 	}
-	if (!returnObj.tokenInfo.name) {
-		returnObj.tokenInfo.error = no_token;
-		returnObj.reminders = {};
-	} else {
-		apiService.startSession();
-		returnObj.reminders = await utils.readReminders();
-	}
-return returnObj;
+
+	return returnObj;
 }

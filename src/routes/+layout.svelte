@@ -24,7 +24,7 @@
 	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
-
+	
 	/** @type {{data: any, children?: import('svelte').Snippet}} */
 	let { data, children } = $props();
 
@@ -169,17 +169,17 @@
 	let active = $derived($page.url.pathname);
 	let title = $derived([defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
-		{ slug: `${base}/`, label: $_('layout.nav.home'), requiresKey: true},
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), requiresKey: true},
+		{ slug: `${base}/`, label: $_('layout.nav.home'), requiresKey: true },
+		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), requiresKey: true },
 		{ slug: `${base}/events/`, label: $_('layout.nav.events'), requiresKey: false },
-		{ slug: `${base}/items/`, label: $_('layout.nav.items'), requiresKey: true},
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), requiresKey: true},
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), requiresKey: true},
-		{ slug: `${base}/account/`, label: $_('layout.nav.account'), requiresKey: true},
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), requiresKey: true},
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), requiresKey: true},
-		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), requiresKey: true},
-		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), requiresKey: true},
+		{ slug: `${base}/items/`, label: $_('layout.nav.items'), requiresKey: true },
+		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), requiresKey: true },
+		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), requiresKey: true },
+		{ slug: `${base}/account/`, label: $_('layout.nav.account'), requiresKey: true },
+		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), requiresKey: true },
+		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), requiresKey: true },
+		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), requiresKey: true },
+		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), requiresKey: true },
 	]);
 	let currentPageRequiresKey = $derived(navigation.find((x) => x.slug == active)?.requiresKey || false);
 
@@ -253,7 +253,7 @@
 					<p><em>{$_('layout.token_ok', { token: tokenInfo.name })}</em></p>
 				{/if}
 				{#if tokenInfo.error}
-					<p><em>{@html tokenInfo.error}</em></p>
+					<p class="error">{@html tokenInfo.error}</p>
 				{/if}
 			</fieldset>
 		</details>
@@ -347,5 +347,11 @@
 		--toastContainerBottom: 1em;
 		--toastContainerLeft: calc(50vw - 12rem);
 		--toastWidth: 24rem;
+	}
+
+	.error{
+		color: var(--gw2helper-module-text) !important;
+		background-color: var(--gw2helper-error);
+		padding: 0.2em 0.6em;
 	}
 </style>

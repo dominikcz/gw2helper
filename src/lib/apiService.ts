@@ -81,6 +81,7 @@ interface TokenInfo {
     name: string;
     permissions: string[];
     missingScopes?: string[];
+    error: string | null;
 }
 
 let _items;
@@ -95,7 +96,9 @@ let requestCache: Map<string, CacheEntry>;
 let _tokenInfo: TokenInfo = {
     id: '',
     name: '',
-    permissions: []
+    permissions: [],
+    error: null,
+    missingScopes: [],
 };
 
 let _apiKey = "";
@@ -199,15 +202,20 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
         });
         if (response?.status >= 400) {
             const body = await response?.text();
+
             // notifyOnError(req, response, _options);
             // cachedValue = body || [];
-            const errorMsg = JSON.parse(body)?.text;
-            if (errorMsg !== "") {
-                throw new Error(errorMsg);
+            if (response?.headers.get('content-type')?.includes('application/json')) {
+                const errorMsg = JSON.parse(body)?.text;
+                if (errorMsg !== "") {
+                    throw new Error(errorMsg);
+                } else {
+                    throw new Error(body);
+                }
             } else {
-                throw new Error(`${response?.status}: ${response?.statusText} ${body}`);
+                throw new Error(body);
             }
-            
+
         } else if (response?.ok) {
             let data;
             if (_options.expectJson) {
@@ -475,9 +483,7 @@ const bank = async () => {
 };
 
 const tokenInfo = async (): Promise<TokenInfo> => {
-    return apiClient("/v2/tokeninfo", "").catch(reason => {
-        console.log('reason', reason)
-    });
+    return apiClient("/v2/tokeninfo", "");
 };
 
 const achievements = async (all: boolean = false) => {
@@ -575,12 +581,8 @@ const currencies = async (order = []) => {
 }
 
 const wallet = async (order = []) => {
-    return new Promise((resolve, reject) => {
-        Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
-            resolve(mergeById(_curr, _wallet));
-        }).catch(error => {
-            reject(error);
-        });
+    Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
+        mergeById(_curr, _wallet);
     });
 }
 
@@ -646,7 +648,11 @@ const init = async (newApiKey: string, options?: object) => {
 
     requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
     await readSettings();
-    _tokenInfo = await tokenInfo();
+    try {
+        _tokenInfo = await tokenInfo();
+    } catch (error) {
+        _tokenInfo.error = error.message;
+    }
     // console.log('tokenInfo', _tokenInfo)
 };
 
