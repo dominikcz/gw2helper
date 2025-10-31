@@ -581,9 +581,13 @@ const currencies = async (order = []) => {
 }
 
 const wallet = async (order = []) => {
-    Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
-        mergeById(_curr, _wallet);
-    });
+    return new Promise((resolve, reject) => {
+        Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
+            resolve(mergeById(_curr, _wallet));
+        }).catch(error => {
+            reject(error);
+        });
+    })
 }
 
 const promiseMe = async (APromise: Promise<any>, job) => {
