@@ -14,6 +14,8 @@
 
 	let { data }: Props = $props();
 
+	const armorPiecesCount = 7; // Helm, Shoulders, Coat, Gloves, Leggings, Boots, Aquatic Helm
+
 	const minReqWeapons = {
 		Axe: 2,
 		Dagger: 2,
@@ -102,16 +104,17 @@
 			<summary
 				>{$_('legendary.armor_type.'+caption.toLowerCase())}
 				<div class="info">
-					<Progress value={progressArmor} max={6} label={`${progressArmor} / 6`} />
+					<Progress value={progressArmor} max={armorPiecesCount} label={`${progressArmor} / ${armorPiecesCount}`} />
 				</div>
 			</summary>
 			<article>
-				{@render unlocksList('Helm', weightData.Helm, 1, true)}
-				{@render unlocksList('Shoulders', weightData.Shoulders, 1, true)}
-				{@render unlocksList('Coat', weightData.Coat, 1, true)}
-				{@render unlocksList('Gloves', weightData.Gloves, 1, true)}
-				{@render unlocksList('Leggings', weightData.Leggings, 1, true)}
-				{@render unlocksList('Boots', weightData.Boots, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.helm'), weightData.Helm, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.shoulders'), weightData.Shoulders, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.coat'), weightData.Coat, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.gloves'), weightData.Gloves, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.leggings'), weightData.Leggings, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.boots'), weightData.Boots, 1, true)}
+				{@render unlocksList($_('legendary.armor_pieces.aquatic'), weightData.HelmAquatic, 1, true)}
 			</article>
 		</details>
 	{/snippet}
@@ -119,9 +122,9 @@
 	{#snippet children(result)}
 		{@const progressTrinkets = completionTrinkets(result)}
 		{@const progressUpgrades = completionUpgrades(result)}
-		{@render unlockGroup('Light', result.armor.Light)}
-		{@render unlockGroup('Medium', result.armor.Medium)}
-		{@render unlockGroup('Heavy', result.armor.Heavy)}
+		{@render unlockGroup($_('legendary.armor_type_short.light'), result.armor.Light)}
+		{@render unlockGroup($_('legendary.armor_type_short.medium'), result.armor.Medium)}
+		{@render unlockGroup($_('legendary.armor_type_short.heavy'), result.armor.Heavy)}
 
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>
@@ -131,10 +134,10 @@
 				</div>
 			</summary>
 			<article>
-				{@render unlocksList('Back', result.back)}
-				{@render unlocksList('Accessory', result.trinkets.Accessory)}
-				{@render unlocksList('Ring', result.trinkets.Ring, 2)}
-				{@render unlocksList('Amulet', result.trinkets.Amulet)}
+				{@render unlocksList($_('legendary.armor_pieces.back_item'), result.back)}
+				{@render unlocksList($_('legendary.armor_pieces.accessory'), result.trinkets.Accessory)}
+				{@render unlocksList($_('legendary.armor_pieces.ring'), result.trinkets.Ring, 2)}
+				{@render unlocksList($_('legendary.armor_pieces.amulet'), result.trinkets.Amulet)}
 			</article>
 		</details>
 
@@ -146,7 +149,7 @@
 				</div>
 			</summary>
 			<article>
-				{@render unlocksList('Upgrades', result.upgrades, 3)}
+				{@render unlocksList($_('legendary.upgrades'), result.upgrades, 3)}
 			</article>
 		</details>
 	{/snippet}

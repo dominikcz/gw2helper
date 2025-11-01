@@ -1,7 +1,7 @@
 
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
 // https://wiki.guildwars2.com/index.php?title=Widget:Event_timer/data.json&action=raw
-// last update: 2025-09-10
+// last update: 2025-11-01
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
@@ -626,7 +626,7 @@ export const wikiData = {
     "fi": {
         "category": "Core Tyria",
         "name": "Fractal Incursions",
-        "link": "Fractal Incursion",
+        "link": "Defeat the enemy spawned by the fractal incursion",
         "segments": {
             "0": {
                 "name": "",
@@ -638,6 +638,7 @@ export const wikiData = {
             },
             "1": {
                 "name": "Diessa Plateau",
+                "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BN0AAAA=]",
                 "bg": [
                     234,
@@ -647,6 +648,7 @@ export const wikiData = {
             },
             "2": {
                 "name": "Brisban Wildlands",
+                "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BHUAAAA=]",
                 "bg": [
                     234,
@@ -656,6 +658,7 @@ export const wikiData = {
             },
             "3": {
                 "name": "Snowden Drifts",
+                "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": " [\u0026BLQAAAA=]",
                 "bg": [
                     234,
@@ -665,6 +668,7 @@ export const wikiData = {
             },
             "4": {
                 "name": "Kessex Hills",
+                "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BBIAAAA=]",
                 "bg": [
                     234,
@@ -2692,6 +2696,179 @@ export const wikiData = {
                 {
                     "r": 0,
                     "d": 170
+                }
+            ]
+        }
+    },
+    "cad": {
+        "category": "Visions of Eternity",
+        "name": "Castora: Day and night",
+        "link": "Day and night",
+        "segments": {
+            "1": {
+                "name": "Day",
+                "link": "Day and night",
+                "bg": [
+                    255,
+                    255,
+                    255
+                ]
+            },
+            "2": {
+                "name": "Dusk",
+                "link": "Day and night",
+                "bg": [
+                    [
+                        255,
+                        255,
+                        255
+                    ],
+                    [
+                        122,
+                        134,
+                        171
+                    ]
+                ]
+            },
+            "3": {
+                "name": "Night",
+                "link": "Day and night",
+                "bg": [
+                    122,
+                    134,
+                    171
+                ]
+            },
+            "4": {
+                "name": "Dawn",
+                "link": "Day and night",
+                "bg": [
+                    [
+                        122,
+                        134,
+                        171
+                    ],
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 3,
+                    "d": 35
+                },
+                {
+                    "r": 4,
+                    "d": 5
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 55
+                },
+                {
+                    "r": 2,
+                    "d": 5
+                },
+                {
+                    "r": 3,
+                    "d": 55
+                },
+                {
+                    "r": 4,
+                    "d": 5
+                }
+            ]
+        }
+    },
+    "shs": {
+        "category": "Visions of Eternity",
+        "name": "Shipwreck Strand",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    241,
+                    182,
+                    161
+                ]
+            },
+            "1": {
+                "name": "Hammerhart Rumble",
+                "chatlink": "[\u0026BJEPAAA=]",
+                "bg": [
+                    223,
+                    91,
+                    44
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 0,
+                    "d": 40
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 20
+                },
+                {
+                    "r": 0,
+                    "d": 100
+                }
+            ]
+        }
+    },
+    "stw": {
+        "category": "Visions of Eternity",
+        "name": "Starlit Weald",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    241,
+                    182,
+                    161
+                ]
+            },
+            "1": {
+                "name": "Secrets of the Weald",
+                "chatlink": "[\u0026BJ4PAAA=]",
+                "bg": [
+                    223,
+                    91,
+                    44
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 1,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 85
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 35
+                },
+                {
+                    "r": 0,
+                    "d": 85
                 }
             ]
         }

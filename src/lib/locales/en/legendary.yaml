@@ -4,11 +4,28 @@ armor_type:
   light: Light armor
   medium: Medium armor
   heavy: Heavy armor
+armor_type_short:
+  light: Light
+  medium: Medium
+  heavy: Heavy
 armor_set:
   pve: PvE armor set
   raid: Raid armor set
   pvp: PvP armor set
   wvw: WvW armor set
 trinkets: Trinkets
-upgrades: Upgrades
+upgrades: Upgrade components
 weapons: Weapons
+armor_pieces:
+  helm: Helm
+  shoulders: Shoulders
+  coat: Coat
+  gloves: Gloves
+  leggings: Leggings
+  boots: Boots
+  aquatic: Aquatic Headgear
+  back_item: Back item
+  accessory: Accessory
+  amulet: Amulet
+  ring: Ring
+  
