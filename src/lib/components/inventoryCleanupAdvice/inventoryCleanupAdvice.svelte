@@ -198,7 +198,7 @@
 <Awaiter promise={allData}>
 	{#snippet children(result)}
 		{#if result.stackSavings + result.getRidSavings > 0}
-			<details class="searchable" use:grungeBorder={{ grunge: true }}>
+			<details use:grungeBorder={{ grunge: true }}>
 				<summary>Inventory cleanup advice: {`${result.stackSavings + result.getRidSavings} slots to save`}</summary>
 				<article>
 					<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
