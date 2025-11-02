@@ -390,19 +390,23 @@ const guildItems = async () => {
     const items = [];
     return promiseMe(_getGuilds(false), async (guilds) => {
         for (const guild of guilds) {
-            let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
-            if (!wxjs_types.isArray(stashRaw)) {
-                continue;
+            try {
+                let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
+                if (!wxjs_types.isArray(stashRaw)) {
+                    continue;
+                }
+                stashRaw = stashRaw
+                    .map((x) => x.inventory)
+                    .flat()
+                    .filter((x) => x != null);
+                const ids = stashRaw.map((x) => x.id);
+                items.push({
+                    name: guild.name,
+                    stash: await expandItems(ids, stashRaw),
+                });
+            } catch (error) {
+                Logger.warn(`error loading guild stash for guild ${guild.name} (${guild.id})`, error);
             }
-            stashRaw = stashRaw
-                .map((x) => x.inventory)
-                .flat()
-                .filter((x) => x != null);
-            const ids = stashRaw.map((x) => x.id);
-            items.push({
-                name: guild.name,
-                stash: await expandItems(ids, stashRaw),
-            });
         }
         return items;
     })

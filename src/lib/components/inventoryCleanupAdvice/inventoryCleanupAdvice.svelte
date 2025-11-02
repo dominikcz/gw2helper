@@ -198,32 +198,36 @@
 <Awaiter promise={allData}>
 	{#snippet children(result)}
 		{#if result.stackSavings + result.getRidSavings > 0}
-			<h3>Inventory cleanup advice</h3>
-			<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
-			<p>
-				Show only items of character:
-				<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />
-			</p>
-
-			<details class="info" use:grungeBorder>
-				<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
-				<article use:autotooltip={tooltipOptions}>
-					<p>Below you can find items that can be compacted to occupy less space. This can save you up to {result.stackSavings} slots.</p>
-					{#each filteredItems(result.itemsToStack) as item, idx}
-						{@render itemAdvice(item, idx)}
-					{/each}
-				</article>
-			</details>
-			<details class="info" use:grungeBorder>
-				<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
-				<article use:autotooltip={tooltipOptions}>
+			<details class="searchable" use:grungeBorder={{ grunge: true }}>
+				<summary>Inventory cleanup advice: {`${result.stackSavings + result.getRidSavings} slots to save`}</summary>
+				<article>
+					<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
 					<p>
-						Below you can find items that you should consider getting rid of. You can use, sell, or discard them if they are not worth selling.
-						You can save up to {result.getRidSavings} slots this way.
+						Show only items of character:
+						<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />
 					</p>
-					{#each filteredItems(result.itemsToGetRidOf) as item, idx}
-						{@render itemAdvice(item, idx)}
-					{/each}
+
+					<details class="info" use:grungeBorder>
+						<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
+						<article use:autotooltip={tooltipOptions}>
+							<p>Below you can find items that can be compacted to occupy less space. This can save you up to {result.stackSavings} slots.</p>
+							{#each filteredItems(result.itemsToStack) as item, idx}
+								{@render itemAdvice(item, idx)}
+							{/each}
+						</article>
+					</details>
+					<details class="info" use:grungeBorder>
+						<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
+						<article use:autotooltip={tooltipOptions}>
+							<p>
+								Below you can find items that you should consider getting rid of. You can use, sell, or discard them if they are not worth
+								selling. You can save up to {result.getRidSavings} slots this way.
+							</p>
+							{#each filteredItems(result.itemsToGetRidOf) as item, idx}
+								{@render itemAdvice(item, idx)}
+							{/each}
+						</article>
+					</details>
 				</article>
 			</details>
 		{/if}
