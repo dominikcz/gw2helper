@@ -32,6 +32,7 @@ export async function load({ fetch, url }) {
 		apiLang,
 		toDoList: utils.readAchievementsToDo(),
 		remindersSettings: new ReminderSettings(),
+		tokenInfo: {  },
 	};
 
 	console.log('key', key);
