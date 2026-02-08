@@ -6,6 +6,7 @@ import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 import { groupBy, mapFields } from "./utils/helper-utils";
+import wxdates from "./wxjs_dates";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -20,11 +21,18 @@ const ACHIEVEMENTS_NOT_IN_API = {
 
 type GW2HelperSettings = {
     currentSeason: string;
+    wizardsVault: {
+        seasonEnd: string;
+    };
 };
 
 let _settings: GW2HelperSettings = {
     currentSeason: '',
+    wizardsVault: {
+        seasonEnd: '2026-05-12T16:00:00+00:00',
+    },
 };
+    
 
 // const unique = function (tab) {
 //     return tab.filter(function (el, i, self) {
@@ -160,13 +168,23 @@ const getFromAchievementsCache = (key: string): object => {
 
 const readSettings = async () => {
     const response = await fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
-        Logger.error('error', error);
+        Logger.error('error loading settings', error);
     });
     if (response?.ok) {
         let data = await response.json();
         _settings = Object.assign({}, _settings, data);
     } else {
-        Logger.warn('error loading settings', { status: response?.status, url: response?.url });
+        Logger.warn('error loading settings', { status: response.status, url: response.url });
+    }
+    // code below is not really correct as season end is not always 3 months after season start, but it will do as a fallback
+    let seasonEnd: Date | undefined = new Date(_settings.wizardsVault.seasonEnd);
+    if (seasonEnd < new Date()){
+        while (seasonEnd && seasonEnd < new Date()) {
+            seasonEnd = wxdates.dateAdd(seasonEnd, 'month', 3);
+        }
+        if (seasonEnd) {
+            _settings.wizardsVault.seasonEnd = seasonEnd.toISOString();
+        }
     }
 }
 
@@ -980,4 +998,5 @@ export default {
     skinsCache: (id) => skinsCache.get(parseInt(id)),
     achievementsCache: (id) => achievementsCache.get(parseInt(id)),
     currentSeason: () => _settings.currentSeason,
+    wizardsVault: () => _settings.wizardsVault,
 };

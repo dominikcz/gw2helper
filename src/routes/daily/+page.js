@@ -8,6 +8,7 @@ export async function load({ fetch, parent }) {
 		special: {},
 		achievements: {},
 		todo,
+		seasonEnd: null,
 	};
 	if (key) {
 		returnObj.account = apiService.account();
@@ -16,6 +17,7 @@ export async function load({ fetch, parent }) {
 		returnObj.weekly = apiService.wizardsVaultWeekly();
 		returnObj.special = apiService.wizardsVaultSpecial();
 		returnObj.achievements = apiService.achievements();
+		returnObj.seasonEnd = apiService.wizardsVault().seasonEnd;
 	} else {
 		console.log('no api key :(');
 		

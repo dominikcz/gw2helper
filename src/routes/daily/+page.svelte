@@ -40,27 +40,6 @@
 		return astralAcclaim.value || 0;
 	}
 
-	function gw2NextQuarter() {
-		const today = new Date();
-		const y = today.getFullYear();
-
-		// prettier-ignore
-		const quarters = [
-			new Date(y, 2, 4), 
-			new Date(y, 5, 4), 
-			new Date(y, 9,  29), 
-			new Date(y, 12, 29), 
-			new Date(y + 1, 3, 29)
-		];
-
-		quarters.forEach((q) => {
-			q = wxdates.setTime(q, true, 16, 0, 0); // 16:00 UTC
-		});
-		// console.log('quarters', quarters.map(x => x.toLocaleString()))
-
-		return quarters.find((x) => x > today);
-	}
-
 	function getTimerTarget(period: Period) {
 		let target;
 		switch (period) {
@@ -71,7 +50,7 @@
 				target = Date.prototype.wxNextWeekDay(1, true, 7, 30, 0);
 				break;
 			case Period.special:
-				target = gw2NextQuarter();
+				target = new Date(data.seasonEnd);
 				break;
 		}
 		return target;
