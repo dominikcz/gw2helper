@@ -406,7 +406,11 @@ const guildItems = async () => {
                 stash: await expandItems(ids, stashRaw),
             });
         } catch (error) {
-            Logger.warn(`error loading guild stash for guild ${guild.name} (${guild.id})`, error);
+            items.push({
+                name: guild.name,
+                stash: [],
+                error: error.message,
+            });
         }
     }
     return items;

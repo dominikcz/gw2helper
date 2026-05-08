@@ -63,7 +63,7 @@
 <Awaiter promise={data.guildItems}>
 	{#snippet children(result)}
 		{#each result as guild}
-			<ItemsList summary={guild.name} items={guild.stash} {filter} {filterFlags} />
+			<ItemsList summary={guild.name} items={guild.stash} error={guild.error} {filter} {filterFlags} />
 		{/each}
 	{/snippet}
 </Awaiter>

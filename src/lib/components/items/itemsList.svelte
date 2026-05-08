@@ -13,6 +13,7 @@
 	export let useBorder: boolean = true;
 	export let additionalInfo: string = '';
 	export let filterFlags: boolean = false;
+	export let error: string = '';
 
 	const fields_def = ['name', 'description', 'type', 'subtype', 'subdescr', 'rarity', 'count'];
 
@@ -34,6 +35,11 @@
 <details class="searchable" open use:grungeBorder={{ grunge: useBorder }}>
 	<summary>{summary}</summary>
 	<article>
+		{#if error}
+			<div class="items">
+				<span class="no-results">{error}</span>
+			</div>
+		{:else}
 		<Awaiter promise={items}>
 			{#snippet children(result)}
 				<div class="items autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions}>
@@ -50,6 +56,7 @@
 				</div>
 			{/snippet}
 		</Awaiter>
+		{/if}
 	</article>
 </details>
 
