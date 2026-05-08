@@ -60,6 +60,6 @@
 <fieldset class="settings">
 	<legend>{$_('common.settings')}</legend>
 
-	<label><input type="checkbox" id="chat-links" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
+	<label><input type="checkbox" id="show-depreciated" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
 	<button onclick={saveSettings}>{$_('common.save_settings')}</button>
 </fieldset>
