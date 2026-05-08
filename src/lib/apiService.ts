@@ -174,7 +174,7 @@ const readSettings = async () => {
     if (response?.ok) {
         let data = await response.json();
         _settings = Object.assign({}, _settings, data);
-    } else {
+    } else if (response) {
         Logger.warn('error loading settings', { status: response.status, url: response.url });
     }
     // code below is not really correct as season end is not always 3 months after season start, but it will do as a fallback
@@ -202,60 +202,55 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
     const _options = Object.assign({}, fetchOptions, options);
-    let cachedValue = !ignoreCache ? tryCache(origReq) : undefined;
-    if (cachedValue !== undefined) {
+    const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
+    if (cacheEntry !== undefined) {
         Logger.log("requestCache is valid, returning cached response");
-        return cachedValue.data;
-    } else {
-        Logger.log("requestCache is INVALID, refreshing...");
+        return cacheEntry.data;
+    }
 
-        if (typeof req == "string") {
-            req = _options.baseURL + req;
-        }
+    Logger.log("requestCache is INVALID, refreshing...");
 
-        if (_options.debug) {
-            Logger.log(`req: ${req}, options: `, _options);
-        }
-        const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options).catch(error => {
-            Logger.error('error', error);
-        });
-        if (response?.status >= 400) {
-            const body = await response?.text();
+    if (typeof req == "string") {
+        req = _options.baseURL + req;
+    }
 
-            // notifyOnError(req, response, _options);
-            // cachedValue = body || [];
-            if (response?.headers.get('content-type')?.includes('application/json')) {
-                const errorMsg = JSON.parse(body)?.text;
-                if (errorMsg !== "") {
-                    throw new Error(errorMsg);
-                } else {
-                    throw new Error(body);
-                }
+    if (_options.debug) {
+        Logger.log(`req: ${req}, options: `, _options);
+    }
+    const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options).catch(error => {
+        Logger.error('error', error);
+    });
+    if (response?.status >= 400) {
+        const body = await response?.text();
+
+        if (response?.headers.get('content-type')?.includes('application/json')) {
+            const errorMsg = JSON.parse(body)?.text;
+            if (errorMsg !== "") {
+                throw new Error(errorMsg);
             } else {
                 throw new Error(body);
             }
-
-        } else if (response?.ok) {
-            let data;
-            if (_options.expectJson) {
-                data = await response.json();
-            } else {
-                data = await response.text();
-            }
-            if (_options.transform) {
-                data = _options.transform(data);
-            }
-            if (cachedValue == undefined) {
-                cachedValue = data;
-                cacheRequest(origReq, cachedValue);
-            }
-            Logger.log(`requestCache for ${origReq} updated`, cachedValue);
         } else {
-            Logger.warn(`got response.status = ${response?.status} for ${origReq}... returning empty`);
-            cachedValue = query ? [] : {};
+            throw new Error(body);
         }
+
+    } else if (response?.ok) {
+        let data;
+        if (_options.expectJson) {
+            data = await response.json();
+        } else {
+            data = await response.text();
+        }
+        if (_options.transform) {
+            data = _options.transform(data);
+        }
+        cacheRequest(origReq, data);
+        Logger.log(`requestCache for ${origReq} updated`, data);
+        return data;
     }
-    return cachedValue;
+
+    Logger.warn(`got response.status = ${response?.status} for ${origReq}... returning empty`);
+    return query ? [] : {};
 };
 
 const charactersItems = async () => {
@@ -324,23 +319,15 @@ const _getTransactions = async (_transactions: any) => {
 }
 
 const transactionsCurrent = async () => {
-    return new Promise((resolve, reject) => {
-        Promise.all([
-            apiClient("/v2/commerce/transactions/current/buys", ""),
-            apiClient("/v2/commerce/transactions/current/sells", "")
-        ]).then(([_buys, _sells]) => {
-
-            Promise.all([_getTransactions(_buys), _getTransactions(_sells)]).then(([_buysExp, _sellsExp]) => {
-                resolve({
-                    buys: _buysExp,
-                    sells: _sellsExp,
-                });
-            }).catch(error => reject(error));
-
-
-        }).catch(error => reject(error));
-    });
-
+    const [_buys, _sells] = await Promise.all([
+        apiClient("/v2/commerce/transactions/current/buys", ""),
+        apiClient("/v2/commerce/transactions/current/sells", "")
+    ]);
+    const [buys, sells] = await Promise.all([
+        _getTransactions(_buys),
+        _getTransactions(_sells)
+    ]);
+    return { buys, sells };
 }
 
 const _getGuilds = async (full: boolean = false) => {
@@ -438,33 +425,28 @@ const items = (x: string) => {
     return apiClient("/v2/items", `ids=${x}`);
 };
 
-const legendaries = async (x: string) => {
-    return new Promise((resolve, reject) => {
-        Promise.all([
-            apiClient("/v2/legendaryarmory", `ids=all`),
-            apiClient("/v2/account/legendaryarmory", ``)
-        ]).then(async ([available, unlocked]) => {
-            const ids = available.map((x) => x.id);
-            const expanded = await expandItems(ids, available);
-            const data = mergeById(expanded, unlocked);
-            // console.log('leg', data);
-            const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
-            const trinkets = groupBy(data.filter(x => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
-            const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
-            const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
-            const _weapons = data.filter(x => x.type === "Weapon");
-            _weapons.forEach(x => {
-                // change subtype naming to match current one in game & Wiki
-                if (x.subtype == 'Harpoon') x.subtype = 'Spear';
-                else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
-                else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
-                else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
-            })
-            const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
-            // console.log('weapons', weapons)
-            resolve({ armor, trinkets, back, upgrades, weapons });
-        }).catch(error => reject(error));
-    });
+const legendaries = async () => {
+    const [available, unlocked] = await Promise.all([
+        apiClient("/v2/legendaryarmory", `ids=all`),
+        apiClient("/v2/account/legendaryarmory", ``)
+    ]);
+    const ids = available.map((x) => x.id);
+    const expanded = await expandItems(ids, available);
+    const data = mergeById(expanded, unlocked);
+    const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
+    const trinkets = groupBy(data.filter(x => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+    const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
+    const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
+    const _weapons = data.filter(x => x.type === "Weapon");
+    _weapons.forEach(x => {
+        // change subtype naming to match current one in game & Wiki
+        if (x.subtype == 'Harpoon') x.subtype = 'Spear';
+        else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
+        else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
+        else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
+    })
+    const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+    return { armor, trinkets, back, upgrades, weapons };
 };
 
 const prices = (x: string) => {
@@ -499,20 +481,17 @@ const tokenInfo = async (): Promise<TokenInfo> => {
 };
 
 const achievements = async (all: boolean = false) => {
-    return new Promise((resolve, reject) => {
-        Promise.all([
-            apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
-            apiClient("/v2/account", ""),
-            apiClient("/v2/account/achievements", ""),
-            apiClient("/v2/achievements", "")])
-            .then(([categories, account, account_achievements, allIds]) => {
-                account_achievements.forEach(x => {
-                    x.bits_done = [...x.bits || []];
-                    delete x.bits;
-                });
-                resolve(expandAchievements(account, categories, account_achievements, allIds));
-            }).catch(error => reject(error));
+    const [categories, account, account_achievements, allIds] = await Promise.all([
+        apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
+        apiClient("/v2/account", ""),
+        apiClient("/v2/account/achievements", ""),
+        apiClient("/v2/achievements", "")
+    ]);
+    account_achievements.forEach(x => {
+        x.bits_done = [...x.bits || []];
+        delete x.bits;
     });
+    return expandAchievements(account, categories, account_achievements, allIds);
 };
 
 const achievementsInfo = async (ids: string) => {
@@ -592,13 +571,11 @@ const currencies = async (order = []) => {
 }
 
 const wallet = async (order = []) => {
-    return new Promise((resolve, reject) => {
-        Promise.all([currencies(order), apiClient("/v2/account/wallet", "")]).then(([_curr, _wallet]) => {
-            resolve(mergeById(_curr, _wallet));
-        }).catch(error => {
-            reject(error);
-        });
-    })
+    const [_curr, _wallet] = await Promise.all([
+        currencies(order),
+        apiClient("/v2/account/wallet", "")
+    ]);
+    return mergeById(_curr, _wallet);
 }
 
 
