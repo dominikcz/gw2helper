@@ -258,35 +258,31 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
 };
 
 const charactersItems = async () => {
-    return promiseMe(apiClient("/v2/characters", "ids=all"), async (rawData) => {
-        const tasks = [];
-        // console.log('charactersItems', rawData)
-        for (const char of rawData) {
-            let bags = char.bags.filter(x => x != null).map(x => ({ id: x.id, size: x.size, count: 1 }));
-            let itemsInBags = char.bags
-                .filter(x => x != null)
-                .map((bag) => bag.inventory)
-                .flat()
-                .filter((x) => x != null);
-            let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1, equipped: true }));
-            let charItems = bags.concat(itemsInBags).concat(equipment);
-            const addons = [];
-            charItems.forEach(x => {
-                addons.push(...(x.upgrades || []), ...(x.infusions || []));
-            })
-            charItems.push(...addons.map(x => ({ id: x, count: 1, equipped: true })))
-            let ids = charItems.map(x => x.id);
-            char._items = await expandItems(ids, charItems);
-        }
-        return rawData;
-    });
+    const rawData = await apiClient("/v2/characters", "ids=all");
+    for (const char of rawData) {
+        let bags = char.bags.filter(x => x != null).map(x => ({ id: x.id, size: x.size, count: 1 }));
+        let itemsInBags = char.bags
+            .filter(x => x != null)
+            .map((bag) => bag.inventory)
+            .flat()
+            .filter((x) => x != null);
+        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1, equipped: true }));
+        let charItems = bags.concat(itemsInBags).concat(equipment);
+        const addons = [];
+        charItems.forEach(x => {
+            addons.push(...(x.upgrades || []), ...(x.infusions || []));
+        })
+        charItems.push(...addons.map(x => ({ id: x, count: 1, equipped: true })))
+        let ids = charItems.map(x => x.id);
+        char._items = await expandItems(ids, charItems);
+    }
+    return rawData;
 };
 
 const materials = async () => {
-    return promiseMe(apiClient("/v2/account/materials", ""), async (rawData) => {
-        let ids = rawData.map((x) => x.id);
-        return expandItems(ids, rawData);
-    })
+    const rawData = await apiClient("/v2/account/materials", "");
+    const ids = rawData.map((x) => x.id);
+    return expandItems(ids, rawData);
 };
 
 
@@ -347,9 +343,9 @@ const transactionsCurrent = async () => {
 }
 
 const _getGuilds = async (full: boolean = false) => {
-    return promiseMe(apiClient("/v2/account", ""), async (account) => {
-        // concat and remove duplicates
-        const _guilds = [...new Set([...(account.guild_leader || []), ...account.guilds])];
+    const account = await apiClient("/v2/account", "");
+    // concat and remove duplicates
+    const _guilds = [...new Set([...(account.guild_leader || []), ...account.guilds])];
 
         let tasks = [];
         for (const guild of _guilds) {
@@ -400,40 +396,37 @@ const _getGuilds = async (full: boolean = false) => {
             // console.log('emblems', {bgs, fgs, clrs});
             // console.log('emblems data', _rawData)
         }
-        return _rawData;
-    })
+    return _rawData;
 }
 
 const guildItems = async () => {
     const items = [];
-    return promiseMe(_getGuilds(false), async (guilds) => {
-        for (const guild of guilds) {
-            try {
-                let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
-                if (!wxjs_types.isArray(stashRaw)) {
-                    continue;
-                }
-                stashRaw = stashRaw
-                    .map((x) => x.inventory)
-                    .flat()
-                    .filter((x) => x != null);
-                const ids = stashRaw.map((x) => x.id);
-                items.push({
-                    name: guild.name,
-                    stash: await expandItems(ids, stashRaw),
-                });
-            } catch (error) {
-                Logger.warn(`error loading guild stash for guild ${guild.name} (${guild.id})`, error);
+    const guilds = await _getGuilds(false);
+    for (const guild of guilds) {
+        try {
+            let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
+            if (!wxjs_types.isArray(stashRaw)) {
+                continue;
             }
+            stashRaw = stashRaw
+                .map((x) => x.inventory)
+                .flat()
+                .filter((x) => x != null);
+            const ids = stashRaw.map((x) => x.id);
+            items.push({
+                name: guild.name,
+                stash: await expandItems(ids, stashRaw),
+            });
+        } catch (error) {
+            Logger.warn(`error loading guild stash for guild ${guild.name} (${guild.id})`, error);
         }
-        return items;
-    })
+    }
+    return items;
 };
 
 const characters = async () => {
-    return promiseMe(apiClient("/v2/characters", "ids=all"), (resp) => {
-        return resp.map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
-    })
+    const resp = await apiClient("/v2/characters", "ids=all");
+    return resp.map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
 };
 
 const guilds = async () => {
@@ -477,31 +470,27 @@ const prices = (x: string) => {
     return apiClient("/v2/commerce/prices", `ids=${x}`);
 };
 
-const account = () => {
-    return promiseMe(apiClient("/v2/account", `v=${SCHEMA_VERSION}`), _acc => {
-        // console.log('acc', {_acc, _wal})
-        _acc.created_local = new Date(_acc.created).toLocaleString();
-        _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
-        return _acc;
-    });
+const account = async () => {
+    const _acc = await apiClient("/v2/account", `v=${SCHEMA_VERSION}`);
+    _acc.created_local = new Date(_acc.created).toLocaleString();
+    _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
+    return _acc;
 };
 
 const sharedInventory = async () => {
-    return promiseMe(apiClient("/v2/account/inventory", ""), (resp) => {
-        // this endpoint returns null in "empty" slots and we don't want that
-        const rawData = resp.filter((x) => x != null);
-        const ids = rawData.map((x) => x.id);
-        return expandItems(ids, rawData);
-    });
+    const resp = await apiClient("/v2/account/inventory", "");
+    // this endpoint returns null in "empty" slots and we don't want that
+    const rawData = resp.filter((x) => x != null);
+    const ids = rawData.map((x) => x.id);
+    return expandItems(ids, rawData);
 };
 
 const bank = async () => {
-    return promiseMe(apiClient("/v2/account/bank", ""), (resp) => {
-        // this endpoint returns null in "empty" slots and we don't want that
-        const rawData = resp.filter((x) => x != null);
-        const ids = rawData.map((x) => x.id);
-        return expandItems(ids, rawData);
-    });
+    const resp = await apiClient("/v2/account/bank", "");
+    // this endpoint returns null in "empty" slots and we don't want that
+    const rawData = resp.filter((x) => x != null);
+    const ids = rawData.map((x) => x.id);
+    return expandItems(ids, rawData);
 };
 
 const tokenInfo = async (): Promise<TokenInfo> => {
@@ -591,15 +580,14 @@ const currencies = async (order = []) => {
     // denormalize
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
-    return promiseMe(apiClient("/v2/currencies", `ids=all`), (resp) => {
-        const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
-        const _data = mergeById(_rawData, _dep);
-        _data.forEach(x => {
-            const idx = order.findIndex(y => y == x.id)
-            x.order = (idx >= 0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
-        });
-        return _data.sort((a, b) => a.order - b.order);
-    })
+    const resp = await apiClient("/v2/currencies", `ids=all`);
+    const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
+    const _data = mergeById(_rawData, _dep);
+    _data.forEach(x => {
+        const idx = order.findIndex(y => y == x.id)
+        x.order = (idx >= 0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
+    });
+    return _data.sort((a, b) => a.order - b.order);
 }
 
 const wallet = async (order = []) => {
@@ -612,36 +600,23 @@ const wallet = async (order = []) => {
     })
 }
 
-const promiseMe = async (APromise: Promise<any>, job) => {
-    return new Promise((resolve, reject) => {
-        APromise.then(async (resp) => {
-            const jobRes = job(resp);
-            if (jobRes) {
-                resolve(jobRes);
-            } else {
-                reject();
-            }
-        }).catch(error => reject(error));
-    });
-};
+
 
 const delivery = async () => {
-    return promiseMe(apiClient("/v2/commerce/delivery", ""), async (resp) => {
-        const ids = resp.items.map(x => x.id);
-        resp.items = await expandItems(ids, resp.items);
-        return resp;
-    });
+    const resp = await apiClient("/v2/commerce/delivery", "");
+    const ids = resp.items.map(x => x.id);
+    resp.items = await expandItems(ids, resp.items);
+    return resp;
 };
 
-const wizardVaultSorted = (APromise: Promise<any>, job) => {
-    return promiseMe(APromise, async (resp) => {
-        const byClaimed = Object.groupBy(resp.objectives, x => x.claimed);
-        byClaimed.false ??= [];
-        byClaimed.true ??= [];
-        resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
-        resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
-        return resp;
-    });
+const wizardVaultSorted = async (promise: Promise<any>) => {
+    const resp = await promise;
+    const byClaimed = Object.groupBy(resp.objectives, x => x.claimed);
+    byClaimed.false ??= [];
+    byClaimed.true ??= [];
+    resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
+    resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
+    return resp;
 }
 
 const wizardsVaultDaily = async () => {
