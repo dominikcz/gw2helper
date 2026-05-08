@@ -101,6 +101,7 @@ let minisCache;
 let skinsCache;
 let achievementsCache;
 let requestCache: Map<string, CacheEntry>;
+let inflightItems: Map<number, Promise<any>> = new Map();
 let _tokenInfo: TokenInfo = {
     id: '',
     name: '',
@@ -250,7 +251,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
             }
             Logger.log(`requestCache for ${origReq} updated`, cachedValue);
         } else {
-            Logger.log(`got response.status = ${response?.status}... ignoring`);
+            Logger.warn(`got response.status = ${response?.status} for ${origReq}... returning empty`);
             cachedValue = query ? [] : {};
         }
     }
@@ -673,33 +674,64 @@ const addPropertiesById = (base: object, details: array) => {
 }
 
 const expandItems = async (ids: Array<number>, collection) => {
-    const knownIds = [...itemsCache.keys()];
     // get rid of nulls, invalid ids and duplicates
     ids = [...new Set(ids.filter((x) => x && !INVALID_ITEM_IDS.includes(x)))];
-    const missingIds = ids.filter((x) => !knownIds.includes(x));
-    const alreadyKnown = ids.filter((x) => knownIds.includes(x)).map((x) => itemsCache.get(x));
+    const toFetch = ids.filter((x) => !itemsCache.has(x) && !inflightItems.has(x));
+    const toAwait = ids.filter((x) => !itemsCache.has(x) && inflightItems.has(x));
 
-    const data = [];
-    const batches = [];
-    do {
-        let batch = missingIds.splice(0, 200);
-        if (batch.length > 0) {
-            batches.push(batch.join(","));
-        }
-    } while (missingIds.length > 0);
-    if (batches.length) {
-        const tasks = batches.map((ids) => items(ids));
-        const resp = (await Promise.all(tasks)).flat();
-        resp.forEach((x) => {
-            if (x) {
-                itemsCache.set(x.id, x);
-            }
-        });
-        await ls.set(ITEMS_CACHE, [...itemsCache.entries()]);
-        data.push(...mergeById(collection, resp));
+    // Wait for any items already being fetched by another parallel call
+    if (toAwait.length) {
+        await Promise.all(toAwait.map(id => inflightItems.get(id))).catch(() => {});
     }
-    if (alreadyKnown.length) {
-        data.push(...mergeById(collection, alreadyKnown));
+
+    // After awaiting, check which items are still missing (inflight call may have failed)
+    const stillMissing = toAwait.filter((x) => !itemsCache.has(x));
+    const allToFetch = [...toFetch, ...stillMissing];
+
+    // Fetch items not yet in cache
+    if (allToFetch.length) {
+        const batches: string[] = [];
+        const remaining = [...allToFetch];
+        do {
+            let batch = remaining.splice(0, 200);
+            if (batch.length > 0) {
+                batches.push(batch.join(","));
+            }
+        } while (remaining.length > 0);
+
+        const fetchPromise = Promise.all(batches.map((ids) => items(ids))).then(results => results.flat());
+
+        // Register each id as inflight
+        for (const id of allToFetch) {
+            inflightItems.set(id, fetchPromise);
+        }
+
+        try {
+            const resp = await fetchPromise;
+            resp.forEach((x) => {
+                if (x) {
+                    itemsCache.set(x.id, x);
+                }
+            });
+            await ls.set(ITEMS_CACHE, [...itemsCache.entries()]);
+        } finally {
+            // Remove from inflight
+            for (const id of allToFetch) {
+                inflightItems.delete(id);
+            }
+        }
+    }
+
+    // All needed items should now be in cache — merge with collection
+    const missingFromCache = ids.filter(x => !itemsCache.has(x));
+    if (missingFromCache.length) {
+        console.warn('expandItems: items NOT in cache after fetch:', missingFromCache);
+    }
+    const knownItems = ids.map((x) => itemsCache.get(x)).filter(x => x != null);
+    const data = mergeById(collection, knownItems);
+    const missingAfterMerge = data.filter(x => x.id && !x.name && !INVALID_ITEM_IDS.includes(x.id));
+    if (missingAfterMerge.length) {
+        console.warn('expandItems: items without name after merge:', missingAfterMerge.map(x => x.id), { collectionSize: collection.length, knownItemsSize: knownItems.length, idsSize: ids.length });
     }
     additionalMapping(data);
 
@@ -935,6 +967,7 @@ const clearCache = async () => {
     requestCache.clear();
     minisCache.clear();
     skinsCache.clear();
+    inflightItems.clear();
 }
 
 const getApiKey = () => {
