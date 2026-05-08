@@ -11,7 +11,7 @@ import wxdates from "./wxjs_dates";
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
 const CACHE_TIMEOUT = 5 * 60;
-const INVALID_ITEM_IDS: number[] = [4589, 21083, 21125, 21154, 21163, 21242, 39350, 39351, 39352, 39353, 39354, 39355, 39356, 39748, 39749, 42424, 42426, 43353, 82854, 97730, 78599, 101489, 101539, 101564, 101600, 101630, 101651];
+const INVALID_ITEM_IDS: number[] = [4589, 39350, 39351, 39352, 39353, 39354, 39355, 39356];
 const INVALID_ACHIEVEMENTS_IDS: number[] = [];
 const ACHIEVEMENTS_NOT_IN_API = {
     // Rift Hunting
