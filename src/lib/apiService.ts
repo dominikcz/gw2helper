@@ -766,11 +766,11 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
-        expandItems(itemIds, itemIds.map(x => ({ id: x })))
+        await expandItems(itemIds, itemIds.map(x => ({ id: x })));
         console.log('expanding minis from achieves...', miniIds);
-        minis(miniIds);
+        await minis(miniIds);
         console.log('expanding skins from achieves...', skinIds);
-        skins(skinIds);
+        await skins(skinIds);
     }
 
     let _log = '';
