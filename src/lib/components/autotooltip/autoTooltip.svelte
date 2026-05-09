@@ -24,6 +24,8 @@
 	let vertical = $state(false);
 	let under = $state(false);
 	let sticky = $state(true);
+	let lastTappedTooltipLink;
+	let lastTappedTooltipTime = 0;
 
 	let touchMode = 'ontouchstart' in window;
 
@@ -155,6 +157,47 @@
 		event.preventDefault();
 	}
 
+	function clickCapture(event) {
+		const elem = event.target;
+		if (!elem || !touchMode || elem.closest?.('._toastContainer')) {
+			return;
+		}
+
+		const anchor = elem.closest?.('a[href]');
+		if (!anchor) {
+			return;
+		}
+
+		// Links rendered inside the tooltip body must remain directly clickable.
+		if (ref && ref.contains(anchor)) {
+			return;
+		}
+
+		if (!elem.closest?.('.autotooltip')) {
+			return;
+		}
+
+		if (!findTitle(elem)) {
+			return;
+		}
+
+		const now = Date.now();
+		const sameLink = anchor === lastTappedTooltipLink;
+		const secondTap = sameLink && now - lastTappedTooltipTime < 1500;
+
+		if (secondTap) {
+			lastTappedTooltipLink = null;
+			lastTappedTooltipTime = 0;
+			return;
+		}
+
+		event.preventDefault();
+		event.stopPropagation();
+		updateXY(event);
+		lastTappedTooltipLink = anchor;
+		lastTappedTooltipTime = now;
+	}
+
 	function tooltipTouchStart(event) {
 		if (!event.target.href) {
 			event.stopPropagation();
@@ -238,6 +281,25 @@
 		const distance = 5;
 		const offset = 3;
 
+		const getPageCoordinates = (evt) => {
+			if (evt?.touches && evt.touches.length) {
+				return {
+					pageX: evt.touches[0].pageX,
+					pageY: evt.touches[0].pageY,
+				};
+			}
+			if (evt?.changedTouches && evt.changedTouches.length) {
+				return {
+					pageX: evt.changedTouches[0].pageX,
+					pageY: evt.changedTouches[0].pageY,
+				};
+			}
+			return {
+				pageX: evt?.pageX ?? touchX ?? 0,
+				pageY: evt?.pageY ?? touchY ?? 0,
+			};
+		};
+
 		// by default set to right side
 		if (ref && event.target.nodeType == Node.ELEMENT_NODE) {
 			// measure natural dimensions by temporarily positioning tooltip where it has room
@@ -252,20 +314,16 @@
 				width: elemRect.width,
 				height: elemRect.height,
 			};
+			const targetPageY = window.scrollY + target.y;
+			const pointer = getPageCoordinates(event);
 			// console.log('updateXY', target);
 
 			if (!sticky) {
-				x = event.pageX + 15;
-				y = event.pageY + 5;
+				x = pointer.pageX + 15;
+				y = pointer.pageY + 5;
 			} else {
 				x = target.x + target.width + offset + distance;
-				if (handlingTouch(event)) {
-					y = event.pageY - touchY + target.y - offset;
-				} else {
-					// x = event.pageX + 15;
-					// y = event.pageY + 5;
-					y = event.pageY - event.y + target.y - offset;
-				}
+				y = targetPageY - offset;
 			}
 
 			let newX = x;
@@ -333,6 +391,17 @@
 			ref.style.left = `${newX}px`;
 			ref.style.top = `${newY}px`;
 
+			const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+			const arrowMargin = 12;
+			const targetCenterX = target.x + target.width / 2;
+			const targetCenterY = pageTop + target.y + target.height / 2;
+			const maxArrowX = Math.max(arrowMargin, rect.width - arrowMargin);
+			const maxArrowY = Math.max(arrowMargin, rect.height - arrowMargin);
+			const arrowX = clamp(targetCenterX - newX, arrowMargin, maxArrowX);
+			const arrowY = clamp(targetCenterY - newY, arrowMargin, maxArrowY);
+			ref.style.setProperty('--autotooltip-arrow-x', `${arrowX}px`);
+			ref.style.setProperty('--autotooltip-arrow-y', `${arrowY}px`);
+
 			left = sticky && placement === 'left';
 			vertical = sticky && (placement === 'above' || placement === 'below');
 			under = sticky && placement === 'below';
@@ -347,6 +416,7 @@
 	onmouseovercapture={mouseOver}
 	onmouseleave={mouseLeave}
 	onmousemovecapture={mouseMove}
+	onclickcapture={clickCapture}
 	use:nonpassive={['touchstart', () => touchStart]}
 	ontouchmove={touchMove}
 	ontouchend={touchEnd}
@@ -379,7 +449,7 @@
 			&::after {
 				content: ' ';
 				position: absolute;
-				top: 1em;
+				top: var(--autotooltip-arrow-y, 1em);
 				left: -20px;
 				transform: none;
 				border-width: 10px;
@@ -394,15 +464,15 @@
 			}
 			&.above {
 				&::after {
-					top: auto;
-					bottom: 1em;
+					top: var(--autotooltip-arrow-y, 1em);
+					bottom: auto;
 				}
 			}
 			&.vertical {
 				&::after {
 					top: 100%;
 					bottom: auto;
-					left: 50%;
+					left: var(--autotooltip-arrow-x, 50%);
 					transform: translateX(-50%);
 					border-color: white transparent transparent transparent;
 				}
@@ -410,7 +480,7 @@
 				&.under {
 					&::after {
 						top: -20px;
-						left: 50%;
+						left: var(--autotooltip-arrow-x, 50%);
 						border-color: transparent transparent white transparent;
 					}
 				}
