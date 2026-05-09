@@ -79,6 +79,10 @@
 
 	function mouseOver(event) {
 		let elem = event.target;
+		if (elem.closest?.('._toastContainer')) {
+			visible = false;
+			return;
+		}
 		findTitle(elem);
 		updateXY(event);
 		// mouseMove(event);
@@ -86,6 +90,9 @@
 	}
 
 	function mouseMove(event) {
+		if (event.target.closest?.('._toastContainer')) {
+			return;
+		}
 		updateXY(event);
 	}
 
@@ -123,7 +130,9 @@
 			// }
 			// console.log('touchended', event);
 
-			if (findTitle(event.target)) {
+			if (event.target.closest?.('._toastContainer')) {
+				visible = false;
+			} else if (findTitle(event.target)) {
 				updateXY(event);
 			}
 		}

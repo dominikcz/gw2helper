@@ -24,7 +24,7 @@
 	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
-	
+
 	/** @type {{data: any, children?: import('svelte').Snippet}} */
 	let { data, children } = $props();
 
@@ -280,6 +280,9 @@
 	:global(#api-key) {
 		margin: 0.4em 0;
 	}
+	:global(._toastContainer) {
+		pointer-events: visible !important;
+	}
 	em {
 		color: var(--gw2helper-not-important);
 	}
@@ -349,7 +352,7 @@
 		--toastWidth: 24rem;
 	}
 
-	.error{
+	.error {
 		color: var(--gw2helper-module-text) !important;
 		background-color: var(--gw2helper-error);
 		padding: 0.2em 0.6em;
