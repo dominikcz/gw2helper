@@ -2,35 +2,49 @@
 	import { resolve } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 
-	/** @type {{ type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
-	let { type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+	const DEBUG_ACHIEVEMENT_ID = 5541;
 
-	const normalizedBitsDone = $derived(
-		(bitsDone || [])
-			.map((value) => Number(value))
-			.filter((value) => Number.isFinite(value))
-	);
-
-	const doneByIndexOrId = $derived(new Set(normalizedBitsDone));
-
-	function normalizeBitType(bit) {
-		return String(bit?.type || '').toLowerCase();
-	}
+	/** @type {{ id?: number, type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
+	let { id = 0, type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
 
 	function isBitDoneByIndexOrId(idx, bit) {
-		// Some accounts return empty bits_done when achievement is already completed.
-		if (done && !normalizedBitsDone.length) return true;
 		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
-		return doneByIndexOrId.has(Number(idx)) || (bit?.id != null && doneByIndexOrId.has(Number(bit.id)));
+		return bitsDone.includes(idx) || (bit?.id != null && bitsDone.includes(bit.id));
 	}
 
 	function resolveBitEntity(bit) {
-		const bitType = normalizeBitType(bit);
-		if (bitType === 'item') return itemsCache(bit.id);
-		if (bitType === 'minipet') return minisCache(bit.id);
-		if (bitType === 'skin') return skinsCache(bit.id);
+		if (bit?.type === 'Item') return itemsCache(bit.id);
+		if (bit?.type === 'Minipet') return minisCache(bit.id);
+		if (bit?.type === 'Skin') return skinsCache(bit.id);
 		return null;
 	}
+
+	$effect(() => {
+		if (id !== DEBUG_ACHIEVEMENT_ID || type !== 'ItemSet') return;
+
+		const rows = bits.map((bit, idx) => {
+			const entity = resolveBitEntity(bit);
+			return {
+				idx,
+				bitId: bit?.id,
+				bitType: bit?.type,
+				doneByRule: isBitDoneByIndexOrId(idx, bit),
+				hasEntity: !!entity,
+				hasIcon: !!entity?.icon,
+				entityName: entity?.name || null,
+			};
+		});
+
+		console.info('[achievements-tooltip-debug]', {
+			id,
+			source: 'achievementProgress',
+			type,
+			done,
+			bitsLen: Array.isArray(bits) ? bits.length : 0,
+			rawBitsDone: bitsDone,
+			rows,
+		});
+	});
 </script>
 
 {#snippet progressText(bits, bitsDone)}

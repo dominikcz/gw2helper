@@ -570,18 +570,16 @@ const achievements = async (all: boolean = false) => {
         apiClient("/v2/achievements", "")
     ]);
 
-    // Never mutate API responses, as they are also reused by requestCache.
-    // Mutating `bits` into `bits_done` in-place caused intermittent missing progress in ItemSet tooltips.
-    const normalizedAccountAchievements = (account_achievements || []).map((x: any) => ({
-        ...x,
-        bits_done: Array.isArray(x.bits_done) ? [...x.bits_done] : [...(x.bits || [])],
-    }));
+    account_achievements.forEach((x: any) => {
+        x.bits_done = [...x.bits || []];
+        delete x.bits;
+    });
 
     if (debugAchievements) {
-        const rows = normalizedAccountAchievements.length;
-        const doneRows = normalizedAccountAchievements.filter((x: any) => !!x.done).length;
-        const withBitsDone = normalizedAccountAchievements.filter((x: any) => Array.isArray(x.bits_done) && x.bits_done.length > 0).length;
-        const doneWithEmptyBitsDone = normalizedAccountAchievements.filter((x: any) => !!x.done && (!Array.isArray(x.bits_done) || x.bits_done.length === 0)).length;
+        const rows = account_achievements.length;
+        const doneRows = account_achievements.filter((x: any) => !!x.done).length;
+        const withBitsDone = account_achievements.filter((x: any) => Array.isArray(x.bits_done) && x.bits_done.length > 0).length;
+        const doneWithEmptyBitsDone = account_achievements.filter((x: any) => !!x.done && (!Array.isArray(x.bits_done) || x.bits_done.length === 0)).length;
         console.info('[achievements-debug]', {
             phase: 'achievements.normalize-account-achievements',
             at: new Date().toISOString(),
@@ -595,7 +593,7 @@ const achievements = async (all: boolean = false) => {
         });
     }
 
-    return expandAchievements(account, categories, normalizedAccountAchievements, allIds);
+    return expandAchievements(account, categories, account_achievements, allIds);
 };
 
 const achievementsInfo = async (ids: string) => {

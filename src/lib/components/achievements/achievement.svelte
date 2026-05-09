@@ -45,12 +45,7 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div
-		class="head autotooltip"
-		data-autotooltip-renderer="achiev.progress"
-		data-autotooltip-id={id}
-		data-autotooltip-params={JSON.stringify({ bitsDone, done })}
-	>
+	<div class="head autotooltip" data-autotooltip-renderer="achiev.progress" data-autotooltip-id={id} data-autotooltip-params={JSON.stringify(bitsDone)}>
 		{#if icon}
 			<img src={icon} alt={name} />
 		{/if}
