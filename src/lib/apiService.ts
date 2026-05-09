@@ -76,24 +76,6 @@ const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 const ignoreCache = getQueryStringFlag('ignore-cache');
 const devMode = getQueryStringFlag('dev-mode');
 const realApi = getQueryStringFlag('real-api');
-const debugAchievements = getQueryStringFlag('debug-achievements');
-
-const isAchievementsRequest = (req: string): boolean => {
-    return req.includes('/v2/account/achievements')
-        || req.includes('/v2/achievements/categories')
-        || req.includes('/v2/achievements?')
-        || req.includes('/v2/achievementslang=');
-};
-
-const debugAchievementsReq = (phase: string, req: string, details: Record<string, any> = {}) => {
-    if (!debugAchievements || !isAchievementsRequest(req)) return;
-    console.info('[achievements-debug]', {
-        phase,
-        req,
-        at: new Date().toISOString(),
-        ...details,
-    });
-};
 
 
 interface CacheEntry {
@@ -262,13 +244,6 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
     const _options: ApiClientOptions = Object.assign({}, fetchOptions, options);
     const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
     if (cacheEntry !== undefined) {
-        debugAchievementsReq('apiClient.cache-hit', origReq, {
-            cachedSeconds: secondsBetween(cacheEntry.time, new Date()),
-            payloadType: Array.isArray(cacheEntry.data) ? 'array' : typeof cacheEntry.data,
-            payloadSize: Array.isArray(cacheEntry.data)
-                ? cacheEntry.data.length
-                : (cacheEntry.data && typeof cacheEntry.data === 'object' ? Object.keys(cacheEntry.data).length : 0),
-        });
         Logger.log("requestCache is valid, returning cached response");
         return cacheEntry.data;
     }
@@ -315,13 +290,6 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
             data = _options.transform(data);
         }
         cacheRequest(origReq, data);
-        debugAchievementsReq('apiClient.fetch-ok', origReq, {
-            status: response.status,
-            payloadType: Array.isArray(data) ? 'array' : typeof data,
-            payloadSize: Array.isArray(data)
-                ? data.length
-                : (data && typeof data === 'object' ? Object.keys(data).length : 0),
-        });
         Logger.log(`requestCache for ${origReq} updated`, data);
         return data;
     }
@@ -562,7 +530,6 @@ const tokenInfo = async (): Promise<TokenInfo> => {
 };
 
 const achievements = async (all: boolean = false) => {
-    const startedAt = Date.now();
     const [categories, account, account_achievements, allIds] = await Promise.all([
         apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
         apiClient("/v2/account", ""),
@@ -570,30 +537,35 @@ const achievements = async (all: boolean = false) => {
         apiClient("/v2/achievements", "")
     ]);
 
-    account_achievements.forEach((x: any) => {
-        x.bits_done = [...x.bits || []];
-        delete x.bits;
-    });
+    const normalizedAccountAchievements = (account_achievements || []).map((x: any) => ({
+        ...x,
+        bits_done: Array.isArray(x.bits_done) ? [...x.bits_done] : [...(x.bits || [])],
+    }));
 
-    if (debugAchievements) {
-        const rows = account_achievements.length;
-        const doneRows = account_achievements.filter((x: any) => !!x.done).length;
-        const withBitsDone = account_achievements.filter((x: any) => Array.isArray(x.bits_done) && x.bits_done.length > 0).length;
-        const doneWithEmptyBitsDone = account_achievements.filter((x: any) => !!x.done && (!Array.isArray(x.bits_done) || x.bits_done.length === 0)).length;
-        console.info('[achievements-debug]', {
-            phase: 'achievements.normalize-account-achievements',
-            at: new Date().toISOString(),
-            durationMs: Date.now() - startedAt,
-            categories: Array.isArray(categories) ? categories.length : 0,
-            accountAchievements: rows,
-            allIds: Array.isArray(allIds) ? allIds.length : 0,
-            doneRows,
-            withBitsDone,
-            doneWithEmptyBitsDone,
-        });
-    }
+    return expandAchievements(account, categories, normalizedAccountAchievements, allIds);
+};
 
-    return expandAchievements(account, categories, account_achievements, allIds);
+const hydrateAchievementBits = async (bits: any[] = []) => {
+    if (!Array.isArray(bits) || !bits.length) return;
+
+    const skinIds = [...new Set(
+        bits
+            .filter((bit: any) => bit?.type === 'Skin' && bit?.id != null)
+            .map((bit: any) => Number(bit.id))
+            .filter((id: number) => Number.isFinite(id))
+    )];
+
+    const miniIds = [...new Set(
+        bits
+            .filter((bit: any) => (bit?.type === 'Minipet' || bit?.type === 'MiniPet') && bit?.id != null)
+            .map((bit: any) => Number(bit.id))
+            .filter((id: number) => Number.isFinite(id))
+    )];
+
+    await Promise.all([
+        skinIds.length ? skins(skinIds) : Promise.resolve([]),
+        miniIds.length ? minis(miniIds) : Promise.resolve([]),
+    ]);
 };
 
 const achievementsInfo = async (ids: string) => {
@@ -1084,6 +1056,7 @@ export default {
     minisCache: (id: string | number) => minisCache.get(parseInt(String(id))),
     skinsCache: (id: string | number) => skinsCache.get(parseInt(String(id))),
     achievementsCache: (id: string | number) => achievementsCache.get(parseInt(String(id))),
+    hydrateAchievementBits,
     currentSeason: () => _settings.currentSeason,
     wizardsVault: () => _settings.wizardsVault,
 };

@@ -2,10 +2,8 @@
 	import { resolve } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 
-	const DEBUG_ACHIEVEMENT_ID = 5541;
-
-	/** @type {{ id?: number, type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
-	let { id = 0, type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+	/** @type {{ type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
+	let { type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
 
 	function isBitDoneByIndexOrId(idx, bit) {
 		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
@@ -18,33 +16,6 @@
 		if (bit?.type === 'Skin') return skinsCache(bit.id);
 		return null;
 	}
-
-	$effect(() => {
-		if (id !== DEBUG_ACHIEVEMENT_ID || type !== 'ItemSet') return;
-
-		const rows = bits.map((bit, idx) => {
-			const entity = resolveBitEntity(bit);
-			return {
-				idx,
-				bitId: bit?.id,
-				bitType: bit?.type,
-				doneByRule: isBitDoneByIndexOrId(idx, bit),
-				hasEntity: !!entity,
-				hasIcon: !!entity?.icon,
-				entityName: entity?.name || null,
-			};
-		});
-
-		console.info('[achievements-tooltip-debug]', {
-			id,
-			source: 'achievementProgress',
-			type,
-			done,
-			bitsLen: Array.isArray(bits) ? bits.length : 0,
-			rawBitsDone: bitsDone,
-			rows,
-		});
-	});
 </script>
 
 {#snippet progressText(bits, bitsDone)}
