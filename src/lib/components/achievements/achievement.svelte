@@ -33,7 +33,7 @@
 	let todoState_class = $derived(todo ? 'todo' : '');
 	let todoState_title = $derived(todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo'));
 
-	let link = ACHIEVEMENT_LINKS[id] ? ACHIEVEMENT_LINKS[id] : name;
+	let link = $derived(ACHIEVEMENT_LINKS[id] ? ACHIEVEMENT_LINKS[id] : name);
 
 	function toggleTodo() {
 		todo = !todo;

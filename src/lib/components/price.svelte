@@ -2,10 +2,10 @@
 	/** @type {{value: any, compact?: boolean, class?: string}} */
 	let { value, compact = true, class: className = '' } = $props();
 
-	const s = (value / 100).toFixed(2);
-	const [decimal, copper] = s.split('.');
-	const silver = decimal.slice(-2);
-	const gold = decimal.slice(0, -2);
+	let decimal = $derived((value / 100).toFixed(2).split('.')[0]);
+	let copper = $derived((value / 100).toFixed(2).split('.')[1] ?? '00');
+	let silver = $derived(decimal.slice(-2));
+	let gold = $derived(decimal.slice(0, -2));
 </script>
 
 <span class="price {className}">

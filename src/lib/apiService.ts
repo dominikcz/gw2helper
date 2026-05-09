@@ -521,7 +521,7 @@ const achievementsInfo = async (ids: string) => {
 };
 
 const minis = async (ids: number[]) => {
-    ids = ids.filter((x: number) => !itemsCache.has(x));
+    ids = ids.filter((x: number) => !minisCache.has(x));
     const batches = [];
     do {
         let batch = ids.splice(0, 200);

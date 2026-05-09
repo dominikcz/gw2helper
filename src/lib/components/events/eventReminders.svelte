@@ -22,6 +22,7 @@
 
 	let filter = $state('');
 
+	// svelte-ignore state_referenced_locally
 	let time = new Clock({ interval: updateInterval * 1000 });
 	let reminders = new Reminders();
 

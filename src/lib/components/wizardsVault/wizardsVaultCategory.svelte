@@ -33,7 +33,9 @@
 		return (data.meta_progress_complete) ? data.meta_progress_complete : data.objectives.length;
 	}
 
+	// svelte-ignore state_referenced_locally
 	console.log(`${title}: ${targetTime.toISOString()}`, data);
+	
 	$effect(() => {
 		updateTime();
 	});

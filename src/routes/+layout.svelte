@@ -29,11 +29,13 @@
 	let { data, children } = $props();
 
 	const defaultTitle = 'GW2 Helper';
+	// svelte-ignore state_referenced_locally
 	let apiKey = $state(data.apiKey);
 	let reminders = new Reminders();
 	let lastNotify = '';
 	let confirmedNotify = '';
 	let noAudio = 0;
+	// svelte-ignore state_referenced_locally
 	let apiLang = $state(data.apiLang);
 
 	const apiLanguages = {

@@ -1,6 +1,5 @@
 <script>
 	import { resolve } from '$app/paths';
-	import { MINIS_CACHE } from '$lib/consts';
 	import helperUtils from '$lib/utils/helper-utils';
 
 	/** @type {{ type: string, bits: any, bitsDone: any, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
@@ -9,6 +8,13 @@
 	function isBitDoneByIndexOrId(idx, bit) {
 		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
 		return bitsDone.includes(idx) || (bit?.id != null && bitsDone.includes(bit.id));
+	}
+
+	function resolveBitEntity(bit) {
+		if (bit?.type === 'Item') return itemsCache(bit.id);
+		if (bit?.type === 'Minipet') return minisCache(bit.id);
+		if (bit?.type === 'Skin') return skinsCache(bit.id);
+		return null;
 	}
 </script>
 
@@ -23,8 +29,8 @@
 {#snippet progressItemSet(bits, bitsDone)}
 	<div class="items condensed autotooltip autotooltip-sticky">
 		{#each bits as x, idx}
-			{@const item = x.type == 'Item' ? itemsCache(x.id) : x.type == 'Minipet' ? minisCache(x.id) : x.type == 'Skin' ? skinsCache(x.id) : {}}
-			{#if item}
+			{@const item = resolveBitEntity(x)}
+			{#if item?.icon}
 				<a href={helperUtils.wikiLink(item.name)} target="_blank">
 					<img alt={item.name} src={item.icon} class:done={isBitDoneByIndexOrId(idx, x)} />
 				</a>

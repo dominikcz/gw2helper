@@ -17,6 +17,7 @@
 	let pointerHeight = $state(0);
 
 	let currentTimePos = $state(0);
+	// svelte-ignore state_referenced_locally
 	let currTime = new Clock({ interval: updateInterval * 1000 });
 	let darkMode = themeWatcher();
 	let dt0 = $state();

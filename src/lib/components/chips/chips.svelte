@@ -27,7 +27,9 @@
 	// - an object  { value1: label1, value2: label2, ... }
 	// - an array of objects: [ { value: value1, label: label1, checked: true}, ... ]
 	// - an array of strings: ['label 1', 'label2', ... ]
+	// svelte-ignore state_referenced_locally
 	if (wxjs_types.isObject(options)) {
+		// svelte-ignore state_referenced_locally
 		Object.entries(options).forEach(([key, label]) => {
 			choice.push({
 				value: key,
@@ -36,7 +38,9 @@
 				selected: false,
 			});
 		});
+	// svelte-ignore state_referenced_locally
 	} else if (wxjs_types.isArray(options)) {
+		// svelte-ignore state_referenced_locally
 		options.forEach((item) => {
 			const _item = wxjs_types.isObject(item)
 				? item

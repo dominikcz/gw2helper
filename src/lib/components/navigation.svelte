@@ -6,7 +6,7 @@
 	let { items = [], active, showScrollButtons = true } = $props();
 
 	let navLeftVisible = $state(false);
-	let navRightVisible = $state(showScrollButtons);
+	let navRightVisible = $state(false);
 
 	let navRef = $state();
 	onMount(() => {
@@ -97,22 +97,6 @@
 		scrollbar-width: thin;
 		user-select: none;
 
-		&.css-scroll-indicators {
-			background:
-			/* Shadow Cover LEFT */
-				linear-gradient(90deg, var(--nav-bg) 60%, rgba(255, 255, 255, 0)) left calc(50% - 5px),
-				/* Shadow Cover RIGHT */ linear-gradient(270deg, var(--nav-bg) 60%, rgba(255, 255, 255, 0)) right calc(50% - 5px),
-				var(--asset-icon-arrow-back) left calc(50% - 5px),
-				var(--asset-icon-arrow-forward) right calc(50% - 5px);
-			background-repeat: no-repeat;
-			background-size:
-				2.5em 1.5em,
-				2.5em 1.5em,
-				1.5em 1.5em,
-				1.5em 1.5em;
-			background-attachment: local, local, scroll, scroll;
-		}
-
 		a {
 			padding: 0.3em 1em;
 			color: var(--nav-fg, #aaa);
@@ -161,9 +145,4 @@
 		}
 	}
 
-	@media (min-width: 900px) {
-		.nav-container {
-			max-width: none;
-		}
-	}
 </style>
