@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import eventsUtils from './eventsUtils';
 
     /** @type {{dt0: any}} */

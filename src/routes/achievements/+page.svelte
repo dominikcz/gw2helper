@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import Awaiter from '$lib/components/awaiter.svelte';

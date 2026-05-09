@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { getContext } from 'svelte';
 	import { TABS } from './tabs.svelte';
 	/** @type {{children?: import('svelte').Snippet}} */

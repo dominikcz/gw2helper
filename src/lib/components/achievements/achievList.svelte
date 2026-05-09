@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import { t as _ } from '$lib/services/i18n.js';

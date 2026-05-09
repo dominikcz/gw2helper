@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from "$app/paths";
 	import Price from "$lib/components/price.svelte";
 	import { t as _ } from '$lib/services/i18n';

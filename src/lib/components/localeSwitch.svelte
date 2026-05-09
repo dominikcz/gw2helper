@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/** @type {{languages?: any, value: any, keysOnly?: boolean}} */
 	let { languages = {}, value = $bindable(), keysOnly = false } = $props();
 </script>

@@ -1,5 +1,5 @@
 <!-- Originally posted on https://webjeda.com/blog/back-to-top-svelte-component/ -->
-<script>
+<script lang="ts">
 	/** @type {{showAtPixel?: number, children?: import('svelte').Snippet}} */
 	let { showAtPixel = 1000, children } = $props();
 

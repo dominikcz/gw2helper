@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import EventItem from './eventItem.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 

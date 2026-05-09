@@ -76,6 +76,24 @@ const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 const ignoreCache = getQueryStringFlag('ignore-cache');
 const devMode = getQueryStringFlag('dev-mode');
 const realApi = getQueryStringFlag('real-api');
+const debugAchievements = getQueryStringFlag('debug-achievements');
+
+const isAchievementsRequest = (req: string): boolean => {
+    return req.includes('/v2/account/achievements')
+        || req.includes('/v2/achievements/categories')
+        || req.includes('/v2/achievements?')
+        || req.includes('/v2/achievementslang=');
+};
+
+const debugAchievementsReq = (phase: string, req: string, details: Record<string, any> = {}) => {
+    if (!debugAchievements || !isAchievementsRequest(req)) return;
+    console.info('[achievements-debug]', {
+        phase,
+        req,
+        at: new Date().toISOString(),
+        ...details,
+    });
+};
 
 
 interface CacheEntry {
@@ -183,12 +201,39 @@ const readSettings = async () => {
     const response = await fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
         Logger.error('error loading settings', error);
     });
+
     if (response?.ok) {
-        let data = await response.json();
-        _settings = Object.assign({}, _settings, data);
+        const contentType = (response.headers.get('content-type') || '').toLowerCase();
+        const isJson = contentType.includes('application/json');
+
+        if (!isJson) {
+            Logger.warn('settings file missing or non-json response, using defaults', {
+                status: response.status,
+                url: response.url,
+                contentType,
+            });
+        } else {
+            try {
+                const data = await response.json();
+                if (wxjs_types.isObject(data)) {
+                    _settings = Object.assign({}, _settings, data);
+                } else {
+                    Logger.warn('invalid settings payload, using defaults', {
+                        payloadType: typeof data,
+                    });
+                }
+            } catch (error) {
+                Logger.warn('could not parse settings json, using defaults', {
+                    error: error instanceof Error ? error.message : String(error),
+                    status: response.status,
+                    url: response.url,
+                });
+            }
+        }
     } else if (response) {
         Logger.warn('error loading settings', { status: response.status, url: response.url });
     }
+
     // code below is not really correct as season end is not always 3 months after season start, but it will do as a fallback
     let seasonEnd: Date | undefined = new Date(_settings.wizardsVault.seasonEnd);
     if (seasonEnd < new Date()){
@@ -217,6 +262,13 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
     const _options: ApiClientOptions = Object.assign({}, fetchOptions, options);
     const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
     if (cacheEntry !== undefined) {
+        debugAchievementsReq('apiClient.cache-hit', origReq, {
+            cachedSeconds: secondsBetween(cacheEntry.time, new Date()),
+            payloadType: Array.isArray(cacheEntry.data) ? 'array' : typeof cacheEntry.data,
+            payloadSize: Array.isArray(cacheEntry.data)
+                ? cacheEntry.data.length
+                : (cacheEntry.data && typeof cacheEntry.data === 'object' ? Object.keys(cacheEntry.data).length : 0),
+        });
         Logger.log("requestCache is valid, returning cached response");
         return cacheEntry.data;
     }
@@ -263,6 +315,13 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
             data = _options.transform(data);
         }
         cacheRequest(origReq, data);
+        debugAchievementsReq('apiClient.fetch-ok', origReq, {
+            status: response.status,
+            payloadType: Array.isArray(data) ? 'array' : typeof data,
+            payloadSize: Array.isArray(data)
+                ? data.length
+                : (data && typeof data === 'object' ? Object.keys(data).length : 0),
+        });
         Logger.log(`requestCache for ${origReq} updated`, data);
         return data;
     }
@@ -503,17 +562,40 @@ const tokenInfo = async (): Promise<TokenInfo> => {
 };
 
 const achievements = async (all: boolean = false) => {
+    const startedAt = Date.now();
     const [categories, account, account_achievements, allIds] = await Promise.all([
         apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
         apiClient("/v2/account", ""),
         apiClient("/v2/account/achievements", ""),
         apiClient("/v2/achievements", "")
     ]);
-    account_achievements.forEach((x: any) => {
-        x.bits_done = [...x.bits || []];
-        delete x.bits;
-    });
-    return expandAchievements(account, categories, account_achievements, allIds);
+
+    // Never mutate API responses, as they are also reused by requestCache.
+    // Mutating `bits` into `bits_done` in-place caused intermittent missing progress in ItemSet tooltips.
+    const normalizedAccountAchievements = (account_achievements || []).map((x: any) => ({
+        ...x,
+        bits_done: Array.isArray(x.bits_done) ? [...x.bits_done] : [...(x.bits || [])],
+    }));
+
+    if (debugAchievements) {
+        const rows = normalizedAccountAchievements.length;
+        const doneRows = normalizedAccountAchievements.filter((x: any) => !!x.done).length;
+        const withBitsDone = normalizedAccountAchievements.filter((x: any) => Array.isArray(x.bits_done) && x.bits_done.length > 0).length;
+        const doneWithEmptyBitsDone = normalizedAccountAchievements.filter((x: any) => !!x.done && (!Array.isArray(x.bits_done) || x.bits_done.length === 0)).length;
+        console.info('[achievements-debug]', {
+            phase: 'achievements.normalize-account-achievements',
+            at: new Date().toISOString(),
+            durationMs: Date.now() - startedAt,
+            categories: Array.isArray(categories) ? categories.length : 0,
+            accountAchievements: rows,
+            allIds: Array.isArray(allIds) ? allIds.length : 0,
+            doneRows,
+            withBitsDone,
+            doneWithEmptyBitsDone,
+        });
+    }
+
+    return expandAchievements(account, categories, normalizedAccountAchievements, allIds);
 };
 
 const achievementsInfo = async (ids: string) => {

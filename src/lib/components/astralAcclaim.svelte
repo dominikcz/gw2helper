@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import helperUtils from "$lib/utils/helper-utils";
     import { resolve } from "$app/paths";
     import { t as _ } from "$lib/services/i18n";

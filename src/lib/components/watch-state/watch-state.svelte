@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/** @type {{watched: any, title: any, onClick: any}} */
 	let { watched, title, onClick } = $props();
 </script>

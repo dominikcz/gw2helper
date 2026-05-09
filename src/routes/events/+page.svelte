@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import EventTimers from '$lib/components/events/eventTimers.svelte';
 	import EventReminders from '$lib/components/events/eventReminders.svelte';
 	import utils from '$lib/utils';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Chip from '$lib/components/chips/chip.svelte';
 	import Chips from '$lib/components/chips/chips.svelte';
 	import ItemTooltip from '$lib/components/items/itemTooltip.svelte';

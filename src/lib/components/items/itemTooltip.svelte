@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import utils from "$lib/utils";
 
 	/** @type {{item: any}} */

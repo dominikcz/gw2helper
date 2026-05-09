@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import { resolve } from '$app/paths';
 	import Wiki from '../wiki.svelte';
@@ -45,7 +45,12 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div class="head autotooltip" data-autotooltip-renderer="achiev.progress" data-autotooltip-id={id} data-autotooltip-params={JSON.stringify(bitsDone)}>
+	<div
+		class="head autotooltip"
+		data-autotooltip-renderer="achiev.progress"
+		data-autotooltip-id={id}
+		data-autotooltip-params={JSON.stringify({ bitsDone, done })}
+	>
 		{#if icon}
 			<img src={icon} alt={name} />
 		{/if}

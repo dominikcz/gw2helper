@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import ArrowBack from './arrowBack.svelte';
 	import ArrowForward from './arrowForward.svelte';

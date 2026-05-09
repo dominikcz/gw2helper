@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/** @type {{value: any, compact?: boolean, class?: string}} */
 	let { value, compact = true, class: className = '' } = $props();
 

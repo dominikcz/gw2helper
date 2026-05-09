@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import { resolve } from '$app/paths';

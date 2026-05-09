@@ -1,19 +1,34 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 
-	/** @type {{ type: string, bits: any, bitsDone: any, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
-	let { type, bits = [], bitsDone = [], itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+	/** @type {{ type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
+	let { type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+
+	const normalizedBitsDone = $derived(
+		(bitsDone || [])
+			.map((value) => Number(value))
+			.filter((value) => Number.isFinite(value))
+	);
+
+	const doneByIndexOrId = $derived(new Set(normalizedBitsDone));
+
+	function normalizeBitType(bit) {
+		return String(bit?.type || '').toLowerCase();
+	}
 
 	function isBitDoneByIndexOrId(idx, bit) {
+		// Some accounts return empty bits_done when achievement is already completed.
+		if (done && !normalizedBitsDone.length) return true;
 		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
-		return bitsDone.includes(idx) || (bit?.id != null && bitsDone.includes(bit.id));
+		return doneByIndexOrId.has(Number(idx)) || (bit?.id != null && doneByIndexOrId.has(Number(bit.id)));
 	}
 
 	function resolveBitEntity(bit) {
-		if (bit?.type === 'Item') return itemsCache(bit.id);
-		if (bit?.type === 'Minipet') return minisCache(bit.id);
-		if (bit?.type === 'Skin') return skinsCache(bit.id);
+		const bitType = normalizeBitType(bit);
+		if (bitType === 'item') return itemsCache(bit.id);
+		if (bitType === 'minipet') return minisCache(bit.id);
+		if (bitType === 'skin') return skinsCache(bit.id);
 		return null;
 	}
 </script>

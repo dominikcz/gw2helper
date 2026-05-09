@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import EventsList from './eventsList.svelte';
 	import SearchInput from '../searchInput.svelte';

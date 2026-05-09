@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	// based on https://svelte.dev/examples/modal
 
 	/** @type {{showModal: any, onModalClose?: CallableFunction, header?: import('svelte').Snippet, children?: import('svelte').Snippet}} */

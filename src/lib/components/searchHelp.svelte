@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { alert } from './alert/alert';
 	import { t as _ } from '$lib/services/i18n.js';
 </script>

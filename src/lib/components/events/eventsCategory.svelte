@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import EventsList from './eventsList.svelte';
 

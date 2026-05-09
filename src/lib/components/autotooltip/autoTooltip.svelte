@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { nonpassive } from 'svelte/legacy';
 
 	import { autoTooltipInit } from './autotooltip-utils';

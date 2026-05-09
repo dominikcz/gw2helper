@@ -1,8 +1,8 @@
-<script module>
+<script lang="ts" module>
 	export const TABS = {};
 </script>
 
-<script>
+<script lang="ts">
 	import { setContext, onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 	/** @type {{children?: import('svelte').Snippet}} */

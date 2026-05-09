@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import { onMount } from 'svelte';
 	import wxdates from '$lib/wxjs_dates';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import eventsUtils from './eventsUtils';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';

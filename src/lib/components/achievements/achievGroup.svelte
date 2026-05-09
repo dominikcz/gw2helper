@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import helperUtils from '$lib/utils/helper-utils';

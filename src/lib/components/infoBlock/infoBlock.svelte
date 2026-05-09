@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/** @type {{caption?: string, kind?: "info" | "error", children?: import('svelte').Snippet<[any]>}} */
 	let { caption = 'Hint', kind = 'info', children } = $props();
 </script>
