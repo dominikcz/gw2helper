@@ -5,12 +5,17 @@
 
 	/** @type {{ type: string, bits: any, bitsDone: any, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
 	let { type, bits = [], bitsDone = [], itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+
+	function isBitDoneByIndexOrId(idx, bit) {
+		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
+		return bitsDone.includes(idx) || (bit?.id != null && bitsDone.includes(bit.id));
+	}
 </script>
 
 {#snippet progressText(bits, bitsDone)}
 	<ol>
 		{#each bits as item, idx}
-			<li class:done={bitsDone.includes(idx)}>{item.text}</li>
+			<li class:done={isBitDoneByIndexOrId(idx, item)}>{item.text}</li>
 		{/each}
 	</ol>
 {/snippet}
@@ -21,7 +26,7 @@
 			{@const item = x.type == 'Item' ? itemsCache(x.id) : x.type == 'Minipet' ? minisCache(x.id) : x.type == 'Skin' ? skinsCache(x.id) : {}}
 			{#if item}
 				<a href={helperUtils.wikiLink(item.name)} target="_blank">
-					<img alt={item.name} src={item.icon} class:done={bitsDone.includes(idx)} />
+					<img alt={item.name} src={item.icon} class:done={isBitDoneByIndexOrId(idx, x)} />
 				</a>
 			{:else}
 				<img src={resolve('/assets/Talk_question_mark_option.png')} alt="item id {x.id} not found" />
@@ -39,6 +44,11 @@
 <style lang="scss">
 	img {
 		filter: grayscale(100%) opacity(50%);
+		max-width: 64px;
+		max-height: 64px;
+		width: 64px;
+		height: 64px;
+		object-fit: contain;
 
 		&.done {
 			filter: none;
