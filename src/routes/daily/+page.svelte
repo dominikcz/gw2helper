@@ -3,7 +3,7 @@
 	import wxdates from '$lib/wxjs_dates';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, extractDaily, extractWeekly, extractDailyAndWeekly } from '$lib/components/achievements/achievements.js';
 	import { t as _ } from '$lib/services/i18n.js';
@@ -74,7 +74,7 @@
 
 <Awaiter promise={data.wallet}>
 	{#snippet children(result)}
-		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={astralAcclaimAvailable(result)} image="{base}/assets/rewards/Astral_Acclaim.png" />
+		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={astralAcclaimAvailable(result)} image={resolve('/assets/rewards/Astral_Acclaim.png')} />
 	{/snippet}
 </Awaiter>
 
@@ -118,7 +118,7 @@
 		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
 
 		<AchievList items={todos} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
-			{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
+			{@html $_('achievements.empty_list', { img_url: resolve('/assets/rewards/map_heart_empty.png') })}
 		</AchievList>
 
 		<h3>{$_('daily.daily')}</h3>

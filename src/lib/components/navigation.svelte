@@ -102,8 +102,8 @@
 			/* Shadow Cover LEFT */
 				linear-gradient(90deg, var(--nav-bg) 60%, rgba(255, 255, 255, 0)) left calc(50% - 5px),
 				/* Shadow Cover RIGHT */ linear-gradient(270deg, var(--nav-bg) 60%, rgba(255, 255, 255, 0)) right calc(50% - 5px),
-				url(/gw2helper/icons/arrow_back.png) left calc(50% - 5px),
-				url(/gw2helper/icons/arrow_forward.png) right calc(50% - 5px);
+				var(--asset-icon-arrow-back) left calc(50% - 5px),
+				var(--asset-icon-arrow-forward) right calc(50% - 5px);
 			background-repeat: no-repeat;
 			background-size:
 				2.5em 1.5em,

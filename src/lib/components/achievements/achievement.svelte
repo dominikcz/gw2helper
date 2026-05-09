@@ -1,6 +1,6 @@
 <script>
 	import helperUtils from '$lib/utils/helper-utils';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Wiki from '../wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
@@ -58,7 +58,7 @@
 		{#if flags && flags.includes('Hidden')}
 			<img
 				class="icon"
-				src="{base}/assets/rewards/Achievements_Watch_List.png"
+				src={resolve('/assets/rewards/Achievements_Watch_List.png')}
 				alt="hidden achievement"
 				title={$_('achievements.achievement_is_hidden')}
 			/>
@@ -99,7 +99,7 @@
 		flex: 0 1 auto;
 
 		&.done {
-			background: var(--gw2helper-module-white) url(/gw2helper/assets/rewards/done.png) top left;
+			background: var(--gw2helper-module-white) var(--asset-reward-done) top left;
 			background-repeat: no-repeat;
 			background-size: 1.5em 1.5em;
 		}
@@ -156,7 +156,7 @@
 	}
 
 	.todo-state {
-		background: url(/gw2helper/assets/rewards/map_heart-sprite.png) no-repeat top center;
+		background: var(--asset-map-heart-sprite) no-repeat top center;
 		padding: 0;
 		border-radius: 0;
 		margin: 0;

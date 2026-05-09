@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 	import { getQueryStringFlag } from '$lib/utils';
 	interface Props {
@@ -24,11 +24,11 @@
 		{#if showApiLinks}<figcaption class="api-link"><a href={helperUtils.apiItemLink(item.id)} target="_blank">api</a></figcaption>{/if}
 	{:else if showApiLinks}
 		<a href={helperUtils.apiItemLink(item.id)} target="_blank">
-			<img alt="invalid id: {item.id}" src="{base}/assets/Talk_question_mark_option.png" />
+			<img alt="invalid id: {item.id}" src={resolve('/assets/Talk_question_mark_option.png')} />
 		</a>
 		<figcaption class="api-link"><a href={helperUtils.apiItemLink(item.id)} target="_blank">api</a></figcaption>
 	{:else}
-		<img alt="invalid id: {item.id}" src="{base}/assets/Talk_question_mark_option.png" class="no-link" />
+		<img alt="invalid id: {item.id}" src={resolve('/assets/Talk_question_mark_option.png')} class="no-link" />
 		<figcaption class="id-label">id: {item.id}</figcaption>
 	{/if}
 	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}

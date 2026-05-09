@@ -1,5 +1,5 @@
 <script>
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Price from '../price.svelte';
@@ -31,7 +31,7 @@
 				{#if category.rewards_to_get.has('title')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('title')}</span>
-						<img src="{base}/assets/rewards/Title_icon.png" alt="title" title={$_('achievements.rewards_title')} />
+						<img src={resolve('/assets/rewards/Title_icon.png')} alt="title" title={$_('achievements.rewards_title')} />
 					</div>
 				{/if}
 				{#if category.rewards_to_get.has('coins')}
@@ -42,14 +42,14 @@
 				{#if category.rewards_to_get.has('item')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('item')}</span>
-						<img src="{base}/assets/rewards/Achievement_Chest_interface_icon.png" alt="item" title={$_('achievements.rewards_items')} />
+						<img src={resolve('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item" title={$_('achievements.rewards_items')} />
 					</div>
 				{/if}
 				{#if category.rewards_to_get.has('mastery_tyria')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_tyria')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Central_Tyria.png"
+							src={resolve('/assets/rewards/Mastery_point_Central_Tyria.png')}
 							alt="mastery points Central Tyria"
 							title={$_('achievements.rewards_mastery_tyria')}
 						/>
@@ -59,7 +59,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_maguuma')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Heart_of_Thorns.png"
+							src={resolve('/assets/rewards/Mastery_point_Heart_of_Thorns.png')}
 							alt="mastery points Heart of Thorns"
 							title={$_('achievements.rewards_mastery_hot')}
 						/>
@@ -69,7 +69,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_desert')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Path_of_Fire.png"
+							src={resolve('/assets/rewards/Mastery_point_Path_of_Fire.png')}
 							alt="mastery points Path of Fire"
 							title={$_('achievements.rewards_mastery_pof')}
 						/>
@@ -79,7 +79,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_tundra')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Icebrood_Saga.png"
+							src={resolve('/assets/rewards/Mastery_point_Icebrood_Saga.png')}
 							alt="mastery points Icebrood Saga"
 							title={$_('achievements.rewards_mastery_ice')}
 						/>
@@ -89,7 +89,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_jade')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_End_of_Dragons.png"
+							src={resolve('/assets/rewards/Mastery_point_End_of_Dragons.png')}
 							alt="mastery points End of Dragons"
 							title={$_('achievements.rewards_mastery_eod')}
 						/>
@@ -99,7 +99,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_sky')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png"
+							src={resolve('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')}
 							alt="mastery points Secrets of the Obscure"
 							title={$_('achievements.rewards_mastery_soto')}
 						/>
@@ -109,7 +109,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_unknown')}</span>
 						<img
-							src="{base}/assets/rewards/Mastery_point_Janthir_Wilds.png"
+							src={resolve('/assets/rewards/Mastery_point_Janthir_Wilds.png')}
 							alt="mastery points Janthir Wilds"
 							title={$_('achievements.rewards_mastery_jw')}
 						/>
@@ -119,7 +119,7 @@
 					<div class="reward-item">
 						<span>{category.points_to_get}</span>
 						<img
-							src="{base}/assets/rewards/AP.png"
+							src={resolve('/assets/rewards/AP.png')}
 							alt="achievement points"
 							title={$_('achievements.rewards_ap_left', { points: category.points_to_get })}
 						/>
@@ -128,7 +128,7 @@
 				<div class="reward-item">
 					<span>{category.achievements.length}</span>
 					<img
-						src="{base}/assets/rewards/Achievements_Summary.png"
+						src={resolve('/assets/rewards/Achievements_Summary.png')}
 						alt="achievements"
 						title={$_('achievements.achievements_left', { todo: category.achievements.length })}
 					/>
@@ -190,15 +190,6 @@
 		font-size: 120%;
         width: auto;
 		// font-family: monospace;
-		&.large {
-			.reward-item {
-				font-size: 1.2rem;
-				img {
-					width: 2em;
-					height: 2em;
-				}
-			}
-		}
 
 		.reward-item {
 			display: flex;

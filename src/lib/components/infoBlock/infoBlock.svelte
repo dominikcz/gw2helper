@@ -16,7 +16,7 @@
 		color: var(--gw2helper-module-text);
 		border-color: var(--gw2helper-info);
 		border-radius: 0.3125em;
-		background: url(/gw2helper/assets/Report_icon.png) 0.5em center no-repeat;
+		background: var(--asset-report-icon) 0.5em center no-repeat;
 		width: fit-content;
 		&.info{
 			background-color: var(--gw2helper-info);

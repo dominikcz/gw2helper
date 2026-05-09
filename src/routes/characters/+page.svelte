@@ -1,5 +1,5 @@
 <script>
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
@@ -12,16 +12,16 @@
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
 	function professionIcon(name) {
-		return `${base}/assets/professions/${name}_icon.png`;
+		return resolve(`/assets/professions/${name}_icon.png`);
 	}
 
 	function icon(name) {
-		return `${base}/assets/${name}`;
+		return resolve(`/assets/${name}`);
 	}
 
 	function craftIcon(name) {
-		// return `${base}/assets/craft/${name}_tango_icon_48px.png`;
-		return `${base}/assets/craft/map_crafting_${name.toLowerCase()}.png`;
+		// return resolve(`/assets/craft/${name}_tango_icon_48px.png`);
+		return resolve(`/assets/craft/map_crafting_${name.toLowerCase()}.png`);
 	}
 
 	function iconScale(createdAt) {

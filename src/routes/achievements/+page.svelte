@@ -6,7 +6,7 @@
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import { sum } from '$lib/utils';
 	import utils from '$lib/utils';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
 	import { onMount } from 'svelte';
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
@@ -115,7 +115,7 @@
 
 <h1>{$_('achievements.achievements')}</h1>
 
-<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
+<img src={resolve('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements}>
 	{#snippet children(result)}
@@ -137,30 +137,30 @@
 		})}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
-			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={`${base}/assets/rewards/Monthly_Achievement.png`} />
-			<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={`${base}/assets/rewards/AP.png`} />
-			<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={`${base}/assets/rewards/AP.png`} />
+			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={resolve('/assets/rewards/Monthly_Achievement.png')} />
+			<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={resolve('/assets/rewards/AP.png')} />
+			<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={resolve('/assets/rewards/AP.png')} />
 			<WidgetInfo
 				title={$_('achievements.points_from_achievements')}
 				value={sum(result.categories, 'points_done')}
-				image={`${base}/assets/rewards/AP.png`}
+				image={resolve('/assets/rewards/AP.png')}
 			/>
-			<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={`${base}/assets/rewards/AP.png`} /> -->
+			<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={resolve('/assets/rewards/AP.png')} /> -->
 		</WidgetsGroup>
 		<WidgetsGroup name={$_('achievements.achievements_todo')}>
-			<WidgetInfo title={$_('achievements.achievements_to_do')} value={result.todo} image="{base}/assets/rewards/Daily_Achievement.png" />
-			<WidgetInfo title={$_('achievements.points_to_get')} value={sum(result.categories, 'points_to_get')} image="{base}/assets/rewards/AP.png" />
+			<WidgetInfo title={$_('achievements.achievements_to_do')} value={result.todo} image={resolve('/assets/rewards/Daily_Achievement.png')} />
+			<WidgetInfo title={$_('achievements.points_to_get')} value={sum(result.categories, 'points_to_get')} image={resolve('/assets/rewards/AP.png')} />
 			<WidgetInfo
 				title={$_('achievements.titles_to_get')}
 				value={result.rewards_to_get.get('title')}
-				image="{base}/assets/rewards/Talk_collection_option.png"
+				image={resolve('/assets/rewards/Talk_collection_option.png')}
 			/>
 			<WidgetInfo
 				title={$_('achievements.items_to_get')}
 				value={result.rewards_to_get.get('item')}
-				image="{base}/assets/rewards/Achievement_Chest_interface_icon.png"
+				image={resolve('/assets/rewards/Achievement_Chest_interface_icon.png')}
 			/>
-			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image="{base}/assets/rewards/Merchant_crop.png">
+			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image={resolve('/assets/rewards/Merchant_crop.png')}>
 				{#snippet children({ value })}
 					<Price {value} />
 				{/snippet}
@@ -217,7 +217,7 @@
 				<TabPanel>
 					<h2>{$_('achievements.your_list')}</h2>
 					<AchievList items={myItems} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
-						{@html $_('achievements.empty_list', { img_url: `${base}/assets/rewards/map_heart_empty.png` })}
+						{@html $_('achievements.empty_list', { img_url: resolve('/assets/rewards/map_heart_empty.png') })}
 					</AchievList>
 				</TabPanel>
 			</Tabs>

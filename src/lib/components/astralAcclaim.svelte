@@ -1,11 +1,11 @@
 <script>
     import helperUtils from "$lib/utils/helper-utils";
-    import { base } from "$app/paths";
+    import { resolve } from "$app/paths";
     import { t as _ } from "$lib/services/i18n";
 </script>
 
 <a class="tooltip-link" target="_blank" href={helperUtils.wikiLink('Astral_Acclaim')}>
-    <img src="{base}/assets/rewards/Astral_Acclaim.png" title="Astral Acclaim - {$_('common.click_for_wiki')}" alt="Astral Acclaim" />
+    <img src={resolve('/assets/rewards/Astral_Acclaim.png')} title="Astral Acclaim - {$_('common.click_for_wiki')}" alt="Astral Acclaim" />
 </a>
 
 <style>

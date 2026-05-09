@@ -1,6 +1,6 @@
 <script>
 	import '$lib/scss/gw2.scss';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -52,11 +52,26 @@
 	};
 
 	let sounds = new Howl({
-		src: [`${base}/assets/sounds/alarms.mp3`],
+		src: [resolve('/assets/sounds/alarms.mp3')],
 		sprite: soundSprites,
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
+	const assetVars = [
+		`--asset-waypoint-sprite: url(${resolve('/assets/waypoint-sprite.png')})`,
+		`--asset-footer-mask-inv: url(${resolve('/assets/footer_mask_inv.png')})`,
+		`--asset-reward-done: url(${resolve('/assets/rewards/done.png')})`,
+		`--asset-map-heart-sprite: url(${resolve('/assets/rewards/map_heart-sprite.png')})`,
+		`--asset-report-icon: url(${resolve('/assets/Report_icon.png')})`,
+		`--asset-loading-gray-inv: url(${resolve('/assets/loading_gray_inv.png')})`,
+		`--asset-loading-gray: url(${resolve('/assets/loading_gray.png')})`,
+		`--asset-trading-post: url(${resolve('/assets/Trading_Post.png')})`,
+		`--asset-wizards-vault-wvw: url(${resolve('/assets/rewards/Wizards_Vault_WvW.png')})`,
+		`--asset-wizards-vault-pvp: url(${resolve('/assets/rewards/Wizards_Vault_PvP.png')})`,
+		`--asset-wizards-vault-pve: url(${resolve('/assets/rewards/Wizards_Vault_PvE.png')})`,
+		`--asset-icon-arrow-back: url(${resolve('/icons/arrow_back.png')})`,
+		`--asset-icon-arrow-forward: url(${resolve('/icons/arrow_forward.png')})`,
+	].join('; ');
 
 	afterNavigate(() => {
 		checkIfAudioPlayable();
@@ -167,19 +182,19 @@
 	}
 	let tokenInfo = $derived(data.tokenInfo);
 	let active = $derived($page.url.pathname);
-	let title = $derived([defaultTitle, active.replace(base, '').replaceAll('/', '')].filter(Boolean).join(' - '));
+	let title = $derived([defaultTitle, active.replace(resolve('/'), '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
-		{ slug: `${base}/`, label: $_('layout.nav.home'), requiresKey: true },
-		{ slug: `${base}/daily/`, label: $_('layout.nav.daily'), requiresKey: true },
-		{ slug: `${base}/events/`, label: $_('layout.nav.events'), requiresKey: false },
-		{ slug: `${base}/items/`, label: $_('layout.nav.items'), requiresKey: true },
-		{ slug: `${base}/materials/`, label: $_('layout.nav.materials'), requiresKey: true },
-		{ slug: `${base}/achievements/`, label: $_('layout.nav.achievements'), requiresKey: true },
-		{ slug: `${base}/account/`, label: $_('layout.nav.account'), requiresKey: true },
-		{ slug: `${base}/characters/`, label: $_('layout.nav.characters'), requiresKey: true },
-		{ slug: `${base}/guilds/`, label: $_('layout.nav.guilds'), requiresKey: true },
-		{ slug: `${base}/trading-post/`, label: $_('layout.nav.trading-post'), requiresKey: true },
-		{ slug: `${base}/legendary/`, label: $_('layout.nav.legendary'), requiresKey: true },
+		{ slug: resolve('/'), label: $_('layout.nav.home'), requiresKey: true },
+		{ slug: resolve('/daily/'), label: $_('layout.nav.daily'), requiresKey: true },
+		{ slug: resolve('/events/'), label: $_('layout.nav.events'), requiresKey: false },
+		{ slug: resolve('/items/'), label: $_('layout.nav.items'), requiresKey: true },
+		{ slug: resolve('/materials/'), label: $_('layout.nav.materials'), requiresKey: true },
+		{ slug: resolve('/achievements/'), label: $_('layout.nav.achievements'), requiresKey: true },
+		{ slug: resolve('/account/'), label: $_('layout.nav.account'), requiresKey: true },
+		{ slug: resolve('/characters/'), label: $_('layout.nav.characters'), requiresKey: true },
+		{ slug: resolve('/guilds/'), label: $_('layout.nav.guilds'), requiresKey: true },
+		{ slug: resolve('/trading-post/'), label: $_('layout.nav.trading-post'), requiresKey: true },
+		{ slug: resolve('/legendary/'), label: $_('layout.nav.legendary'), requiresKey: true },
 	]);
 	let currentPageRequiresKey = $derived(navigation.find((x) => x.slug == active)?.requiresKey || false);
 
@@ -197,12 +212,12 @@
 <Alert />
 <SvelteToast />
 
-<div id="content-wrapper">
+<div id="content-wrapper" style={assetVars}>
 	<div id="content">
 		<header>
-			<a href="/gw2helper/"><img src="{base}/assets/heart.png" alt="logo" /></a>
+			<a href={resolve('/')}><img src={resolve('/assets/heart.png')} alt="logo" /></a>
 			<div class="line">
-				<a href="/gw2helper/" title={$_('layout.nav.home')}><h1>GW2 Helper</h1></a>
+				<a href={resolve('/')} title={$_('layout.nav.home')}><h1>GW2 Helper</h1></a>
 				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>
 			</div>
 		</header>
@@ -318,7 +333,7 @@
 	.waypoint {
 		width: 4em;
 		height: 4em;
-		background: url(/gw2helper/assets/waypoint-sprite.png) no-repeat top center;
+		background: var(--asset-waypoint-sprite) no-repeat top center;
 		padding: 0;
 		border-radius: 0;
 		margin: 0;

@@ -81,7 +81,7 @@
 			border: none;
 		}
 		&.category-WvW {
-			background: var(--gw2helper-wvw-bg) url(/gw2helper/assets/rewards/Wizards_Vault_WvW.png) no-repeat 0.5em center;
+			background: var(--gw2helper-wvw-bg) var(--asset-wizards-vault-wvw) no-repeat 0.5em center;
 			progress[value] {
 				color: var(--gw2helper-wvw-progress) !important;
 				background-color: var(--gw2helper-wvw-progress-bg);
@@ -97,7 +97,7 @@
 			}
 		}
 		&.category-PvP {
-			background: var(--gw2helper-pvp-bg) url(/gw2helper/assets/rewards/Wizards_Vault_PvP.png) no-repeat 0.5em center;
+			background: var(--gw2helper-pvp-bg) var(--asset-wizards-vault-pvp) no-repeat 0.5em center;
 			progress[value] {
 				color: var(--gw2helper-pvp-progress) !important;
 				background-color: var(--gw2helper-pvp-progress-bg);
@@ -113,7 +113,7 @@
 			}
 		}
 		&.category-PvE {
-			background: var(--gw2helper-pve-bg) url(/gw2helper/assets/rewards/Wizards_Vault_PvE.png) no-repeat 0.5em center;
+			background: var(--gw2helper-pve-bg) var(--asset-wizards-vault-pve) no-repeat 0.5em center;
 			progress[value] {
 				color: var(--gw2helper-pve-progress) !important;
 				background-color: var(--gw2helper-pve-progress-bg);

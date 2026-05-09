@@ -16,7 +16,7 @@
 	};
 </script>
 
-<div class="container">
+<div class="container autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions}>
 	<table>
 		<caption></caption>
 		<thead>

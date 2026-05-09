@@ -7,7 +7,7 @@
 
 <style lang="scss">
 	.watched-state {
-		background: url(/gw2helper/assets/rewards/map_heart-sprite.png) no-repeat top center;
+		background: var(--asset-map-heart-sprite) no-repeat top center;
 		border: none;
 		padding: 0;
 		border-radius: 0;

@@ -5,7 +5,7 @@
 	.spinner {
 		width: 4em;
 		height: 4em;
-		background: url('/gw2helper/assets/loading_gray_inv.png') no-repeat 0 0/248em 4em;
+		background: var(--asset-loading-gray-inv) no-repeat 0 0/248em 4em;
         animation: sprites 2.2s steps(62) infinite reverse;
 	}
 
@@ -23,7 +23,7 @@
 
 	@media (prefers-color-scheme: dark) {
 		.spinner{
-			background: url('/gw2helper/assets/loading_gray.png') no-repeat 0 0/248em 4em;
+			background: var(--asset-loading-gray) no-repeat 0 0/248em 4em;
 		}
 	}
 </style>

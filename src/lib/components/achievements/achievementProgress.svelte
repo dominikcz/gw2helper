@@ -1,5 +1,5 @@
 <script>
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { MINIS_CACHE } from '$lib/consts';
 	import helperUtils from '$lib/utils/helper-utils';
 
@@ -24,7 +24,7 @@
 					<img alt={item.name} src={item.icon} class:done={bitsDone.includes(idx)} />
 				</a>
 			{:else}
-				<img src="{base}/assets/Talk_question_mark_option.png" alt="item id {x.id} not found" />
+				<img src={resolve('/assets/Talk_question_mark_option.png')} alt="item id {x.id} not found" />
 			{/if}
 		{/each}
 	</div>

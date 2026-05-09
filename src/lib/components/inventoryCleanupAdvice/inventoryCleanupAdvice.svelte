@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import { resolve } from '$app/paths';
 	import Awaiter from '../awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
 	import { t as _, t } from '$lib/services/i18n.js';
@@ -201,7 +202,7 @@
 			<details use:grungeBorder={{ grunge: true }}>
 				<summary>Inventory cleanup advice: {`${result.stackSavings + result.getRidSavings} slots to save`}</summary>
 				<article>
-					<img src="/gw2helper/assets/150px-construction.png" title={$_('common.under_construction')} width="150px" alt="under construction" />
+					<img src={resolve('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
 					<p>
 						Show only items of character:
 						<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />

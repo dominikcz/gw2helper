@@ -1,7 +1,7 @@
 <script>
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import ItemsList from '$lib/components/items/itemsList.svelte';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Price from '../price.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 	import { autotooltip } from '$lib/actions/autotooltip.js';
@@ -26,7 +26,7 @@
 				<ItemsList summary={$_('home.items_for_pickup')} {items} useBorder={false}/>
 			{/if}
 			{#if showTradingPostLink}
-			<a href="{base}/trading-post/">{$_('home.trading-post')}</a>
+			<a href={resolve('/trading-post/')}>{$_('home.trading-post')}</a>
 			{/if}
 		</div>
 	</details>
@@ -43,7 +43,7 @@
 
 	.bltc {
 		summary {
-			background: url(/gw2helper/assets/Trading_Post.png) no-repeat center right 0.6em;
+			background: var(--asset-trading-post) no-repeat center right 0.6em;
 			background-size: 3em;
 		}
 	}
