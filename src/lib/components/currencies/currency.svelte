@@ -31,7 +31,15 @@
 			<Price value={currency.value} />
 		{:else}
 			<span class:karma={currency.id == 2} class:gems={currency.id == 4}>{formatValue(currency.value || 0)}</span>
-			<img src={currency.icon} alt={currency.name} title={getTitle(currency)} class="autotooltip" />
+			<img
+				src={currency.icon}
+				alt={currency.name}
+				title={getTitle(currency)}
+				class="autotooltip"
+				loading="lazy"
+				decoding="async"
+				fetchpriority="low"
+			/>
 		{/if}
 	</div>
 </div>

@@ -6,14 +6,14 @@ export async function load({ fetch, parent }) {
 	const walletOrder = await utils.readWalletOrder();
 	if (key) {
 		return {
-			'wallet': key ? apiService.wallet(walletOrder) : [],
-			'delivery': key ? apiService.delivery() : [],
+			'wallet': apiService.wallet(walletOrder),
+			'delivery': apiService.delivery(),
 		};
 	} else {
 		console.log('no api key :(');
 		return {
 			'wallet': [],
-			'delivery': {},
+			'delivery': { coins: 0, items: [] },
 		};
 	}
 }

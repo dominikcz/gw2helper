@@ -18,7 +18,7 @@
 	{#if item.name}
 		<span data-autotooltip-renderer="img.item" data-autotooltip-id={item.id} data-autotooltip-params={JSON.stringify({ count: item.count })}>
 			<a href={helperUtils.wikiLink(item.name)} target="_blank">
-				<img alt={item.name} src={item.icon} class:locked={item.locked} />
+				<img alt={item.name} src={item.icon} class:locked={item.locked} loading="lazy" decoding="async" fetchpriority="low" />
 			</a>
 		</span>
 		{#if showApiLinks}<figcaption class="api-link"><a href={helperUtils.apiItemLink(item.id)} target="_blank">api</a></figcaption>{/if}
