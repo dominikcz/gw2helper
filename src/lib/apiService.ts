@@ -13,7 +13,7 @@ const mockApiUrl = "http://localhost:3000";
 const CACHE_TIMEOUT = 5 * 60;
 const INVALID_ITEM_IDS: number[] = [4589, 39350, 39351, 39352, 39353, 39354, 39355, 39356];
 const INVALID_ACHIEVEMENTS_IDS: number[] = [];
-const ACHIEVEMENTS_NOT_IN_API = {
+const ACHIEVEMENTS_NOT_IN_API: Record<string, number[]> = {
     // Rift Hunting
     // TODO: will have to change to list of objects and get achievements' descriptions from wiki :(
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
@@ -81,25 +81,36 @@ const realApi = getQueryStringFlag('real-api');
 interface CacheEntry {
     time: Date | string;
     timeout: number;
-    data: object;
+    data: any;
 }
 
 interface TokenInfo {
     id: string;
     name: string;
     permissions: string[];
-    missingScopes?: string[];
+    missingScopes: string[];
     error: string | null;
 }
 
-let _items;
-let _minis;
-let _skins;
-let _achievements;
-let itemsCache;
-let minisCache;
-let skinsCache;
-let achievementsCache;
+interface ApiClientOptions extends RequestInit {
+    baseURL: string;
+    timeout: number;
+    expectJson: boolean;
+    apiLang: string;
+    onError(request: RequestInfo | string, response: Response, options: object): void;
+    fetchFunction: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+    debug: boolean;
+    transform?: (data: any) => any;
+}
+
+let _items: [number, any][] | undefined;
+let _minis: [number, any][] | undefined;
+let _skins: [number, any][] | undefined;
+let _achievements: [number, any][] | undefined;
+let itemsCache: Map<number, any>;
+let minisCache: Map<number, any>;
+let skinsCache: Map<number, any>;
+let achievementsCache: Map<number, any>;
 let requestCache: Map<string, CacheEntry>;
 let inflightItems: Map<number, Promise<any>> = new Map();
 let _tokenInfo: TokenInfo = {
@@ -111,7 +122,7 @@ let _tokenInfo: TokenInfo = {
 };
 
 let _apiKey = "";
-let fetchOptions = {
+let fetchOptions: ApiClientOptions = {
     method: "GET",
     baseURL: devMode ? realApi ? defaultApiUrl : mockApiUrl : defaultApiUrl,
     timeout: 10000,
@@ -142,7 +153,7 @@ const secondsBetween = (d1: Date | string, d2: Date): number => {
     return diff;
 };
 
-const tryCache = (req: string): object | undefined => {
+const tryCache = (req: string): CacheEntry | undefined => {
     if (_apiKey && requestCache.has(req)) {
         let info = requestCache.get(req);
         let secs = secondsBetween(info!.time, new Date());
@@ -155,16 +166,17 @@ const tryCache = (req: string): object | undefined => {
 };
 
 const cacheRequest = async (req: string, value: any) => {
-    const obj = {
+    const obj: CacheEntry = {
         time: new Date(),
+        timeout: CACHE_TIMEOUT,
         data: value,
     };
     requestCache.set(req, obj);
     await ls.set(requestCacheName(), [...requestCache.entries()]);
 };
 
-const getFromAchievementsCache = (key: string): object => {
-    return achievementsCache.get(key);
+const getFromAchievementsCache = (key: string): any => {
+    return achievementsCache.get(Number(key));
 }
 
 const readSettings = async () => {
@@ -189,19 +201,20 @@ const readSettings = async () => {
     }
 }
 
-const apiClient = async (req: string | RequestInfo, query: string, options?: object) => {
+const apiClient = async (req: string | RequestInfo, query: string, options?: Partial<ApiClientOptions>) => {
     if (!_apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
         return null;
     }
-    let missingScopes = getScopes(req).filter(x => !_tokenInfo.permissions.includes(x));
+    const scopeReq = typeof req === 'string' ? req : req instanceof Request ? req.url : String(req);
+    let missingScopes = getScopes(scopeReq).filter(x => !_tokenInfo.permissions.includes(x));
     if (missingScopes.length) {
         _tokenInfo.missingScopes.push(...missingScopes);
         throw ScopeError(missingScopes)
     }
     query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
-    const _options = Object.assign({}, fetchOptions, options);
+    const _options: ApiClientOptions = Object.assign({}, fetchOptions, options);
     const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
     if (cacheEntry !== undefined) {
         Logger.log("requestCache is valid, returning cached response");
@@ -217,14 +230,19 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
     if (_options.debug) {
         Logger.log(`req: ${req}, options: `, _options);
     }
-    const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options).catch(error => {
+    const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options as RequestInit).catch(error => {
         Logger.error('error', error);
     });
-    if (response?.status >= 400) {
-        const body = await response?.text();
+    if (response && response.status >= 400) {
+        const body = await response.text();
 
-        if (response?.headers.get('content-type')?.includes('application/json')) {
-            const errorMsg = JSON.parse(body)?.text;
+        if (response.headers.get('content-type')?.includes('application/json')) {
+            let errorMsg = '';
+            try {
+                errorMsg = JSON.parse(body)?.text || '';
+            } catch {
+                errorMsg = '';
+            }
             if (errorMsg !== "") {
                 throw new Error(errorMsg);
             } else {
@@ -254,37 +272,37 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: obj
 };
 
 const charactersItems = async () => {
-    const rawData = await apiClient("/v2/characters", "ids=all");
+    const rawData: any[] = (await apiClient("/v2/characters", "ids=all")) || [];
     for (const char of rawData) {
-        let bags = char.bags.filter(x => x != null).map(x => ({ id: x.id, size: x.size, count: 1 }));
-        let itemsInBags = char.bags
-            .filter(x => x != null)
-            .map((bag) => bag.inventory)
+        let bags = (char.bags || []).filter((x: any) => x != null).map((x: any) => ({ id: x.id, size: x.size, count: 1 }));
+        let itemsInBags = (char.bags || [])
+            .filter((x: any) => x != null)
+            .map((bag: any) => bag.inventory)
             .flat()
-            .filter((x) => x != null);
-        let equipment = char.equipment.flat().filter(x => x != null).map(x => ({ ...x, count: 1, equipped: true }));
+            .filter((x: any) => x != null);
+        let equipment = (char.equipment || []).flat().filter((x: any) => x != null).map((x: any) => ({ ...x, count: 1, equipped: true }));
         let charItems = bags.concat(itemsInBags).concat(equipment);
-        const addons = [];
-        charItems.forEach(x => {
+        const addons: number[] = [];
+        charItems.forEach((x: any) => {
             addons.push(...(x.upgrades || []), ...(x.infusions || []));
         })
-        charItems.push(...addons.map(x => ({ id: x, count: 1, equipped: true })))
-        let ids = charItems.map(x => x.id);
+        charItems.push(...addons.map((x: number) => ({ id: x, count: 1, equipped: true })))
+        let ids: number[] = charItems.map((x: any) => x.id);
         char._items = await expandItems(ids, charItems);
     }
     return rawData;
 };
 
 const materials = async () => {
-    const rawData = await apiClient("/v2/account/materials", "");
-    const ids = rawData.map((x) => x.id);
+    const rawData: any[] = (await apiClient("/v2/account/materials", "")) || [];
+    const ids: number[] = rawData.map((x: any) => x.id);
     return expandItems(ids, rawData);
 };
 
 
-function sumQuantities(data) {
+function sumQuantities(data: any[]) {
     // for more general function use sumGroupBy from utils.js
-    return Object.values(data.reduce((result, item) => {
+    return Object.values(data.reduce((result: Record<string, any>, item: any) => {
         // Create a unique key combining item_id and price
         const key = `${item.item_id}-${item.price}`;
         // If the key already exists, add to the existing quantity
@@ -298,8 +316,8 @@ function sumQuantities(data) {
     }, {})); // Initialize with an empty object
 }
 
-const _getTransactions = async (_transactions: any) => {
-    const transactions = _transactions.map(x => ({
+const _getTransactions = async (_transactions: any[]) => {
+    const transactions = _transactions.map((x: any) => ({
         ...x,
         transId: x.id,
         id: x.item_id,
@@ -308,7 +326,7 @@ const _getTransactions = async (_transactions: any) => {
     }));
 
 
-    const ids = transactions.map(x => x.id);
+    const ids: number[] = transactions.map((x: any) => x.id);
 
     // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
     let sum = sumQuantities(transactions);
@@ -335,11 +353,11 @@ const _getGuilds = async (full: boolean = false) => {
     // concat and remove duplicates
     const _guilds = [...new Set([...(account.guild_leader || []), ...account.guilds])];
 
-        let tasks = [];
+        let tasks: Promise<any>[] = [];
         for (const guild of _guilds) {
             tasks.push(apiClient(`/v2/guild/${guild}`, ""));
         }
-        let _rawData = (await Promise.all(tasks)).flat();
+        let _rawData: any[] = (await Promise.all(tasks)).flat();
         const defEmblem = {
             background: {
                 id: 1,
@@ -352,20 +370,20 @@ const _getGuilds = async (full: boolean = false) => {
             flags: []
         };
         if (full) {
-            _rawData.forEach(x => {
+            _rawData.forEach((x: any) => {
                 x.emblem ??= defEmblem
             });
-            const _emblems = _rawData.map(x => x.emblem);
-            const fgs = [];
-            const bgs = [];
-            let clrs = [];
+            const _emblems = _rawData.map((x: any) => x.emblem);
+            const fgs: number[] = [];
+            const bgs: number[] = [];
+            let clrs: number[] = [];
 
             // console.log('emblems', _emblems);
             for (const emblem of _emblems) {
                 bgs.push(emblem.background.id);
                 fgs.push(emblem.foreground.id);
-                clrs.push(...emblem.background.colors.map(x => wx.isObject(x) ? x.id : x));
-                clrs.push(...emblem.foreground.colors.map(x => wx.isObject(x) ? x.id : x));
+                clrs.push(...emblem.background.colors.map((x: any) => wx.isObject(x) ? x.id : x));
+                clrs.push(...emblem.foreground.colors.map((x: any) => wx.isObject(x) ? x.id : x));
             }
             clrs = [...new Set(clrs)].filter(x => x != null);
             const [colors, foregrounds, backgrounds] = await Promise.all([
@@ -377,8 +395,8 @@ const _getGuilds = async (full: boolean = false) => {
                 if (item.emblem) {
                     addPropertiesById(item.emblem.foreground, foregrounds);
                     addPropertiesById(item.emblem.background, backgrounds);
-                    item.emblem.foreground.colors = item.emblem.foreground.colors.map(color => colors.find(x => color == x.id));
-                    item.emblem.background.colors = item.emblem.background.colors.map(color => colors.find(x => color == x.id));
+                    item.emblem.foreground.colors = item.emblem.foreground.colors.map((color: any) => colors.find((x: any) => color == x.id));
+                    item.emblem.background.colors = item.emblem.background.colors.map((color: any) => colors.find((x: any) => color == x.id));
                 }
             }
             // console.log('emblems', {bgs, fgs, clrs});
@@ -388,19 +406,19 @@ const _getGuilds = async (full: boolean = false) => {
 }
 
 const guildItems = async () => {
-    const items = [];
+    const items: any[] = [];
     const guilds = await _getGuilds(false);
     for (const guild of guilds) {
         try {
-            let stashRaw = await apiClient(`/v2/guild/${guild.id}/stash`, "");
+            let stashRaw: any[] | any = await apiClient(`/v2/guild/${guild.id}/stash`, "");
             if (!wxjs_types.isArray(stashRaw)) {
                 continue;
             }
             stashRaw = stashRaw
-                .map((x) => x.inventory)
+                .map((x: any) => x.inventory)
                 .flat()
-                .filter((x) => x != null);
-            const ids = stashRaw.map((x) => x.id);
+                .filter((x: any) => x != null);
+            const ids = stashRaw.map((x: any) => x.id);
             items.push({
                 name: guild.name,
                 stash: await expandItems(ids, stashRaw),
@@ -409,7 +427,7 @@ const guildItems = async () => {
             items.push({
                 name: guild.name,
                 stash: [],
-                error: error.message,
+                error: error instanceof Error ? error.message : String(error),
             });
         }
     }
@@ -417,8 +435,8 @@ const guildItems = async () => {
 };
 
 const characters = async () => {
-    const resp = await apiClient("/v2/characters", "ids=all");
-    return resp.map(x => ({ ...x, crafting_discipline: x.crafting.map(c => c.discipline).flat().join(', ') }));
+    const resp: any[] = (await apiClient("/v2/characters", "ids=all")) || [];
+    return resp.map((x: any) => ({ ...x, crafting_discipline: (x.crafting || []).map((c: any) => c.discipline).flat().join(', ') }));
 };
 
 const guilds = async () => {
@@ -430,26 +448,26 @@ const items = (x: string) => {
 };
 
 const legendaries = async () => {
-    const [available, unlocked] = await Promise.all([
+    const [available, unlocked]: [any[], any[]] = await Promise.all([
         apiClient("/v2/legendaryarmory", `ids=all`),
         apiClient("/v2/account/legendaryarmory", ``)
     ]);
-    const ids = available.map((x) => x.id);
+    const ids: number[] = available.map((x: any) => x.id);
     const expanded = await expandItems(ids, available);
     const data = mergeById(expanded, unlocked);
-    const armor = groupBy(data.filter(x => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
-    const trinkets = groupBy(data.filter(x => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
-    const back = data.filter(x => x.type === "Back").map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
-    const upgrades = data.filter(x => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map(x => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
-    const _weapons = data.filter(x => x.type === "Weapon");
-    _weapons.forEach(x => {
+    const armor = (groupBy as any)(data.filter((x: any) => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
+    const trinkets = (groupBy as any)(data.filter((x: any) => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+    const back = data.filter((x: any) => x.type === "Back").map((x: any) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
+    const upgrades = data.filter((x: any) => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map((x: any) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
+    const _weapons = data.filter((x: any) => x.type === "Weapon");
+    _weapons.forEach((x: any) => {
         // change subtype naming to match current one in game & Wiki
         if (x.subtype == 'Harpoon') x.subtype = 'Spear';
         else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
         else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
         else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
     })
-    const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+    const weapons = (groupBy as any)(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
     return { armor, trinkets, back, upgrades, weapons };
 };
 
@@ -465,18 +483,18 @@ const account = async () => {
 };
 
 const sharedInventory = async () => {
-    const resp = await apiClient("/v2/account/inventory", "");
+    const resp: any[] = (await apiClient("/v2/account/inventory", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x) => x != null);
-    const ids = rawData.map((x) => x.id);
+    const rawData = resp.filter((x: any) => x != null);
+    const ids: number[] = rawData.map((x: any) => x.id);
     return expandItems(ids, rawData);
 };
 
 const bank = async () => {
-    const resp = await apiClient("/v2/account/bank", "");
+    const resp: any[] = (await apiClient("/v2/account/bank", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x) => x != null);
-    const ids = rawData.map((x) => x.id);
+    const rawData = resp.filter((x: any) => x != null);
+    const ids: number[] = rawData.map((x: any) => x.id);
     return expandItems(ids, rawData);
 };
 
@@ -491,7 +509,7 @@ const achievements = async (all: boolean = false) => {
         apiClient("/v2/account/achievements", ""),
         apiClient("/v2/achievements", "")
     ]);
-    account_achievements.forEach(x => {
+    account_achievements.forEach((x: any) => {
         x.bits_done = [...x.bits || []];
         delete x.bits;
     });
@@ -502,8 +520,8 @@ const achievementsInfo = async (ids: string) => {
     return apiClient("/v2/achievements", "ids=" + ids);
 };
 
-const minis = async (ids) => {
-    ids = ids.filter(x => !itemsCache.has(x));
+const minis = async (ids: number[]) => {
+    ids = ids.filter((x: number) => !itemsCache.has(x));
     const batches = [];
     do {
         let batch = ids.splice(0, 200);
@@ -524,8 +542,8 @@ const minis = async (ids) => {
 
 }
 
-const skins = async (ids) => {
-    ids = ids.filter(x => !skinsCache.has(x));
+const skins = async (ids: number[]) => {
+    ids = ids.filter((x: number) => !skinsCache.has(x));
     const batches = [];
     do {
         let batch = ids.splice(0, 200);
@@ -546,7 +564,7 @@ const skins = async (ids) => {
 
 }
 
-const currencies = async (order = []) => {
+const currencies = async (order: number[] = []) => {
     const depreciated = [
         {
             reason: 'Replaced by "Tales of Dungeon Delving"',
@@ -565,7 +583,7 @@ const currencies = async (order = []) => {
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
     const resp = await apiClient("/v2/currencies", `ids=all`);
-    const _rawData = resp.filter(x => !ignored.includes(x.id)).map(x => ({ ...x, active: 1 }));
+    const _rawData = resp.filter((x: any) => !ignored.includes(x.id)).map((x: any) => ({ ...x, active: 1 }));
     const _data = mergeById(_rawData, _dep);
     _data.forEach(x => {
         const idx = order.findIndex(y => y == x.id)
@@ -574,7 +592,7 @@ const currencies = async (order = []) => {
     return _data.sort((a, b) => a.order - b.order);
 }
 
-const wallet = async (order = []) => {
+const wallet = async (order: number[] = []) => {
     const [_curr, _wallet] = await Promise.all([
         currencies(order),
         apiClient("/v2/account/wallet", "")
@@ -586,18 +604,18 @@ const wallet = async (order = []) => {
 
 const delivery = async () => {
     const resp = await apiClient("/v2/commerce/delivery", "");
-    const ids = resp.items.map(x => x.id);
+    const ids = resp.items.map((x: any) => x.id);
     resp.items = await expandItems(ids, resp.items);
     return resp;
 };
 
 const wizardVaultSorted = async (promise: Promise<any>) => {
     const resp = await promise;
-    const byClaimed = Object.groupBy(resp.objectives, x => x.claimed);
+    const byClaimed = Object.groupBy((resp.objectives || []) as any[], (x: any) => String(Boolean(x.claimed))) as Record<string, any[]>;
     byClaimed.false ??= [];
     byClaimed.true ??= [];
-    resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
-    resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
+    resp.objectives = byClaimed.false.sort((a: any, b: any) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
+    resp.objectives.push(...byClaimed.true.sort((a: any, b: any) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
     return resp;
 }
 
@@ -613,7 +631,7 @@ const wizardsVaultSpecial = async () => {
     return wizardVaultSorted(apiClient("/v2/account/wizardsvault/special", ""));
 }
 
-const init = async (newApiKey: string, options?: object) => {
+const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
     if (newApiKey === _apiKey && _tokenInfo) return;
     _items = await ls.getObject(ITEMS_CACHE, []);
     _achievements = await ls.getObject(ACHIEVEMENTS_CACHE, []);
@@ -634,16 +652,16 @@ const init = async (newApiKey: string, options?: object) => {
     try {
         _tokenInfo = await tokenInfo();
     } catch (error) {
-        _tokenInfo.error = error.message;
+        _tokenInfo.error = error instanceof Error ? error.message : String(error);
     }
     // console.log('tokenInfo', _tokenInfo)
 };
 
-const mergeById = (a1, a2) => {
+const mergeById = (a1: any[], a2: any[]) => {
     return a1.filter((x) => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
 };
 
-const addPropertiesById = (base: object, details: array) => {
+const addPropertiesById = (base: any, details: any[]) => {
     const clone = JSON.parse(JSON.stringify(base));
     const match = details.find(x => x.id == base.id);
     // console.log('addPropertiesById', {clone, details})
@@ -654,7 +672,7 @@ const addPropertiesById = (base: object, details: array) => {
     }
 }
 
-const expandItems = async (ids: Array<number>, collection) => {
+const expandItems = async (ids: Array<number>, collection: any[]) => {
     // get rid of nulls, invalid ids and duplicates
     ids = [...new Set(ids.filter((x) => x && !INVALID_ITEM_IDS.includes(x)))];
     const toFetch = ids.filter((x) => !itemsCache.has(x) && !inflightItems.has(x));
@@ -719,7 +737,7 @@ const expandItems = async (ids: Array<number>, collection) => {
     return data;
 };
 
-const expandPrices = async (ids: Array<number>, collection) => {
+const expandPrices = async (ids: Array<number>, collection: any[]) => {
     ids = ids.filter((x) => !INVALID_ITEM_IDS.includes(x));
 
     const data = [];
@@ -738,15 +756,15 @@ const expandPrices = async (ids: Array<number>, collection) => {
     return data;
 };
 
-const expandAchievements = async (account, categories, accountAchievements, allIds) => {
-    Object.keys(ACHIEVEMENTS_NOT_IN_API).forEach(x => {
-        allIds.push(...(ACHIEVEMENTS_NOT_IN_API[x]));
+const expandAchievements = async (account: any, categories: any[], accountAchievements: any[], allIds: number[]) => {
+    Object.keys(ACHIEVEMENTS_NOT_IN_API).forEach((x: string) => {
+        allIds.push(...(ACHIEVEMENTS_NOT_IN_API[x] || []));
     })
 
     const knownIds = [...achievementsCache.keys()];
-    const _doneIds = accountAchievements.filter(x => x.done === true).map(x => x.id);
-    const _notDone = allIds.filter(x => !_doneIds.includes(x));
-    const missingIds = allIds.filter((x) => !INVALID_ACHIEVEMENTS_IDS.includes(x) && !knownIds.includes(x));
+    const _doneIds = accountAchievements.filter((x: any) => x.done === true).map((x: any) => x.id);
+    const _notDone = allIds.filter((x: number) => !_doneIds.includes(x));
+    const missingIds = allIds.filter((x: number) => !INVALID_ACHIEVEMENTS_IDS.includes(x) && !knownIds.includes(x));
 
     // prepare list of ids to request in batches of 200 max
     const batches = [];
@@ -761,17 +779,17 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // and make requests in parallel
         const tasks = batches.map((ids) => achievementsInfo(ids));
         const resp = (await Promise.all(tasks)).filter(x => wxjs_types.isArray(x)).flat();
-        const itemIds = [];
-        const skinIds = [];
-        const miniIds = [];
-        resp.forEach(async (x) => {
+        const itemIds: number[] = [];
+        const skinIds: number[] = [];
+        const miniIds: number[] = [];
+        resp.forEach(async (x: any) => {
             if (x) {
                 x.description = toHtml(x.description)
                 if (x.type == 'ItemSet' && x.bits) {
 
-                    itemIds.push(...(x.bits.filter(xx => xx.type == "Item").map(xxx => xxx.id)));
-                    skinIds.push(...(x.bits.filter(xx => xx.type == "Skin").map(xxx => xxx.id)));
-                    miniIds.push(...(x.bits.filter(xx => xx.type == "Minipet").map(xxx => xxx.id)));
+                    itemIds.push(...(x.bits.filter((xx: any) => xx.type == "Item").map((xxx: any) => xxx.id)));
+                    skinIds.push(...(x.bits.filter((xx: any) => xx.type == "Skin").map((xxx: any) => xxx.id)));
+                    miniIds.push(...(x.bits.filter((xx: any) => xx.type == "Minipet").map((xxx: any) => xxx.id)));
                 }
                 achievementsCache.set(x.id, x);
             }
@@ -779,7 +797,7 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
-        await expandItems(itemIds, itemIds.map(x => ({ id: x })));
+        await expandItems(itemIds, itemIds.map((x: number) => ({ id: x })));
         console.log('expanding minis from achieves...', miniIds);
         await minis(miniIds);
         console.log('expanding skins from achieves...', skinIds);
@@ -792,18 +810,18 @@ const expandAchievements = async (account, categories, accountAchievements, allI
     const ignored_achievements = [...INACTIVE_ACHIEVEMENTS_CATEGORIES];
     // so we also ignore seasonal ones (appart from current season ofc)
     // console.log('current season:', _settings.currentSeason)
-    Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach(season => {
+    Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach((season: string) => {
         if (season != _settings.currentSeason) {
-            ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season]);
+            ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season as keyof typeof SEASONAL_ACHIEVEMENTS_CATEGORIES]);
         }
     })
 
-    const achievsInCategories = [];
-    const noCategory = [];
-    categories.forEach(cat => {
-        achievsInCategories.push(...cat.achievements.map(x => x.id));
+    const achievsInCategories: number[] = [];
+    const noCategory: number[] = [];
+    categories.forEach((cat: any) => {
+        achievsInCategories.push(...cat.achievements.map((x: any) => x.id));
     });
-    allIds.forEach(id => {
+    allIds.forEach((id: number) => {
         if (!ignored_achievements.includes(id) && !achievsInCategories.includes(id)) {
             noCategory.push(id)
         }
@@ -815,10 +833,10 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         name: "__MISSING__",
         description: "Achievements with no category",
         icon: "/gw2helper/assets/rewards/Daily_Achievement.png",
-        achievements: noCategory.map(x => ({ id: x }))
+        achievements: noCategory.map((x: number) => ({ id: x }))
     });
 
-    categories.forEach(cat => {
+    categories.forEach((cat: any) => {
         // if (ACHIEVEMENTS_NOT_IN_API[cat.id]) {
         //     const tmp = cat.achievements;
         //     tmp.push(...(ACHIEVEMENTS_NOT_IN_API[cat.id].map(x => ({ id: x }))));
@@ -826,13 +844,13 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         // }
         _log += `${cat.id}, // ${cat.name}\n`;
         cat.ignore = (ignored_achievements.includes(cat.id)) ? true : false;
-        cat.achievements = cat.achievements.map(x => {
+        cat.achievements = cat.achievements.map((x: any) => {
             let achiev = achievementsCache.get(x.id);
             if (!achiev) {
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchievements.find(acv => acv.id == x.id) || {
+            const mine = accountAchievements.find((acv: any) => acv.id == x.id) || {
                 id: x.id,
                 current: 0,
                 repeated: 0,
@@ -841,13 +859,13 @@ const expandAchievements = async (account, categories, accountAchievements, allI
                 max: achiev.bits != undefined ? achiev.bits.length : 0,
             };
             mine.repeated ??= 0;
-            let points_per_tier: number | null = null;
-            let points_done: number | null = null;
-            let points_to_get: number | null = null;
+            let points_per_tier = 0;
+            let points_done = 0;
+            let points_to_get = 0;
 
             if (achiev.tiers) {
-                const tiers_done = achiev.tiers.filter(t => t.count <= mine.current);
-                const tiers_todo = achiev.tiers.filter(t => t.count > mine.current);
+                const tiers_done = achiev.tiers.filter((t: any) => t.count <= mine.current);
+                const tiers_todo = achiev.tiers.filter((t: any) => t.count > mine.current);
                 points_per_tier = sum(achiev.tiers, 'points');
                 points_done = points_per_tier * mine.repeated + sum(tiers_done, 'points');
                 if (achiev.point_cap && (achiev.point_cap < points_done)) {
@@ -855,7 +873,7 @@ const expandAchievements = async (account, categories, accountAchievements, allI
                 }
                 points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
             }
-            achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, x => x.type.toLowerCase()) : {};
+            achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards as any[], (x: any) => x.type.toLowerCase()) : {};
             achiev.icon ??= cat.icon;
 
             return {
@@ -870,12 +888,12 @@ const expandAchievements = async (account, categories, accountAchievements, allI
         if (cat.id == 0) {
             // console.log('missing...')
             // remove daily and weekly from missing achievements
-            cat.achievements = cat.achievements.filter(x => !(x.flags.includes('Daily') || x.flags.includes('Weekly')));
+            cat.achievements = cat.achievements.filter((x: any) => !(x.flags.includes('Daily') || x.flags.includes('Weekly')));
             // console.log('missing', cat.achievements)
         }
         cat.points_to_get = sum(cat.achievements, 'points_to_get');
         cat.points_done = sum(cat.achievements, 'points_done');
-        cat._rewards_to_get = cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)
+        cat._rewards_to_get = cat.achievements.filter((x: any) => !x.done && x.rewards).flatMap((x: any) => x.rewards)
         // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
         // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
         // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
@@ -894,7 +912,7 @@ const expandAchievements = async (account, categories, accountAchievements, allI
 
     const rewards_to_get = new Map();
 
-    categories.forEach(x => {
+    categories.forEach((x: any) => {
         sumRewards(rewards_to_get, x._rewards_to_get)
     });
 
@@ -918,8 +936,8 @@ const toHtml = (text: string | null): string => {
     return descr;
 }
 
-const additionalMapping = (data) => {
-    data.forEach((element) => {
+const additionalMapping = (data: any[]) => {
+    data.forEach((element: any) => {
         if (element.charges) {
             element.count = element.charges;
         }
@@ -982,10 +1000,10 @@ export default {
         _tokenInfo.missingScopes = [];
     },
     tokenInfo: () => _tokenInfo,
-    itemsCache: (id) => itemsCache.get(parseInt(id)),
-    minisCache: (id) => minisCache.get(parseInt(id)),
-    skinsCache: (id) => skinsCache.get(parseInt(id)),
-    achievementsCache: (id) => achievementsCache.get(parseInt(id)),
+    itemsCache: (id: string | number) => itemsCache.get(parseInt(String(id))),
+    minisCache: (id: string | number) => minisCache.get(parseInt(String(id))),
+    skinsCache: (id: string | number) => skinsCache.get(parseInt(String(id))),
+    achievementsCache: (id: string | number) => achievementsCache.get(parseInt(String(id))),
     currentSeason: () => _settings.currentSeason,
     wizardsVault: () => _settings.wizardsVault,
 };
