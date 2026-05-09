@@ -21,6 +21,8 @@
 	let touchY;
 	let left = $state(false);
 	let above = $state(false);
+	let vertical = $state(false);
+	let under = $state(false);
 	let sticky = $state(true);
 
 	let touchMode = 'ontouchstart' in window;
@@ -268,15 +270,38 @@
 
 			let newX = x;
 			let newY = y;
+			let placement = 'right';
+			const pageTop = window.scrollY;
+			const pageBottom = pageTop + window.innerHeight;
 
 			if (sticky) {
-				// if it doesn't fit horizontally on right side, try placing tooltip on left side of the element
-				if (newX + rect.width > window.innerWidth && target.x - rect.width > distance + offset) {
-					newX = target.x - rect.width - distance - offset;
+				const rightX = target.x + target.width + offset + distance;
+				const leftX = target.x - rect.width - distance - offset;
+				const rightFits = rightX + rect.width <= window.innerWidth - distance;
+				const leftFits = leftX >= distance;
+
+				if (rightFits) {
+					newX = rightX;
+				} else if (leftFits) {
+					newX = leftX;
+					placement = 'left';
+				} else {
+					// On small screens, prefer vertical placement instead of squeezing tooltip horizontally.
+					const tooltipAboveY = pageTop + target.y - rect.height - distance - offset;
+					const tooltipBelowY = pageTop + target.y + target.height + distance + offset;
+					const spaceAbove = target.y - distance;
+					const spaceBelow = window.innerHeight - (target.y + target.height) - distance;
+					const placeBelow = spaceBelow >= rect.height || spaceBelow >= spaceAbove;
+
+					newX = target.x + target.width / 2 - rect.width / 2;
+					newY = placeBelow ? tooltipBelowY : tooltipAboveY;
+					placement = placeBelow ? 'below' : 'above';
 				}
-				// if it doesn't fit below, try placing tooltip on top of the element
-				if (newY + rect.height > window.innerHeight + window.scrollY) {
-					newY = event.pageY - event.y + target.y + target.height - rect.height + offset;
+
+				if (placement === 'right' || placement === 'left') {
+					if (newY + rect.height > pageBottom) {
+						newY = pageTop + target.y + target.height - rect.height + offset;
+					}
 				}
 			} else {
 				// if it doesn't fit on the right, clamp to right edge of viewport
@@ -288,16 +313,30 @@
 					newY = y - rect.height - distance;
 				}
 			}
-			// final clamp: ensure tooltip doesn't go off-screen left
-			if (newX < distance) {
-				newX = distance;
+
+			const minX = distance;
+			const maxX = window.innerWidth - rect.width - distance;
+			if (maxX >= minX) {
+				newX = Math.min(Math.max(newX, minX), maxX);
+			} else {
+				newX = minX;
+			}
+
+			const minY = pageTop + distance;
+			const maxY = pageBottom - rect.height - distance;
+			if (maxY >= minY) {
+				newY = Math.min(Math.max(newY, minY), maxY);
+			} else {
+				newY = minY;
 			}
 
 			ref.style.left = `${newX}px`;
 			ref.style.top = `${newY}px`;
 
-			left = sticky && newX < target.x;
-			above = sticky && newY - window.scrollY < target.y - distance;
+			left = sticky && placement === 'left';
+			vertical = sticky && (placement === 'above' || placement === 'below');
+			under = sticky && placement === 'below';
+			above = sticky && !vertical && newY - window.scrollY < target.y - distance;
 		}
 	}
 
@@ -315,7 +354,7 @@
 />
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
-<div bind:this={ref} ontouchstart={tooltipTouchStart} class:visible class:left class:above class:sticky class={autotooltipClass}>
+<div bind:this={ref} ontouchstart={tooltipTouchStart} class:visible class:left class:above class:vertical class:under class:sticky class={autotooltipClass}>
 </div>
 
 <style lang="scss">
@@ -342,6 +381,7 @@
 				position: absolute;
 				top: 1em;
 				left: -20px;
+				transform: none;
 				border-width: 10px;
 				border-style: solid;
 				border-color: transparent white transparent transparent;
@@ -356,6 +396,23 @@
 				&::after {
 					top: auto;
 					bottom: 1em;
+				}
+			}
+			&.vertical {
+				&::after {
+					top: 100%;
+					bottom: auto;
+					left: 50%;
+					transform: translateX(-50%);
+					border-color: white transparent transparent transparent;
+				}
+
+				&.under {
+					&::after {
+						top: -20px;
+						left: 50%;
+						border-color: transparent transparent white transparent;
+					}
 				}
 			}
 		}
