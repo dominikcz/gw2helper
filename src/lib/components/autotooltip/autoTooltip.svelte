@@ -83,6 +83,10 @@
 			visible = false;
 			return;
 		}
+		// Don't hide tooltip when cursor is over the tooltip itself
+		if (ref && ref.contains(elem)) {
+			return;
+		}
 		findTitle(elem);
 		updateXY(event);
 		// mouseMove(event);
@@ -91,6 +95,10 @@
 
 	function mouseMove(event) {
 		if (event.target.closest?.('._toastContainer')) {
+			return;
+		}
+		// Don't reposition when cursor is over the tooltip itself
+		if (ref && ref.contains(event.target)) {
 			return;
 		}
 		updateXY(event);
@@ -230,6 +238,9 @@
 
 		// by default set to right side
 		if (ref && event.target.nodeType == Node.ELEMENT_NODE) {
+			// measure natural dimensions by temporarily positioning tooltip where it has room
+			ref.style.left = '0px';
+			ref.style.top = '0px';
 			const rect = ref.getBoundingClientRect();
 
 			const elemRect = event.target.getBoundingClientRect();
@@ -268,20 +279,22 @@
 					newY = event.pageY - event.y + target.y + target.height - rect.height + offset;
 				}
 			} else {
-				// else try your best
+				// if it doesn't fit on the right, clamp to right edge of viewport
+				if (newX + rect.width > window.innerWidth) {
+					newX = window.innerWidth - rect.width - distance;
+				}
+				// if it doesn't fit below, place above cursor
 				if (newY + rect.height > window.innerHeight + window.scrollY) {
 					newY = y - rect.height - distance;
 				}
 			}
-			// else try your best
-			if (newX + rect.width > window.innerWidth) {
-				newX = window.innerWidth - rect.width + distance;
+			// final clamp: ensure tooltip doesn't go off-screen left
+			if (newX < distance) {
+				newX = distance;
 			}
 
-			if (newX && newY) {
-				ref.style.left = `${newX}px`;
-				ref.style.top = `${newY}px`;
-			}
+			ref.style.left = `${newX}px`;
+			ref.style.top = `${newY}px`;
 
 			left = sticky && newX < target.x;
 			above = sticky && newY - window.scrollY < target.y - distance;
