@@ -5,14 +5,33 @@
 	import WatchState from '../watch-state/watch-state.svelte';
 	import Reminders from '$lib/reminders';
 
-	/** @type {{event: any, showEventTimes?: boolean, showChatLinks?: boolean, darkMode?: boolean}} */
+	type EventSegment = {
+		start: Date;
+		duration: number;
+		bg: string;
+		name: string;
+		link: string;
+		chatlink?: string;
+	};
+
+	type TimerEvent = {
+		segments: Record<string, EventSegment>;
+	};
+
+	interface Props {
+		event: TimerEvent;
+		showEventTimes?: boolean;
+		showChatLinks?: boolean;
+		darkMode?: boolean;
+	}
+
 	let { event, showEventTimes = true, showChatLinks = false, darkMode = false } = $props();
 
 	let reminders = new Reminders();
 
 	const remindersStore = reminders.$store;
 
-	function toggleSegmentWatched(segment) {
+	function toggleSegmentWatched(segment: EventSegment) {
 		console.log('toggleSegmentWatched', segment);
 		const hour = eventsUtils.getHour(segment.start);
 		let alarms = [];

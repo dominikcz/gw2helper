@@ -6,7 +6,7 @@
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import { sum } from '$lib/utils';
 	import utils from '$lib/utils';
-	import { resolve } from '$app/paths';
+	import { base } from '$app/paths';
 	import Price from '$lib/components/price.svelte';
 	import { onMount } from 'svelte';
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs.js';
@@ -39,6 +39,25 @@
 	let sortBy = $state('ap');
 	let todoList=$state([]);
 
+	const asset = (path: string) => `${base}${path}`;
+
+	type MasteryReward = { region: string };
+	type AchievementLike = {
+		id?: number;
+		done?: boolean;
+		flags?: string[];
+		points_to_get?: number;
+		rewardsObj?: {
+			mastery?: MasteryReward[];
+			title?: unknown;
+			item?: unknown;
+			coins?: unknown;
+		};
+		name?: string;
+		desription?: string;
+		requirement?: string;
+	};
+
 	onMount(async () => {
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
 		const settings = await data.settings;
@@ -62,15 +81,16 @@
 		// console.log('todo', todoList);
 	});
 
-	function achievFilterCallback(achiev) {
-		const mastery = achiev.rewardsObj.mastery || [];
+	function achievFilterCallback(achiev: AchievementLike) {
+		const rewardsObj = achiev.rewardsObj ?? {};
+		const mastery = rewardsObj.mastery || [];
 		const notCompletedOK = !notCompleted || !achiev.done;
 		const withPointsOK = !withPoints || achiev.points_to_get > 0;
-		const withTitlesOK = !withTitles || achiev.rewardsObj.title;
-		const withItemsOK = !withItems || achiev.rewardsObj.item;
-		const withCoinsOK = !withCoins || achiev.rewardsObj.coins;
+		const withTitlesOK = !withTitles || rewardsObj.title;
+		const withItemsOK = !withItems || rewardsObj.item;
+		const withCoinsOK = !withCoins || rewardsObj.coins;
 		const dailyWeeklyOK = (!daily && !weekly) || (daily && achiev.flags.includes('Daily')) || (weekly && achiev.flags.includes('Weekly'));
-		const requiredRegions = [];
+		const requiredRegions: string[] = [];
 		if (withMasteryCentral) requiredRegions.push('Tyria');
 		if (withMasteryHoT) requiredRegions.push('Maguuma');
 		if (withMasteryPoF) requiredRegions.push('Desert');
@@ -79,7 +99,7 @@
 		if (withMasterySofO) requiredRegions.push('Sky');
 		if (withMasteryJW) requiredRegions.push('Unknown');
 
-		const withMasteryOK = !requiredRegions.length || mastery.find((x) => requiredRegions.includes(x.region));
+		const withMasteryOK = !requiredRegions.length || mastery.find((x: MasteryReward) => requiredRegions.includes(x.region));
 
 		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement', 'id']);
 
@@ -115,10 +135,10 @@
 
 <h1>{$_('achievements.achievements')}</h1>
 
-<img src={resolve('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
+<img src={asset('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
 
 <Awaiter promise={data.achievements}>
-	{#snippet children(result)}
+	{#snippet children(result: any)}
 		{@const _result = filteredAchievements(result, filter, achievFilterCallback, null, {
 			notCompleted,
 			withPoints,
@@ -137,30 +157,30 @@
 		})}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
-			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={resolve('/assets/rewards/Monthly_Achievement.png')} />
-			<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={resolve('/assets/rewards/AP.png')} />
-			<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={resolve('/assets/rewards/AP.png')} />
+			<WidgetInfo title={$_('achievements.achievements_completed')} value={result.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
+			<WidgetInfo title={$_('achievements.daily_points')} value={result.daily_ap} image={asset('/assets/rewards/AP.png')} />
+			<WidgetInfo title={$_('achievements.monthly_points')} value={result.monthly_ap} image={asset('/assets/rewards/AP.png')} />
 			<WidgetInfo
 				title={$_('achievements.points_from_achievements')}
 				value={sum(result.categories, 'points_done')}
-				image={resolve('/assets/rewards/AP.png')}
+				image={asset('/assets/rewards/AP.png')}
 			/>
 			<!-- <WidgetInfo title="Points total" value={result.monthly_ap + result.daily_ap + sum(result.categories, 'points_done')} image={resolve('/assets/rewards/AP.png')} /> -->
 		</WidgetsGroup>
 		<WidgetsGroup name={$_('achievements.achievements_todo')}>
-			<WidgetInfo title={$_('achievements.achievements_to_do')} value={result.todo} image={resolve('/assets/rewards/Daily_Achievement.png')} />
-			<WidgetInfo title={$_('achievements.points_to_get')} value={sum(result.categories, 'points_to_get')} image={resolve('/assets/rewards/AP.png')} />
+			<WidgetInfo title={$_('achievements.achievements_to_do')} value={result.todo} image={asset('/assets/rewards/Daily_Achievement.png')} />
+			<WidgetInfo title={$_('achievements.points_to_get')} value={sum(result.categories, 'points_to_get')} image={asset('/assets/rewards/AP.png')} />
 			<WidgetInfo
 				title={$_('achievements.titles_to_get')}
 				value={result.rewards_to_get.get('title')}
-				image={resolve('/assets/rewards/Talk_collection_option.png')}
+				image={asset('/assets/rewards/Talk_collection_option.png')}
 			/>
 			<WidgetInfo
 				title={$_('achievements.items_to_get')}
 				value={result.rewards_to_get.get('item')}
-				image={resolve('/assets/rewards/Achievement_Chest_interface_icon.png')}
+				image={asset('/assets/rewards/Achievement_Chest_interface_icon.png')}
 			/>
-			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image={resolve('/assets/rewards/Merchant_crop.png')}>
+			<WidgetInfo title={$_('achievements.gold_to_get')} value={result.rewards_to_get.get('coins')} image={asset('/assets/rewards/Merchant_crop.png')}>
 				{#snippet children({ value })}
 					<Price {value} />
 				{/snippet}
@@ -209,15 +229,15 @@
 					<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: result.categories.length })}</span>
 					<div class="achiev-container" use:grungeBorder>
 						{#each sort(_result.categories, sortBy) as category (category.id)}
-							<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)} />
+							<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 						{/each}
 					</div>
 				</TabPanel>
 
 				<TabPanel>
 					<h2>{$_('achievements.your_list')}</h2>
-					<AchievList items={myItems} {todoList} onToggleTodo={(event) => utils.hndToggleTodo(event, todoList)}>
-						{@html $_('achievements.empty_list', { img_url: resolve('/assets/rewards/map_heart_empty.png') })}
+					<AchievList items={myItems} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)}>
+						{@html $_('achievements.empty_list', { img_url: asset('/assets/rewards/map_heart_empty.png') })}
 					</AchievList>
 				</TabPanel>
 			</Tabs>

@@ -1,12 +1,25 @@
 <script lang="ts">
-	import wxdates from '$lib/wxjs_dates.ts';
+	import wxdates from '$lib/wxjs_dates';
 	import Item from '$lib/components/items/item.svelte';
 	import Price from '$lib/components/price.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	export let items;
+	type Offer = {
+		unit_price: number;
+		quantity: number;
+	};
+
+	type TransactionItem = {
+		id: number;
+		name: string;
+		price: number;
+		created: string;
+		[key: string]: Offer | number | string;
+	};
+
+	export let items: TransactionItem[] = [];
 	export let offerType = '';
 
 	const tooltipOptions = {

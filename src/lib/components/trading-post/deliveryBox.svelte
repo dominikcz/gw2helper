@@ -16,9 +16,9 @@
 		<summary>{$_('home.delivery_box')}</summary>
 		<div class="delivery-box autotooltip" use:autotooltip>
 			{#if coins}
-				<WidgetInfo title={$_('home.coins_for_pickup')} value={coins}  id="bltc-coins">
+				<WidgetInfo title={$_('home.coins_for_pickup')} value={`${coins}`}  id="bltc-coins">
 					{#snippet children({ value })}
-						<Price {value} />
+						<Price value={Number(value)} />
 					{/snippet}
 				</WidgetInfo>
 			{/if}

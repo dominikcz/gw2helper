@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '$lib/scss/gw2.scss';
-	import { resolve } from '$app/paths';
+	import { base, resolve } from '$app/paths';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -27,6 +27,7 @@
 
 	/** @type {{data: any, children?: import('svelte').Snippet}} */
 	let { data, children } = $props();
+	const asset = (path: string) => `${base}${path}`;
 
 	const defaultTitle = 'GW2 Helper';
 	// svelte-ignore state_referenced_locally
@@ -51,28 +52,30 @@
 		squeeze: [5924, 850],
 		notif3: [6834, 1160],
 		notif9: [8000, 2182],
-	};
+	} as const;
+
+	type SoundSpriteName = keyof typeof soundSprites;
 
 	let sounds = new Howl({
-		src: [resolve('/assets/sounds/alarms.mp3')],
+		src: [asset('/assets/sounds/alarms.mp3')],
 		sprite: soundSprites,
 	});
 
 	const devMode = utils.getQueryStringFlag('dev-mode');
 	const assetVars = [
-		`--asset-waypoint-sprite: url(${resolve('/assets/waypoint-sprite.png')})`,
-		`--asset-footer-mask-inv: url(${resolve('/assets/footer_mask_inv.png')})`,
-		`--asset-reward-done: url(${resolve('/assets/rewards/done.png')})`,
-		`--asset-map-heart-sprite: url(${resolve('/assets/rewards/map_heart-sprite.png')})`,
-		`--asset-report-icon: url(${resolve('/assets/Report_icon.png')})`,
-		`--asset-loading-gray-inv: url(${resolve('/assets/loading_gray_inv.png')})`,
-		`--asset-loading-gray: url(${resolve('/assets/loading_gray.png')})`,
-		`--asset-trading-post: url(${resolve('/assets/Trading_Post.png')})`,
-		`--asset-wizards-vault-wvw: url(${resolve('/assets/rewards/Wizards_Vault_WvW.png')})`,
-		`--asset-wizards-vault-pvp: url(${resolve('/assets/rewards/Wizards_Vault_PvP.png')})`,
-		`--asset-wizards-vault-pve: url(${resolve('/assets/rewards/Wizards_Vault_PvE.png')})`,
-		`--asset-icon-arrow-back: url(${resolve('/icons/arrow_back.png')})`,
-		`--asset-icon-arrow-forward: url(${resolve('/icons/arrow_forward.png')})`,
+		`--asset-waypoint-sprite: url(${asset('/assets/waypoint-sprite.png')})`,
+		`--asset-footer-mask-inv: url(${asset('/assets/footer_mask_inv.png')})`,
+		`--asset-reward-done: url(${asset('/assets/rewards/done.png')})`,
+		`--asset-map-heart-sprite: url(${asset('/assets/rewards/map_heart-sprite.png')})`,
+		`--asset-report-icon: url(${asset('/assets/Report_icon.png')})`,
+		`--asset-loading-gray-inv: url(${asset('/assets/loading_gray_inv.png')})`,
+		`--asset-loading-gray: url(${asset('/assets/loading_gray.png')})`,
+		`--asset-trading-post: url(${asset('/assets/Trading_Post.png')})`,
+		`--asset-wizards-vault-wvw: url(${asset('/assets/rewards/Wizards_Vault_WvW.png')})`,
+		`--asset-wizards-vault-pvp: url(${asset('/assets/rewards/Wizards_Vault_PvP.png')})`,
+		`--asset-wizards-vault-pve: url(${asset('/assets/rewards/Wizards_Vault_PvE.png')})`,
+		`--asset-icon-arrow-back: url(${asset('/icons/arrow_back.png')})`,
+		`--asset-icon-arrow-forward: url(${asset('/icons/arrow_forward.png')})`,
 	].join('; ');
 
 	afterNavigate(() => {
@@ -113,7 +116,7 @@
 		if (data.apiService) {
 			await data.apiService.clearCache();
 		}
-		location.reload(true);
+		location.reload();
 	}
 
 	let time = new Clock({ interval: 10 * 1000 });
@@ -134,13 +137,21 @@
 		}
 	}
 
-	function hndNotificationTest(ev) {
+	function hndNotificationTest(ev: CustomEvent<{ sound: SoundSpriteName }>) {
 		const sound = ev.detail.sound;
 		sounds.stop();
 		sounds.play(sound);
 	}
 
-	function playAlarm(info) {
+	type AlarmInfo = {
+		time: string;
+		eventsList: string;
+		inAdvance: number;
+		immediate: boolean;
+		plural: boolean;
+	};
+
+	function playAlarm(info?: AlarmInfo) {
 		if (!info) return;
 		// console.log('info', info)
 		let tts = $_('events.tts', { ...info });
@@ -148,12 +159,13 @@
 		if ([lastNotify, confirmedNotify].includes(tts)) return;
 		lastNotify = tts;
 
-		const dur = soundSprites[data.remindersSettings.sound][1];
+		const selectedSound = data.remindersSettings.sound as SoundSpriteName;
+		const dur = soundSprites[selectedSound][1];
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10) + dur,
-			onpop: (id, details) => {
+			onpop: (_id: number, details?: { event?: Event }) => {
 				// console.log('onpop', details);
-				if (details.event != undefined) {
+				if (details?.event != undefined) {
 					// if closed by user
 					console.log('notification disabled:', tts);
 					confirmedNotify = tts;
@@ -180,9 +192,10 @@
 			window.speechSynthesis.speak(msg);
 		});
 		sounds.stop();
-		sounds.play(data.remindersSettings.sound);
+		sounds.play(selectedSound);
 	}
-	let tokenInfo = $derived(data.tokenInfo);
+	let tokenInfo = $derived(data.tokenInfo as { name?: string; error?: string });
+	let missingScopes = $derived((data.missingScopes ?? []) as string[]);
 	let active = $derived($page.url.pathname);
 	let title = $derived([defaultTitle, active.replace(resolve('/'), '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
@@ -203,13 +216,19 @@
 	$effect(() => {
 		onTimeChange();
 	});
+
+	onMount(() => {
+		const handler = (event: Event) => hndNotificationTest(event as CustomEvent<{ sound: SoundSpriteName }>);
+		window.addEventListener('notification-test', handler as EventListener);
+		return () => {
+			window.removeEventListener('notification-test', handler as EventListener);
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
-
-<svelte:window onnotification-test={hndNotificationTest} />
 
 <Alert />
 <SvelteToast />
@@ -217,7 +236,7 @@
 <div id="content-wrapper" style={assetVars}>
 	<div id="content">
 		<header>
-			<a href={resolve('/')}><img src={resolve('/assets/heart.png')} alt="logo" /></a>
+			<a href={resolve('/')}><img src={asset('/assets/heart.png')} alt="logo" /></a>
 			<div class="line">
 				<a href={resolve('/')} title={$_('layout.nav.home')}><h1>GW2 Helper</h1></a>
 				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>

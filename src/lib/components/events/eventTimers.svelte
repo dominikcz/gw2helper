@@ -13,17 +13,23 @@
 	/** @type {{showEventTimes?: boolean, showChatLinks?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean, updateInterval?: number}} */
 	let { showEventTimes = true, showChatLinks = false, showCategories = true, showHeadings = true, autoScroll = false, updateInterval = 10 } = $props();
 
-	let eventsRef = $state();
+	type EventListItem = {
+		name: string;
+		link?: string;
+		segments: Record<string, unknown>;
+	};
+
+	let eventsRef = $state<HTMLElement | null>(null);
 	let pointerHeight = $state(0);
 
 	let currentTimePos = $state(0);
 	// svelte-ignore state_referenced_locally
 	let currTime = new Clock({ interval: updateInterval * 1000 });
 	let darkMode = themeWatcher();
-	let dt0 = $state();
-	let oldTime = 0;
+	let dt0 = $state<Date | undefined>(undefined);
+	let oldTime = $state<Date | undefined>(undefined);
 
-	let categoriesState = {};
+	let categoriesState: Record<string, boolean> = {};
 
 	onMount(async () => {
 		categoriesState = await utils.readEventTimerCategories();
@@ -58,22 +64,23 @@
 				// scroll to center if out of view
 				// keep pointer positioned at center and scroll background
 				if (firstRun || (autoScroll && timePosPx >= window.innerWidth - 16)) {
-					const elem = document.querySelector('.event-pointer');
+					const elem = document.querySelector<HTMLElement>('.event-pointer');
 					// console.log('autoscrolling...');
-					elem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+					elem?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 				}
 			}
 		}
 	}
 
-	function hndCatToggle(cat, ev) {
+	function hndCatToggle(cat: string, ev: Event) {
+		const details = ev.currentTarget as HTMLDetailsElement;
 		// console.log('hndCatToggle', cat, ev.newState);
-		categoriesState[cat] = ev.newState == 'open';
+		categoriesState[cat] = details.open;
 		utils.saveEventTimerCategories(categoriesState);
 		updatePointerPos();
 	}
 
-	function getCatState(cat) {
+	function getCatState(cat: string) {
 		const state = categoriesState[cat];
 		if (state == undefined) return true;
 		return state;
@@ -90,7 +97,7 @@
 		<EventTimerTime {dt0} />
 	</div>
 
-	{#snippet category(eventsList)}
+	{#snippet category(eventsList: EventListItem[])}
 		<div class="category" class:no-headings={!showHeadings}>
 			{#each eventsList as event}
 				{#if showHeadings}

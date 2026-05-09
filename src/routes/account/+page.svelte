@@ -4,7 +4,7 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
-	import { resolve } from '$app/paths';
+	import { base } from '$app/paths';
 	import { t as _ } from '$lib/services/i18n.js';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { onMount } from 'svelte';
@@ -14,9 +14,11 @@
 	}
 
 	let { data }: Props = $props();
-	let perm = $state([]);
+	let perm = $state<string[]>([]);
 
-	function has(account, content: string): boolean {
+	const asset = (path: string) => `${base}${path}`;
+
+	function has(account: { access: string[] }, content: string): boolean {
 		return account.access.includes(content);
 	}
 
@@ -28,7 +30,7 @@
 <h1>{$_('account.account_info')}</h1>
 
 <Awaiter promise={data.account}>
-	{#snippet children(result)}
+	{#snippet children(result: any)}
 		<h3>{result.name}</h3>
 		<ul>
 			<li>{$_('account.created_at')} <span>{result.created_local}</span></li>
@@ -48,7 +50,7 @@
 			{#if has(result, 'PlayForFree')}
 				<WidgetImg
 					title={$_('account.play_for_free')}
-					url={resolve('/assets/400px-GW2Logo_new.png')}
+					url={asset('/assets/400px-GW2Logo_new.png')}
 					link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
 					linkTitle={$_('common.read_more_on_wiki')}
 					class="autotooltip"
@@ -59,7 +61,7 @@
 			{#if has(result, 'GuildWars2')}
 				<WidgetImg
 					title={$_('account.base_game')}
-					url={resolve('/assets/400px-GW2Logo_new.png')}
+					url={asset('/assets/400px-GW2Logo_new.png')}
 					link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
 					linkTitle={$_('common.read_more_on_wiki')}
 					class="autotooltip"
@@ -69,7 +71,7 @@
 
 			<WidgetImg
 				title={$_('account.heart_of_thorns')}
-				url={resolve('/assets/400px-HoT_Texture_Centered_Trans.png')}
+				url={asset('/assets/400px-HoT_Texture_Centered_Trans.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -78,7 +80,7 @@
 
 			<WidgetImg
 				title={$_('account.path_of_fire')}
-				url={resolve('/assets/400px-GW2-PoF_Texture_Centered_Trans.png')}
+				url={asset('/assets/400px-GW2-PoF_Texture_Centered_Trans.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -87,7 +89,7 @@
 
 			<WidgetImg
 				title={$_('account.end_of_dragons')}
-				url={resolve('/assets/400px-EoD_Texture_Trans.png')}
+				url={asset('/assets/400px-EoD_Texture_Trans.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -96,7 +98,7 @@
 
 			<WidgetImg
 				title={$_('account.secrets_of_the_obscure')}
-				url={resolve('/assets/400px-Secrets_of_the_Obscure_logo.png')}
+				url={asset('/assets/400px-Secrets_of_the_Obscure_logo.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -105,7 +107,7 @@
 
 			<WidgetImg
 				title={$_('account.janthir_wilds')}
-				url={resolve('/assets/400px-Janthir_Wilds_logo.png')}
+				url={asset('/assets/400px-Janthir_Wilds_logo.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -114,7 +116,7 @@
 
 			<WidgetImg
 				title={$_('account.visions_of_eternity')}
-				url={resolve('/assets/400px-Visions_of_Eternity_logo.png')}
+				url={asset('/assets/400px-Visions_of_Eternity_logo.png')}
 				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Visions_of_Eternity"
 				linkTitle={$_('common.read_more_on_wiki')}
 				class="autotooltip"
@@ -124,8 +126,8 @@
 
 		{#if perm.includes('progression')}
 			<WidgetsGroup name={$_('account.levels')}>
-				<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image={resolve('/assets/rewards/Daily_Fractals.png')} />
-				<WidgetInfo title="WvW" value={result.wvw_rank} image={resolve('/assets/rewards/WvW_Ability_Point.png')} />
+				<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image={asset('/assets/rewards/Daily_Fractals.png')} />
+				<WidgetInfo title="WvW" value={result.wvw_rank} image={asset('/assets/rewards/WvW_Ability_Point.png')} />
 			</WidgetsGroup>
 		{:else}
 			<InfoBlock caption={$_('account.info.hint')}>{@html $_('account.info.hint-content')}</InfoBlock>

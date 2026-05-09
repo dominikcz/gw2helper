@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { base } from '$app/paths';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
@@ -11,24 +11,39 @@
 	let filter = $state('');
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
-	function professionIcon(name) {
-		return resolve(`/assets/professions/${name}_icon.png`);
+	type CharacterCraft = { discipline: string; rating: number };
+	type Character = {
+		name: string;
+		created: string;
+		gender: string;
+		race: string;
+		profession: string;
+		level: number;
+		crafting?: CharacterCraft[];
+		deaths: number;
+		age: number;
+	};
+
+	const asset = (path: string) => `${base}${path}`;
+
+	function professionIcon(name: string) {
+		return asset(`/assets/professions/${name}_icon.png`);
 	}
 
-	function icon(name) {
-		return resolve(`/assets/${name}`);
+	function icon(name: string) {
+		return asset(`/assets/${name}`);
 	}
 
-	function craftIcon(name) {
+	function craftIcon(name: string) {
 		// return resolve(`/assets/craft/${name}_tango_icon_48px.png`);
-		return resolve(`/assets/craft/map_crafting_${name.toLowerCase()}.png`);
+		return asset(`/assets/craft/map_crafting_${name.toLowerCase()}.png`);
 	}
 
-	function iconScale(createdAt) {
+	function iconScale(createdAt: string) {
 		return Math.round(28 + ((365 - helperUtils.tillBirthday(createdAt)) / 365) * 100)+"px";
 	}
 
-	function deathsPerHour(char) {
+	function deathsPerHour(char: Character) {
 		return (char.age > 3600 ? (char.deaths | 0) / helperUtils.hoursPlayed(char.age) : char.deaths | 0).toFixed(2);
 	}
 </script>
@@ -37,8 +52,9 @@
 <SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.what_are_you_looking_for')} />
 
 <Awaiter promise={data.characters}>
-	{#snippet children(result)}
-		{#each helperUtils.filterCollection(result, fields, filter).sort((a, b) => -1 * (a.age - b.age)) as char}
+	{#snippet children(result: Character[])}
+		{@const filtered = helperUtils.filterCollection(result, fields, filter) as Character[]}
+		{#each filtered.sort((a, b) => -1 * (a.age - b.age)) as char}
 			{@const days = helperUtils.tillBirthday(char.created)}
 			{@const gender = char.gender.toLowerCase()}
 			<details use:grungeBorder open>

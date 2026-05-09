@@ -1,7 +1,13 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	interface Props {
-		item: object;
+		item: {
+			id: number;
+			name: string;
+			icon: string;
+			count: number;
+			max_count: number;
+		};
 	}
 
 	let { item }: Props = $props();

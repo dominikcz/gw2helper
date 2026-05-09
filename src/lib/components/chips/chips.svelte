@@ -8,7 +8,7 @@
 		options?: object;
 		value?: any;
 		className?: string;
-		onChipsChange: CallableFunction;
+		onChipsChange?: CallableFunction;
 	}
 
 	let {

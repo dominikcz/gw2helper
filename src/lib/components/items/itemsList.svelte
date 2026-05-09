@@ -7,8 +7,20 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
+	type ItemListEntry = {
+		id: number;
+		name?: string;
+		description?: string;
+		type?: string;
+		subtype?: string;
+		subdescr?: string;
+		rarity?: string;
+		count?: number;
+		flags?: string[];
+	};
+
 	export let summary: string;
-	export let items;
+	export let items: Promise<ItemListEntry[]> | ItemListEntry[];
 	export let filter: string = '';
 	export let useBorder: boolean = true;
 	export let additionalInfo: string = '';
@@ -23,12 +35,12 @@
 		},
 	};
 
-	function filterColletion(collection, filter, filterFlags) {
+	function filterColletion(collection: ItemListEntry[], filter: string, filterFlags: boolean): ItemListEntry[] {
 		const fields = [...fields_def];
 		if (filterFlags) {
 			fields.push('flags');
 		}
-		return helperUtils.filterCollection(collection, fields, filter, { nonZero: true, nonZeroField: 'count' });
+		return helperUtils.filterCollection(collection, fields, filter, { nonZero: true, nonZeroField: 'count' }) as ItemListEntry[];
 	}
 </script>
 
@@ -41,7 +53,7 @@
 			</div>
 		{:else}
 		<Awaiter promise={items}>
-			{#snippet children(result)}
+			{#snippet children(result: ItemListEntry[])}
 				<div class="items autotooltip autotooltip-sticky" use:autotooltip={tooltipOptions}>
 					{#if additionalInfo}
 						<span class="additional-info">{additionalInfo}</span>
