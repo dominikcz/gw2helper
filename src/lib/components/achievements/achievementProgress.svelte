@@ -103,7 +103,7 @@
 	}
 
 	li {
-		font-size: 80%;
+		font-size: inherit;
 		&.done {
 			text-decoration: line-through;
 			color: var(--gw2helper-not-important);
@@ -125,8 +125,8 @@
 		}
 
 		img {
-			width: 2em;
-			height: 2em;
+			width: 64px;
+			height: 64px;
 		}
 	}
 

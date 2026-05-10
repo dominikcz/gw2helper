@@ -136,11 +136,11 @@
 			todo={todoList.includes(achiev.id ?? 0)}
 			rewardsObj={achiev.rewardsObj}
 			done={achiev.done}
-			bits={bits}
-			bitsDone={bitsDone}
+			{bits}
+			{bitsDone}
 			pointsToGet={achiev.points_to_get}
 			tiers={achiev.tiers as Array<{ count: number; points?: number }>}
-			onToggleTodo={onToggleTodo}
+			{onToggleTodo}
 		/>
 
 		<div class="details-grid">
@@ -187,7 +187,15 @@
 											{@const item = rewardItemsMap.get(itemId)}
 											<li class="reward-item-entry">
 												<div class="reward-item-preview">
-													<Item item={{ id: itemId, name: item?.name, icon: item?.icon, rarity: item?.rarity, count: reward.count || 1 }} />
+													<Item
+														item={{
+															id: itemId,
+															name: item?.name,
+															icon: item?.icon,
+															rarity: item?.rarity,
+															count: reward.count || 1,
+														}}
+													/>
 													<Linkable link={helperUtils.wikiLink(item?.name || `item ${itemId}`)} rel="noopener noreferrer">
 														{item?.name || $_('achievements.reward_item_with_id', { id: reward.id, count: reward.count || 1 })}
 													</Linkable>
@@ -313,7 +321,7 @@
 						<AchievementProgress
 							type={String(achiev.type || 'Default')}
 							{bits}
-							bitsDone={bitsDone}
+							{bitsDone}
 							done={Boolean(achiev.done)}
 							detailed={true}
 							itemsCache={apiService.itemsCache as (id: number) => { name?: string; icon?: string }}
@@ -321,7 +329,6 @@
 							skinsCache={apiService.skinsCache as (id: number) => { name?: string; icon?: string }}
 						/>
 					{/if}
-
 				</section>
 			{/if}
 
@@ -333,7 +340,12 @@
 							<li class:done={tierDone(current, Number(tier.count || 0))}>
 								<span>{$_('achievements.tier_target', { count: tier.count })}</span>
 								{#if tier.points}
-									<span>+{tier.points} AP</span>
+									<ul>
+										<li class="reward-row ap-left">
+											<span>+{tier.points}</span>
+											<img src={asset('/assets/rewards/AP.png')} alt="AP" />
+										</li>
+									</ul>
 								{/if}
 							</li>
 						{/each}
