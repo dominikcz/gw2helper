@@ -1,13 +1,13 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import SearchInput from '$lib/components/searchInput.svelte';
-	import Awaiter from '$lib/components/awaiter.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import { sum } from '$lib/utils';
 	import utils from '$lib/utils';
 	import { asset } from '$app/paths';
-	import Price from '$lib/components/price.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
 	import { onMount } from 'svelte';
 	import { Tabs, TabPanel, Tab } from '$lib/components/tabs/tabs';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
@@ -254,3 +254,4 @@
 		margin-top: 4em;
 	}
 </style>
+

@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { asset } from '$app/paths';
-	import Awaiter from '$lib/components/awaiter.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
@@ -190,3 +190,4 @@ type Character = ApiCharacterDto;
 		}
 	}
 </style>
+

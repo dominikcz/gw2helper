@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import Item from '$lib/components/items/item.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
-	import Awaiter from '$lib/components/awaiter.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from './itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n';
@@ -80,3 +80,4 @@
 		margin-bottom: 1rem;
 	}
 </style>
+

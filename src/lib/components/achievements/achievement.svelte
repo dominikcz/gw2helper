@@ -1,7 +1,7 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import { asset, resolve } from '$app/paths';
-	import Wiki from '../wiki.svelte';
+	import Wiki from '$lib/components/ui/wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
 	import AchievementRewards from './achievementRewards.svelte';

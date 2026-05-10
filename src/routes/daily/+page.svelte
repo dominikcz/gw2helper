@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import WizardsVaultCategory from '$lib/components/wizardsVault/wizardsVaultCategory.svelte';
 	import wxdates from '$lib/wxjs_dates';
-	import Awaiter from '$lib/components/awaiter.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { asset } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
@@ -143,3 +143,4 @@ import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } 
 		</div>
 	{/snippet}
 </Awaiter>
+

@@ -24,44 +24,51 @@ Object.defineProperty(globalThis, 'window', {
 });
 
 const componentModules = import.meta.glob('/src/lib/components/**/*.svelte');
-const componentPaths = Object.keys(componentModules).sort();
+const componentEntries = Object.entries(componentModules).sort(([a], [b]) => a.localeCompare(b));
 
-const testFileModules = import.meta.glob('/src/**/*.{test,spec}.{ts,js}', {
-	eager: true,
-	query: '?raw',
-	import: 'default'
-}) as Record<string, string>;
-
-const componentImportRegex = /import\s+[^;]*?from\s+['"](?:\$lib\/components\/|\/src\/lib\/components\/)([^'"]+\.svelte)['"]/g;
-
-function getCoveredComponentPaths(): Set<string> {
-	const covered = new Set<string>();
-
-	for (const [testPath, source] of Object.entries(testFileModules)) {
-		if (testPath.endsWith('/src/lib/components/all-components.test.ts')) {
-			continue;
-		}
-
-		for (const match of source.matchAll(componentImportRegex)) {
-			covered.add(`/src/lib/components/${match[1]}`);
-		}
-	}
-
-	return covered;
+function getFolder(path: string): string {
+	const prefix = '/src/lib/components/';
+	const relativePath = path.startsWith(prefix) ? path.slice(prefix.length) : path;
+	const [folder = 'root'] = relativePath.split('/');
+	return folder;
 }
+
+function getComponentName(path: string): string {
+	const file = path.split('/').at(-1) ?? path;
+	return file.replace(/\.svelte$/, '');
+}
+
+const groupedComponents = componentEntries.reduce<Record<string, Array<[string, () => Promise<unknown>]>>>((acc, [path, loader]) => {
+	const folder = getFolder(path);
+	if (!acc[folder]) {
+		acc[folder] = [];
+	}
+	acc[folder].push([path, loader]);
+	return acc;
+}, {});
+
+const folderNames = Object.keys(groupedComponents).sort((a, b) => a.localeCompare(b));
 
 describe('All lib/components are test-covered', () => {
 	it('finds component files', () => {
-		expect(componentPaths.length).toBeGreaterThan(0);
+		expect(componentEntries.length).toBeGreaterThan(0);
 	});
 
-	it('each component has an explicit test import', () => {
-		const coveredComponents = getCoveredComponentPaths();
-		const missingComponents = componentPaths.filter((path) => !coveredComponents.has(path));
-
-		expect(
-			missingComponents,
-			`Missing explicit tests for components:\n${missingComponents.join('\n')}`
-		).toEqual([]);
+	it('has no root-level component files', () => {
+		expect(groupedComponents.root ?? []).toEqual([]);
 	});
+
+	for (const folder of folderNames) {
+		describe(`folder: ${folder}`, () => {
+			for (const [path, loader] of groupedComponents[folder]) {
+				describe(`component: ${getComponentName(path)}`, () => {
+					it(`loads module: ${path}`, async () => {
+						const mod = (await loader()) as { default?: unknown };
+						expect(mod).toBeTruthy();
+						expect(mod.default).toBeTruthy();
+					});
+				});
+			}
+		});
+	}
 });

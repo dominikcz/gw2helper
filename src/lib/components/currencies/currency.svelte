@@ -1,6 +1,6 @@
-<script lang="ts">
+﻿<script lang="ts">
 
-	import Price from '$lib/components/price.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
     import { dragHandle } from 'svelte-dnd-action';
 	import { t as _ } from '$lib/services/i18n';
@@ -31,7 +31,7 @@
 
 <div class="currency autotooltip" class:depreciated={currency.depreciated} title={getTitle(currency)} data-autotooltip-class="autotooltip-wide">
 	<span>
-        <span class="handle" use:dragHandle aria-label="drag-handle for {currency.name}">⁝</span>
+		<span class="handle" use:dragHandle aria-label={`drag-handle for ${currency.name}`}>&#8942;</span>
         <span class="currency-name autotooltip" title={getTitle(currency)}>{currency.name}</span>
     </span>
 	<div class="currency-value">
@@ -83,3 +83,4 @@
 		}
 	}
 </style>
+

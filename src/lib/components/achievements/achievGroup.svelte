@@ -2,8 +2,8 @@
 	import { asset } from '$app/paths';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import helperUtils from '$lib/utils/helper-utils';
-	import Price from '../price.svelte';
-	import Wiki from '../wiki.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
+	import Wiki from '$lib/components/ui/wiki.svelte';
 	import AchievList from './achievList.svelte';
 	import { sort } from './achievements';
 	import type { CategoryLike } from './achievements';

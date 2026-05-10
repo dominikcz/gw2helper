@@ -4,8 +4,8 @@
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import AchievementProgress from '$lib/components/achievements/achievementProgress.svelte';
 	import Item from '$lib/components/items/item.svelte';
-	import Linkable from '$lib/components/linkable.svelte';
-	import Price from '$lib/components/price.svelte';
+	import Linkable from '$lib/components/ui/linkable.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import helperUtils from '$lib/utils/helper-utils';
 	import utils from '$lib/utils';

@@ -9,7 +9,7 @@
 		claimed: boolean;
 	}
 
-	import AstralAcclaim from '../astralAcclaim.svelte';
+	import AstralAcclaim from '$lib/components/branding/astralAcclaim.svelte';
 	interface Props {
 		value: WizardsVaultObjective;
 	}

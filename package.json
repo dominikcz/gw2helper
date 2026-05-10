@@ -14,7 +14,7 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:unit": "vitest run",
-    "test:unit:full": "vitest run --reporter=tree --exclude src/lib/components/all-components.test.ts",
+    "test:unit:full": "vitest run --reporter=tree",
     "test:unit:coverage-guard": "vitest run src/lib/components/all-components.test.ts --reporter=verbose",
     "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "playwright install && playwright test"

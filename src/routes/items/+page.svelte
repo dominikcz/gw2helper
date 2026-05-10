@@ -1,8 +1,8 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import ItemsList from '$lib/components/items/itemsList.svelte';
-	import Awaiter from '$lib/components/awaiter.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
-	import SearchHelp from '$lib/components/searchHelp.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
+	import SearchHelp from '$lib/components/search/searchHelp.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { sum } from '$lib/utils';
 	import InventoryCleanupAdvice from '$lib/components/inventoryCleanupAdvice/inventoryCleanupAdvice.svelte';
@@ -112,3 +112,4 @@
 		{/each}
 	{/snippet}
 </Awaiter>
+

@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import wxdates from '$lib/wxjs_dates';
 	import Item from '$lib/components/items/item.svelte';
-	import Price from '$lib/components/price.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n';
@@ -217,3 +217,4 @@
 		}
 	}
 </style>
+

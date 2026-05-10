@@ -1,8 +1,8 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { onMount } from 'svelte';
 	import helperUtils from '$lib/utils/helper-utils';
-	import Awaiter from '$lib/components/awaiter.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 	import utils from '$lib/utils';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
 	import { t as _ } from '$lib/services/i18n';
@@ -66,3 +66,4 @@
 	<label><input type="checkbox" id="show-depreciated" bind:checked={showDepreciated} /> {$_('home.show_depreciated_currencies')}</label>
 	<button onclick={saveSettings}>{$_('common.save_settings')}</button>
 </fieldset>
+

@@ -1,5 +1,5 @@
-<script lang="ts">
-	import Awaiter from '$lib/components/awaiter.svelte';
+﻿<script lang="ts">
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import { autotooltip } from '$lib/actions/autotooltip';
@@ -217,3 +217,4 @@
 		}
 	}
 </style>
+

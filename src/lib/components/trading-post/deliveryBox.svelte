@@ -2,7 +2,7 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import { resolve } from '$app/paths';
-	import Price from '../price.svelte';
+	import Price from '$lib/components/currencies/price.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';

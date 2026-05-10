@@ -2,12 +2,12 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import { asset } from '$app/paths';
-	import Awaiter from '../awaiter.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n';
 	import Item from '../items/item.svelte';
 	import { sum } from '$lib/utils';
-	import SearchInput from '../searchInput.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 
 	type ItemUsage = {
 		count: number;

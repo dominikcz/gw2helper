@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { alert } from './alert/alert';
+    import { alert } from '$lib/components/alert/alert';
 	import { t as _ } from '$lib/services/i18n';
 </script>
 

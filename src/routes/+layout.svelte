@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import '$lib/scss/gw2.scss';
 	import { asset, resolve } from '$app/paths';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
@@ -7,15 +7,15 @@
 	import languages from '$lib/locales/languages.json';
 	import { t as _, locale } from '$lib/services/i18n';
 
-	import BackToTop from '$lib/components/backToTop.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
+	import BackToTop from '$lib/components/navigation/backToTop.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 	import Reminders from '$lib/reminders';
 
 	import { Howl } from 'howler';
 
 	import utils from '$lib/utils';
 
-	import Navigation from '$lib/components/navigation.svelte';
+	import Navigation from '$lib/components/navigation/navigation.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
 	import { onMount } from 'svelte';
@@ -23,7 +23,7 @@
 	import eventsUtils from '$lib/components/events/eventsUtils';
 	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
-	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
+	import LocaleSwitch from '$lib/components/ui/localeSwitch.svelte';
 
 	interface LayoutData {
 		apiKey: string;
@@ -57,10 +57,10 @@
 
 	const apiLanguages = {
 		en: 'English',
-		fr: 'Français',
+		fr: 'FranĂ§ais',
 		de: 'Deutsch',
-		es: 'Español',
-		zh: '中国人',
+		es: 'EspaĂ±ol',
+		zh: 'ä¸­ĺ›˝äşş',
 	};
 
 	const soundSprites: Record<SoundSpriteName, [number, number]> = {
@@ -445,3 +445,4 @@
 		padding: 0.2em 0.6em;
 	}
 </style>
+

@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import ItemsList from '$lib/components/items/itemsList.svelte';
-	import SearchHelp from '$lib/components/searchHelp.svelte';
-	import SearchInput from '$lib/components/searchInput.svelte';
+	import SearchHelp from '$lib/components/search/searchHelp.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import type { PageData } from './$types';
 
@@ -17,3 +17,4 @@
 </SearchInput>
 
 <ItemsList summary={$_('materials.materials')} items={data.materials} {filter} />
+

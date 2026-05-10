@@ -1,7 +1,7 @@
 <script lang="ts">
 	import wxdates from '$lib/wxjs_dates';
 	import WizardsVaultObjective from '$lib/components/wizardsVault/wizardsVaultObjective.svelte';
-	import AstralAcclaim from '../astralAcclaim.svelte';
+	import AstralAcclaim from '$lib/components/branding/astralAcclaim.svelte';
 	import Clock from '$lib/services/clock.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';

@@ -1,6 +1,6 @@
-<script lang="ts">
-	import GuildEmblem from '$lib/components/guildEmblem.svelte';
-	import Awaiter from '$lib/components/awaiter.svelte';
+﻿<script lang="ts">
+	import GuildEmblem from '$lib/components/branding/guildEmblem.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import type { PageData } from './$types';
@@ -19,7 +19,7 @@
 					<GuildEmblem emblem={emblem as never} background="#777" />
 					<div class="guild-h">
 						<h2>{guild.name} [{guild.tag}]</h2>
-						<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>
+						<blockquote>{guild.motd ? `â€ś${guild.motd}â€ť` : ''}</blockquote>
 					</div>
 				</div>
 				<div class="details">
@@ -64,7 +64,7 @@
 			text-indent: 0;
 			hanging-punctuation: first;
 			font-style: italic;
-			quotes: '“' '”' '‘' '’';
+			quotes: 'â€ś' 'â€ť' 'â€' 'â€™';
 		}
 	}
 	.details {
@@ -88,3 +88,4 @@
 		}
 	}
 </style>
+

@@ -1,6 +1,6 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { grungeBorder } from '$lib/actions/grungeBorder';
-	import Awaiter from '$lib/components/awaiter.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	import TransactionList from '$lib/components/trading-post/transactionList.svelte';
 	import { t as _ } from '$lib/services/i18n';
@@ -50,3 +50,4 @@
 		}
 	}
 </style>
+

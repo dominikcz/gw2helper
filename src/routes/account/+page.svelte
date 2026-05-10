@@ -1,6 +1,6 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import Awaiter from '$lib/components/awaiter.svelte';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
@@ -134,3 +134,4 @@
 		{/if}
 	{/snippet}
 </Awaiter>
+

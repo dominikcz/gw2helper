@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import EventsList from './eventsList.svelte';
-	import SearchInput from '../searchInput.svelte';
+	import SearchInput from '$lib/components/search/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
 	import EventsCategory from './eventsCategory.svelte';
 	import eventsUtils from './eventsUtils';
