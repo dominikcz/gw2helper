@@ -76,10 +76,12 @@
 
 		allObserved.forEach((ev: string) => {
 			const hours = alarms[ev];
-			const found = filteredEvents.find((x: ReminderEvent) => x.name == ev) || { name: ev, startTimes: hours };
-			found.alarms = [...(hours || [])];
-			found.watched = true;
-			_watched.push(found);
+			const found = filteredEvents.find((x: ReminderEvent) => x.name == ev);
+			_watched.push({
+				...(found || { name: ev, startTimes: hours }),
+				alarms: [...(hours || [])],
+				watched: true,
+			});
 		});
 
 		return sort(_watched, 'name');
@@ -211,5 +213,47 @@
 <style lang="scss">
 	h2 {
 		margin-top: 1em;
+	}
+
+	.settings {
+		display: grid;
+		gap: 0.8rem;
+		padding: 0.85rem 1rem 1rem;
+		width: min(100%, 52rem);
+
+		.group {
+			display: flex;
+			align-items: flex-start;
+			flex-wrap: wrap;
+			column-gap: 0.9rem;
+			row-gap: 0.35rem;
+		}
+
+		.group + .group {
+			margin-top: 0.5rem;
+		}
+
+		h4 {
+			margin: 0;
+			flex-basis: 100%;
+			margin-bottom: 0.1rem;
+		}
+
+		label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.45rem;
+			margin-right: 0.9rem;
+			margin-bottom: 0.2rem;
+		}
+
+		button + button {
+			margin-left: 0.5rem;
+		}
+
+		button {
+			justify-self: start;
+			width: auto;
+		}
 	}
 </style>

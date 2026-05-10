@@ -96,13 +96,21 @@
 		checkIfAudioPlayable();
 	});
 
+	function clearNoAudioToast() {
+		if (!noAudio) return;
+		toast.pop(noAudio);
+		noAudio = 0;
+	}
+
 	function checkIfAudioPlayable() {
 		if (!navigator.userActivation.hasBeenActive && reminders.hasAny()) {
-			noAudio = toast.push($_('layout.no_audio'), {
-				initial: 0,
-			});
+			if (!noAudio) {
+				noAudio = toast.push($_('layout.no_audio'), {
+					initial: 0,
+				});
+			}
 		} else {
-			toast.pop(noAudio);
+			clearNoAudioToast();
 		}
 	}
 
@@ -251,9 +259,18 @@
 	});
 
 	onMount(() => {
+		const onUserInteraction = () => {
+			checkIfAudioPlayable();
+		};
 		const handler = (event: Event) => hndNotificationTest(event as CustomEvent<{ sound: SoundSpriteName }>);
+		window.addEventListener('pointerdown', onUserInteraction, { passive: true });
+		window.addEventListener('keydown', onUserInteraction);
+		window.addEventListener('touchstart', onUserInteraction, { passive: true });
 		window.addEventListener('notification-test', handler as EventListener);
 		return () => {
+			window.removeEventListener('pointerdown', onUserInteraction);
+			window.removeEventListener('keydown', onUserInteraction);
+			window.removeEventListener('touchstart', onUserInteraction);
 			window.removeEventListener('notification-test', handler as EventListener);
 		};
 	});
@@ -419,6 +436,7 @@
 		--toastContainerBottom: 1em;
 		--toastContainerLeft: calc(50vw - 12rem);
 		--toastWidth: 24rem;
+		--toastBoxShadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.22);
 	}
 
 	.error {
