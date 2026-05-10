@@ -1,17 +1,7 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
-
-	type BitType = 'Item' | 'Minipet' | 'Skin' | string;
-	interface AchievementBit {
-		id?: number;
-		type?: BitType;
-		text?: string;
-	}
-	interface CachedEntity {
-		name?: string;
-		icon?: string;
-	}
+	import type { AchievementBit, CachedEntity } from '$lib/types/achievements';
 	interface Props {
 		type: string;
 		bits?: AchievementBit[];

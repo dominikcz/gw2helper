@@ -1,28 +1,15 @@
 import ItemTooltip from "./itemTooltip.svelte";
 import { mount, unmount } from "svelte";
 import apiService from "$lib/apiService";
-
-type ItemData = {
-    id?: number;
-    count?: number;
-    name?: string;
-    icon?: string;
-    rarity?: string;
-    locked?: boolean;
-    [key: string]: unknown;
-};
-
-type RendererParams = {
-    count?: number;
-};
+import type { ItemRendererParams, ItemTooltipData } from "$lib/types/items";
 
 type ApiServiceLike = {
-    itemsCache: (id: string | number) => ItemData | null | undefined;
+    itemsCache: (id: string | number) => ItemTooltipData | null | undefined;
 };
 
 const api = apiService as unknown as ApiServiceLike;
 
-function toRendererParams(params: unknown): RendererParams {
+function toRendererParams(params: unknown): ItemRendererParams {
     if (params && typeof params === 'object' && 'count' in params) {
         const count = (params as { count?: unknown }).count;
         return { count: typeof count === 'number' ? count : undefined };

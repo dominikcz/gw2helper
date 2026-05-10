@@ -2,15 +2,9 @@
 	import { asset } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 	import { getQueryStringFlag } from '$lib/utils';
+	import type { ItemBaseData } from '$lib/types/items';
 	interface Props {
-		item: {
-			id: number;
-			name?: string;
-			icon?: string;
-			rarity?: string;
-			count?: number;
-			locked?: boolean;
-		};
+		item: ItemBaseData;
 	}
 
 	let { item }: Props = $props();

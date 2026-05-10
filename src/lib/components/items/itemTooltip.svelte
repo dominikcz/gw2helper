@@ -1,19 +1,9 @@
 <script lang="ts">
 	import utils from "$lib/utils";
-
-	interface ItemTooltipModel {
-		id?: number;
-		name?: string;
-		icon?: string;
-		description?: string;
-		level?: number;
-		flags?: string[];
-		rarity?: string;
-		count?: number;
-	}
+	import type { ItemTooltipData } from '$lib/types/items';
 
 	interface Props {
-		item: ItemTooltipModel;
+		item: ItemTooltipData;
 	}
 
 	let { item }: Props = $props();

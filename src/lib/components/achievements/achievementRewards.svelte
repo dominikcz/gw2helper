@@ -2,23 +2,7 @@
 	import { asset } from "$app/paths";
 	import Price from "$lib/components/price.svelte";
 	import { t as _ } from '$lib/services/i18n';
-
-	type MasteryRegion = 'Tyria' | 'Maguuma' | 'Desert' | 'Tundra' | 'Jade' | 'Sky' | 'Unknown' | string;
-
-	interface CoinReward {
-		count: number;
-	}
-
-	interface MasteryReward {
-		region: MasteryRegion;
-	}
-
-	interface RewardsObj {
-		title?: unknown;
-		coins?: CoinReward[];
-		item?: unknown;
-		mastery?: MasteryReward[];
-	}
+	import type { MasteryReward, RewardsObj } from '$lib/types/achievements';
 
 	interface Props {
 		type: string;
@@ -64,7 +48,7 @@
 		</div>
 	{/if}
 	{#if rewardsObj.mastery}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Tyria')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Tyria')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_Central_Tyria.png')}
@@ -73,7 +57,7 @@
 				/>
 			</div>
 		{/if}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Maguuma')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Maguuma')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_Heart_of_Thorns.png')}
@@ -82,7 +66,7 @@
 				/>
 			</div>
 		{/if}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Desert')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Desert')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_Path_of_Fire.png')}
@@ -91,7 +75,7 @@
 				/>
 			</div>
 		{/if}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Tundra')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Tundra')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_Icebrood_Saga.png')}
@@ -100,7 +84,7 @@
 				/>
 			</div>
 		{/if}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Jade')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Jade')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_End_of_Dragons.png')}
@@ -109,7 +93,7 @@
 				/>
 			</div>
 		{/if}
-		{#if rewardsObj.mastery.find((x: { region: string }) => x.region == 'Sky')}
+		{#if rewardsObj.mastery.find((x: MasteryReward) => x.region == 'Sky')}
 			<div class="reward-item">
 				<img
 					src={asset('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')}

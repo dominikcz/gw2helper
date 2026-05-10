@@ -2,24 +2,13 @@ import apiService from "$lib/apiService";
 import AchievementProgress from "./achievementProgress.svelte";
 import { mount, unmount } from "svelte";
 
-type AchievementBit = {
-    id?: number;
-    type?: string;
-    text?: string;
-};
-
-type CachedEntity = {
-    name?: string;
-    icon?: string;
-};
+import type { AchievementBit, CachedEntity, RendererPayload } from "$lib/types/achievements";
 
 type AchievementData = {
     type: string;
     bits: AchievementBit[];
     done?: boolean;
 };
-
-type RendererPayload = number[] | { bitsDone?: number[]; done?: boolean } | undefined;
 
 type ApiServiceLike = {
     achievementsCache: (id: string | number) => AchievementData;

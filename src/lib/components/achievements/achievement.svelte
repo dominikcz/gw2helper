@@ -6,18 +6,12 @@
 	import { t as _ } from '$lib/services/i18n';
 	import AchievementRewards from './achievementRewards.svelte';
 	import { ACHIEVEMENT_LINKS } from './achievements';
+	import type { RewardsObj } from '$lib/types/achievements';
 
 	type Tier = {
 		count: number;
 		points?: number;
 	};
-
-	interface RewardsObj {
-		title?: unknown;
-		coins?: Array<{ count: number }>;
-		item?: unknown;
-		mastery?: Array<{ region: string }>;
-	}
 
 	interface Props {
 		id: number;
