@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
+	import { t as _ } from '$lib/services/i18n';
 	import type { AchievementBit, CachedEntity } from '$lib/types/achievements';
 	interface Props {
 		type: string;
 		bits?: AchievementBit[];
 		bitsDone?: number[];
 		done?: boolean;
+		detailed?: boolean;
 		itemsCache?: (id: number) => CachedEntity;
 		minisCache?: (id: number) => CachedEntity;
 		skinsCache?: (id: number) => CachedEntity;
@@ -16,6 +18,7 @@
 		bits = [],
 		bitsDone = [],
 		done = false,
+		detailed = false,
 		itemsCache = (_id: number) => ({}),
 		minisCache = (_id: number) => ({}),
 		skinsCache = (_id: number) => ({})
@@ -33,11 +36,12 @@
 		if (bit?.type === 'Skin') return skinsCache(bit.id);
 		return null;
 	}
+
 </script>
 
 {#snippet progressText(bits: AchievementBit[], bitsDone: number[])}
 	<ol>
-		{#each bits as item, idx}
+		{#each bits as item, idx (`text-${item.id ?? idx}-${idx}`)}
 			<li class:done={isBitDoneByIndexOrId(idx, item)}>{item.text}</li>
 		{/each}
 	</ol>
@@ -45,10 +49,10 @@
 
 {#snippet progressItemSet(bits: AchievementBit[], bitsDone: number[])}
 	<div class="items condensed autotooltip autotooltip-sticky">
-		{#each bits as x, idx}
+		{#each bits as x, idx (`set-${x.id ?? idx}-${idx}`)}
 			{@const item = resolveBitEntity(x)}
 			{#if item?.icon}
-				<a href={helperUtils.wikiLink(item.name || '')} target="_blank">
+				<a href={helperUtils.wikiLink(item.name || '')} target="_blank" rel="noopener noreferrer" class="wiki-link">
 					<img alt={item.name} src={item.icon} class:done={isBitDoneByIndexOrId(idx, x)} />
 				</a>
 			{:else}
@@ -58,10 +62,30 @@
 	</div>
 {/snippet}
 
+{#snippet progressItemSetDetailed(bits: AchievementBit[], bitsDone: number[])}
+	<ul class="item-set-detailed">
+		{#each bits as x, idx (`details-${x.id ?? idx}-${idx}`)}
+			{@const item = resolveBitEntity(x)}
+			<li class:done={isBitDoneByIndexOrId(idx, x)}>
+				{#if item?.icon}
+					<img alt={item.name} src={item.icon} class:done={isBitDoneByIndexOrId(idx, x)} />
+				{/if}
+				<a href={helperUtils.wikiLink(item?.name || x.text || '')} target="_blank" rel="noopener noreferrer" class="wiki-link-text">
+					{item?.name || x.text || $_('achievements.unknown_item')}
+				</a>
+			</li>
+		{/each}
+	</ul>
+{/snippet}
+
 {#if type == 'Default'}
 	{@render progressText(bits, bitsDone)}
 {:else if type == 'ItemSet'}
-	{@render progressItemSet(bits, bitsDone)}
+	{#if detailed}
+		{@render progressItemSetDetailed(bits, bitsDone)}
+	{:else}
+		{@render progressItemSet(bits, bitsDone)}
+	{/if}
 {/if}
 
 <style lang="scss">
@@ -84,5 +108,36 @@
 			text-decoration: line-through;
 			color: var(--gw2helper-not-important);
 		}
+	}
+
+	.item-set-detailed {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 0.5em;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: 0.5em;
+		}
+
+		img {
+			width: 2em;
+			height: 2em;
+		}
+	}
+
+	.wiki-link,
+	.wiki-link-text {
+		display: inline-block;
+		background: transparent;
+		padding: 0;
+		cursor: pointer;
+		text-align: left;
+		color: inherit;
+		text-decoration: none;
 	}
 </style>

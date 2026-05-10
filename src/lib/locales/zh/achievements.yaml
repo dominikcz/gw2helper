@@ -76,3 +76,21 @@ titles_to_get: 要获得的标题
 to_dos: 要做到这一点
 weekly: 每周活动
 your_list: 名单
+details: 详情
+view_details: 查看成就详情
+back_to_list: 返回成就列表
+details_not_found: 未找到该成就。
+detailed_progress: 详细进度
+tier_progress: 阶段进度
+rewards_breakdown: 奖励明细
+rewards_details: 奖励详情
+prerequisites: 前置成就
+prerequisite_achievement_with_id: '成就 #{id}'
+reward_item_with_id: '物品奖励: #{id} x{count}'
+reward_title_with_id: '称号奖励 ID: {id}'
+reward_mastery_with_id: '精通奖励 ({region}) ID: {id}'
+reward_coins_with_count: '硬币奖励: {count}'
+reward_unknown_type: '奖励类型: {type}'
+tier_target: '目标: {count}'
+exact_progress: '精确进度: {current} / {max}'
+unknown_item: 未知物品

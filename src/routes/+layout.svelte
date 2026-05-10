@@ -211,7 +211,26 @@
 	let tokenInfo = $derived(data.tokenInfo);
 	let missingScopes = $derived(data.missingScopes ?? []);
 	let active = $derived($page.url.pathname);
-	let title = $derived([defaultTitle, active.replace(resolve('/'), '').replaceAll('/', '')].filter(Boolean).join(' - '));
+	function pathParts(pathname: string): string[] {
+		const appRoot = resolve('/');
+		const trimmed = pathname.startsWith(appRoot) ? pathname.slice(appRoot.length) : pathname;
+		return trimmed.split('/').filter(Boolean).map((part) => decodeURIComponent(part));
+	}
+
+	function normalizePathForTitle(pathname: string): string {
+		return pathParts(pathname).join(' / ');
+	}
+
+	let title = $derived.by(() => {
+		const parts = pathParts(active);
+		const achievementName = ($page.data as { achievement?: { name?: string } }).achievement?.name;
+		if (parts[0] === 'achievements' && /^\d+$/.test(parts[1] || '') && achievementName) {
+			return `${defaultTitle} - ${$_('layout.nav.achievements')} - ${achievementName}`;
+		}
+
+		const routeTitle = normalizePathForTitle(active);
+		return routeTitle ? `${defaultTitle} - ${routeTitle}` : defaultTitle;
+	});
 	let navigation = $derived([
 		{ slug: resolve('/'), label: $_('layout.nav.home'), requiresKey: true },
 		{ slug: resolve('/daily/'), label: $_('layout.nav.daily'), requiresKey: true },

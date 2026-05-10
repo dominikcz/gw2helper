@@ -79,3 +79,21 @@ titles_to_get: Titres à obtenir
 to_dos: Pour faire
 weekly: Semaine
 your_list: Votre liste
+details: Details
+view_details: Voir les details du succes
+back_to_list: Retour a la liste des succes
+details_not_found: Succes introuvable.
+detailed_progress: Progression detaillee
+tier_progress: Progression des paliers
+rewards_breakdown: Detail des recompenses
+rewards_details: Details des recompenses
+prerequisites: Prerequis
+prerequisite_achievement_with_id: 'Succes #{id}'
+reward_item_with_id: 'Recompense objet: #{id} x{count}'
+reward_title_with_id: 'ID de recompense de titre: {id}'
+reward_mastery_with_id: 'Recompense de maitrise ({region}) ID: {id}'
+reward_coins_with_count: 'Recompense en pieces: {count}'
+reward_unknown_type: 'Type de recompense: {type}'
+tier_target: 'Palier: {count}'
+exact_progress: 'Progression exacte: {current} / {max}'
+unknown_item: Objet inconnu

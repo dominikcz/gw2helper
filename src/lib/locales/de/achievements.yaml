@@ -79,3 +79,21 @@ titles_to_get: Titel zu bekommen
 to_dos: Zu tun
 weekly: Wöchentlich
 your_list: Ihre Liste
+details: Details
+view_details: Achievement-Details anzeigen
+back_to_list: Zuruck zur Achievement-Liste
+details_not_found: Achievement wurde nicht gefunden.
+detailed_progress: Detaillierter Fortschritt
+tier_progress: Stufenfortschritt
+rewards_breakdown: Belohnungsaufschlüsselung
+rewards_details: Belohnungsdetails
+prerequisites: Voraussetzungen
+prerequisite_achievement_with_id: 'Erfolg #{id}'
+reward_item_with_id: 'Gegenstandsbelohnung: #{id} x{count}'
+reward_title_with_id: 'Titelbelohnung ID: {id}'
+reward_mastery_with_id: 'Beherrschungsbelohnung ({region}) ID: {id}'
+reward_coins_with_count: 'Münzbelohnung: {count}'
+reward_unknown_type: 'Belohnungstyp: {type}'
+tier_target: 'Ziel: {count}'
+exact_progress: 'Exakter Fortschritt: {current} / {max}'
+unknown_item: Unbekannter Gegenstand

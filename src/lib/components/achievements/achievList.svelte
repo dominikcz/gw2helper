@@ -45,6 +45,7 @@
 			bits={achiev.bits}
 			bitsDone={achiev.bits_done}
 			pointsToGet={achiev.points_to_get}
+			tiers={achiev.tiers as Array<{ count: number; points?: number }>}
 			{onToggleTodo}
 		/>
 	{:else}

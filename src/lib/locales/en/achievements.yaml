@@ -79,3 +79,21 @@ titles_to_get: Titles to get
 to_dos: To dos
 weekly: Weekly
 your_list: Your list
+details: Details
+view_details: View achievement details
+back_to_list: Back to achievements list
+details_not_found: Achievement not found.
+detailed_progress: Detailed progress
+tier_progress: Tier progress
+rewards_breakdown: Rewards breakdown
+rewards_details: Reward details
+prerequisites: Prerequisites
+prerequisite_achievement_with_id: 'Achievement #{id}'
+reward_item_with_id: 'Item reward: #{id} x{count}'
+reward_title_with_id: 'Title reward ID: {id}'
+reward_mastery_with_id: 'Mastery reward ({region}) ID: {id}'
+reward_coins_with_count: 'Coin reward: {count}'
+reward_unknown_type: 'Reward type: {type}'
+tier_target: 'Target: {count}'
+exact_progress: 'Exact progress: {current} / {max}'
+unknown_item: Unknown item

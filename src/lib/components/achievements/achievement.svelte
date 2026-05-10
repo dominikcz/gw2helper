@@ -1,6 +1,6 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import { asset } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import Wiki from '../wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
@@ -67,6 +67,10 @@
 			todo,
 		});
 	}
+
+	function openWiki() {
+		window.open(helperUtils.wikiLink(link), '_blank', 'noopener,noreferrer');
+	}
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
@@ -89,11 +93,16 @@
 			/>
 		{/if}
 		{#if showApiLinks}
-			<small><a href="https://api.guildwars2.com/v2/achievements/{id}" target="_blank">id: {id}</a></small>
+			<small>
+				<a href={`https://api.guildwars2.com/v2/achievements/${id}`} target="_blank" rel="noopener noreferrer">id: {id}</a>
+			</small>
 		{/if}
-		<a href={helperUtils.wikiLink(link)} target="_blank" title={$_('common.read_more_on_wiki')}>
-			<Wiki width="1.5em" height="1.5em" />
+		<a class="achiev-details" href={resolve(`/achievements/${id}/`)} title={$_('achievements.view_details')}>
+			{$_('achievements.details')}
 		</a>
+		<button type="button" class="wiki-btn" title={$_('common.read_more_on_wiki')} onclick={openWiki}>
+			<Wiki width="1.5em" height="1.5em" />
+		</button>
 	</div>
 	<div class="body">
 		<div class="title-bar">
@@ -147,6 +156,17 @@
 				overflow-wrap: break-word;
 			}
 			a {
+				color: var(--gw2helper-module-text);
+			}
+			.achiev-details {
+				font-size: x-small;
+				text-decoration: underline;
+			}
+			.wiki-btn {
+				border: 0;
+				background: transparent;
+				cursor: pointer;
+				padding: 0;
 				color: var(--gw2helper-module-text);
 			}
 			img {

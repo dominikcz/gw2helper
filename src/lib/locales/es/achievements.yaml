@@ -79,3 +79,21 @@ titles_to_get: Títulos para conseguir
 to_dos: A dos
 weekly: Semanal
 your_list: Su lista
+details: Detalles
+view_details: Ver detalles del logro
+back_to_list: Volver a la lista de logros
+details_not_found: No se encontro el logro.
+detailed_progress: Progreso detallado
+tier_progress: Progreso por niveles
+rewards_breakdown: Desglose de recompensas
+rewards_details: Detalles de recompensas
+prerequisites: Requisitos previos
+prerequisite_achievement_with_id: 'Logro #{id}'
+reward_item_with_id: 'Recompensa de objeto: #{id} x{count}'
+reward_title_with_id: 'ID de recompensa de titulo: {id}'
+reward_mastery_with_id: 'Recompensa de maestria ({region}) ID: {id}'
+reward_coins_with_count: 'Recompensa de monedas: {count}'
+reward_unknown_type: 'Tipo de recompensa: {type}'
+tier_target: 'Objetivo: {count}'
+exact_progress: 'Progreso exacto: {current} / {max}'
+unknown_item: Objeto desconocido

@@ -83,3 +83,21 @@ titles_to_get: Tytuły do zdobycia
 to_dos: Do zrobienia
 weekly: Tygodniowe
 your_list: Twoja lista
+details: Szczegóły
+view_details: Pokaż szczegóły osiągnięcia
+back_to_list: Wróć do listy osiągnięć
+details_not_found: Nie znaleziono osiągnięcia.
+detailed_progress: Szczegółowy postęp
+tier_progress: Postęp progów
+rewards_breakdown: Rozpiska nagród
+rewards_details: Szczegóły nagród
+prerequisites: Wymagane osiągnięcia
+prerequisite_achievement_with_id: 'Osiągnięcie #{id}'
+reward_item_with_id: 'Nagroda przedmiot: #{id} x{count}'
+reward_title_with_id: 'Nagroda tytuł ID: {id}'
+reward_mastery_with_id: 'Nagroda punkt mistrzostwa ({region}) ID: {id}'
+reward_coins_with_count: 'Nagroda monety: {count}'
+reward_unknown_type: 'Typ nagrody: {type}'
+tier_target: 'Próg: {count}'
+exact_progress: 'Dokładny postęp: {current} / {max}'
+unknown_item: Nieznany przedmiot
