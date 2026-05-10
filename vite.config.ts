@@ -6,7 +6,25 @@ import { searchForWorkspaceRoot } from 'vite';
 
 export default defineConfig({
 	build: {
-		target: 'esnext'
+		target: 'esnext',
+		// rollupOptions: {
+		// 	output: {
+		// 		manualChunks: (id) => {
+		// 			if (id.includes('node_modules/svelte') || id.includes('node_modules/@sveltejs')) {
+		// 				return 'vendor-svelte';
+		// 			}
+		// 			if (id.includes('node_modules/sveltekit-i18n') || id.includes('node_modules/@sveltekit-i18n')) {
+		// 				return 'vendor-i18n';
+		// 			}
+		// 			if (id.includes('node_modules/howler')) {
+		// 				return 'vendor-audio';
+		// 			}
+		// 			if (id.includes('node_modules')) {
+		// 				return 'vendor';
+		// 			}
+		// 		}
+		// 	}
+		// }
 	},
 	plugins: [sveltekit(), ViteYaml()],
 	test: {

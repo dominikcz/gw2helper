@@ -12,9 +12,6 @@ const config = {
 			fallback: 'index.html',
 			pages: "build"
 		}),
-		output: {
-			bundleStrategy: 'single'
-		},
 		// prerender: {
 		// 	entries: ['*'],
 		// },
