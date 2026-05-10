@@ -47,9 +47,14 @@ button {
 	}
 }
 
-input[type=checkbox] {
+input[type=checkbox],
+input[type=radio] {
 	height: 1.2em;
 	outline-offset: 2px;
+}
+
+select {
+	user-select: none;
 }
 
 input.apikey {

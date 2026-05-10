@@ -1,6 +1,5 @@
 ﻿<script lang="ts">
 	import WizardsVaultCategory from '$lib/components/wizardsVault/wizardsVaultCategory.svelte';
-	import wxdates from '$lib/wxjs_dates';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import { asset } from '$app/paths';
@@ -13,9 +12,10 @@
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import { expandToDoList } from '$lib/components/achievements/achievements';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
+	import { Period, getTimerTarget, currentDay, currentWeek } from '$lib/components/daily/dailyUtils';
 	import type { PageData } from './$types';
 	import type { AchievementsData } from '$lib/components/achievements/achievements';
-import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } from '$lib/types/gw2-api';
+	import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } from '$lib/types/gw2-api';
 
 	interface Props {
 		data: PageData;
@@ -27,14 +27,6 @@ import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } 
 	let showApiLinks = false;
 	let todoList = $state<number[]>([]);
 
-
-	// svelte-ignore non_reactive_update
-	enum Period {
-		daily = 'daily',
-		weekly = 'weekly',
-		special = 'special',
-	}
-
 	onMount(async () => {
 		todoList = (await data.toDoList) as number[];
 	});
@@ -45,33 +37,6 @@ import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } 
 			return 0;
 		}
 		return astralAcclaim.value || 0;
-	}
-
-	function getTimerTarget(period: Period): Date {
-		let target = new Date();
-		switch (period) {
-			case Period.daily:
-				target = Date.prototype.wxTomorrow(true, 0, 0, 0);
-				break;
-			case Period.weekly:
-				target = Date.prototype.wxNextWeekDay(1, true, 7, 30, 0);
-				break;
-			case Period.special:
-				target = data.seasonEnd ? new Date(data.seasonEnd) : new Date();
-				break;
-		}
-		return target;
-	}
-
-	function currentDay(dt: string): boolean {
-		const currentDate = new Date(dt);
-		const currDay = Date.prototype.wxToday(true, 0, 0, 0);
-		return wxdates.secondsBetween(currentDate, currDay, false) >= 0;
-	}
-	function currentWeek(dt: string): boolean {
-		const currentDate = new Date(dt);
-		const startOfWeek = wxdates.dateAdd(Date.prototype.wxNextWeekDay(1, true, 0, 0, 0), 'day', -7) || new Date(0);
-		return wxdates.secondsBetween(currentDate, startOfWeek, false) >= 0;
 	}
 </script>
 
@@ -111,7 +76,7 @@ import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } 
 
 <Awaiter promise={data.special as Promise<WizardsVaultCategoryData> | WizardsVaultCategoryData}>
 	{#snippet children(result: WizardsVaultCategoryData)}
-		<WizardsVaultCategory title={$_('daily.special')} data={result} targetTime={getTimerTarget(Period.special)} />
+		<WizardsVaultCategory title={$_('daily.special')} data={result} targetTime={getTimerTarget(Period.special, data.seasonEnd ?? undefined)} />
 	{/snippet}
 </Awaiter>
 
