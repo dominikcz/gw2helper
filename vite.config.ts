@@ -10,7 +10,8 @@ export default defineConfig({
 	},
 	plugins: [sveltekit(), ViteYaml()],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		setupFiles: ['src/test/setup-i18n.ts']
 	},
 	// assetsInclude: ['**/*.yaml', '**/*.json'],
 	define: {

@@ -30,12 +30,22 @@ export const config = {
 type I18nConfig = ConstructorParameters<typeof i18n>[0];
 export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(config as unknown as I18nConfig);
 
+const isTestEnv = typeof process !== 'undefined' && Boolean(process.env?.VITEST);
+
 locale.subscribe((value) => {
 	if (value != undefined) {
-		console.log('locales subscribe', value)
+		if (!isTestEnv) {
+			console.log('locales subscribe', value);
+		}
 		utils.saveLang(value);
-		document.documentElement.lang = value		
+		if (typeof document !== 'undefined') {
+			document.documentElement.lang = value;
+		}
 	}
 });
 
-loading.subscribe(($loading) => $loading && console.log('Loading translations...'));
+loading.subscribe(($loading) => {
+	if ($loading && !isTestEnv) {
+		console.log('Loading translations...');
+	}
+});
