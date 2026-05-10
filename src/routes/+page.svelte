@@ -7,8 +7,17 @@
 	import Currencies from '$lib/components/currencies/currencies.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
+	import type { PageData } from './$types';
+
+	type DeliveryItem = {
+		id: number;
+		count: number;
+		name?: string;
+		[key: string]: unknown;
+	};
+
 	interface Props {
-		data: any;
+		data: PageData;
 	}
 
 	let { data }: Props = $props();
@@ -47,7 +56,7 @@
 <h1>{$_('home.title')}</h1>
 
 <Awaiter promise={data.delivery} >
-	{#snippet children(result: { coins: number; items: any[] })}
+	{#snippet children(result: { coins: number; items: DeliveryItem[] })}
 		<DeliveryBox coins={result.coins} items={result.items} />
 	{/snippet}
 </Awaiter>

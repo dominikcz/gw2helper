@@ -6,9 +6,10 @@
 	import { t as _ } from '$lib/services/i18n';
 	import { sum } from '$lib/utils';
 	import InventoryCleanupAdvice from '$lib/components/inventoryCleanupAdvice/inventoryCleanupAdvice.svelte';
+	import type { PageData } from './$types';
 
 	interface Props {
-		data: any;
+		data: PageData;
 	}
 
 	let { data }: Props = $props();
@@ -18,7 +19,18 @@
 
 	type BagItem = { inventory: Array<unknown | null> };
 	type Bag = { size: number; inventory: Array<unknown | null> } | null;
-	type CharacterItems = { name: string; bags: Bag[]; _items: any[] };
+	type ItemListEntry = {
+		id: number;
+		count: number;
+		name?: string;
+		description?: string;
+		type?: string;
+		subtype?: string;
+		rarity?: string;
+		icon?: string;
+		flags?: string[];
+	};
+	type CharacterItems = { name: string; bags: Bag[]; _items: ItemListEntry[] };
 
 	enum SortType {
 		AsIs,
@@ -65,7 +77,7 @@
 
 <h3>{$_('items.guild_items')}</h3>
 <Awaiter promise={data.guildItems}>
-	{#snippet children(result: any[])}
+	{#snippet children(result: Array<{ name: string; stash: ItemListEntry[]; error?: string }>)}
 		{#each result as guild}
 			<ItemsList summary={guild.name} items={guild.stash} error={guild.error} {filter} {filterFlags} />
 		{/each}

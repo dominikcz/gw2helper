@@ -164,7 +164,7 @@ export function filteredAchievements(
     categoriesCallbackFn: CategoryPredicate,
     params: FilterParams = {}
 ): AchievementsData {
-    // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
+    // `params` is just for forcing Svelte to make it reactive to other params. Add extra variables there to opt-in to reactivity.
 
     console.log('filtering...');
     // clone base properties, but no categories

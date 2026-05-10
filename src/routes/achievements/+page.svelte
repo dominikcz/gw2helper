@@ -15,9 +15,13 @@
 	import { sort, filteredAchievements, expandToDoList } from '$lib/components/achievements/achievements';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import type { PageData } from './$types';
+	import type { AchievementSettings } from '$lib/utils';
+	import type { AchievementsData } from '$lib/components/achievements/achievements';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	type AchievementsView = AchievementsData & { rewards_to_get: Map<string, number> };
+
+	let { data }: { data: PageData } = $props();
 
 	let filter = $state('');
 	let showApiLinks = $state(false);
@@ -37,7 +41,7 @@
 	let daily = $state(false);
 	let weekly = $state(false);
 	let sortBy = $state('ap');
-	let todoList=$state([]);
+	let todoList = $state<number[]>([]);
 
 	type MasteryReward = { region: string };
 	type AchievementLike = {
@@ -58,7 +62,7 @@
 
 	onMount(async () => {
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
-		const settings = await data.settings as Record<string, any>;
+		const settings = await data.settings as AchievementSettings;
 		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
 		if (settings.withPoints !== undefined) withPoints = settings.withPoints;
 		if (settings.withMasteryCentral !== undefined) withMasteryCentral = settings.withMasteryCentral;
@@ -136,9 +140,9 @@
 
 <img src={asset('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
 
-<Awaiter promise={data.achievements}>
-	{#snippet children(result: any)}
-		{@const typedResult = result as any}
+<Awaiter promise={data.achievements as Promise<AchievementsData> | AchievementsData}>
+	{#snippet children(result: AchievementsData)}
+		{@const typedResult = result as AchievementsView}
 		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, {
 			notCompleted,
 			withPoints,
@@ -154,7 +158,7 @@
 			withCoins,
 			daily,
 			weekly,
-		}) as any}
+		})}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={typedResult.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
@@ -172,15 +176,15 @@
 			<WidgetInfo title={$_('achievements.points_to_get')} value={String(sum(typedResult.categories, 'points_to_get'))} image={asset('/assets/rewards/AP.png')} />
 			<WidgetInfo
 				title={$_('achievements.titles_to_get')}
-				value={typedResult.rewards_to_get.get('title')}
+				value={typedResult.rewards_to_get.get('title') ?? 0}
 				image={asset('/assets/rewards/Talk_collection_option.png')}
 			/>
 			<WidgetInfo
 				title={$_('achievements.items_to_get')}
-				value={typedResult.rewards_to_get.get('item')}
+				value={typedResult.rewards_to_get.get('item') ?? 0}
 				image={asset('/assets/rewards/Achievement_Chest_interface_icon.png')}
 			/>
-			<WidgetInfo title={$_('achievements.gold_to_get')} value={typedResult.rewards_to_get.get('coins')} image={asset('/assets/rewards/Merchant_crop.png')}>
+			<WidgetInfo title={$_('achievements.gold_to_get')} value={typedResult.rewards_to_get.get('coins') ?? 0} image={asset('/assets/rewards/Merchant_crop.png')}>
 				{#snippet children({ value })}
 					<Price {value} />
 				{/snippet}

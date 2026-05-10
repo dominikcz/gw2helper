@@ -27,7 +27,8 @@ export const config = {
 	loaders
 };
 
-export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(config as any);
+type I18nConfig = ConstructorParameters<typeof i18n>[0];
+export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(config as unknown as I18nConfig);
 
 locale.subscribe((value) => {
 	if (value != undefined) {

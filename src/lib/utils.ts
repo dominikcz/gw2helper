@@ -1,4 +1,3 @@
-// @ts-nocheck
 import idb from "$lib/wxjs_idb";
 import ls from "$lib/wxjs_localstorage";
 
@@ -18,212 +17,216 @@ import {
     LANG
 } from "$lib/consts";
 
-/** @typedef {{ showDepreciated?: boolean }} WalletSettings */
-/** @typedef {{ showChatLinks?: boolean, showEventTimes?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean }} EventTimerSettings */
-/** @typedef {{ notCompleted?: boolean, withPoints?: boolean, withMasteryCentral?: boolean, withMasteryHoT?: boolean, withMasteryPoF?: boolean, withMasteryIce?: boolean, withMasteryEoD?: boolean, withMasterySofO?: boolean, withMasteryJW?: boolean, withTitles?: boolean, withItems?: boolean, withCoins?: boolean, daily?: boolean, weekly?: boolean, sortBy?: string }} AchievementSettings */
-/** @typedef {{ inAdvance?: number, sound?: string, sortBy?: string }} ReminderSettings */
+export type WalletSettings = { showDepreciated?: boolean };
+export type EventTimerSettings = {
+    showChatLinks?: boolean;
+    showEventTimes?: boolean;
+    showCategories?: boolean;
+    showHeadings?: boolean;
+    autoScroll?: boolean;
+};
+export type AchievementSettings = {
+    notCompleted?: boolean;
+    withPoints?: boolean;
+    withMasteryCentral?: boolean;
+    withMasteryHoT?: boolean;
+    withMasteryPoF?: boolean;
+    withMasteryIce?: boolean;
+    withMasteryEoD?: boolean;
+    withMasterySofO?: boolean;
+    withMasteryJW?: boolean;
+    withTitles?: boolean;
+    withItems?: boolean;
+    withCoins?: boolean;
+    daily?: boolean;
+    weekly?: boolean;
+    sortBy?: string;
+};
+export type ReminderSettings = { inAdvance?: number; sound?: string; sortBy?: string };
 
-type WalletSettings = { showDepreciated?: boolean };
-type EventTimerSettings = { showChatLinks?: boolean; showEventTimes?: boolean; showCategories?: boolean; showHeadings?: boolean; autoScroll?: boolean };
-type AchievementSettings = { notCompleted?: boolean; withPoints?: boolean; withMasteryCentral?: boolean; withMasteryHoT?: boolean; withMasteryPoF?: boolean; withMasteryIce?: boolean; withMasteryEoD?: boolean; withMasterySofO?: boolean; withMasteryJW?: boolean; withTitles?: boolean; withItems?: boolean; withCoins?: boolean; daily?: boolean; weekly?: boolean; sortBy?: string };
-type ReminderSettings = { inAdvance?: number; sound?: string; sortBy?: string };
+type NumericLike = number | `${number}` | null | undefined;
 
-async function readApiKey() {
+async function readApiKey(): Promise<string> {
     let key = '';
-    if (typeof window != 'undefined') {
-        key = new URLSearchParams(window.location.search).get('key') || ''
+    if (typeof window !== 'undefined') {
+        key = new URLSearchParams(window.location.search).get('key') ?? '';
     }
     if (!key) {
-        key = await idb.get(KEY_NAME, '');
+        key = await idb.get<string>(KEY_NAME, '');
     }
     return key;
 }
 
-/** @param {string} value */
-async function saveApiKey(value) {
-    /** @type {string[]} */
+async function saveApiKey(value: string): Promise<void> {
     const hist = await getKeyHist();
     if (!hist.includes(value)) {
         hist.push(value);
         await idb.set(KEY_HIST, hist);
     }
-    return await idb.set(KEY_NAME, value);
+    await idb.set(KEY_NAME, value);
 }
 
-async function deleteApiKey() {
-    await idb.delete(KEY_NAME)
+async function deleteApiKey(): Promise<void> {
+    await idb.delete(KEY_NAME);
 }
 
-async function getKeyHist() {
-    /** @type {string[]} */
-    return await idb.getObject(KEY_HIST, []);
+async function getKeyHist(): Promise<string[]> {
+    return await idb.getObject<string[]>(KEY_HIST, []);
 }
 
-async function readApiLang() {
-    return await idb.get(API_LANG, 'en');
+async function readApiLang(): Promise<string> {
+    return await idb.get<string>(API_LANG, 'en');
 }
 
-/** @param {string} value */
-async function saveApiLang(value) {
-    return await idb.set(API_LANG, value);
+async function saveApiLang(value: string): Promise<void> {
+    await idb.set(API_LANG, value);
 }
 
-function readLang(defaultValue = 'en') {
-    return ls.get(LANG, defaultValue);
+function readLang(defaultValue = 'en'): string {
+    return ls.get(LANG, defaultValue) ?? defaultValue;
 }
 
-/** @param {string} value */
-function saveLang(value) {
-    return ls.set(LANG, value);
+function saveLang(value: string): void {
+    ls.set(LANG, value);
 }
 
-/** @returns {Promise<EventTimerSettings>} */
 async function readEventTimerSettings(): Promise<EventTimerSettings> {
-    return await idb.getObject<EventTimerSettings>(EVENT_TIMER_SETTINGS, {} as EventTimerSettings);
+    return await idb.getObject<EventTimerSettings>(EVENT_TIMER_SETTINGS, {});
 }
 
-/** @param {Record<string, unknown>} settings */
-async function saveEventTimerSettings(settings) {
-    return await idb.set(EVENT_TIMER_SETTINGS, settings);
+async function saveEventTimerSettings(settings: Record<string, unknown>): Promise<void> {
+    await idb.set(EVENT_TIMER_SETTINGS, settings);
 }
 
-/** @returns {Promise<Record<string, unknown>>} */
-async function readEventTimerCategories() {
-    /** @type {Record<string, unknown>} */
-    return await idb.getObject(EVENT_TIMER_CATEGORIES, {});
+async function readEventTimerCategories(): Promise<Record<string, unknown>> {
+    return await idb.getObject<Record<string, unknown>>(EVENT_TIMER_CATEGORIES, {});
 }
 
-/** @param {Record<string, unknown>} settings */
-async function saveEventTimerCategories(settings) {
-    return await idb.set(EVENT_TIMER_CATEGORIES, settings);
+async function saveEventTimerCategories(settings: Record<string, unknown>): Promise<void> {
+    await idb.set(EVENT_TIMER_CATEGORIES, settings);
 }
 
-/** @returns {Promise<AchievementSettings>} */
 async function readAchievementsSettings(): Promise<AchievementSettings> {
-    return await idb.getObject<AchievementSettings>(ACHIEVEMENTS_SETTINGS, {} as AchievementSettings);
+    return await idb.getObject<AchievementSettings>(ACHIEVEMENTS_SETTINGS, {});
 }
 
-/** @param {Record<string, unknown>} settings */
-async function saveAchievementsSettings(settings) {
-    return await idb.set(ACHIEVEMENTS_SETTINGS, settings);
+async function saveAchievementsSettings(settings: Record<string, unknown>): Promise<void> {
+    await idb.set(ACHIEVEMENTS_SETTINGS, settings);
 }
 
-/** @returns {Promise<WalletSettings>} */
 async function readWalletSettings(): Promise<WalletSettings> {
-    return await idb.getObject<WalletSettings>(WALLET_SETTINGS, {} as WalletSettings);
+    return await idb.getObject<WalletSettings>(WALLET_SETTINGS, {});
 }
 
-/** @param {Record<string, unknown>} settings */
-async function saveWalletSettings(settings) {
-    return await idb.set(WALLET_SETTINGS, settings);
+async function saveWalletSettings(settings: Record<string, unknown>): Promise<void> {
+    await idb.set(WALLET_SETTINGS, settings);
 }
 
-/** @param {Array<Record<string, any>>} array @param {string} property */
-export function sum(array, property) {
-    return array.reduce((acc, curr) => acc + (curr[property] || 0), 0)
+export function sum<T extends Record<string, unknown>>(array: T[], property: keyof T & string): number {
+    return array.reduce((acc, curr) => {
+        const raw = curr[property] as NumericLike;
+        const parsed = typeof raw === 'number' ? raw : Number(raw ?? 0);
+        return acc + (Number.isFinite(parsed) ? parsed : 0);
+    }, 0);
 }
 
-/** @param {Array<Record<string, any>>} array @param {string[]} groupingKeys @param {string} sumProperty */
-export function sumGroupBy(array, groupingKeys, sumProperty) {
-    const cache = array.reduce((acc, curr) => {
-        const key = groupingKeys.map(x => curr[x]).join('-');
-        if (acc[key]) { acc[key][sumProperty] += curr[sumProperty]; }
-        else {
+export function sumGroupBy<T extends Record<string, unknown>>(
+    array: T[],
+    groupingKeys: Array<keyof T & string>,
+    sumProperty: keyof T & string
+): T[] {
+    const cache = array.reduce<Record<string, T>>((acc, curr) => {
+        const key = groupingKeys.map((x) => String(curr[x] ?? '')).join('-');
+        if (acc[key]) {
+            const current = Number((acc[key][sumProperty] as NumericLike) ?? 0);
+            const extra = Number((curr[sumProperty] as NumericLike) ?? 0);
+            const value = (Number.isFinite(current) ? current : 0) + (Number.isFinite(extra) ? extra : 0);
+            acc[key][sumProperty] = value as unknown as T[typeof sumProperty];
+        } else {
             acc[key] = { ...curr };
         }
         return acc;
-    }, /** @type {Record<string, Record<string, any>>} */ ({}));
+    }, {});
+
     return Object.values(cache);
 }
 
-/** @param {number[]} list */
-async function saveAchievementsToDo(list) {
-    return await idb.set(ACHIEVEMENTS_TODO, list);
+async function saveAchievementsToDo(list: number[]): Promise<void> {
+    await idb.set(ACHIEVEMENTS_TODO, list);
 }
 
-/** @param {string[]} list */
-async function saveWatchedEvents(list) {
-    return await idb.set(WATCHED_EVENTS, list);
+async function saveWatchedEvents(list: string[]): Promise<void> {
+    await idb.set(WATCHED_EVENTS, list);
 }
 
-/** @param {Record<string, string[]>} value */
-async function saveReminders(value) {
-    return await idb.set(REMINDERS, value);
+async function saveReminders(value: Record<string, string[]>): Promise<void> {
+    await idb.set(REMINDERS, value);
 }
 
-/** @param {Record<string, unknown>} value */
-async function saveRemindersSettings(value) {
-    return await idb.set(REMINDERS_SETTINGS, value);
+async function saveRemindersSettings(value: Record<string, unknown>): Promise<void> {
+    await idb.set(REMINDERS_SETTINGS, value);
 }
 
-async function readWatchedEvents() {
-    /** @type {string[]} */
-    return await idb.getObject(WATCHED_EVENTS, []);
+async function readWatchedEvents(): Promise<string[]> {
+    return await idb.getObject<string[]>(WATCHED_EVENTS, []);
 }
 
-async function readReminders() {
-    /** @type {Record<string, string[]>} */
-    return await idb.getObject(REMINDERS, {});
+async function readReminders(): Promise<Record<string, string[]>> {
+    return await idb.getObject<Record<string, string[]>>(REMINDERS, {});
 }
 
-/** @returns {Promise<ReminderSettings>} */
 async function readRemindersSettings(): Promise<ReminderSettings> {
-    return await idb.getObject<ReminderSettings>(REMINDERS_SETTINGS, {} as ReminderSettings);
+    return await idb.getObject<ReminderSettings>(REMINDERS_SETTINGS, {});
 }
 
-async function readAchievementsToDo() {
-    /** @type {number[]} */
-    return await idb.getObject(ACHIEVEMENTS_TODO, []);
+async function readAchievementsToDo(): Promise<number[]> {
+    return await idb.getObject<number[]>(ACHIEVEMENTS_TODO, []);
 }
 
-async function readWalletOrder() {
-    /** @type {number[]} */
-    return await idb.getObject(WALLET_ORDER, []);
+async function readWalletOrder(): Promise<number[]> {
+    return await idb.getObject<number[]>(WALLET_ORDER, []);
 }
 
-/** @param {number[]} value */
-async function saveWalletOrder(value) {
-    return await idb.set(WALLET_ORDER, value);
+async function saveWalletOrder(value: number[]): Promise<void> {
+    await idb.set(WALLET_ORDER, value);
 }
 
-/** @param {string} keyName @param {string=} defaultValue */
-export function getQueryString(keyName, defaultValue) {
-    if (typeof window != 'undefined') {
+export function getQueryString(keyName: string, defaultValue?: string): string | undefined {
+    if (typeof window !== 'undefined') {
         const query = new URLSearchParams(window.location.search).get(keyName);
-        return (query === null) ? defaultValue : query;
+        return query === null ? defaultValue : query;
     }
     return defaultValue;
 }
 
-/** @param {string} keyName */
-export function getQueryStringFlag(keyName) {
-    return getQueryString(keyName) == '1' ? true : false;
+export function getQueryStringFlag(keyName: string): boolean {
+    return getQueryString(keyName) === '1';
 }
 
-export function runsDesktop() {
+export function runsDesktop(): boolean {
+    if (typeof window === 'undefined') {
+        return true;
+    }
     const browser = window.navigator.userAgent || '';
     const desktop = ['Windows', 'Linux', 'Macintosh'].some((v) => browser.includes(v));
     console.log('desktop', desktop);
     return desktop;
 }
 
-/** @param {{ id: number, todo: boolean }} event @param {number[]} todoList */
-export async function hndToggleTodo(event, todoList) {
-    // console.log('hndToggleTodo', {event, todoList})
+type TodoToggleEvent = { id: number; todo: boolean };
+
+export async function hndToggleTodo(event: TodoToggleEvent, todoList: number[]): Promise<void> {
     if (event.todo) {
         todoList.push(event.id);
     } else {
         const index = todoList.indexOf(event.id);
-        const x = todoList.splice(index, 1);
-        //DC: filter breaks reactivity :(
-        // todoList.re = todoList.filter((x) => x !== event.id);
+        todoList.splice(index, 1);
     }
-    const clone = [...todoList];
-    // console.log('saveAchievementsToDo', clone);
-    await saveAchievementsToDo(clone);
+
+    await saveAchievementsToDo([...todoList]);
 }
 
-export default {
+const utils = {
     readApiKey,
     saveApiKey,
     readLang,
@@ -253,5 +256,7 @@ export default {
     getQueryString,
     getQueryStringFlag,
     runsDesktop,
-    hndToggleTodo,
-}
+    hndToggleTodo
+};
+
+export default utils;

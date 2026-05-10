@@ -5,9 +5,9 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import type { PageData } from './$types';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	let { data }: { data: PageData } = $props();
 	let filter = $state('');
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 

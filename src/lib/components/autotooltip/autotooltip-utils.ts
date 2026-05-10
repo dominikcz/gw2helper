@@ -1,6 +1,6 @@
-type AutoTooltipRenderer = (container: HTMLElement, id: string | null, params: unknown) => unknown;
+export type AutoTooltipRenderer = (container: HTMLElement, id: string | number | null, params: unknown) => unknown;
 type AutoTooltipState = { customRenderers: Record<string, AutoTooltipRenderer> };
-type AutoTooltipOptions = { customRenderers?: Record<string, AutoTooltipRenderer> };
+export type AutoTooltipOptions = { customRenderers?: Record<string, AutoTooltipRenderer> };
 
 /**
  * @param {Window & typeof globalThis & { __autotooltip?: AutoTooltipState }} currentWindow

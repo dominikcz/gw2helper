@@ -2,8 +2,7 @@
 	import { nonpassive } from 'svelte/legacy';
 
 	import { autoTooltipInit } from './autotooltip-utils';
-
-	type AutoTooltipRenderer = (container: HTMLElement, id: string | null, params: unknown) => unknown;
+	import type { AutoTooltipRenderer } from './autotooltip-utils';
 
 	interface Props {
 		title?: string;

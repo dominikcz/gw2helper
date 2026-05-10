@@ -7,9 +7,10 @@
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { sum } from '$lib/utils';
 	import Progress from '$lib/components/progress/progress.svelte';
+	import type { PageData } from './$types';
 
 	interface Props {
-		data: any;
+		data: PageData;
 	}
 
 	let { data }: Props = $props();
@@ -141,7 +142,7 @@
 	</details>
 {/snippet}
 
-<Awaiter promise={data.legendaries}>
+<Awaiter promise={data.legendaries as Promise<LegendariesResult> | LegendariesResult}>
 	{#snippet children(result: LegendariesResult)}
 		{@const progressTrinkets = completionTrinkets(result)}
 		{@const progressUpgrades = completionUpgrades(result)}
@@ -180,7 +181,7 @@
 
 <h3>{$_('legendary.weapons')}</h3>
 
-<Awaiter promise={data.legendaries}>
+<Awaiter promise={data.legendaries as Promise<LegendariesResult> | LegendariesResult}>
 	{#snippet children(result: LegendariesResult)}
 		{@const progressWeapons = completionWeapons(result.weapons)}
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>

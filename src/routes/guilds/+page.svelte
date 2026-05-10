@@ -3,14 +3,31 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import type { PageData } from './$types';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	type GuildData = {
+		id: string;
+		emblem: {
+			background: { layers: string[] };
+			foreground: { layers: string[] };
+			flags: string[];
+		};
+		name: string;
+		tag: string;
+		motd?: string;
+		level: number;
+		member_count: number;
+		member_capacity: number;
+		aetherium: number;
+		favor: number;
+	};
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} >
-	{#snippet children(result: any[])}
+	{#snippet children(result: GuildData[])}
 		{#each result as guild (guild.id)}
 			<section class="guild-info" use:grungeBorder>
 				<div class="guild-header">

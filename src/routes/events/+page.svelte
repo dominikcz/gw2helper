@@ -8,9 +8,9 @@
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
 	import { t as _ } from '$lib/services/i18n';
+	import type { PageData } from './$types';
 
-	/** @type {{data: any}} */
-	let { data = $bindable() } = $props();
+	let { data = $bindable() }: { data: PageData } = $props();
 	let { remindersSettings } = $state(data);
 	$effect(() => {
 		remindersSettings = data.remindersSettings;
@@ -22,7 +22,7 @@
 	let showHeadings = $state(true);
 	let autoScroll = $state(!utils.runsDesktop());
 
-	let allEvents = $state<Record<string, any[]>>({}); // here we hold all events' data
+	let allEvents = $state<ReturnType<typeof eventsUtils.prepareDailyCalendar>>({}); // here we hold all events' data
 
 	onMount(async () => {
 		const currentSeason = data.apiService.currentSeason();
@@ -36,7 +36,7 @@
 		eventsUtils.excludeEvents(specialEvents);
 		eventsUtils.init();
 
-		allEvents = eventsUtils.prepareDailyCalendar() as Record<string, any[]>;
+		allEvents = eventsUtils.prepareDailyCalendar();
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
 		if (settings.showEventTimes !== undefined) showEventTimes = settings.showEventTimes;

@@ -557,7 +557,7 @@ const hydrateAchievementBits = async (bits: any[] = []) => {
 
     const miniIds = [...new Set(
         bits
-            .filter((bit: any) => (bit?.type === 'Minipet' || bit?.type === 'MiniPet') && bit?.id != null)
+            .filter((bit: any) => bit?.type === 'Minipet' && bit?.id != null)
             .map((bit: any) => Number(bit.id))
             .filter((id: number) => Number.isFinite(id))
     )];

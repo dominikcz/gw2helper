@@ -1,10 +1,7 @@
 import { autoTooltipInit } from "$lib/components/autotooltip/autotooltip-utils";
+import type { AutoTooltipOptions as CoreAutoTooltipOptions } from "$lib/components/autotooltip/autotooltip-utils";
 
-type AutotooltipOptions = {
-    customRenderers?: Record<string, (...args: any[]) => any>;
-};
-
-export function autotooltip(node: HTMLElement, options?: AutotooltipOptions) {
+export function autotooltip(node: HTMLElement, options?: CoreAutoTooltipOptions) {
     autoTooltipInit(node, options);
 
     const observer = new MutationObserver(() => {
@@ -19,7 +16,7 @@ export function autotooltip(node: HTMLElement, options?: AutotooltipOptions) {
     });
 
     return {
-        update(nextOptions?: AutotooltipOptions) {
+        update(nextOptions?: CoreAutoTooltipOptions) {
             options = nextOptions;
             autoTooltipInit(node, options);
         },

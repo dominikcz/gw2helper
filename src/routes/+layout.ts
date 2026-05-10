@@ -29,7 +29,20 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 	/** @type {string[]} */
 	const apiKeyHist = await utils.getKeyHist();
 
-	const returnObj: any = {
+	type TokenInfo = Awaited<ReturnType<typeof apiService.tokenInfo>>;
+	type LayoutResult = {
+		version: string;
+		apiKey: string;
+		apiKeyHist: string[];
+		apiService: typeof apiService;
+		apiLang: string;
+		toDoList: Promise<number[]>;
+		remindersSettings: ReminderSettings;
+		tokenInfo: TokenInfo;
+		reminders?: Record<string, string[]>;
+	};
+
+	const returnObj: LayoutResult = {
 		// @ts-ignore vite define
 		version: __VERSION__,
 		apiKey: key,
@@ -38,7 +51,7 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 		apiLang,
 		toDoList: utils.readAchievementsToDo(),
 		remindersSettings: new ReminderSettings(),
-		tokenInfo: {  },
+		tokenInfo: apiService.tokenInfo() as TokenInfo,
 	};
 
 	console.log('key', key);

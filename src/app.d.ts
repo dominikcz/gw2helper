@@ -1,9 +1,11 @@
+import type { AutoTooltipRenderer } from '$lib/components/autotooltip/autotooltip-utils';
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
 	interface Window {
 		__autotooltip?: {
-			customRenderers: Record<string, (container: HTMLElement, id: string | null, params: unknown) => unknown>;
+			customRenderers: Record<string, AutoTooltipRenderer>;
 		};
 	}
 

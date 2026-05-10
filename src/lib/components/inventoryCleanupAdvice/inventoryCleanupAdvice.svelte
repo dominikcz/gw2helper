@@ -64,7 +64,10 @@
 		itemsToGetRidOf: ItemAdvice[];
 	};
 
-	let { bank = [], shared = [], charactersItems = [] } = $props();
+	type InventorySource = InventoryItem[] | Promise<InventoryItem[]>;
+	type CharacterSource = CharacterItems[] | Promise<CharacterItems[]>;
+
+	let { bank = [], shared = [], charactersItems = [] }: { bank?: InventorySource; shared?: InventorySource; charactersItems?: CharacterSource } = $props();
 
 	let allData = new Promise<AdviceSummary>((resolve, reject) => {
 		Promise.all([bank, shared, charactersItems])
@@ -74,7 +77,7 @@
 			.catch((error) => reject(error));
 	});
 
-	let char = $state('--- any ---');
+	let char = $state('--- all ---');
 
 	const tooltipOptions = {
 		customRenderers: {
@@ -213,7 +216,7 @@
 	}
 
 	function getCharacters(itemsToStack: ItemAdvice[]) {
-		const list = ['--- any ---'];
+		const list = ['--- all ---'];
 
 		const sources = new Set<string>();
 		itemsToStack.forEach((element: ItemAdvice) => {
@@ -228,7 +231,7 @@
 	}
 
 	function filteredItems(items: ItemAdvice[]) {
-		if (!char || char == '--- any ---') return items;
+		if (!char || char == '--- all ---') return items;
 		return items.filter((x: ItemAdvice) => x.usage.some((u: ItemUsage) => u.source == char));
 	}
 </script>

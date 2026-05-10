@@ -3,8 +3,9 @@
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import { t as _ } from '$lib/services/i18n';
-	/** @type {{data: any}} */
-	let { data } = $props();
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
 
 	let filter = $state('');
 </script>

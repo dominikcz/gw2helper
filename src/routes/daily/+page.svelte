@@ -13,16 +13,28 @@
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import { expandToDoList } from '$lib/components/achievements/achievements';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
+	import type { PageData } from './$types';
+	import type { AchievementsData } from '$lib/components/achievements/achievements';
 
 	interface Props {
-		data: any;
+		data: PageData;
 	}
+
+	type VaultCategoryData = {
+		objectives: Array<{ claimed: boolean; acclaim: number }>;
+		meta_reward_claimed?: boolean;
+		meta_reward_astral?: number;
+		meta_progress_current?: number;
+		meta_progress_complete?: number;
+	};
+
+	type AccountSummary = { last_modified: string };
 
 	let { data }: Props = $props();
 
 	let sortBy = 'ap';
 	let showApiLinks = false;
-	let todoList = $state([]);
+	let todoList = $state<number[]>([]);
 
 	type WalletCurrency = {
 		id: number;
@@ -37,7 +49,7 @@
 	}
 
 	onMount(async () => {
-		todoList = await data.toDoList;
+		todoList = (await data.toDoList) as number[];
 	});
 
 	function astralAcclaimAvailable(wallet: WalletCurrency[]) {
@@ -58,7 +70,7 @@
 				target = Date.prototype.wxNextWeekDay(1, true, 7, 30, 0);
 				break;
 			case Period.special:
-				target = new Date(data.seasonEnd);
+				target = data.seasonEnd ? new Date(data.seasonEnd) : new Date();
 				break;
 		}
 		return target;
@@ -80,27 +92,27 @@
 
 <h2>{$_('daily.wizards_vault')}</h2>
 
-<Awaiter promise={data.wallet}>
+<Awaiter promise={data.wallet as Promise<WalletCurrency[]> | WalletCurrency[]}>
 	{#snippet children(result: WalletCurrency[])}
 		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={`${astralAcclaimAvailable(result)}`} image={asset('/assets/rewards/Astral_Acclaim.png')} />
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.account}>
-	{#snippet children(result: { last_modified: string })}
+<Awaiter promise={data.account as Promise<AccountSummary> | AccountSummary}>
+	{#snippet children(result: AccountSummary)}
 		{#if !currentDay(result.last_modified)}
 			<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
 		{/if}
-		<Awaiter promise={data.daily}>
-			{#snippet children(resultDaily: any)}
+		<Awaiter promise={data.daily as Promise<VaultCategoryData> | VaultCategoryData}>
+			{#snippet children(resultDaily: VaultCategoryData)}
 				{#if currentDay(result.last_modified)}
 					<WizardsVaultCategory title={$_('daily.daily')} data={resultDaily} targetTime={getTimerTarget(Period.daily)} />
 				{/if}
 			{/snippet}
 		</Awaiter>
 
-		<Awaiter promise={data.weekly}>
-			{#snippet children(resultWeekly: any)}
+		<Awaiter promise={data.weekly as Promise<VaultCategoryData> | VaultCategoryData}>
+			{#snippet children(resultWeekly: VaultCategoryData)}
 				{#if currentWeek(result.last_modified)}
 					<WizardsVaultCategory title={$_('daily.weekly')} data={resultWeekly} targetTime={getTimerTarget(Period.weekly)} />
 				{/if}
@@ -109,8 +121,8 @@
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.special}>
-	{#snippet children(result: any)}
+<Awaiter promise={data.special as Promise<VaultCategoryData> | VaultCategoryData}>
+	{#snippet children(result: VaultCategoryData)}
 		<WizardsVaultCategory title={$_('daily.special')} data={result} targetTime={getTimerTarget(Period.special)} />
 	{/snippet}
 </Awaiter>
@@ -118,10 +130,10 @@
 <h2>{$_('daily.achievements')}</h2>
 <h3>{$_('achievements.your_list')}</h3>
 
-<Awaiter promise={data.achievements}>
-	{#snippet children(result: any)}
-		{@const dailies = extractDaily(result) as any}
-		{@const weeklies = extractWeekly(result) as any}
+<Awaiter promise={data.achievements as Promise<AchievementsData> | AchievementsData}>
+	{#snippet children(result: AchievementsData)}
+		{@const dailies = extractDaily(result)}
+		{@const weeklies = extractWeekly(result)}
 		{@const dailiesWeeklies = extractDailyAndWeekly(result)}
 		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
 

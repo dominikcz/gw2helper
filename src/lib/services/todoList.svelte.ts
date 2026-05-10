@@ -2,7 +2,7 @@
 import utils from '$lib/utils';
 
 export default class ToDoList {
-    private _todos = $state([]);
+    private _todos = $state<number[]>([]);
 
     constructor() {
         utils.readAchievementsToDo().then(v => {

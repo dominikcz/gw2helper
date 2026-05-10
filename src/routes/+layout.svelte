@@ -29,7 +29,7 @@
 		apiKey: string;
 		apiLang: string;
 		apiKeyHist: string[];
-		apiService: any;
+		apiService: typeof import('$lib/apiService').default;
 		remindersSettings: { inAdvance: number; sound: SoundSpriteName };
 		tokenInfo: { name?: string; error?: string };
 		missingScopes?: string[];

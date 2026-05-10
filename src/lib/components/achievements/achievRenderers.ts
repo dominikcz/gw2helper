@@ -22,7 +22,7 @@ type AchievementData = {
 type RendererPayload = number[] | { bitsDone?: number[]; done?: boolean } | undefined;
 
 type ApiServiceLike = {
-    achievementsCache: (id: number) => AchievementData;
+    achievementsCache: (id: string | number) => AchievementData;
     itemsCache: (id: number) => CachedEntity;
     minisCache: (id: number) => CachedEntity;
     skinsCache: (id: number) => CachedEntity;
@@ -31,17 +31,36 @@ type ApiServiceLike = {
 
 const api = apiService as unknown as ApiServiceLike;
 
-export function achievProgressRenderer(node: HTMLElement, id: number | null, bitsDone: RendererPayload) {
-    if (!id) return false;
+function toRendererPayload(bitsDone: unknown): RendererPayload {
+    if (Array.isArray(bitsDone)) {
+        return bitsDone as number[];
+    }
+    if (bitsDone && typeof bitsDone === 'object') {
+        const payload = bitsDone as { bitsDone?: unknown; done?: unknown };
+        return {
+            bitsDone: Array.isArray(payload.bitsDone) ? payload.bitsDone as number[] : [],
+            done: typeof payload.done === 'boolean' ? payload.done : undefined,
+        };
+    }
+    return undefined;
+}
 
-    const achiev = api.achievementsCache(id);
+export function achievProgressRenderer(node: HTMLElement, id: string | number | null, bitsDone: unknown) {
+    if (id == null || id === '') return false;
+
+    const achievId = Number(id);
+    if (!Number.isFinite(achievId) || achievId === 0) return false;
+
+    const achiev = api.achievementsCache(achievId);
     if (!achiev.bits) return false;
 
-    const params = Array.isArray(bitsDone)
-        ? { bitsDone, done: !!achiev?.done }
+    const parsedBitsDone = toRendererPayload(bitsDone);
+
+    const params = Array.isArray(parsedBitsDone)
+        ? { bitsDone: parsedBitsDone, done: !!achiev?.done }
         : {
-            bitsDone: Array.isArray(bitsDone?.bitsDone) ? bitsDone.bitsDone : [],
-            done: typeof bitsDone?.done === 'boolean' ? bitsDone.done : !!achiev?.done,
+            bitsDone: Array.isArray(parsedBitsDone?.bitsDone) ? parsedBitsDone.bitsDone : [],
+            done: typeof parsedBitsDone?.done === 'boolean' ? parsedBitsDone.done : !!achiev?.done,
         };
 
     const props = {

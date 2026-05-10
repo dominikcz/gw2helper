@@ -8,9 +8,22 @@
 	import { t as _ } from '$lib/services/i18n';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+
+	type AccountData = {
+		name: string;
+		created_local: string;
+		last_modified_local: string;
+		created: string;
+		age: number;
+		fractal_level?: number;
+		wvw_rank?: number;
+		access: string[];
+		[key: string]: unknown;
+	};
 
 	interface Props {
-		data: any;
+		data: PageData;
 	}
 
 	let { data }: Props = $props();
@@ -27,8 +40,8 @@
 
 <h1>{$_('account.account_info')}</h1>
 
-<Awaiter promise={data.account}>
-	{#snippet children(result: any)}
+<Awaiter promise={data.account as Promise<AccountData> | AccountData}>
+	{#snippet children(result: AccountData)}
 		<h3>{result.name}</h3>
 		<ul>
 			<li>{$_('account.created_at')} <span>{result.created_local}</span></li>
@@ -124,8 +137,8 @@
 
 		{#if perm.includes('progression')}
 			<WidgetsGroup name={$_('account.levels')}>
-				<WidgetInfo title={$_('account.fractals')} value={result.fractal_level} image={asset('/assets/rewards/Daily_Fractals.png')} />
-				<WidgetInfo title="WvW" value={result.wvw_rank} image={asset('/assets/rewards/WvW_Ability_Point.png')} />
+				<WidgetInfo title={$_('account.fractals')} value={result.fractal_level ?? 0} image={asset('/assets/rewards/Daily_Fractals.png')} />
+				<WidgetInfo title="WvW" value={result.wvw_rank ?? 0} image={asset('/assets/rewards/WvW_Ability_Point.png')} />
 			</WidgetsGroup>
 		{:else}
 			<InfoBlock caption={$_('account.info.hint')}>{@html $_('account.info.hint-content')}</InfoBlock>

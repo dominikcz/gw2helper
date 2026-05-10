@@ -35,9 +35,9 @@
 	function toggleSegmentWatched(segment: EventSegment) {
 		console.log('toggleSegmentWatched', segment);
 		const hour = eventsUtils.getHour(segment.start);
-		let alarms = [];
+		let alarms: string[] = [];
 		if (reminders.hasEvent(segment.name)) {
-			alarms = reminders.getAlarms(segment.name);
+			alarms = reminders.getAlarms(segment.name) ?? [];
 			const idx = alarms.indexOf(hour);
 			if (idx >= 0) {
 				alarms.splice(idx, 1);

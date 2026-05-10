@@ -1,15 +1,26 @@
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, parent }) => {
-	const { apiService, todo } = await parent();
+	const { apiService, toDoList } = await parent();
 	const key = apiService.getApiKey();
-	const returnObj: any = {
+	type DailyLoadResult = {
+		wallet: unknown[] | Promise<unknown[]>;
+		daily: Record<string, unknown> | Promise<Record<string, unknown>>;
+		weekly: Record<string, unknown> | Promise<Record<string, unknown>>;
+		special: Record<string, unknown> | Promise<Record<string, unknown>>;
+		achievements: Record<string, unknown> | Promise<Record<string, unknown>>;
+		toDoList: unknown;
+		seasonEnd: string | null;
+		account?: Promise<Record<string, unknown>>;
+	};
+
+	const returnObj: DailyLoadResult = {
 		wallet: [],
 		daily: {},
 		weekly: {},
 		special: {},
 		achievements: {},
-		todo,
+		toDoList,
 		seasonEnd: null,
 	};
 	if (key) {

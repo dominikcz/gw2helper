@@ -4,21 +4,43 @@
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	import TransactionList from '$lib/components/trading-post/transactionList.svelte';
 	import { t as _ } from '$lib/services/i18n';
+	import type { PageData } from './$types';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	type DeliveryItem = {
+		id: number;
+		count: number;
+		[key: string]: unknown;
+	};
+
+	type Offer = {
+		id: number;
+		name: string;
+		price: number;
+		created: string;
+		unit_price?: number;
+		quantity?: number;
+		buys?: { unit_price: number; quantity: number };
+		sells?: { unit_price: number; quantity: number };
+		count?: number;
+		icon?: string;
+		rarity?: string;
+		locked?: boolean;
+		[key: string]: string | number | boolean | { unit_price: number; quantity: number } | undefined;
+	};
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <h1>{$_('layout.nav.trading-post')}</h1>
 
 <Awaiter promise={data.delivery} >
-	{#snippet children(result: { coins: number; items: any[] })}
+	{#snippet children(result: { coins: number; items: DeliveryItem[] })}
 		<DeliveryBox coins={result.coins} items={result.items} showTradingPostLink={false}/>
 	{/snippet}
 </Awaiter>
 
 <Awaiter promise={data.current} >
-	{#snippet children(result: { buys: any[]; sells: any[] })}
+	{#snippet children(result: { buys: Offer[]; sells: Offer[] })}
 		<div class="trading-container">
 			<details open use:grungeBorder >
 				<summary>{$_('trading-post.buying')}</summary>
