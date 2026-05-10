@@ -12,7 +12,7 @@ export default function () {
     return readable<boolean>(darkMode, set => {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', hndColorPrefChange);
 
-        function hndColorPrefChange(event) {
+        function hndColorPrefChange(event: MediaQueryListEvent) {
             console.log('darkMode', event.matches);
             set(event.matches);
         }

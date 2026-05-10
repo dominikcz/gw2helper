@@ -1,10 +1,15 @@
-<script lang="ts">
+<script lang="ts" generics="T">
 	import Spinner from '$lib/components/gw2spinner.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import InfoBlock from './infoBlock/infoBlock.svelte';
-    import { t as _ } from "$lib/services/i18n";
-	/** @type {{promise: any, children?: import('svelte').Snippet<[any]>}} */
-	let { promise, children } = $props();
+	import { t as _ } from '$lib/services/i18n';
+
+	interface Props {
+		promise: Promise<T> | T;
+		children?: import('svelte').Snippet<[T]>;
+	}
+
+	let { promise, children }: Props = $props();
 </script>
 
 {#await promise}

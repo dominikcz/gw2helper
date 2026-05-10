@@ -1,6 +1,9 @@
 export const ssr = false;
 export const trailingSlash = 'always';
 // export const prerender = true;
+/* global __NAME__, __VERSION__ */
+
+import type { LayoutLoad } from './$types';
 
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
@@ -8,12 +11,13 @@ import apiService from "$lib/apiService";
 import { loadTranslations, t as _ } from '$lib/services/i18n';
 import ReminderSettings from "$lib/services/reminderSettings.svelte";
 
+// @ts-ignore vite define
 console.log(__NAME__, __VERSION__);
 
-export async function load({ fetch, url }) {
+export const load: LayoutLoad = async ({ fetch, url }) => {
 	const { pathname } = url;
 
-	const initLocale = utils.readLang();
+	const initLocale = utils.readLang() || 'en';
 
 	await loadTranslations(initLocale, pathname);
 	let no_token = _.get('layout.no_token');
@@ -22,9 +26,11 @@ export async function load({ fetch, url }) {
 	const key = await utils.readApiKey();
 	// const apiService = await import("$lib/apiService.ts");
 	let apiLang = await utils.readApiLang();
+	/** @type {string[]} */
 	const apiKeyHist = await utils.getKeyHist();
 
-	const returnObj = {
+	const returnObj: any = {
+		// @ts-ignore vite define
 		version: __VERSION__,
 		apiKey: key,
 		apiKeyHist,
@@ -52,4 +58,4 @@ export async function load({ fetch, url }) {
 	}
 
 	return returnObj;
-}
+};

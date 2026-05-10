@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { TABS } from './tabs.svelte';
+	import type { TabsContext } from './tabs.svelte';
 	/** @type {{children?: import('svelte').Snippet}} */
-	let { children } = $props();
+	let { children = undefined } = $props();
 
-	const tab = {};
-	const { registerTab, selectTab, selectedTab } = getContext(TABS);
+	const tab: Record<string, unknown> = {};
+	const { registerTab, selectTab, selectedTab } = getContext<TabsContext>(TABS);
 
 	registerTab(tab);
 </script>

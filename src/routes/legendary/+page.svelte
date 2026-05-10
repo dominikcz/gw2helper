@@ -16,6 +16,29 @@
 
 	const armorPiecesCount = 7; // Helm, Shoulders, Coat, Gloves, Leggings, Boots, Aquatic Helm
 
+	type LegendaryItem = { id: number; name: string; icon: string; count: number; max_count: number };
+	type ArmorGroup = {
+		Helm: LegendaryItem[];
+		Shoulders: LegendaryItem[];
+		Coat: LegendaryItem[];
+		Gloves: LegendaryItem[];
+		Leggings: LegendaryItem[];
+		Boots: LegendaryItem[];
+		HelmAquatic: LegendaryItem[];
+	};
+	type TrinketsGroup = {
+		Accessory: LegendaryItem[];
+		Ring: LegendaryItem[];
+		Amulet: LegendaryItem[];
+	};
+	type LegendariesResult = {
+		armor: { Light: ArmorGroup; Medium: ArmorGroup; Heavy: ArmorGroup };
+		back: LegendaryItem[];
+		trinkets: TrinketsGroup;
+		upgrades: LegendaryItem[];
+		weapons: Record<string, LegendaryItem[]>;
+	};
+
 	const minReqWeapons = {
 		Axe: 2,
 		Dagger: 2,
@@ -36,14 +59,14 @@
 		Torch: 1,
 		Trident: 1,
 		Warhorn: 1,
-	};
+	} as Record<string, number>;
 
-	function done(items, minReq) {
+	function done(items: LegendaryItem[], minReq: number) {
 		const completed = sum(items, 'count');
 		return completed >= minReq;
 	}
 
-	function completionArmor(data) {
+	function completionArmor(data: ArmorGroup) {
 		let completed = 0;
 		if (sum(data.Helm, 'count')) completed++;
 		if (sum(data.Shoulders, 'count')) completed++;
@@ -54,7 +77,7 @@
 		return completed;
 	}
 
-	function completionTrinkets(data) {
+	function completionTrinkets(data: { back: LegendaryItem[]; trinkets: TrinketsGroup }) {
 		let completed = 0;
 		if (sum(data.back, 'count')) completed++;
 		if (sum(data.trinkets.Accessory, 'count')) completed++;
@@ -63,11 +86,11 @@
 		return completed;
 	}
 
-	function completionUpgrades(data) {
+	function completionUpgrades(data: { upgrades: LegendaryItem[] }) {
 		return sum(data.upgrades, 'count');
 	}
 
-	function completionWeapons(data) {
+	function completionWeapons(data: Record<string, LegendaryItem[]>) {
 		let completed = 0;
 		Object.keys(minReqWeapons).forEach((x) => {
 			completed += Math.min(minReqWeapons[x], sum(data[x], 'count'));
@@ -86,7 +109,7 @@
 
 <h3>{$_('legendary.armor')}</h3>
 
-{#snippet unlocksList(caption, items, minReq = 1, restricted = false)}
+{#snippet unlocksList(caption: string, items: LegendaryItem[], minReq = 1, restricted = false)}
 	<div class="equip" class:done={done(items, minReq)} class:restricted>
 		<h4>{caption}</h4>
 		<div class="unlocks">
@@ -97,29 +120,29 @@
 	</div>
 {/snippet}
 
-<Awaiter promise={data.legendaries}>
-	{#snippet unlockGroup(caption, weightData)}
-		{@const progressArmor = completionArmor(weightData)}
-		<details use:grungeBorder use:autotooltip={tooltipOptions}>
-			<summary
-				>{$_('legendary.armor_type.'+caption.toLowerCase())}
-				<div class="info">
-					<Progress value={progressArmor} max={armorPiecesCount} label={`${progressArmor} / ${armorPiecesCount}`} />
-				</div>
-			</summary>
-			<article>
-				{@render unlocksList($_('legendary.armor_pieces.helm'), weightData.Helm, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.shoulders'), weightData.Shoulders, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.coat'), weightData.Coat, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.gloves'), weightData.Gloves, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.leggings'), weightData.Leggings, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.boots'), weightData.Boots, 1, true)}
-				{@render unlocksList($_('legendary.armor_pieces.aquatic'), weightData.HelmAquatic, 1, true)}
-			</article>
-		</details>
-	{/snippet}
+{#snippet unlockGroup(caption: string, weightData: ArmorGroup)}
+	{@const progressArmor = completionArmor(weightData)}
+	<details use:grungeBorder use:autotooltip={tooltipOptions}>
+		<summary
+			>{$_('legendary.armor_type.'+caption.toLowerCase())}
+			<div class="info">
+				<Progress value={progressArmor} max={armorPiecesCount} label={`${progressArmor} / ${armorPiecesCount}`} />
+			</div>
+		</summary>
+		<article>
+			{@render unlocksList($_('legendary.armor_pieces.helm'), weightData.Helm, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.shoulders'), weightData.Shoulders, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.coat'), weightData.Coat, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.gloves'), weightData.Gloves, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.leggings'), weightData.Leggings, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.boots'), weightData.Boots, 1, true)}
+			{@render unlocksList($_('legendary.armor_pieces.aquatic'), weightData.HelmAquatic, 1, true)}
+		</article>
+	</details>
+{/snippet}
 
-	{#snippet children(result)}
+<Awaiter promise={data.legendaries}>
+	{#snippet children(result: LegendariesResult)}
 		{@const progressTrinkets = completionTrinkets(result)}
 		{@const progressUpgrades = completionUpgrades(result)}
 		{@render unlockGroup($_('legendary.armor_type_short.light'), result.armor.Light)}
@@ -158,7 +181,7 @@
 <h3>{$_('legendary.weapons')}</h3>
 
 <Awaiter promise={data.legendaries}>
-	{#snippet children(result)}
+	{#snippet children(result: LegendariesResult)}
 		{@const progressWeapons = completionWeapons(result.weapons)}
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>

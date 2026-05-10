@@ -10,7 +10,7 @@
 
 <h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} >
-	{#snippet children(result)}
+	{#snippet children(result: any[])}
 		{#each result as guild (guild.id)}
 			<section class="guild-info" use:grungeBorder>
 				<div class="guild-header">

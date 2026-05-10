@@ -30,6 +30,7 @@
 	let reminders = new Reminders();
 
 	const remindersStore = reminders.$store;
+	const segments = $derived(Object.values(event.segments) as EventSegment[]);
 
 	function toggleSegmentWatched(segment: EventSegment) {
 		console.log('toggleSegmentWatched', segment);
@@ -54,7 +55,7 @@
 </script>
 
 <div class="event-bar">
-	{#each Object.values(event.segments) as segment}
+	{#each segments as segment}
 	{@const _watched = reminders.isWatched($remindersStore, segment)}
 	{@const _title = `${$_(_watched ? 'events.click_to_remove' : 'events.click_to_add')} - ${segment.name}`}
 		<div

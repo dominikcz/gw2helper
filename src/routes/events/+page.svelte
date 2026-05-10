@@ -22,7 +22,7 @@
 	let showHeadings = $state(true);
 	let autoScroll = $state(!utils.runsDesktop());
 
-	let allEvents = $state([]); // here we hold all events' data
+	let allEvents = $state<Record<string, any[]>>({}); // here we hold all events' data
 
 	onMount(async () => {
 		const currentSeason = data.apiService.currentSeason();
@@ -36,7 +36,7 @@
 		eventsUtils.excludeEvents(specialEvents);
 		eventsUtils.init();
 
-		allEvents = eventsUtils.prepareDailyCalendar();
+		allEvents = eventsUtils.prepareDailyCalendar() as Record<string, any[]>;
 		const settings = await utils.readEventTimerSettings();
 		if (settings.showChatLinks !== undefined) showChatLinks = settings.showChatLinks;
 		if (settings.showEventTimes !== undefined) showEventTimes = settings.showEventTimes;

@@ -10,12 +10,14 @@
 	type ItemListEntry = {
 		id: number;
 		name?: string;
+		icon?: string;
 		description?: string;
 		type?: string;
 		subtype?: string;
 		subdescr?: string;
 		rarity?: string;
-		count?: number;
+		count: number;
+		locked?: boolean;
 		flags?: string[];
 	};
 

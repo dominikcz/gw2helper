@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS: ClockOptions = {
 }
 
 export default class Clock {
-    private timerId: number;
+    private timerId: ReturnType<typeof setTimeout> | null = null;
     private time = $state(new Date);
     private interval: number;
 
@@ -24,7 +24,11 @@ export default class Clock {
             this.interval = 10; // just a safeguard
         }
         this.updateTime();
-        onDestroy(() => clearInterval(this.timerId));
+        onDestroy(() => {
+            if (this.timerId) {
+                clearTimeout(this.timerId);
+            }
+        });
     }
 
     private updateTime() {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset } from '$app/paths';
 	import EventsList from './eventsList.svelte';
 	import SearchInput from '../searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
@@ -10,7 +10,28 @@
 	import utils from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n.js';
 
-	/** @type {{events: any, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string, sortBy?: 'time' | 'name'}} */
+	type ReminderEvent = {
+		name: string;
+		startTimes: string[];
+		next?: string;
+		watched?: boolean;
+		alarms?: string[];
+		bg?: string;
+		link?: string;
+		chatlink?: string;
+	};
+
+	interface ReminderTogglePayload {
+		name: string;
+		watched: boolean;
+	}
+
+	interface ReminderAlarmPayload {
+		name: string;
+		alarms: string[];
+	}
+
+	/** @type {{events: Record<string, ReminderEvent[]>, showChatLinks?: boolean, updateInterval?: number, inAdvance?: number, sound?: string, sortBy?: 'time' | 'name'}} */
 	let {
 		events = $bindable(),
 		showChatLinks = false,
@@ -30,11 +51,11 @@
 
 	let version = $state(0);
 
-	function hndAlarmsChange(event) {
+	function hndAlarmsChange(event: ReminderAlarmPayload) {
 		reminders.updateAlarms(event.name, event.alarms);
 	}
 
-	function getWatched(ver) {
+	function getWatched(_ver: number): ReminderEvent[] {
 		// const _watched = [];
 		// Object.keys(events).forEach((cat) => {
 		// 	events[cat].forEach((x) => {
@@ -48,14 +69,14 @@
 		// });
 		// return _watched;
 
-		const _watched = [];
-		const alarms = reminders.getAllAlarms();
+		const _watched: ReminderEvent[] = [];
+		const alarms = reminders.getAllAlarms() as Record<string, string[]>;
 		const allObserved = Object.keys(alarms);
-		const filteredEvents = Object.values(events).flat();
+		const filteredEvents = Object.values(events).flat() as ReminderEvent[];
 
-		allObserved.forEach((ev) => {
+		allObserved.forEach((ev: string) => {
 			const hours = alarms[ev];
-			const found = filteredEvents.find((x) => x.name == ev) || { name: ev, startTimes: hours };
+			const found = filteredEvents.find((x: ReminderEvent) => x.name == ev) || { name: ev, startTimes: hours };
 			found.alarms = [...(hours || [])];
 			found.watched = true;
 			_watched.push(found);
@@ -64,34 +85,34 @@
 		return sort(_watched, 'name');
 	}
 
-	function sort(collection, sortBy) {
+	function sort(collection: ReminderEvent[], sortBy: 'time' | 'name') {
 		if (sortBy == 'name') {
-			collection.sort((a, b) => a.name.localeCompare(b.name));
+			collection.sort((a: ReminderEvent, b: ReminderEvent) => a.name.localeCompare(b.name));
 		} else {
-			collection.sort((a, b) => a.next.localeCompare(b.next));
+			collection.sort((a: ReminderEvent, b: ReminderEvent) => (a.next ?? '').localeCompare(b.next ?? ''));
 		}
 		return collection;
 	}
 
-	function getNotWatched(events, filter, sortBy, ver) {
-		const notWatched = events.filter((x) => !x.watched);
-		return sort(helperUtils.filterCollection(notWatched, ['name'], filter), sortBy);
+	function getNotWatched(events: ReminderEvent[], filter: string, sortBy: 'time' | 'name', _ver: number) {
+		const notWatched = events.filter((x: ReminderEvent) => !x.watched);
+		return sort(helperUtils.filterCollection(notWatched, ['name'], filter) as ReminderEvent[], sortBy);
 	}
 
-	function getEvent(name) {
-		let _event;
+	function getEvent(name: string): ReminderEvent | undefined {
+		let _event: ReminderEvent | undefined;
 		Object.keys(events).some((cat) => {
-			_event = events[cat].find((x) => x.name == name);
+			_event = events[cat].find((x: ReminderEvent) => x.name == name);
 			return _event !== undefined;
 		});
 		return _event;
 	}
 
 	function updateNextEvents() {
-		Object.keys(events).forEach((catKey) => {
+		Object.keys(events).forEach((catKey: string) => {
 			const cat = events[catKey];
 			let changed = false;
-			cat.forEach((event) => {
+			cat.forEach((event: ReminderEvent) => {
 				const newNext = eventsUtils.getNextOccurence(event.startTimes, time.value);
 				if (event.next != newNext) {
 					event.next = newNext;
@@ -108,8 +129,11 @@
 		updateNextEvents();
 	}
 
-	async function hndToggleWatched(event) {
+	async function hndToggleWatched(event: ReminderTogglePayload) {
 		const _event = getEvent(event.name);
+		if (!_event) {
+			return;
+		}
 		if (event.watched) {
 			_event.alarms = [];
 			_event.watched = true;
@@ -128,7 +152,7 @@
 	}
 
 	function testAlarm() {
-		dispatchEvent(
+		window.dispatchEvent(
 			new CustomEvent('notification-test', {
 				bubbles: true,
 				detail: {
@@ -145,7 +169,7 @@
 <h2>{$_('events.watched.watched')}</h2>
 <EventsList events={getWatched(version)} onToggleWatched={hndToggleWatched} onAlarmsChange={hndAlarmsChange}>
 	{@html $_('events.watched.empty_list', {
-		image: `<img src="${resolve('/assets/rewards/map_heart_empty.png')}" alt="not on list" class="icon-small" />`,
+		image: `<img src="${asset('/assets/rewards/map_heart_empty.png')}" alt="not on list" class="icon-small" />`,
 	})}
 </EventsList>
 
@@ -178,7 +202,7 @@
 </section>
 
 {#each Object.keys(events) as cat}
-	{@const notWatched = getNotWatched(events[cat], filter, sortBy, version)}
+	{@const notWatched = getNotWatched(events[cat], filter, sortBy as 'time' | 'name', version)}
 	{#if notWatched}
 		<EventsCategory events={notWatched} {showChatLinks} category={cat} onToggleWatched={hndToggleWatched} />
 	{/if}

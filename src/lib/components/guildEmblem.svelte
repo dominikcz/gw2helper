@@ -1,8 +1,18 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 
+	interface EmblemLayerSet {
+		layers: string[];
+	}
+
+	interface GuildEmblem {
+		background: EmblemLayerSet;
+		foreground: EmblemLayerSet;
+		flags: string[];
+	}
+
 	interface Props {
-		emblem: any;
+		emblem: GuildEmblem;
 		width?: number;
 		height?: number;
 		background?: string;
@@ -15,8 +25,8 @@
 		background = '#000'
 	}: Props = $props();
 
-	let canvas: HTMLCanvasElement = $state();
-	let ctx: CanvasRenderingContext2D | null = $state();
+	let canvas: HTMLCanvasElement | null = $state(null);
+	let ctx: CanvasRenderingContext2D | null = $state(null);
 
 	interface LayerData {
 		img: HTMLImageElement;
@@ -52,7 +62,7 @@
 	}
 
 	async function prepareEmblem() {
-		if (ctx && emblem) {
+		if (ctx && emblem && canvas) {
 			ctx.fillStyle = background;
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			const tasks = Array<Promise<LayerData>>();
@@ -68,7 +78,7 @@
 	}
 
 	onMount(() => {
-		ctx = canvas.getContext('2d');
+		ctx = canvas?.getContext('2d') ?? null;
 	});
 
 	onDestroy(() => {});

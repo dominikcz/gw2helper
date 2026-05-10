@@ -7,8 +7,27 @@
 	import { autotooltip } from '$lib/actions/autotooltip.js';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	/** @type {{showTradingPostLink?: boolean, coins?: number, items?: any}} */
-	let { showTradingPostLink = true, coins = 0, items = [] } = $props();
+	type DeliveryItem = {
+		id: number;
+		name?: string;
+		count: number;
+		description?: string;
+		type?: string;
+		subtype?: string;
+		rarity?: string;
+		flags?: string[];
+		icon?: string;
+		locked?: boolean;
+		[key: string]: unknown;
+	};
+
+	interface Props {
+		showTradingPostLink?: boolean;
+		coins?: number;
+		items?: DeliveryItem[];
+	}
+
+	let { showTradingPostLink = true, coins = 0, items = [] }: Props = $props();
 </script>
 
 {#if coins || items.length}

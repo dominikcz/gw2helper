@@ -1,25 +1,22 @@
-/** @typedef {{ customRenderers: Record<string, (...args: any[]) => any> }} AutoTooltipState */
+type AutoTooltipRenderer = (container: HTMLElement, id: string | null, params: unknown) => unknown;
+type AutoTooltipState = { customRenderers: Record<string, AutoTooltipRenderer> };
+type AutoTooltipOptions = { customRenderers?: Record<string, AutoTooltipRenderer> };
 
 /**
  * @param {Window & typeof globalThis & { __autotooltip?: AutoTooltipState }} currentWindow
  */
-function getAutoTooltipState(currentWindow) {
+function getAutoTooltipState(currentWindow: Window & typeof globalThis & { __autotooltip?: AutoTooltipState }) {
     return currentWindow.__autotooltip;
 }
 
-/**
- * @param {ParentNode | Document} node
- * @param {{ customRenderers?: Record<string, (...args: any[]) => any> }} [options]
- */
-export function autoTooltipInit(node, options) {
+export function autoTooltipInit(node: ParentNode | Document = document, options?: AutoTooltipOptions) {
     const autoTooltipState = getAutoTooltipState(window);
 
     if (options && options.customRenderers && autoTooltipState){
         Object.assign(autoTooltipState.customRenderers, options.customRenderers);
     }
     let count = 0;
-    node ??= document;
-    node.querySelectorAll('.autotooltip [title], .autotooltip[title], .autotooltip[data-autotooltip-id], .autotooltip [data-autotooltip-id]').forEach((elem) => {
+    node.querySelectorAll('.autotooltip [title], .autotooltip[title], .autotooltip[data-autotooltip-id], .autotooltip [data-autotooltip-id]').forEach((elem: Element) => {
         const t = elem.getAttribute('title');
         const id = elem.getAttribute('data-autotooltip-id');
         if ((t && t.length > 0) || (id && !elem.hasAttribute('data-autotooltip'))) {

@@ -18,11 +18,7 @@ export default defineConfig({
 		__VERSION__: `"${pkg.version}"`
 	},
 	css: {
-		preprocessorOptions: {
-			scss: {
-				api: "modern-compiler"
-			}
-		}
+		preprocessorOptions: {}
 	},
 	server: {
 		fs: {

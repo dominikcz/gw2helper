@@ -10,30 +10,36 @@ const DEFAULT_FILTER_OPTIONS: FilterOptions = {
     nonZeroField: 'count',
 }
 
-function match(word: string, obj: object, properties: Array<string>) {
+type AnyRecord = Record<string, unknown> & {
+    count?: number;
+};
+
+function match(word: string, obj: AnyRecord, properties: Array<string>) {
     // at least one property has to match
     return properties.some((x) => {
-        if (obj['count'] != undefined && ['>', '<', '='].includes(word.charAt(0))) {
+        const count = obj.count;
+        if (count != undefined && ['>', '<', '='].includes(word.charAt(0))) {
             if (word.startsWith('=')) {
-                return obj.count ? obj.count == parseInt(word.slice(1)) : false;
+                return count ? count == parseInt(word.slice(1)) : false;
             } else if (word.startsWith('>=')) {
-                return obj.count ? obj.count >= parseInt(word.slice(2)) : false;
+                return count ? count >= parseInt(word.slice(2)) : false;
             } else if (word.startsWith('>')) {
-                return obj.count ? obj.count > parseInt(word.slice(1)) : false;
+                return count ? count > parseInt(word.slice(1)) : false;
             } else if (word.startsWith('<=')) {
-                return obj.count ? obj.count <= parseInt(word.slice(2)) : false;
+                return count ? count <= parseInt(word.slice(2)) : false;
             } else if (word.startsWith('<')) {
-                return obj.count ? obj.count < parseInt(word.slice(1)) : false;
+                return count ? count < parseInt(word.slice(1)) : false;
             }
         } else {
-            const t = typeof obj[x];
-            if (t === 'string' && obj[x].toLowerCase().includes(word)) {
+            const value = obj[x];
+            const t = typeof value;
+            if (t === 'string' && (value as string).toLowerCase().includes(word)) {
                 return true;
             }
-            if (t === 'number' && ('' + obj[x]).includes(word)) {
+            if (t === 'number' && ('' + value).includes(word)) {
                 return true;
             }
-            if (Array.isArray(obj[x]) && (obj[x].join(',').toLowerCase()).includes(word)) {
+            if (Array.isArray(value) && value.join(',').toLowerCase().includes(word)) {
                 return true;
             }
         }
@@ -41,7 +47,7 @@ function match(word: string, obj: object, properties: Array<string>) {
     });
 }
 
-function fullTextSearch(filter: string, obj: object, properties: Array<string>) {
+function fullTextSearch(filter: string, obj: AnyRecord, properties: Array<string>) {
     if (!filter) return true;
     const f = filter.toLowerCase();
 
@@ -50,8 +56,9 @@ function fullTextSearch(filter: string, obj: object, properties: Array<string>) 
     return words.every((x) => match(x, obj, properties));
 }
 
-function filterCollection(collection: Array<object>, fields: Array<string>, filter: string, options: FilterOptions = DEFAULT_FILTER_OPTIONS) {
-    let filtered = collection.filter((x) => (!options.nonZero || x[options.nonZeroField] > 0) && fullTextSearch(filter, x, fields));
+function filterCollection<T extends AnyRecord>(collection: Array<T>, fields: Array<string>, filter: string, options: FilterOptions = DEFAULT_FILTER_OPTIONS): Array<T> {
+    const nonZeroField = options.nonZeroField ?? 'count';
+    let filtered = collection.filter((x) => (!options.nonZero || (Number(x[nonZeroField]) || 0) > 0) && fullTextSearch(filter, x, fields));
 
     // if (sortBy == SortType.Slots) {
     // 	console.log('sorting by slots...');
@@ -69,7 +76,7 @@ function filterCollection(collection: Array<object>, fields: Array<string>, filt
     // 	console.log('not sorting...');
     // }
     document.body.querySelectorAll('details.searchable').forEach((e) => {
-        e.setAttribute('open', true);
+        e.setAttribute('open', 'true');
     });
     return filtered;
 }
@@ -84,61 +91,76 @@ function generateId(len: number | undefined): string {
     return Array.from(arr, dec2hex).join('')
 }
 
-function diff(createdAt) {
+function diff(createdAt: string | Date | number) {
     const dt = new Date(createdAt);
     return Math.floor((new Date().getTime() - dt.getTime()) / (1000 * 3600 * 24));
 }
-function tillBirthday(createdAt) {
+function tillBirthday(createdAt: string | Date | number) {
     return 365 - (diff(createdAt) % 365);
 }
 
-function age(createdAt) {
+function age(createdAt: string | Date | number) {
     return Math.floor(diff(createdAt) / 365);
 }
 
-function hoursPlayed(time) {
+function hoursPlayed(time: number) {
     return Math.trunc(time / 3600);
 }
 
-function wikiLink(name) {
+function wikiLink(name: string) {
     return name ? `https://wiki.guildwars2.com/wiki/${name}`.replaceAll(' ', '_') : '#';
 }
 
-function apiItemLink(id) {
+function apiItemLink(id: number | string) {
     return `https://api.guildwars2.com/v2/items/${id}`;
 }
 
-function getDeepProp(obj, str) {
-    if (typeof obj !== 'object' || obj === undefined) return obj;
+function getDeepProp(obj: unknown, str: string): unknown {
+    if (typeof obj !== 'object' || obj === undefined || obj === null) return obj;
+    if (!str) return obj;
     const fields = str.split(".");
-    return getDeepProp(obj[fields[0]], fields.slice(1).join("."));
+    const head = fields[0];
+    const tail = fields.slice(1).join(".");
+    return getDeepProp((obj as Record<string, unknown>)[head], tail);
 }
 
-export function mapFields(obj, fields) {
+export function mapFields(obj: AnyRecord, fields: Array<string | Record<string, unknown>>) {
     if (fields.length) {
-        const res = {};
-        fields.forEach(x => {
+        const res: Record<string, unknown> = {};
+        fields.forEach((x) => {
             if (wxjs_types.isObject(x)) {
-                for (const [key, value] of Object.entries(x)) {
+                for (const [key, value] of Object.entries(x as Record<string, unknown>)) {
                     res[key] = value;
                 }
             } else {
-                res[x] = getDeepProp(obj, x);
+                const key = x as string;
+                res[key] = getDeepProp(obj, key);
             }
-        })
+        });
         return res;
     }
     return obj;
 }
 
-export function groupBy(collection, groups = [], mappings) {
-    const grouped = {};
-    collection.forEach((x) => {
-        groups.reduce((o, g, i) => {
-            let v = getDeepProp(x, g);
-            o[v] = o[v] || (i + 1 === groups.length ? [] : {});
-            return o[v];
-        }, grouped).push(mapFields(x, mappings));
+export function groupBy(collection: AnyRecord[], groups: string[] = [], mappings: Array<string | Record<string, unknown>>) {
+    const grouped: Record<string, unknown> = {};
+    collection.forEach((x: AnyRecord) => {
+        let cursor: Record<string, unknown> = grouped;
+        groups.forEach((g: string, i: number) => {
+            const v = String(getDeepProp(x, g));
+            cursor[v] = cursor[v] || (i + 1 === groups.length ? [] : {});
+            if (i + 1 < groups.length) {
+                cursor = cursor[v] as Record<string, unknown>;
+            }
+        });
+        const finalKey = String(getDeepProp(x, groups[groups.length - 1] || ''));
+        const bucket = (groups.length ? cursor[finalKey] : grouped.__root) as unknown[] | undefined;
+        if (bucket) {
+            bucket.push(mapFields(x, mappings));
+        } else {
+            grouped.__root = (grouped.__root as unknown[] | undefined) || [];
+            (grouped.__root as unknown[]).push(mapFields(x, mappings));
+        }
     });
     return grouped;
 }

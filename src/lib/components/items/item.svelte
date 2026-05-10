@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 	import { getQueryStringFlag } from '$lib/utils';
 	interface Props {
@@ -8,13 +8,12 @@
 			name?: string;
 			icon?: string;
 			rarity?: string;
-			count: number;
+			count?: number;
 			locked?: boolean;
 		};
 	}
 
 	let { item }: Props = $props();
-	const asset = (path: string) => `${base}${path}`;
 	const showApiLinks = getQueryStringFlag('show-api-links');
 
 	function rarityClass() {
@@ -24,7 +23,7 @@
 
 <figure class={rarityClass()}>
 	{#if item.name}
-		<span data-autotooltip-renderer="img.item" data-autotooltip-id={item.id} data-autotooltip-params={JSON.stringify({ count: item.count })}>
+		<span data-autotooltip-renderer="img.item" data-autotooltip-id={item.id} data-autotooltip-params={JSON.stringify({ count: item.count ?? 0 })}>
 			<a href={helperUtils.wikiLink(item.name)} target="_blank">
 				<img alt={item.name} src={item.icon} class:locked={item.locked} loading="lazy" decoding="async" fetchpriority="low" />
 			</a>
@@ -39,7 +38,7 @@
 		<img alt="invalid id: {item.id}" src={asset('/assets/Talk_question_mark_option.png')} class="no-link" />
 		<figcaption class="id-label">id: {item.id}</figcaption>
 	{/if}
-	{#if item.count > 1}<figcaption>{item.count}</figcaption>{/if}
+	{#if (item.count ?? 0) > 1}<figcaption>{item.count}</figcaption>{/if}
 </figure>
 
 <style lang="scss">

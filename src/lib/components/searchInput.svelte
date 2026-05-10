@@ -5,10 +5,10 @@
 	interface Props {
 		debounceTime?: number;
 		value?: string;
-		id?: any;
+		id?: string;
 		options?: string[];
-		children?: import('svelte').Snippet<[any]>;
-		[key: string]: any;
+		children?: import('svelte').Snippet<[ { key: string }? ]>;
+		[key: string]: unknown;
 	}
 
 	let { 
@@ -20,16 +20,17 @@
 		...rest
 	}: Props = $props();
 	
-	let ref: HTMLElement = $state();
-	let inputRef: HTMLElement = $state();
+	let ref: HTMLElement | null = $state(null);
+	let inputRef: HTMLInputElement | null = $state(null);
 
 	let showDropdown: boolean = $state(false);
 
-	let timer: number;
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
-	const debounceFilter = (e) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => (value = e.target.value), debounceTime);
+	const debounceFilter = (e: Event) => {
+		if (timer) clearTimeout(timer);
+		const target = e.target as HTMLInputElement | null;
+		timer = setTimeout(() => (value = target?.value ?? ''), debounceTime);
 	};
 
 	const toggleDropdown = () => (showDropdown = !showDropdown);

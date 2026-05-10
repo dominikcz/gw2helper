@@ -1,10 +1,10 @@
 <script lang="ts">
 	interface Props {
 		title: string;
-		value: string;
+		value: string | number;
 		image?: string;
-		children?: import('svelte').Snippet<[any]>;
-		[key: string]: any;
+		children?: import('svelte').Snippet<[ { value: string | number } ]>;
+		[key: string]: unknown;
 	}
 
 	let {

@@ -1,5 +1,4 @@
 Date.prototype.wxUseTimeOffset = true;
-
 Date.prototype.wxToLocaleISOString = function () {
 	if (this.wxUseTimeOffset) {
 		const tzoffset = this.getTimezoneOffset() * 60000;
@@ -33,25 +32,27 @@ Date.prototype.wxToFriendlyText = function () {
 	}
 };
 
-function setTime(dt, utc, atHour, atMinute, atSecond) {
+type OptionalTimePart = number | null | undefined;
+
+function setTime(dt: Date, utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart): Date {
 	if (utc) {
-		if (atHour !== null) {
+		if (atHour != null) {
 			dt.setUTCHours(atHour)
 		}
-		if (atMinute !== null) {
+		if (atMinute != null) {
 			dt.setUTCMinutes(atMinute)
 		}
-		if (atSecond !== null) {
+		if (atSecond != null) {
 			dt.setUTCSeconds(atSecond)
 		}
 	} else {
-		if (atHour !== null) {
+		if (atHour != null) {
 			dt.setHours(atHour)
 		}
-		if (atMinute !== null) {
+		if (atMinute != null) {
 			dt.setMinutes(atMinute)
 		}
-		if (atSecond !== null) {
+		if (atSecond != null) {
 			dt.setSeconds(atSecond)
 		}
 	}
@@ -59,25 +60,25 @@ function setTime(dt, utc, atHour, atMinute, atSecond) {
 	return dt;
 }
 
-function setDate(daysAdd, utc, atHour, atMinute, atSecond){
+function setDate(daysAdd: number, utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart): Date {
 	let newDate = new Date();
 	newDate.setDate(newDate.getDate() + daysAdd);
 	return setTime(newDate, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxTomorrow = function (utc, atHour, atMinute, atSecond) {
+Date.prototype.wxTomorrow = function (utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart) {
 	return setDate(1, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxYesterday = function (utc, atHour, atMinute, atSecond) {
+Date.prototype.wxYesterday = function (utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart) {
 	return setDate(-1, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxToday = function (utc, atHour, atMinute, atSecond) {
+Date.prototype.wxToday = function (utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart) {
 	return setDate(0, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxNextWeekDay = function (weekDay = 1, utc, atHour, atMinute, atSecond) {
+Date.prototype.wxNextWeekDay = function (weekDay = 1, utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart) {
 	const d = new Date();
 	const currentWeekDay = d.getDay();
 	const currentTime = d.getHours() * 60 * 60 + d.getMinutes() * 60 + d.getSeconds();
@@ -92,14 +93,14 @@ Date.prototype.wxNextWeekDay = function (weekDay = 1, utc, atHour, atMinute, atS
 	return setTime(d, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxNextQuarterOfYear = function (utc, atHour, atMinute, atSecond) {
+Date.prototype.wxNextQuarterOfYear = function (utc?: boolean, atHour?: OptionalTimePart, atMinute?: OptionalTimePart, atSecond?: OptionalTimePart) {
 	const today = new Date();
 	const quarter = Math.floor((today.getMonth() + 3) / 3);
 	const nextq = (quarter == 4) ? new Date(today.getFullYear() + 1, 1, 1) : new Date(today.getFullYear(), quarter * 3, 1);
 	return setTime(nextq, utc, atHour, atMinute, atSecond);
 }
 
-Date.prototype.wxGetPeriodBegin = function (interval, units) {
+Date.prototype.wxGetPeriodBegin = function (interval: string, units: number) {
 	const dt = new Date(this.getTime());
 	// without break statements!;
 	/* eslint-disable  no-fallthrough */
@@ -109,7 +110,7 @@ Date.prototype.wxGetPeriodBegin = function (interval, units) {
 			dt.setMonth(1);
 		case 'month':
 		case 'months':
-			dt.setDay(1);
+			dt.setDate(1);
 		case 'day':
 		case 'days':
 			dt.setHours(0);
@@ -156,7 +157,7 @@ Date.prototype.wxGetNextQuarter = function () {
 	return dt;
 };
 
-Date.prototype.wxEquals = function (d) {
+Date.prototype.wxEquals = function (d?: Date) {
 	return d ? this.getTime() === d.getTime() : false;
 };
 
@@ -165,14 +166,14 @@ Date.prototype.wxClone = function () {
 };
 
 const wxdates = {
-	roundTimeTo15min: function (dt) {
+	roundTimeTo15min: function (dt: Date) {
 		dt.setMilliseconds(0);
 		dt.setSeconds(0);
 		dt.setMinutes(Math.round(dt.getMinutes() / 15) * 15);
 		return dt;
 	},
 
-	friendlyDateTime: function (dt) {
+	friendlyDateTime: function (dt: string | Date) {
 		if (typeof dt == 'string') {
 			return dt.replace('T', ' ').substring(0, 19);
 		}
@@ -180,8 +181,11 @@ const wxdates = {
 		return dt.toISOString().replace('T', ' ');
 	},
 
-	durationToFriendlyText: function (durationInSeconds, precise = true) {
+	durationToFriendlyText: function (durationInSeconds: number | null, precise = true) {
 		let text = '';
+		if (durationInSeconds === null) {
+			return '?';
+		}
 		if (precise) {
 			const days = Math.floor(durationInSeconds / (60 * 60 * 24));
 
@@ -219,7 +223,7 @@ const wxdates = {
 		return text;
 	},
 
-	jsonDateToFriendlyText: function (jsonDate) {
+	jsonDateToFriendlyText: function (jsonDate: string) {
 		const dt = new Date(jsonDate);
 		const dtUTC = new Date(
 			Date.UTC(
@@ -234,47 +238,47 @@ const wxdates = {
 		return dtUTC.wxToFriendlyText();
 	},
 
-	dateAdd: function (date: Date, interval: string, units: number) {
+	dateAdd: function (date: Date, interval: string, units: number): Date | undefined {
 		if (!(date instanceof Date)) return undefined;
-		let ret = new Date(date); //don't change original date
+		let ret: Date | undefined = new Date(date); //don't change original date
 		const checkRollover = function () {
-			if (ret.getDate() != date.getDate()) ret.setDate(0);
+			if (ret && ret.getDate() != date.getDate()) ret.setDate(0);
 		};
 		switch (String(interval).toLowerCase()) {
 			case 'year':
 			case 'years':
-				ret.setFullYear(ret.getFullYear() + units);
+				ret!.setFullYear(ret!.getFullYear() + units);
 				checkRollover();
 				break;
 			case 'quarter':
 			case 'quarters':
-				ret.setMonth(ret.getMonth() + 3 * units);
+				ret!.setMonth(ret!.getMonth() + 3 * units);
 				checkRollover();
 				break;
 			case 'month':
 			case 'months':
-				ret.setMonth(ret.getMonth() + units);
+				ret!.setMonth(ret!.getMonth() + units);
 				checkRollover();
 				break;
 			case 'week':
 			case 'weeks':
-				ret.setDate(ret.getDate() + 7 * units);
+				ret!.setDate(ret!.getDate() + 7 * units);
 				break;
 			case 'day':
 			case 'days':
-				ret.setDate(ret.getDate() + units);
+				ret!.setDate(ret!.getDate() + units);
 				break;
 			case 'hour':
 			case 'hours':
-				ret.setTime(ret.getTime() + units * 3600000);
+				ret!.setTime(ret!.getTime() + units * 3600000);
 				break;
 			case 'minute':
 			case 'minutes':
-				ret.setTime(ret.getTime() + units * 60000);
+				ret!.setTime(ret!.getTime() + units * 60000);
 				break;
 			case 'second':
 			case 'seconds':
-				ret.setTime(ret.getTime() + units * 1000);
+				ret!.setTime(ret!.getTime() + units * 1000);
 				break;
 			default:
 				ret = undefined;
@@ -283,50 +287,50 @@ const wxdates = {
 		return ret;
 	},
 
-	dateAddMinutes: function (date, units) {
+	dateAddMinutes: function (date: Date, units: number) {
 		const ret = new Date(date);
 		ret.setTime(ret.getTime() + units * 60000);
 		return ret;
 	},
 
-	msecondsBetween: function (d1, d2, absolute = true) {
+	msecondsBetween: function (d1: Date, d2: Date, absolute = true) {
 		const diff = d1.getTime() - d2.getTime();
 		return absolute ? Math.abs(diff) : diff;
 	},
 
-	secondsBetween: function (d1, d2, absolute = true) {
+	secondsBetween: function (d1: Date, d2: Date, absolute = true) {
 		return this.msecondsBetween(d1, d2, absolute) / 1000;
 	},
 
-	minutesBetween: function (d1, d2, absolute = true) {
+	minutesBetween: function (d1: Date, d2: Date, absolute = true) {
 		return this.msecondsBetween(d1, d2, absolute) / 60000;
 	},
 
-	hoursBetween: function (d1, d2, absolute = true) {
+	hoursBetween: function (d1: Date, d2: Date, absolute = true) {
 		return (this.msecondsBetween(d1, d2, absolute) / 60) * 60000;
 	},
 
-	daysBetween: function (d1, d2, absolute = true) {
+	daysBetween: function (d1: Date, d2: Date, absolute = true) {
 		return (this.msecondsBetween(d1, d2, absolute) / 24) * 60 * 60000;
 	},
 
-	datesDiffer: function (d1, d2) {
+	datesDiffer: function (d1: Date, d2: Date) {
 		return d1.getTime() !== d2.getTime();
 	},
 
-	datesDifference: function (d1, d2) {
+	datesDifference: function (d1: Date, d2: Date) {
 		return new Date(d2.getTime() - d1.getTime());
 	},
 
-	datesDifferenceFromNow: function (d) {
+	datesDifferenceFromNow: function (d: Date) {
 		return new Date(new Date().getTime() - d.getTime());
 	},
 
-	friendlyDurationTill: function (d0, d1, precise = true) {
+	friendlyDurationTill: function (d0: Date, d1: Date, precise = true) {
 		return this.durationToFriendlyText(this.secondsBetween(d1, d0, true), precise);
 	},
 
-	friendlyDurationTillNow: function (d, precise = true) {
+	friendlyDurationTillNow: function (d: Date, precise = true) {
 		return this.friendlyDurationTill(d, new Date(), precise);
 	},
 

@@ -1,6 +1,11 @@
 <script lang="ts">
-	/** @type {{languages?: any, value: any, keysOnly?: boolean}} */
-	let { languages = {}, value = $bindable(), keysOnly = false } = $props();
+    interface Props {
+        languages?: Record<string, string>;
+        value: string;
+        keysOnly?: boolean;
+    }
+
+    let { languages = {}, value = $bindable(''), keysOnly = false }: Props = $props();
 </script>
 
 <select bind:value id="locale-switch">

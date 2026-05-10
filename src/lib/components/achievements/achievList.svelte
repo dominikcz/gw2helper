@@ -3,12 +3,19 @@
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
 	import { achievProgressRenderer } from './achievRenderers';
+	import type { AchievementLike } from './achievements';
 
-	/** @type {{items: any, todoList: any, onToggleTodo?: CallableFunction,  children?: import('svelte').Snippet}} */
-	let { items, todoList, onToggleTodo, children } = $props();
+	interface Props {
+		items: AchievementLike[];
+		todoList: number[];
+		onToggleTodo?: (event: { id: number; todo: boolean }) => void;
+		children?: import('svelte').Snippet;
+	}
 
-	function isOnTodo(todoList, achievId){
-		return todoList.findIndex((x) => x == achievId) >= 0;
+	let { items, todoList, onToggleTodo, children = undefined }: Props = $props();
+
+	function isOnTodo(todoList: number[], achievId: number){
+		return todoList.findIndex((x: number) => x == achievId) >= 0;
 	}
 
 	// console.log('achieveList ' + name, items);
@@ -23,7 +30,7 @@
 <div class="achiev-list" use:autotooltip={tooltipOptions}>
 	{#each items as achiev (achiev.id)}
 		<Achievement
-			id={achiev.id}
+			id={achiev.id ?? 0}
 			icon={achiev.icon}
 			name={achiev.name}
 			type={achiev.type}
@@ -32,7 +39,7 @@
 			current={achiev.current}
 			max={achiev.max}
 			flags={achiev.flags}
-			todo={isOnTodo(todoList, achiev.id)}
+			todo={isOnTodo(todoList, achiev.id ?? 0)}
 			rewardsObj={achiev.rewardsObj}
 			done={achiev.done}
 			bits={achiev.bits}

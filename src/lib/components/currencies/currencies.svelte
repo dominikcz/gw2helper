@@ -6,17 +6,25 @@
 	import Currency from './currency.svelte';
 
 	interface Props {
-		items?: any;
-		onWalletReorder?: CallableFunction;
+		items?: Array<{
+			id: number;
+			name: string;
+			icon: string;
+			value: number;
+			description?: string;
+			depreciated?: boolean;
+			depreciationReason?: string;
+		}>;
+		onWalletReorder?: (payload: { order: number[] }) => void;
 	}
 
 	let { items = $bindable([]), onWalletReorder = () => {} }: Props = $props();
 
 	const flipDurationMs = 200;
 
-	function handleSort(e) {
+	function handleSort(e: CustomEvent<{ items: NonNullable<Props['items']> }>) {
 		items = e.detail.items;
-		const order = items.map((x) => x.id);
+		const order = items.map((x: { id: number }) => x.id);
 		onWalletReorder({
 			order,
 		});

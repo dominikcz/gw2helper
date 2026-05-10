@@ -16,7 +16,11 @@
 		name: string;
 		price: number;
 		created: string;
-		[key: string]: Offer | number | string;
+		count?: number;
+		icon?: string;
+		rarity?: string;
+		locked?: boolean;
+		[key: string]: Offer | number | string | boolean | undefined;
 	};
 
 	export let items: TransactionItem[] = [];
@@ -43,7 +47,7 @@
 		</thead>
 		<tbody>
 			{#each items as item, index (`${item.id}-${index}`)}
-				{@const offer = item[offerType]}
+				{@const offer = item[offerType] as Offer}
 				<tr>
 					<td class="item">
 						<Item {item} />

@@ -4,7 +4,7 @@
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import { t as _ } from '$lib/services/i18n.js';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { onMount } from 'svelte';
@@ -15,8 +15,6 @@
 
 	let { data }: Props = $props();
 	let perm = $state<string[]>([]);
-
-	const asset = (path: string) => `${base}${path}`;
 
 	function has(account: { access: string[] }, content: string): boolean {
 		return account.access.includes(content);

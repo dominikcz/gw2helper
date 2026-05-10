@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '$lib/scss/gw2.scss';
-	import { base, resolve } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -20,14 +20,30 @@
 	import AutoTooltip from '$lib/components/autotooltip/autoTooltip.svelte';
 	import { onMount } from 'svelte';
 
-	import eventsUtils from '$lib/components/events/eventsUtils.js';
+	import eventsUtils from '$lib/components/events/eventsUtils';
 	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/localeSwitch.svelte';
 
-	/** @type {{data: any, children?: import('svelte').Snippet}} */
-	let { data, children } = $props();
-	const asset = (path: string) => `${base}${path}`;
+	interface LayoutData {
+		apiKey: string;
+		apiLang: string;
+		apiKeyHist: string[];
+		apiService: any;
+		remindersSettings: { inAdvance: number; sound: SoundSpriteName };
+		tokenInfo: { name?: string; error?: string };
+		missingScopes?: string[];
+		version: string;
+	}
+
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	type SoundSpriteName = 'trumpet' | 'squeeze' | 'notif3' | 'notif9';
+
+	let { data, children }: Props = $props();
 
 	const defaultTitle = 'GW2 Helper';
 	// svelte-ignore state_referenced_locally
@@ -47,14 +63,12 @@
 		zh: '中国人',
 	};
 
-	const soundSprites = {
+	const soundSprites: Record<SoundSpriteName, [number, number]> = {
 		trumpet: [0, 5923],
 		squeeze: [5924, 850],
 		notif3: [6834, 1160],
 		notif9: [8000, 2182],
-	} as const;
-
-	type SoundSpriteName = keyof typeof soundSprites;
+	};
 
 	let sounds = new Howl({
 		src: [asset('/assets/sounds/alarms.mp3')],
@@ -163,7 +177,7 @@
 		const dur = soundSprites[selectedSound][1];
 		toast.push(tts, {
 			duration: 1000 * (tts.length / 10) + dur,
-			onpop: (_id: number, details?: { event?: Event }) => {
+			onpop: (_id?: number, details?: { event?: Event }) => {
 				// console.log('onpop', details);
 				if (details?.event != undefined) {
 					// if closed by user
@@ -194,8 +208,8 @@
 		sounds.stop();
 		sounds.play(selectedSound);
 	}
-	let tokenInfo = $derived(data.tokenInfo as { name?: string; error?: string });
-	let missingScopes = $derived((data.missingScopes ?? []) as string[]);
+	let tokenInfo = $derived(data.tokenInfo);
+	let missingScopes = $derived(data.missingScopes ?? []);
 	let active = $derived($page.url.pathname);
 	let title = $derived([defaultTitle, active.replace(resolve('/'), '').replaceAll('/', '')].filter(Boolean).join(' - '));
 	let navigation = $derived([
@@ -245,7 +259,7 @@
 		<Navigation items={navigation} {active} />
 
 		{#if tokenInfo.name || !currentPageRequiresKey}
-			{#if data.missingScopes}
+			{#if missingScopes.length}
 				<h2>Your token is missing the following scopes:</h2>
 				<ul>
 					{#each missingScopes as scope}

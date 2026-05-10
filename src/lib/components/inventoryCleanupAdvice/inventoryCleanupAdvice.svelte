@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import Awaiter from '../awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
 	import { t as _, t } from '$lib/services/i18n.js';
@@ -65,8 +65,6 @@
 	};
 
 	let { bank = [], shared = [], charactersItems = [] } = $props();
-
-	const asset = (path: string) => `${base}${path}`;
 
 	let allData = new Promise<AdviceSummary>((resolve, reject) => {
 		Promise.all([bank, shared, charactersItems])

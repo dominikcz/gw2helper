@@ -1,21 +1,29 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset } from '$app/paths';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Price from '../price.svelte';
 	import Wiki from '../wiki.svelte';
 	import AchievList from './achievList.svelte';
 	import { sort } from './achievements';
+	import type { CategoryLike } from './achievements';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
-	/** @type {{category: any, todoList?: any, showApiLinks?: boolean, sortBy?: string, onToggleTodo?: CallableFunction }} */
-	let { category, todoList = [], showApiLinks = false, sortBy = 'ap', onToggleTodo = () => {} } = $props();
+	interface Props {
+		category: CategoryLike;
+		todoList?: number[];
+		showApiLinks?: boolean;
+		sortBy?: string;
+		onToggleTodo?: (event: { id: number; todo: boolean }) => void;
+	}
+
+	let { category, todoList = [], showApiLinks = false, sortBy = 'ap', onToggleTodo = () => {} }: Props = $props();
 </script>
 
 <details class="achiev-group" use:autotooltip use:grungeBorder>
 	<summary>
-		<img src={category.icon} alt={category.name} />
+		<img src={category.icon || ''} alt={category.name} />
 		<div class="descr">
 			<span>
 				{category.name}
@@ -31,25 +39,25 @@
 				{#if category.rewards_to_get.has('title')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('title')}</span>
-						<img src={resolve('/assets/rewards/Title_icon.png')} alt="title" title={$_('achievements.rewards_title')} />
+						<img src={asset('/assets/rewards/Title_icon.png')} alt="title" title={$_('achievements.rewards_title')} />
 					</div>
 				{/if}
 				{#if category.rewards_to_get.has('coins')}
 					<div class="reward-item">
-						<Price value={category.rewards_to_get.get('coins')} />
+						<Price value={category.rewards_to_get.get('coins') ?? 0} />
 					</div>
 				{/if}
 				{#if category.rewards_to_get.has('item')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('item')}</span>
-						<img src={resolve('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item" title={$_('achievements.rewards_items')} />
+						<img src={asset('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item" title={$_('achievements.rewards_items')} />
 					</div>
 				{/if}
 				{#if category.rewards_to_get.has('mastery_tyria')}
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_tyria')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Central_Tyria.png')}
+							src={asset('/assets/rewards/Mastery_point_Central_Tyria.png')}
 							alt="mastery points Central Tyria"
 							title={$_('achievements.rewards_mastery_tyria')}
 						/>
@@ -59,7 +67,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_maguuma')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Heart_of_Thorns.png')}
+							src={asset('/assets/rewards/Mastery_point_Heart_of_Thorns.png')}
 							alt="mastery points Heart of Thorns"
 							title={$_('achievements.rewards_mastery_hot')}
 						/>
@@ -69,7 +77,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_desert')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Path_of_Fire.png')}
+							src={asset('/assets/rewards/Mastery_point_Path_of_Fire.png')}
 							alt="mastery points Path of Fire"
 							title={$_('achievements.rewards_mastery_pof')}
 						/>
@@ -79,7 +87,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_tundra')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Icebrood_Saga.png')}
+							src={asset('/assets/rewards/Mastery_point_Icebrood_Saga.png')}
 							alt="mastery points Icebrood Saga"
 							title={$_('achievements.rewards_mastery_ice')}
 						/>
@@ -89,7 +97,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_jade')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_End_of_Dragons.png')}
+							src={asset('/assets/rewards/Mastery_point_End_of_Dragons.png')}
 							alt="mastery points End of Dragons"
 							title={$_('achievements.rewards_mastery_eod')}
 						/>
@@ -99,7 +107,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_sky')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')}
+							src={asset('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')}
 							alt="mastery points Secrets of the Obscure"
 							title={$_('achievements.rewards_mastery_soto')}
 						/>
@@ -109,7 +117,7 @@
 					<div class="reward-item">
 						<span>{category.rewards_to_get.get('mastery_unknown')}</span>
 						<img
-							src={resolve('/assets/rewards/Mastery_point_Janthir_Wilds.png')}
+							src={asset('/assets/rewards/Mastery_point_Janthir_Wilds.png')}
 							alt="mastery points Janthir Wilds"
 							title={$_('achievements.rewards_mastery_jw')}
 						/>
@@ -119,7 +127,7 @@
 					<div class="reward-item">
 						<span>{category.points_to_get}</span>
 						<img
-							src={resolve('/assets/rewards/AP.png')}
+							src={asset('/assets/rewards/AP.png')}
 							alt="achievement points"
 							title={$_('achievements.rewards_ap_left', { points: category.points_to_get })}
 						/>
@@ -128,7 +136,7 @@
 				<div class="reward-item">
 					<span>{category.achievements.length}</span>
 					<img
-						src={resolve('/assets/rewards/Achievements_Summary.png')}
+						src={asset('/assets/rewards/Achievements_Summary.png')}
 						alt="achievements"
 						title={$_('achievements.achievements_left', { todo: category.achievements.length })}
 					/>

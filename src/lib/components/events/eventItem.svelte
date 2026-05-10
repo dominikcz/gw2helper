@@ -6,8 +6,26 @@
 	import { t as _ } from '$lib/services/i18n.js';
 	import WatchState from '../watch-state/watch-state.svelte';
 
-	/** @type {{event: any, onToggleWatched?: CallableFunction, onAlarmsChange?: CallableFunction, showChatLinks?: boolean}} */
-	let { event = $bindable(), showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {} } = $props();
+	type ChipValue = string | number;
+	type ReminderEvent = {
+		name: string;
+		watched?: boolean;
+		link?: string;
+		chatlink?: string;
+		next?: string;
+		bg?: unknown;
+		startTimes?: string[];
+		alarms?: string[];
+	};
+
+	interface Props {
+		event: ReminderEvent;
+		onToggleWatched?: (payload: { name: string; watched: boolean }) => void;
+		onAlarmsChange?: (payload: { name: string; alarms: string[] }) => void;
+		showChatLinks?: boolean;
+	}
+
+	let { event = $bindable(), showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {} }: Props = $props();
 
 	let watchedState_class = $derived(event.watched ? 'watched' : '');
 	let watchedState_title = $derived(event.watched ? $_('events.click_to_remove') : $_('events.click_to_add'));
@@ -23,15 +41,15 @@
 		});
 	}
 
-	function hndHoursChange(ev) {
+	function hndHoursChange(ev: { name: string; value: ChipValue[]; trigger: Event }) {
 		onAlarmsChange({
 			name: ev.name,
-			alarms: [...ev.value],
+			alarms: ev.value.map((v) => String(v)),
 		});
 	}
 </script>
 
-<div class="event" style="background: {eventsUtils.getColor(event.bg, $darkMode)};">
+<div class="event" style="background: {eventsUtils.getColor(event.bg as string | number[] | number[][] | undefined, $darkMode)};">
 	<div class="header">
 		{#if event.link}
 			<a href={helperUtils.wikiLink(event.link)} title={`${event.name} - ${$_('common.read_more_on_wiki')}`} target="_blank">{event.name}</a>
@@ -40,7 +58,7 @@
 		{/if}
 		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
 		<!--<div class={`watched-state ${watchedState_class}`} title={watchedState_title} on:click={toggleWatched} />-->
-		<WatchState title={watchedState_title} watched={event.watched} onClick={toggleWatched} />
+		<WatchState title={watchedState_title} watched={event.watched ?? false} onClick={toggleWatched} />
 	</div>
 	<div class="body">
 		{#if event.watched}
@@ -48,7 +66,7 @@
 				<span>{event.chatlink}</span>
 			{/if}
 			<h5>{$_('events.watched.choose_times')}</h5>
-			<Chips name={event.name} options={event.startTimes} value={event.alarms} onChipsChange={hndHoursChange} />
+			<Chips name={event.name} options={event.startTimes ?? []} value={event.alarms ?? []} onChipsChange={hndHoursChange} />
 		{:else if event.next}
 			<span>{$_('events.next_event')} {event.next}</span>
 		{/if}

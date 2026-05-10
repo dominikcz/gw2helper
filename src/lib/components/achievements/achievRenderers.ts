@@ -2,10 +2,39 @@ import apiService from "$lib/apiService";
 import AchievementProgress from "./achievementProgress.svelte";
 import { mount, unmount } from "svelte";
 
-export function achievProgressRenderer(node, id, bitsDone) {
+type AchievementBit = {
+    id?: number;
+    type?: string;
+    text?: string;
+};
+
+type CachedEntity = {
+    name?: string;
+    icon?: string;
+};
+
+type AchievementData = {
+    type: string;
+    bits: AchievementBit[];
+    done?: boolean;
+};
+
+type RendererPayload = number[] | { bitsDone?: number[]; done?: boolean } | undefined;
+
+type ApiServiceLike = {
+    achievementsCache: (id: number) => AchievementData;
+    itemsCache: (id: number) => CachedEntity;
+    minisCache: (id: number) => CachedEntity;
+    skinsCache: (id: number) => CachedEntity;
+    hydrateAchievementBits: (bits: AchievementBit[]) => Promise<unknown>;
+};
+
+const api = apiService as unknown as ApiServiceLike;
+
+export function achievProgressRenderer(node: HTMLElement, id: number | null, bitsDone: RendererPayload) {
     if (!id) return false;
 
-    const achiev = apiService.achievementsCache(id);
+    const achiev = api.achievementsCache(id);
     if (!achiev.bits) return false;
 
     const params = Array.isArray(bitsDone)
@@ -20,24 +49,24 @@ export function achievProgressRenderer(node, id, bitsDone) {
         bits: achiev.bits,
         bitsDone: params.bitsDone,
         done: params.done,
-        itemsCache: apiService.itemsCache,
-        minisCache: apiService.minisCache,
-        skinsCache: apiService.skinsCache,
+        itemsCache: api.itemsCache,
+        minisCache: api.minisCache,
+        skinsCache: api.skinsCache,
     };
 
     let destroyed = false;
 
-    let component = mount(AchievementProgress, {
+    let component = mount(AchievementProgress as never, {
         props,
         target: node,
     });
 
     // Lazy hydration: only fetch bit entities when tooltip is actually rendered.
-    apiService.hydrateAchievementBits(achiev.bits)
+    api.hydrateAchievementBits(achiev.bits)
         .then(() => {
             if (destroyed) return;
             unmount(component);
-            component = mount(AchievementProgress, {
+            component = mount(AchievementProgress as never, {
                 props,
                 target: node,
             });

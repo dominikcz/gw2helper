@@ -1,16 +1,43 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset } from '$app/paths';
 	import helperUtils from '$lib/utils/helper-utils';
 
-	/** @type {{ type: string, bits: any, bitsDone: any, done?: boolean, itemsCache: CallableFunction, minisCache: CallableFunction, skinsCache: CallableFunction}} */
-	let { type, bits = [], bitsDone = [], done = false, itemsCache = (id) => ({}), minisCache = (id) => ({}), skinsCache = (id) => ({}) } = $props();
+	type BitType = 'Item' | 'Minipet' | 'Skin' | string;
+	interface AchievementBit {
+		id?: number;
+		type?: BitType;
+		text?: string;
+	}
+	interface CachedEntity {
+		name?: string;
+		icon?: string;
+	}
+	interface Props {
+		type: string;
+		bits?: AchievementBit[];
+		bitsDone?: number[];
+		done?: boolean;
+		itemsCache?: (id: number) => CachedEntity;
+		minisCache?: (id: number) => CachedEntity;
+		skinsCache?: (id: number) => CachedEntity;
+	}
+	let {
+		type,
+		bits = [],
+		bitsDone = [],
+		done = false,
+		itemsCache = (_id: number) => ({}),
+		minisCache = (_id: number) => ({}),
+		skinsCache = (_id: number) => ({})
+	}: Props = $props();
 
-	function isBitDoneByIndexOrId(idx, bit) {
+	function isBitDoneByIndexOrId(idx: number, bit: AchievementBit) {
 		// API payloads for bits_done may be index-based or id-based depending on achievement type/source.
 		return bitsDone.includes(idx) || (bit?.id != null && bitsDone.includes(bit.id));
 	}
 
-	function resolveBitEntity(bit) {
+	function resolveBitEntity(bit: AchievementBit): CachedEntity | null {
+		if (bit?.id == null) return null;
 		if (bit?.type === 'Item') return itemsCache(bit.id);
 		if (bit?.type === 'Minipet') return minisCache(bit.id);
 		if (bit?.type === 'Skin') return skinsCache(bit.id);
@@ -18,7 +45,7 @@
 	}
 </script>
 
-{#snippet progressText(bits, bitsDone)}
+{#snippet progressText(bits: AchievementBit[], bitsDone: number[])}
 	<ol>
 		{#each bits as item, idx}
 			<li class:done={isBitDoneByIndexOrId(idx, item)}>{item.text}</li>
@@ -26,16 +53,16 @@
 	</ol>
 {/snippet}
 
-{#snippet progressItemSet(bits, bitsDone)}
+{#snippet progressItemSet(bits: AchievementBit[], bitsDone: number[])}
 	<div class="items condensed autotooltip autotooltip-sticky">
 		{#each bits as x, idx}
 			{@const item = resolveBitEntity(x)}
 			{#if item?.icon}
-				<a href={helperUtils.wikiLink(item.name)} target="_blank">
+				<a href={helperUtils.wikiLink(item.name || '')} target="_blank">
 					<img alt={item.name} src={item.icon} class:done={isBitDoneByIndexOrId(idx, x)} />
 				</a>
 			{:else}
-				<img src={resolve('/assets/Talk_question_mark_option.png')} alt="item id {x.id} not found" />
+				<img src={asset('/assets/Talk_question_mark_option.png')} alt="item id {x.id} not found" />
 			{/if}
 		{/each}
 	</div>

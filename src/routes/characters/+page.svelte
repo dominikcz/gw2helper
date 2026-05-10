@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
@@ -23,8 +23,6 @@
 		deaths: number;
 		age: number;
 	};
-
-	const asset = (path: string) => `${base}${path}`;
 
 	function professionIcon(name: string) {
 		return asset(`/assets/professions/${name}_icon.png`);

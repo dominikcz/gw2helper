@@ -4,9 +4,9 @@
 		id?: string;
 		label: string;
 		title?: string;
-		value: any;
+		value: string | number;
 		selected?: boolean;
-		onChipToggle?: CallableFunction;
+		onChipToggle?: (payload: { name: string; id: string; label: string; title?: string; value: string | number; selected: boolean }) => void;
 	}
 
 	let { name = '', id = '', label, title = '', value, selected = $bindable(false), onChipToggle = () => {} }: Props = $props();
@@ -14,9 +14,10 @@
 	function toggleSelected() {
 		selected = !selected;
 		onChipToggle({
-			name,
-			id,
+			name: name || '',
+			id: id || '',
 			label,
+			title,
 			value,
 			selected,
 		});

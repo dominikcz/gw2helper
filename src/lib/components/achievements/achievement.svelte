@@ -1,13 +1,44 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
-	import { resolve } from '$app/paths';
+	import { asset } from '$app/paths';
 	import Wiki from '../wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
 	import AchievementRewards from './achievementRewards.svelte';
 	import { ACHIEVEMENT_LINKS } from './achievements';
 
-	/** @type {{id: any, icon: any, name: any, type?: string, description: any, requirement: any, current: any, max: any, flags?: any, todo?: boolean, rewardsObj?: any, done?: boolean, bits?: any, bitsDone?: any, pointsToGet?: number, tiers?: any, onToggleTodo?: CallableFunction}} */
+	type Tier = {
+		count: number;
+		points?: number;
+	};
+
+	interface RewardsObj {
+		title?: unknown;
+		coins?: Array<{ count: number }>;
+		item?: unknown;
+		mastery?: Array<{ region: string }>;
+	}
+
+	interface Props {
+		id: number;
+		icon?: string;
+		name: string;
+		type?: string;
+		description?: string;
+		requirement?: string;
+		current?: number;
+		max?: number;
+		flags?: string[];
+		todo?: boolean;
+		rewardsObj?: RewardsObj;
+		done?: boolean;
+		bits?: unknown[];
+		bitsDone?: number[];
+		pointsToGet?: number;
+		tiers?: Tier[];
+		onToggleTodo?: (event: { id: number; todo: boolean }) => void;
+	}
+
 	let {
 		id,
 		icon,
@@ -26,14 +57,14 @@
 		pointsToGet = 0,
 		tiers = [],
 		onToggleTodo = () => {},
-	} = $props();
+	}: Props = $props();
 
 	const showApiLinks = getQueryStringFlag('show-api-links');
 
 	let todoState_class = $derived(todo ? 'todo' : '');
 	let todoState_title = $derived(todo ? $_('achievements.click_to_remove_todo') : $_('achievements.click_to_add_todo'));
 
-	let link = $derived(ACHIEVEMENT_LINKS[id] ? ACHIEVEMENT_LINKS[id] : name);
+	let link = $derived(ACHIEVEMENT_LINKS[id as keyof typeof ACHIEVEMENT_LINKS] ? ACHIEVEMENT_LINKS[id as keyof typeof ACHIEVEMENT_LINKS] : name);
 
 	function toggleTodo() {
 		todo = !todo;
@@ -51,14 +82,14 @@
 		{/if}
 
 		{#if max}
-			<progress value={current <= max ? current : max} {max} data-autotooltip-id={id}></progress>
-			<span data-autotooltip-id={id}>{current <= max ? current : max} / {max}</span>
+			<progress value={(current ?? 0) <= max ? (current ?? 0) : max} {max} data-autotooltip-id={id}></progress>
+			<span data-autotooltip-id={id}>{(current ?? 0) <= max ? (current ?? 0) : max} / {max}</span>
 		{/if}
 
 		{#if flags && flags.includes('Hidden')}
 			<img
 				class="icon"
-				src={resolve('/assets/rewards/Achievements_Watch_List.png')}
+				src={asset('/assets/rewards/Achievements_Watch_List.png')}
 				alt="hidden achievement"
 				title={$_('achievements.achievement_is_hidden')}
 			/>

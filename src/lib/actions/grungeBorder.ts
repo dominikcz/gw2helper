@@ -13,13 +13,13 @@ const DEF_OPTIONS: BorderOptions = {
 let lastVal = 0;
 
 export function grungeBorder(elem: HTMLElement, options: BorderOptions = DEF_OPTIONS) {
-    options = {...DEF_OPTIONS, ...options};
-    let newVal = Math.trunc(Math.random() * options.maskWidth);
-    if (Math.abs(lastVal - newVal) < options.minDiff){
+    const merged: Required<BorderOptions> = { ...DEF_OPTIONS, ...options } as Required<BorderOptions>;
+    let newVal = Math.trunc(Math.random() * merged.maskWidth);
+    if (Math.abs(lastVal - newVal) < merged.minDiff){
         // make sure it is not too similar to previous one
-        newVal = lastVal + options.minDiff;
+        newVal = lastVal + merged.minDiff;
     }
-    if (options.grunge){
+    if (merged.grunge){
         elem.classList.add('grunge-border');
         elem.style.maskPosition = `${newVal}px bottom`;
     } else {

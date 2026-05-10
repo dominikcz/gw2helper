@@ -16,6 +16,10 @@
 	let filter = $state('');
 	let filterFlags = $state(false);
 
+	type BagItem = { inventory: Array<unknown | null> };
+	type Bag = { size: number; inventory: Array<unknown | null> } | null;
+	type CharacterItems = { name: string; bags: Bag[]; _items: any[] };
+
 	enum SortType {
 		AsIs,
 		Slots,
@@ -30,16 +34,16 @@
 		sortBy = SortType.Slots;
 	}
 
-	function sizes(bags) {
-		return bags.map((x) => x.size).join(', ');
+	function sizes(bags: Array<{ size: number }>) {
+		return bags.map((x: { size: number }) => x.size).join(', ');
 	}
 
-	function availableSlots(bags) {
+	function availableSlots(bags: Bag[]) {
 		return bags
 			.filter(Boolean)
-			.map((x) => x.inventory)
+			.map((x) => (x as BagItem).inventory)
 			.flat()
-			.filter((x) => x === null).length;
+			.filter((x: unknown | null) => x === null).length;
 	}
 </script>
 
@@ -61,7 +65,7 @@
 
 <h3>{$_('items.guild_items')}</h3>
 <Awaiter promise={data.guildItems}>
-	{#snippet children(result)}
+	{#snippet children(result: any[])}
 		{#each result as guild}
 			<ItemsList summary={guild.name} items={guild.stash} error={guild.error} {filter} {filterFlags} />
 		{/each}
@@ -70,9 +74,9 @@
 
 <h3>{$_('items.characters_items')}</h3>
 <Awaiter promise={data.charactersItems}>
-	{#snippet children(result)}
+	{#snippet children(result: CharacterItems[])}
 		{#each result as char}
-			{@const bags = char.bags.filter(Boolean)}
+			{@const bags = char.bags.filter(Boolean) as Array<{ size: number }>}
 			{@const capacity = sum(bags, 'size')}
 			{@const available = availableSlots(char.bags)}
 			<!-- `${char.name} - ${char.bags.length} bags (${}) - ${sum(char.bags, 'size')} slots total` -->

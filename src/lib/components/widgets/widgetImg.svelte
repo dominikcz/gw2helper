@@ -6,7 +6,7 @@
 		linkTitle?: string;
 		class?: string | null;
 		active: boolean;
-		[key: string]: any
+		[key: string]: unknown
 	}
 
 	let {

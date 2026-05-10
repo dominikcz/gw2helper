@@ -7,10 +7,23 @@
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import Progress from '../progress/progress.svelte';
 
-	/** @type {{data: any, targetTime: any, title: any}} */
+	type Objective = {
+		claimed: boolean;
+		acclaim: number;
+	};
+
+	type VaultCategoryData = {
+		objectives: Objective[];
+		meta_reward_claimed?: boolean;
+		meta_reward_astral?: number;
+		meta_progress_current?: number;
+		meta_progress_complete?: number;
+	};
+
+	/** @type {{data: VaultCategoryData, targetTime: Date, title: string}} */
 	let { data = $bindable(), targetTime, title } = $props();
 
-	let timeLeft = $state();
+	let timeLeft = $state<string>('');
 	let time = new Clock({ interval: 1000 });
 	let accLeft = acclaimLeft();
 
@@ -19,14 +32,14 @@
 	}
 
 	function acclaimLeft() {
-		const points = data.objectives.filter((x) => !x.claimed).reduce((acc, val) => acc + val.acclaim, 0);
+		const points = data.objectives.filter((x: Objective) => !x.claimed).reduce((acc: number, val: Objective) => acc + val.acclaim, 0);
 		data.meta_reward_claimed ??= false;
 		data.meta_reward_astral ??= 0;
 		return data.meta_reward_claimed ? points : points + data.meta_reward_astral;
 	}
 
 	function progressValue(){
-		return (data.meta_progress_current) ? data.meta_progress_current : data.objectives.filter((x) => x.claimed).length;
+		return (data.meta_progress_current) ? data.meta_progress_current : data.objectives.filter((x: Objective) => x.claimed).length;
 	}
 
 	function progressMax(){
@@ -35,7 +48,7 @@
 
 	// svelte-ignore state_referenced_locally
 	console.log(`${title}: ${targetTime.toISOString()}`, data);
-	
+
 	$effect(() => {
 		updateTime();
 	});

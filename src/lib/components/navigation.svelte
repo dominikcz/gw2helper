@@ -2,28 +2,41 @@
 	import { onMount } from 'svelte';
 	import ArrowBack from './arrowBack.svelte';
 	import ArrowForward from './arrowForward.svelte';
-	/** @type {{items?: any, active: any, showScrollButtons?: boolean}} */
-	let { items = [], active, showScrollButtons = true } = $props();
+
+	interface NavItem {
+		slug: string;
+		label: string;
+	}
+
+	interface Props {
+		items?: NavItem[];
+		active: string;
+		showScrollButtons?: boolean;
+	}
+
+	let { items = [], active, showScrollButtons = true }: Props = $props();
 
 	let navLeftVisible = $state(false);
 	let navRightVisible = $state(false);
 
-	let navRef = $state();
+	let navRef: HTMLElement | null = $state(null);
 	onMount(() => {
 		hndScroll();
 	});
 
 	function hndScroll() {
+		if (!navRef) return;
 		const rect = navRef.getBoundingClientRect();
 		navLeftVisible = navRef.scrollLeft > 32;
 		navRightVisible = navRef.scrollWidth > Math.round(navRef.scrollLeft + navRef.offsetWidth);
 	}
 
 	function scrollLeft() {
+		if (!navRef) return;
 		// scroll to last elem with left < 0
 		let pos = 0;
 		let i = 0;
-		for (const child of navRef.children) {
+		for (const child of Array.from(navRef.children)) {
 			const rect = child.getBoundingClientRect();
 			if (i > 0 && rect.left > 0) {
 				break;
@@ -39,10 +52,11 @@
 	}
 
 	function scrollRight() {
+		if (!navRef) return;
 		// scroll to 2nd elem with left > 0
 		let pos = 50;
 		let i = 0;
-		for (const child of navRef.children) {
+		for (const child of Array.from(navRef.children)) {
 			const rect = child.getBoundingClientRect();
 			if (rect.left > pos) {
 				pos = rect.left;

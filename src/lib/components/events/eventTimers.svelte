@@ -32,7 +32,7 @@
 	let categoriesState: Record<string, boolean> = {};
 
 	onMount(async () => {
-		categoriesState = await utils.readEventTimerCategories();
+		categoriesState = await utils.readEventTimerCategories() as Record<string, boolean>;
 		setTimeout(() => updatePointerPos(true), 1000); // give some time for animations and then reset pointer if it's off the screen at start
 	});
 

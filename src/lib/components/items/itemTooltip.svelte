@@ -1,8 +1,22 @@
 <script lang="ts">
 	import utils from "$lib/utils";
 
-	/** @type {{item: any}} */
-	let { item } = $props();
+	interface ItemTooltipModel {
+		id?: number;
+		name?: string;
+		icon?: string;
+		description?: string;
+		level?: number;
+		flags?: string[];
+		rarity?: string;
+		count?: number;
+	}
+
+	interface Props {
+		item: ItemTooltipModel;
+	}
+
+	let { item }: Props = $props();
 
 	let flags = getFlags();
 	let showApiLinks = utils.getQueryStringFlag('show-api-links');
@@ -22,7 +36,7 @@
 <div class="item-descr">
 	<div class="head">
 		<img alt={item.name} src={item.icon} />
-		<div class="caption {rarityClass()}">{item.count > 1 ? item.count : ''} {item.name} {#if showApiLinks}(id: {item.id}){/if}</div>
+				<div class="caption {rarityClass()}">{(item.count ?? 0) > 1 ? item.count : ''} {item.name} {#if showApiLinks}(id: {item.id}){/if}</div>
 	</div>
 
 	<div class="details">

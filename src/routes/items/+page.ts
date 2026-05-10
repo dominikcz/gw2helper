@@ -1,5 +1,7 @@
-export async function load({ fetch, parent }) {
-    const { apiService } = await parent();
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch, parent }) => {
+	const { apiService } = await parent();
 	const key = apiService.getApiKey();
 	return {
 		bank: key ? apiService.bank() : [],
@@ -7,4 +9,4 @@ export async function load({ fetch, parent }) {
 		charactersItems: key ? apiService.charactersItems() : [],
 		guildItems: key ? apiService.guildItems() : [],
 	};
-}
+};

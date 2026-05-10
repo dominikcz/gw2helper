@@ -1,19 +1,24 @@
 <script lang="ts">
 	// based on https://svelte.dev/examples/modal
+	interface Props {
+		showModal: boolean;
+		onModalClose?: () => void;
+		header?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+	}
 
-	/** @type {{showModal: any, onModalClose?: CallableFunction, header?: import('svelte').Snippet, children?: import('svelte').Snippet}} */
-	let { showModal = $bindable(), onModalClose = () => {}, header, children } = $props();
+	let { showModal = $bindable(false), onModalClose = () => {}, header = undefined, children = undefined }: Props = $props();
 
-	let dialog = $state(); // HTMLDialogElement
+	let dialog: HTMLDialogElement | null = $state(null);
 	$effect(() => {
 		if (dialog && showModal) dialog.showModal();
 	});
-    function hndClose(ev){
+	function hndClose(ev: Event){
 		ev.stopPropagation();
-        dialog.close();
-        showModal = false;
-        onModalClose();
-    }
+		dialog?.close();
+		showModal = false;
+		onModalClose();
+	}
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->

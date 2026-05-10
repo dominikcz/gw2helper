@@ -18,6 +18,16 @@
 	let showDepreciated = $state(false);
 	let items = [];
 
+	type WalletCurrency = {
+		id: number;
+		name: string;
+		icon: string;
+		value: number;
+		description?: string;
+		depreciated?: boolean;
+		depreciationReason?: string;
+	};
+
 	function saveSettings() {
 		utils.saveWalletSettings({
 			showDepreciated,
@@ -26,10 +36,10 @@
 
 	onMount(async () => {
 		const settings = await utils.readWalletSettings();
-		showDepreciated = settings.showDepreciated;
+		showDepreciated = settings.showDepreciated ?? false;
 	});
 
-	function hndWalletReorder(ev: object) {
+	function hndWalletReorder(ev: { order: number[] }) {
 		utils.saveWalletOrder(ev.order);
 	}
 </script>
@@ -37,7 +47,7 @@
 <h1>{$_('home.title')}</h1>
 
 <Awaiter promise={data.delivery} >
-	{#snippet children(result)}
+	{#snippet children(result: { coins: number; items: any[] })}
 		<DeliveryBox coins={result.coins} items={result.items} />
 	{/snippet}
 </Awaiter>
@@ -49,9 +59,9 @@
 </section>
 
 <Awaiter promise={data.wallet} >
-	{#snippet children(result)}
+	{#snippet children(result: WalletCurrency[])}
 		<Currencies
-			items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' })}
+			items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as WalletCurrency[]}
 			onWalletReorder={hndWalletReorder}
 		/>
 	{/snippet}

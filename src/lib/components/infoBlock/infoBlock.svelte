@@ -1,6 +1,11 @@
 <script lang="ts">
-	/** @type {{caption?: string, kind?: "info" | "error", children?: import('svelte').Snippet<[any]>}} */
-	let { caption = 'Hint', kind = 'info', children } = $props();
+	interface Props {
+		caption?: string;
+		kind?: 'info' | 'error';
+		children?: import('svelte').Snippet;
+	}
+
+	let { caption = 'Hint', kind = 'info', children }: Props = $props();
 </script>
 
 <div class="info-block {kind}">

@@ -12,13 +12,13 @@
 <h1>{$_('layout.nav.trading-post')}</h1>
 
 <Awaiter promise={data.delivery} >
-	{#snippet children(result)}
+	{#snippet children(result: { coins: number; items: any[] })}
 		<DeliveryBox coins={result.coins} items={result.items} showTradingPostLink={false}/>
 	{/snippet}
 </Awaiter>
 
 <Awaiter promise={data.current} >
-	{#snippet children(result)}
+	{#snippet children(result: { buys: any[]; sells: any[] })}
 		<div class="trading-container">
 			<details open use:grungeBorder >
 				<summary>{$_('trading-post.buying')}</summary>

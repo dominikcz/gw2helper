@@ -1,8 +1,10 @@
+import type { PageLoad } from './$types';
 import utils from '$lib/utils.js';
 
-export async function load({ fetch, parent }) {
+export const load: PageLoad = async ({ fetch, parent }) => {
 	const { apiService } = await parent();
 	const key = apiService.getApiKey();
+	/** @type {number[]} */
 	const walletOrder = await utils.readWalletOrder();
 	if (key) {
 		return {
@@ -16,4 +18,4 @@ export async function load({ fetch, parent }) {
 			'delivery': { coins: 0, items: [] },
 		};
 	}
-}
+};

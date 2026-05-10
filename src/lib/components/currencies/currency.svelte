@@ -5,12 +5,20 @@
     import { dragHandle } from 'svelte-dnd-action';
 	import { t as _ } from '$lib/services/i18n';
 	interface Props {
-		currency: any;
+		currency: {
+			id: number;
+			name: string;
+			icon: string;
+			value: number;
+			description?: string;
+			depreciated?: boolean;
+			depreciationReason?: string;
+		};
 	}
 
 	let { currency }: Props = $props();
 
-	function getTitle(currency) {
+	function getTitle(currency: Props['currency']) {
 		return `<h4>${currency.name} (${currency.id}) - <a class="autotooltip-link" target="_blank" href="${helperUtils.wikiLink(currency.name)}">${$_('common.click_for_wiki')}</a></h4>
 			${currency.depreciated ? `<p class="warning"><strong>${$_('home.depreciated')}:</strong>${currency.depreciationReason}</p>` : ''}
 			<p>${currency.description}</p>`;

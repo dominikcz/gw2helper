@@ -1,6 +1,13 @@
 <script lang="ts">
-	/** @type {{width?: number, height?: number, [key: string]: any}} */
-	let { width = 128, height = 128, ...rest } = $props();
+	type SizeValue = number | string;
+
+	interface Props {
+		width?: SizeValue;
+		height?: SizeValue;
+		[key: string]: unknown;
+	}
+
+	let { width = 128, height = 128, ...rest }: Props = $props();
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" version="1.0" height={height} width={width} fill="currentColor" {...rest}>

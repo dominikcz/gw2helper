@@ -1,7 +1,9 @@
-export async function load({ fetch, parent }) {
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch, parent }) => {
 	const { apiService, todo } = await parent();
 	const key = apiService.getApiKey();
-	const returnObj = {
+	const returnObj: any = {
 		wallet: [],
 		daily: {},
 		weekly: {},
@@ -23,4 +25,4 @@ export async function load({ fetch, parent }) {
 		
 	}
 	return returnObj;
-}
+};

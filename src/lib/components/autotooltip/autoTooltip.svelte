@@ -3,28 +3,33 @@
 
 	import { autoTooltipInit } from './autotooltip-utils';
 
-	/** @type {{title?: string}} */
-	let { title = $bindable('') } = $props();
+	type AutoTooltipRenderer = (container: HTMLElement, id: string | null, params: unknown) => unknown;
+
+	interface Props {
+		title?: string;
+	}
+
+	let { title = $bindable('') }: Props = $props();
 
 	let customContent = false;
 	let visible = $state(title != '');
 
-	let x;
-	let y;
-	let ref = $state();
+	let x = 0;
+	let y = 0;
+	let ref = $state<HTMLDivElement | null>(null);
 	let autotooltipClass = $state('');
 
-	let touchStartTime;
-	let touchEventIsTap;
-	let touchInProgress;
-	let touchX;
-	let touchY;
+	let touchStartTime = 0;
+	let touchEventIsTap = false;
+	let touchInProgress = false;
+	let touchX: number | undefined;
+	let touchY: number | undefined;
 	let left = $state(false);
 	let above = $state(false);
 	let vertical = $state(false);
 	let under = $state(false);
 	let sticky = $state(true);
-	let lastTappedTooltipLink;
+	let lastTappedTooltipLink: HTMLAnchorElement | null = null;
 	let lastTappedTooltipTime = 0;
 
 	let touchMode = 'ontouchstart' in window;
@@ -33,41 +38,41 @@
 		customRenderers: {},
 	};
 
-	function processCustomRenderers(node) {
+	function processCustomRenderers(node: Element): boolean {
 		const id = node.getAttribute('data-autotooltip-id')
 		const customRendererId = node.getAttribute('data-autotooltip-renderer') || '';
 		// console.log('customRendererId', customRendererId, node)
 		if (customRendererId) {
-			const renderer = window.__autotooltip.customRenderers[customRendererId];
-			let params = id;
+			const renderer = window.__autotooltip?.customRenderers?.[customRendererId] as AutoTooltipRenderer | undefined;
+			let params: unknown = id;
 			const strParams = node.getAttribute('data-autotooltip-params');
 			if (strParams){
 				params = JSON.parse(strParams);
 			}
 			// console.log('autotooltip', customRendererId, window.__autotooltip.customRenderers, params);
-			if (renderer) {
+			if (renderer && ref) {
 				ref.textContent = '';
 				return (renderer(ref, id, params) === false) ? false : true;
 			}
 		} else {
-			if (customContent) {
+			if (customContent && ref) {
 				ref.textContent = '';
 			}
 		}
 		return false;
 	}
 
-	function handlingTouch(event) {
+	function handlingTouch(event: MouseEvent | TouchEvent): boolean {
 		const result = touchInProgress || touchMode;
 		if (result) {
 			event.preventDefault();
 			event.stopPropagation();
-			if (event.type.startsWith('touch') && event.touches.length) {
+			if ('touches' in event && event.type.startsWith('touch') && event.touches.length) {
 				touchX = event.touches[0].pageX;
 				touchY = event.touches[0].pageY;
 			} else {
-				touchX = event.pageX + 15;
-				touchY = event.pageY + 5;
+				touchX = (event as MouseEvent).pageX + 15;
+				touchY = (event as MouseEvent).pageY + 5;
 			}
 			// console.log('touch updated', touchX, touchY);
 		}
@@ -76,13 +81,14 @@
 
 	// #region mouse events
 
-	function mouseUp(event) {
+	function mouseUp(_event: MouseEvent) {
 		touchInProgress = false;
 		touchEventIsTap = false;
 	}
 
-	function mouseOver(event) {
-		let elem = event.target;
+	function mouseOver(event: MouseEvent) {
+		let elem = event.target as HTMLElement | null;
+		if (!elem) return;
 		if (elem.closest?.('._toastContainer')) {
 			visible = false;
 			return;
@@ -97,18 +103,20 @@
 		event.stopPropagation();
 	}
 
-	function mouseMove(event) {
-		if (event.target.closest?.('._toastContainer')) {
+	function mouseMove(event: MouseEvent) {
+		const target = event.target as HTMLElement | null;
+		if (!target) return;
+		if (target.closest?.('._toastContainer')) {
 			return;
 		}
 		// Don't reposition when cursor is over the tooltip itself
-		if (ref && ref.contains(event.target)) {
+		if (ref && ref.contains(target)) {
 			return;
 		}
 		updateXY(event);
 	}
 
-	function mouseLeave(event) {
+	function mouseLeave(_event: MouseEvent) {
 		// if (!handlingTouch(event)) {
 		// 	title = '';
 		// }
@@ -117,20 +125,20 @@
 	//#endregion
 	// #region touch events
 
-	function touchStart(event) {
+	function touchStart(_event: TouchEvent) {
 		touchInProgress = true;
 		touchStartTime = new Date().getTime();
 		touchEventIsTap = true;
 		// console.log('touch start', event);
 	}
 
-	function touchMove(event) {
+	function touchMove(event: TouchEvent) {
 		event.preventDefault();
 		// console.log(event);
 		touchEventIsTap = false;
 	}
 
-	function touchEnd(event) {
+	function touchEnd(event: TouchEvent) {
 		// console.log(event);
 		if (touchEventIsTap) {
 			let touchTimeLength = new Date().getTime() - touchStartTime;
@@ -142,9 +150,10 @@
 			// }
 			// console.log('touchended', event);
 
-			if (event.target.closest?.('._toastContainer')) {
+			const target = event.target as HTMLElement | null;
+			if (target?.closest?.('._toastContainer')) {
 				visible = false;
-			} else if (findTitle(event.target)) {
+			} else if (findTitle(target)) {
 				updateXY(event);
 			}
 		}
@@ -152,18 +161,18 @@
 		touchInProgress = false;
 	}
 
-	function touchCancel(event) {
+	function touchCancel(event: TouchEvent) {
 		touchInProgress = false;
 		event.preventDefault();
 	}
 
-	function clickCapture(event) {
-		const elem = event.target;
+	function clickCapture(event: MouseEvent) {
+		const elem = event.target as HTMLElement | null;
 		if (!elem || !touchMode || elem.closest?.('._toastContainer')) {
 			return;
 		}
 
-		const anchor = elem.closest?.('a[href]');
+		const anchor = elem.closest?.('a[href]') as HTMLAnchorElement | null;
 		if (!anchor) {
 			return;
 		}
@@ -198,8 +207,9 @@
 		lastTappedTooltipTime = now;
 	}
 
-	function tooltipTouchStart(event) {
-		if (!event.target.href) {
+	function tooltipTouchStart(event: TouchEvent) {
+		const target = event.target as HTMLAnchorElement | null;
+		if (!target?.href) {
 			event.stopPropagation();
 			event.preventDefault();
 			// title = '';
@@ -208,7 +218,7 @@
 
 	//#endregion
 
-	function checkIfSticky(elem) {
+	function checkIfSticky(elem: HTMLElement | null): boolean {
 		if (elem == null) return false;
 		// looking up hierarchy
 		try {
@@ -228,7 +238,7 @@
 		return sticky;
 	}
 
-	function findTitle(elem) {
+	function findTitle(elem: HTMLElement | null): boolean {
 		let _title = '';
 		let _class = '';
 		let __class = '';
@@ -244,8 +254,8 @@
 					_visible = true;
 					break;
 				} else {
-					_title = elem.getAttribute('data-autotooltip');
-					__class = elem.getAttribute('data-autotooltip-class');
+					_title = elem.getAttribute('data-autotooltip') || '';
+					__class = elem.getAttribute('data-autotooltip-class') || '';
 					if (__class) {
 						_class = __class;
 					}
@@ -262,7 +272,7 @@
 				// console.log('__', {_title, _visible, customContent})
 			} while (!_title && elem != null);
 			if (_visible) {
-				if (!customContent) {
+				if (!customContent && ref) {
 					title = _title;
 					ref.innerHTML = _title;
 				}
@@ -277,37 +287,38 @@
 		return visible;
 	}
 
-	function updateXY(event) {
+	function updateXY(event: MouseEvent | TouchEvent) {
 		const distance = 5;
 		const offset = 3;
 
-		const getPageCoordinates = (evt) => {
-			if (evt?.touches && evt.touches.length) {
+		const getPageCoordinates = (evt: MouseEvent | TouchEvent) => {
+			if ('touches' in evt && evt.touches.length) {
 				return {
 					pageX: evt.touches[0].pageX,
 					pageY: evt.touches[0].pageY,
 				};
 			}
-			if (evt?.changedTouches && evt.changedTouches.length) {
+			if ('changedTouches' in evt && evt.changedTouches.length) {
 				return {
 					pageX: evt.changedTouches[0].pageX,
 					pageY: evt.changedTouches[0].pageY,
 				};
 			}
 			return {
-				pageX: evt?.pageX ?? touchX ?? 0,
-				pageY: evt?.pageY ?? touchY ?? 0,
+				pageX: ('pageX' in evt ? evt.pageX : touchX) ?? 0,
+				pageY: ('pageY' in evt ? evt.pageY : touchY) ?? 0,
 			};
 		};
 
 		// by default set to right side
-		if (ref && event.target.nodeType == Node.ELEMENT_NODE) {
+		const targetElement = event.target as HTMLElement | null;
+		if (ref && targetElement && targetElement.nodeType == Node.ELEMENT_NODE) {
 			// measure natural dimensions by temporarily positioning tooltip where it has room
 			ref.style.left = '0px';
 			ref.style.top = '0px';
 			const rect = ref.getBoundingClientRect();
 
-			const elemRect = event.target.getBoundingClientRect();
+			const elemRect = targetElement.getBoundingClientRect();
 			const target = {
 				x: elemRect.left,
 				y: elemRect.top,
@@ -391,7 +402,7 @@
 			ref.style.left = `${newX}px`;
 			ref.style.top = `${newY}px`;
 
-			const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+			const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 			const arrowMargin = 12;
 			const targetCenterX = target.x + target.width / 2;
 			const targetCenterY = pageTop + target.y + target.height / 2;
@@ -409,7 +420,7 @@
 		}
 	}
 
-	autoTooltipInit();
+	autoTooltipInit(document);
 </script>
 
 <svelte:window
@@ -417,7 +428,7 @@
 	onmouseleave={mouseLeave}
 	onmousemovecapture={mouseMove}
 	onclickcapture={clickCapture}
-	use:nonpassive={['touchstart', () => touchStart]}
+	use:nonpassive={['touchstart', () => touchStart as EventListener]}
 	ontouchmove={touchMove}
 	ontouchend={touchEnd}
 	ontouchcancel={touchCancel}

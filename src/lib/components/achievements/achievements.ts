@@ -1,7 +1,77 @@
 import helperUtils from "$lib/utils/helper-utils";
 import { sum } from "$lib/utils";
 
-export function sort(collection, sortBy) {
+type SortBy = 'ap' | 'name' | 'order' | string;
+
+type RewardLike = {
+    type: string;
+    region?: string;
+    count?: number;
+};
+
+export type AchievementLike = {
+    id?: number;
+    icon?: string;
+    name: string;
+    type?: string;
+    description?: string;
+    requirement?: string;
+    current?: number;
+    max?: number;
+    done?: boolean;
+    todo?: boolean;
+    order?: number;
+    points_to_get?: number;
+    points_done?: number;
+    rewards?: RewardLike[];
+    bits?: unknown[];
+    bits_done?: number[];
+    rewardsObj?: Record<string, unknown>;
+    flags?: string[];
+    [key: string]: unknown;
+};
+
+export type CategoryLike = {
+    id?: number;
+    icon?: string;
+    name: string;
+    description?: string;
+    ignore?: boolean;
+    achievements: AchievementLike[];
+    rewards_to_get: Map<string, number>;
+    points_to_get: number;
+    points_done?: number;
+    _rewards_to_get?: RewardLike[];
+    [key: string]: unknown;
+};
+
+export type AchievementsData = {
+    completed: number;
+    todo: number;
+    daily_ap: number;
+    monthly_ap: number;
+    categories: CategoryLike[];
+    [key: string]: unknown;
+};
+
+type FilterParams = {
+    ignoreUnavilable?: boolean;
+    [key: string]: unknown;
+};
+
+type AchievementPredicate = (item: AchievementLike) => boolean;
+type CategoryPredicate = ((category: CategoryLike) => boolean) | null;
+
+type Sortable = {
+    name: string;
+    order?: number;
+    done?: boolean;
+    points_to_get?: number;
+};
+
+export function sort(collection: AchievementLike[], sortBy: SortBy): AchievementLike[];
+export function sort(collection: CategoryLike[], sortBy: SortBy): CategoryLike[];
+export function sort<T extends Sortable>(collection: T[], sortBy: SortBy): T[] {
     console.log('sorting...');
     switch (sortBy) {
         case 'ap': {
@@ -29,20 +99,20 @@ export function sort(collection, sortBy) {
     return collection;
 }
 
-export const sumRewards = (rewardsToGet, rewards) => {
-    rewards.forEach(x => {
+export const sumRewards = (rewardsToGet: Map<string, number>, rewards: RewardLike[]): void => {
+    rewards.forEach((x) => {
         const key = (x.region ? `${x.type}_${x.region}` : x.type).toLowerCase();
         const old = rewardsToGet.get(key) || 0;
-        rewardsToGet.set(key, old + (x.count || 1))
+        rewardsToGet.set(key, old + (x.count || 1));
     });
-}
+};
 
-export function expandToDoList(all, list) {
-    const _data = [];
+export function expandToDoList(all: AchievementsData, list: number[]): AchievementLike[] {
+    const _data: AchievementLike[] = [];
 
     all.categories.forEach((cat) => {
         cat.achievements.forEach((x) => {
-            if (list.includes(x.id)) {
+            if (x.id !== undefined && list.includes(x.id)) {
                 _data.push({ ...x, todo: true });
             }
         });
@@ -51,23 +121,23 @@ export function expandToDoList(all, list) {
     return _data;
 }
 
-function filterDaily(x) {
+function filterDaily(x: AchievementLike): boolean {
     return filterFlags(x, ['Daily']);
 }
 
-function filterWeekly(x) {
+function filterWeekly(x: AchievementLike): boolean {
     return filterFlags(x, ['Weekly']);
 }
 
-function filterDailyWeekly(x) {
+function filterDailyWeekly(x: AchievementLike): boolean {
     return filterFlags(x, ['Daily', 'Weekly']);
 }
 
-function filterFlags(x, expected) {
-    return x.flags.some(item => expected.includes(item));
+function filterFlags(x: { flags?: string[] }, expected: string[]): boolean {
+    return (x.flags || []).some((item) => expected.includes(item));
 }
 
-function onlyActiveCategories(x) {
+function onlyActiveCategories(x: CategoryLike): boolean {
     // it should be done on the level of an additional layer over api, but for now just quick reset of rewards
     x.rewards_to_get.clear();
     x.points_to_get = 0;
@@ -75,28 +145,35 @@ function onlyActiveCategories(x) {
     return !x.ignore;
 }
 
-export function extractDaily(achievements) {
+export function extractDaily(achievements: AchievementsData): AchievementsData {
     return filteredAchievements(achievements, '', filterDaily, onlyActiveCategories);
 }
 
-export function extractWeekly(achievements) {
+export function extractWeekly(achievements: AchievementsData): AchievementsData {
     return filteredAchievements(achievements, '', filterWeekly, onlyActiveCategories);
 }
 
-export function extractDailyAndWeekly(achievements) {
+export function extractDailyAndWeekly(achievements: AchievementsData): AchievementsData {
     return filteredAchievements(achievements, '', filterDailyWeekly, onlyActiveCategories);
 }
 
-export function filteredAchievements(data, filter, callbackFn, categoriesCallbackFn, params) {
+export function filteredAchievements(
+    data: AchievementsData,
+    filter: string,
+    callbackFn: AchievementPredicate,
+    categoriesCallbackFn: CategoryPredicate,
+    params: FilterParams = {}
+): AchievementsData {
     // `params` is just for forcing Svelte to make it reactive to other params. Just add there any variables which you want Svete to react on
 
     console.log('filtering...');
     // clone base properties, but no categories
-    let _data = {
+    const _data: AchievementsData = {
         completed: data.completed,
         todo: data.todo,
         daily_ap: data.daily_ap,
         monthly_ap: data.monthly_ap,
+        categories: [],
     };
 
     // in order to accomplish this task we have to produce a clone of this hierarchical structure and work on it,
@@ -113,35 +190,47 @@ export function filteredAchievements(data, filter, callbackFn, categoriesCallbac
     //            |- [] we filter here too
 
     // new categories (1)
-    const _categories = categoriesCallbackFn ? data.categories.filter(categoriesCallbackFn) : params.ignoreUnavilable ? data.categories.filter((x) => !x.ignore) : data.categories;
+    const _categories = categoriesCallbackFn
+        ? data.categories.filter(categoriesCallbackFn)
+        : params?.ignoreUnavilable
+            ? data.categories.filter((x) => !x.ignore)
+            : data.categories;
 
-    _data.categories = _categories.map(({ achievements, ...rest }) => {
-        let _cat = { ...rest }; // (1) clone categories without achievements
+    _data.categories = _categories
+        .map(({ achievements, ...rest }) => {
+            const _cat: CategoryLike = {
+                ...(rest as CategoryLike),
+                achievements: [],
+                rewards_to_get: new Map<string, number>(),
+                points_to_get: 0,
+            }; // (1) clone categories without achievements
 
-        // (2) filter achievements and attach them to this cloned category
-        _cat.achievements = achievements.filter(callbackFn);
+            // (2) filter achievements and attach them to this cloned category
+            _cat.achievements = achievements.filter(callbackFn);
 
-        _cat.points_to_get = sum(_cat.achievements, 'points_to_get');
-        _cat.points_done = sum(_cat.achievements, 'points_done');
-        _cat._rewards_to_get = _cat.achievements.filter(x => !x.done && x.rewards).flatMap(x => x.rewards)
-        // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
-        // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
-        // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
-        // cat.items_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.item).length;
+            _cat.points_to_get = sum(_cat.achievements, 'points_to_get');
+            _cat.points_done = sum(_cat.achievements, 'points_done');
+            _cat._rewards_to_get = _cat.achievements
+                .filter((x) => !x.done && Array.isArray(x.rewards))
+                .flatMap((x) => x.rewards as RewardLike[]);
+            // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
+            // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
+            // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
+            // cat.items_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.item).length;
 
-        _cat.rewards_to_get = new Map();
-        sumRewards(_cat.rewards_to_get, _cat._rewards_to_get);
-        // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
+            _cat.rewards_to_get = new Map<string, number>();
+            sumRewards(_cat.rewards_to_get, _cat._rewards_to_get);
+            // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
 
-        return _cat;
-    })
+            return _cat;
+        })
         // (3) and finally remove all categories that have no achievs anymore, unless category name matches filter
         .filter((cat) => cat.achievements.length || (filter != '' && helperUtils.fullTextSearch(filter, cat, ['name'])));
 
     return _data;
 }
 
-export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
+export const SEASONAL_ACHIEVEMENTS_CATEGORIES: Record<string, number[]> = {
     'sab': [ // Super Adventure Box
         22, // Super Adventure Box: World 1
         45, // Super Adventure Box: World 2
@@ -193,7 +282,7 @@ export const SEASONAL_ACHIEVEMENTS_CATEGORIES = {
         447, // Cozy Café
         448, // Daily Fooling
     ]
-}
+};
 
 export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
     28, // A Very Merry Wintersday '12
@@ -242,9 +331,9 @@ export const INACTIVE_ACHIEVEMENTS_CATEGORIES = [
     400, // Player vs. Player Rush
     401, // World vs. World Rush
     402, // New Hero Jump Start
-]
+];
 
-export const ACHIEVEMENT_LINKS = {
+export const ACHIEVEMENT_LINKS: Record<number, string> = {
     4181: `Sunken_Treasure_Hunter#achievement4181`, // Daily Blood in the Water
     4474: `Roller_Beetle_Time_Trial:_Lakeside_Loop`, // Daily Racer: Lakeside Loop
     4475: `Roller_Beetle_Time_Trial:_Tropic_Valley_Raceway`, // Daily Racer: Tropic Valley Raceway
@@ -253,4 +342,4 @@ export const ACHIEVEMENT_LINKS = {
     4482: `Mount_race#Roller_beetle_races`, // Daily Rolling Racer
     4484: `Roller_Beetle_Time_Trial:_Jormag's_Fang`, // Daily Racer: Jormag's Fang
     6683: `Defeat_the_invading_minions_of_Scarlet_Briar`, // Daily Portal Closer
-}
+};

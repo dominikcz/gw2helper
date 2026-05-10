@@ -1,9 +1,26 @@
 <script lang="ts">
 	import EventItem from './eventItem.svelte';
 	import { t as _ } from '$lib/services/i18n.js';
+	type EventItemModel = {
+		name: string;
+		watched?: boolean;
+		link?: string;
+		chatlink?: string;
+		next?: string;
+		bg?: unknown;
+		startTimes?: string[];
+		alarms?: string[];
+	};
 
-	/** @type {{events: any, showChatLinks?: boolean, onToggleWatched?: CallableFunction, onAlarmsChange?: CallableFunction, children?: import('svelte').Snippet}} */
-	let { events, showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {}, children } = $props();
+	interface Props {
+		events: EventItemModel[];
+		showChatLinks?: boolean;
+		onToggleWatched?: (payload: { name: string; watched: boolean }) => void;
+		onAlarmsChange?: (payload: { name: string; alarms: string[] }) => void;
+		children?: import('svelte').Snippet;
+	}
+
+	let { events, showChatLinks = false, onToggleWatched = () => {}, onAlarmsChange = () => {}, children = undefined }: Props = $props();
 </script>
 
 <div class="events-list">

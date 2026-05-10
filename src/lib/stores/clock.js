@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { readable } from 'svelte/store'
 
 export default function (options = {}) {

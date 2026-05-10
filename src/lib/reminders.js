@@ -1,3 +1,4 @@
+// @ts-nocheck
 import utils from '$lib/utils';
 import { writable } from 'svelte/store';
 import eventsUtils from './components/events/eventsUtils';

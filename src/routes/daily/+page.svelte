@@ -3,15 +3,15 @@
 	import wxdates from '$lib/wxjs_dates';
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
-	import { sort, extractDaily, extractWeekly, extractDailyAndWeekly } from '$lib/components/achievements/achievements.js';
+	import { sort, extractDaily, extractWeekly, extractDailyAndWeekly } from '$lib/components/achievements/achievements';
 	import { t as _ } from '$lib/services/i18n.js';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import AchievList from '$lib/components/achievements/achievList.svelte';
-	import { expandToDoList } from '$lib/components/achievements/achievements.js';
+	import { expandToDoList } from '$lib/components/achievements/achievements';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 
 	interface Props {
@@ -23,8 +23,6 @@
 	let sortBy = 'ap';
 	let showApiLinks = false;
 	let todoList = $state([]);
-
-	const asset = (path: string) => `${base}${path}`;
 
 	type WalletCurrency = {
 		id: number;
@@ -73,7 +71,7 @@
 	}
 	function currentWeek(dt: string): boolean {
 		const currentDate = new Date(dt);
-		const startOfWeek = wxdates.dateAdd(Date.prototype.wxNextWeekDay(1, true, 0, 0, 0), 'day', -7);
+		const startOfWeek = wxdates.dateAdd(Date.prototype.wxNextWeekDay(1, true, 0, 0, 0), 'day', -7) || new Date(0);
 		return wxdates.secondsBetween(currentDate, startOfWeek, false) >= 0;
 	}
 </script>
@@ -84,7 +82,7 @@
 
 <Awaiter promise={data.wallet}>
 	{#snippet children(result: WalletCurrency[])}
-		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={astralAcclaimAvailable(result)} image={asset('/assets/rewards/Astral_Acclaim.png')} />
+		<WidgetInfo title={$_('daily.your_astral_acclaims')} value={`${astralAcclaimAvailable(result)}`} image={asset('/assets/rewards/Astral_Acclaim.png')} />
 	{/snippet}
 </Awaiter>
 
@@ -122,8 +120,8 @@
 
 <Awaiter promise={data.achievements}>
 	{#snippet children(result: any)}
-		{@const dailies = extractDaily(result)}
-		{@const weeklies = extractWeekly(result)}
+		{@const dailies = extractDaily(result) as any}
+		{@const weeklies = extractWeekly(result) as any}
 		{@const dailiesWeeklies = extractDailyAndWeekly(result)}
 		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
 
@@ -133,13 +131,13 @@
 
 		<h3>{$_('daily.daily')}</h3>
 		<div class="achiev-container" use:grungeBorder>
-			{#each sort(dailies.categories, sortBy) as category (category.id)}
+					{#each sort(dailies.categories as import('$lib/components/achievements/achievements').CategoryLike[], sortBy) as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
 		<h3>{$_('daily.weekly')}</h3>
 		<div class="achiev-container" use:grungeBorder>
-			{#each sort(weeklies.categories, sortBy) as category (category.id)}
+					{#each sort(weeklies.categories as import('$lib/components/achievements/achievements').CategoryLike[], sortBy) as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>

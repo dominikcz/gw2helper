@@ -66,7 +66,7 @@ describe('Visual Components', () => {
 	});
 
 	it('renders item set icons and fallback for missing entries', () => {
-		const itemsCache = (id: number) => (id === 1001 ? { name: 'Apple', icon: 'https://example.com/apple.png' } : null);
+		const itemsCache = (id: number) => (id === 1001 ? { name: 'Apple', icon: 'https://example.com/apple.png' } : {});
 		const view = render(AchievementProgress, {
 			props: {
 				type: 'ItemSet',
