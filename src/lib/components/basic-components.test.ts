@@ -1,10 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
+import AstralAcclaim from '$lib/components/astralAcclaim.svelte';
 import Linkable from '$lib/components/linkable.svelte';
 import Wiki from '$lib/components/wiki.svelte';
 import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
-import AstralAcclaim from '$lib/components/astralAcclaim.svelte';
+
+describe('AstralAcclaim', () => {
+	it('renders wiki link and image', () => {
+		const view = render(AstralAcclaim);
+		expect(view.body).toMatch(/class="[^"]*tooltip-link[^"]*"/);
+		expect(view.body).toContain('href="https://wiki.guildwars2.com/wiki/Astral_Acclaim"');
+		expect(view.body).toContain('target="_blank"');
+		expect(view.body).toContain('Astral_Acclaim.png');
+	});
+
+	it('renders image alt text', () => {
+		const view = render(AstralAcclaim);
+		expect(view.body).toContain('alt="Astral Acclaim"');
+	});
+});
 
 describe('Linkable', () => {
 	it('renders anchor when link is provided', () => {
@@ -105,20 +120,5 @@ describe('WidgetsGroup', () => {
 	it('renders empty heading by default', () => {
 		const view = render(WidgetsGroup);
 		expect(view.body).toMatch(/<h3[^>]*><\/h3>/);
-	});
-});
-
-describe('AstralAcclaim', () => {
-	it('renders wiki link and image', () => {
-		const view = render(AstralAcclaim);
-		expect(view.body).toMatch(/class="[^"]*tooltip-link[^"]*"/);
-		expect(view.body).toContain('href="https://wiki.guildwars2.com/wiki/Astral_Acclaim"');
-		expect(view.body).toContain('target="_blank"');
-		expect(view.body).toContain('Astral_Acclaim.png');
-	});
-
-	it('renders image alt text', () => {
-		const view = render(AstralAcclaim);
-		expect(view.body).toContain('alt="Astral Acclaim"');
 	});
 });
