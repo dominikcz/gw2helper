@@ -1,2 +1,9 @@
 buying: Kupuję
 selling: Sprzedaję
+item: Przedmiot
+my_offer: Moja oferta
+age: Wiek oferty
+best_offer: Najlepsza oferta
+ordered_qty: '# zamówiono'
+outbid: Przelicytowano
+undercut: Ktoś wystawił taniej

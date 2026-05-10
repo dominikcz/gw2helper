@@ -36,6 +36,7 @@ network_error: Network error
 no_audio: >-
   You've got notifications set up but your browser prevents auto-playing audio
   without user interaction. Please close this message to enable sound.
+missing_scopes: 'Your token is missing the following scopes:'
 no_token: No API key provided
 paste_your_api_key_here: Paste your API key here
 retry: Retry

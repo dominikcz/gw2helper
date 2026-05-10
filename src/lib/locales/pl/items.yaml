@@ -12,4 +12,14 @@ characters_items: Przedmioty postaci
 common_items: Wspólne przedmioty
 guild_items: Przedmioty Gildii
 items: Przedmioty
+search_in_flags: szukaj w flagach przedmiotów
 shared_inventory: Wpólny schowek
+cleanup:
+  all_characters: '--- wszyscy ---'
+  slots_to_save: 'Miejsca do odzyskania: {slots}'
+  summary: 'Porady porządkowania ekwipunku: {slots} miejsc do odzyskania'
+  filter_by_character: 'Pokaż tylko przedmioty postaci:'
+  stackable_summary: 'Przedmioty, które można skompresować. Miejsca do odzyskania: {slots}'
+  stackable_description: 'Poniżej znajdziesz przedmioty, które można skompresować, by zajmowały mniej miejsca. W ten sposób możesz odzyskać do {slots} miejsc.'
+  get_rid_summary: 'Przedmioty, których warto się pozbyć. Miejsca do odzyskania: {slots}'
+  get_rid_description: 'Poniżej znajdziesz przedmioty, których warto się pozbyć. Możesz je zużyć, sprzedać lub wyrzucić, jeśli nie opłaca się ich sprzedawać. W ten sposób możesz odzyskać do {slots} miejsc.'

@@ -70,7 +70,7 @@
 	<!-- <button on:click={sortAsIs}>original sort order</button>
 		<button on:click={sortBySlots}>sort by quantity</button> -->
 	<SearchHelp />
-	<label><input type="checkbox" bind:checked={filterFlags} /> search in item flags</label>
+	<label><input type="checkbox" bind:checked={filterFlags} /> {$_('items.search_in_flags')}</label>
 </SearchInput>
 
 <InventoryCleanupAdvice

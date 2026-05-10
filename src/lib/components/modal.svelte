@@ -1,5 +1,7 @@
 <script lang="ts">
 	// based on https://svelte.dev/examples/modal
+	import { t as _ } from '$lib/services/i18n';
+
 	interface Props {
 		showModal: boolean;
 		onModalClose?: () => void;
@@ -28,7 +30,7 @@
 		{@render header?.()}
 		{@render children?.()}
 		<!-- svelte-ignore a11y_autofocus -->
-		<button autofocus onclick={hndClose}>OK</button>
+		<button autofocus onclick={hndClose}>{$_('common.ok')}</button>
 	</div>
 </dialog>
 

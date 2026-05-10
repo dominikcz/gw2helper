@@ -36,6 +36,7 @@ no_audio: >-
   Masz skonfigurowane powiadomienia, ale przeglądarka zapobiega automatycznemu
   odtwarzaniu dźwięku bez interakcji użytkownika. Proszę zamknąć tę wiadomość,
   aby włączyć dźwięk.
+missing_scopes: 'Twój token nie ma wymaganych uprawnień:'
 no_token: Brak klucza API
 paste_your_api_key_here: Wklej tutaj swój klucz API
 token_ok: Udane wczytanie klucza "{token}".

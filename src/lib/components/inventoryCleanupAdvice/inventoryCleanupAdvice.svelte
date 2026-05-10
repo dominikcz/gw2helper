@@ -4,7 +4,7 @@
 	import { asset } from '$app/paths';
 	import Awaiter from '../awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
-	import { t as _, t } from '$lib/services/i18n';
+	import { t as _ } from '$lib/services/i18n';
 	import Item from '../items/item.svelte';
 	import { sum } from '$lib/utils';
 	import SearchInput from '../searchInput.svelte';
@@ -77,7 +77,7 @@
 			.catch((error) => reject(error));
 	});
 
-	let char = $state('--- all ---');
+	let char = $state($_('items.cleanup.all_characters'));
 
 	const tooltipOptions = {
 		customRenderers: {
@@ -216,7 +216,7 @@
 	}
 
 	function getCharacters(itemsToStack: ItemAdvice[]) {
-		const list = ['--- all ---'];
+		const list = [$_('items.cleanup.all_characters')];
 
 		const sources = new Set<string>();
 		itemsToStack.forEach((element: ItemAdvice) => {
@@ -231,8 +231,14 @@
 	}
 
 	function filteredItems(items: ItemAdvice[]) {
-		if (!char || char == '--- all ---') return items;
+		if (!char || char == $_('items.cleanup.all_characters')) return items;
 		return items.filter((x: ItemAdvice) => x.usage.some((u: ItemUsage) => u.source == char));
+	}
+
+	function sourceLabel(source: string) {
+		if (source === 'bank') return $_('items.bank');
+		if (source === 'shared') return $_('items.shared_inventory');
+		return source;
 	}
 </script>
 
@@ -241,10 +247,10 @@
 		<Item item={{ ...adv.item, count: sum(adv.usage, 'count') }} />
 		<ul>
 			{#each adv.usage as usage}
-				<li class:highlight={usage.source == char}>{usage.count} - {usage.source}</li>
+				<li class:highlight={usage.source == char}>{usage.count} - {sourceLabel(usage.source)}</li>
 			{/each}
 		</ul>
-		<span class="savings">Slots to save: {adv.savings}</span>
+		<span class="savings">{$_('items.cleanup.slots_to_save', { slots: adv.savings })}</span>
 	</div>
 {/snippet}
 
@@ -252,29 +258,28 @@
 	{#snippet children(result: AdviceSummary)}
 		{#if result.stackSavings + result.getRidSavings > 0}
 			<details use:grungeBorder={{ grunge: true }}>
-				<summary>Inventory cleanup advice: {`${result.stackSavings + result.getRidSavings} slots to save`}</summary>
+				<summary>{$_('items.cleanup.summary', { slots: result.stackSavings + result.getRidSavings })}</summary>
 				<article>
-					<img src={asset('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt="under construction" />
+					<!-- <img src={asset('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt={$_('common.under_construction')} /> -->
 					<p>
-						Show only items of character:
+						{$_('items.cleanup.filter_by_character')}
 						<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />
 					</p>
 
 					<details class="info" use:grungeBorder>
-						<summary>Items that can be stacked. Slots to save: {result.stackSavings}</summary>
+						<summary>{$_('items.cleanup.stackable_summary', { slots: result.stackSavings })}</summary>
 						<article use:autotooltip={tooltipOptions}>
-							<p>Below you can find items that can be compacted to occupy less space. This can save you up to {result.stackSavings} slots.</p>
+							<p>{$_('items.cleanup.stackable_description', { slots: result.stackSavings })}</p>
 							{#each filteredItems(result.itemsToStack) as item, idx}
 								{@render itemAdvice(item, idx)}
 							{/each}
 						</article>
 					</details>
 					<details class="info" use:grungeBorder>
-						<summary>Items that you should get rid of. Slots to save: {result.getRidSavings}</summary>
+						<summary>{$_('items.cleanup.get_rid_summary', { slots: result.getRidSavings })}</summary>
 						<article use:autotooltip={tooltipOptions}>
 							<p>
-								Below you can find items that you should consider getting rid of. You can use, sell, or discard them if they are not worth
-								selling. You can save up to {result.getRidSavings} slots this way.
+								{$_('items.cleanup.get_rid_description', { slots: result.getRidSavings })}
 							</p>
 							{#each filteredItems(result.itemsToGetRidOf) as item, idx}
 								{@render itemAdvice(item, idx)}
@@ -298,11 +303,15 @@
 	ul {
 		width: 16rem;
 		padding-left: 0;
-		list-style-position: outside;
-		padding-inline-start: 1.2rem;
+		/* list-style-position: inside; */
+		list-style: none;
+		padding-inline-start: 0;
 		margin: 0.2rem 0;
 	}
 
+	li{
+		padding: 0 0.4rem;
+	}
 	.item-cleanup {
 		padding: 0 0 0 0.8rem;
 		min-height: 80px;

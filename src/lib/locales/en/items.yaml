@@ -11,4 +11,14 @@ characters_items: Characters' items
 common_items: Common items
 guild_items: Guild items
 items: Items
+search_in_flags: search in item flags
 shared_inventory: Shared inventory
+cleanup:
+  all_characters: '--- all ---'
+  slots_to_save: 'Slots to save: {slots}'
+  summary: 'Inventory cleanup advice: {slots} slots to save'
+  filter_by_character: 'Show only items of character:'
+  stackable_summary: 'Items that can be stacked. Slots to save: {slots}'
+  stackable_description: 'Below you can find items that can be compacted to occupy less space. This can save you up to {slots} slots.'
+  get_rid_summary: 'Items that you should get rid of. Slots to save: {slots}'
+  get_rid_description: 'Below you can find items that you should consider getting rid of. You can use, sell, or discard them if they are not worth selling. You can save up to {slots} slots this way.'

@@ -1,2 +1,9 @@
 buying: Compra
 selling: Venta
+item: Objeto
+my_offer: Mi oferta
+age: Antiguedad
+best_offer: Mejor oferta
+ordered_qty: '# pedidos'
+outbid: Superada
+undercut: Precio rebajado

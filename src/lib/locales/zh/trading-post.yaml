@@ -1,2 +1,9 @@
 buying: 购买
 selling: 销售
+item: 物品
+my_offer: 我的报价
+age: 时长
+best_offer: 最优报价
+ordered_qty: '# 订单数'
+outbid: 出价被超过
+undercut: 被压价

@@ -1,2 +1,9 @@
 buying: Kaufen
 selling: Verkaufen
+item: Gegenstand
+my_offer: Mein Angebot
+age: Alter
+best_offer: Bestes Angebot
+ordered_qty: '# bestellt'
+outbid: Uberboten
+undercut: Unterboten

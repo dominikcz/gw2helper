@@ -36,6 +36,7 @@ no_audio: >-
   Usted tiene notificaciones establecidas pero su navegador evita el audio de
   reproducción automática sin interacción con el usuario. Por favor, cierre este
   mensaje para permitir el sonido.
+missing_scopes: 'A tu token le faltan los siguientes permisos:'
 no_token: No API key provided
 paste_your_api_key_here: Pruebe su clave de API aquí
 token_ok: Clave cargada exitosamente "{token}".

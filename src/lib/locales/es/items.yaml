@@ -3,4 +3,14 @@ characters_items: Artículos de carácter
 common_items: Artículos comunes
 guild_items: Artículos de culpabilidad
 items: Temas
+search_in_flags: buscar en las banderas del objeto
 shared_inventory: Inventario compartido
+cleanup:
+  all_characters: '--- todos ---'
+  slots_to_save: 'Espacios para ahorrar: {slots}'
+  summary: 'Consejos de limpieza de inventario: {slots} espacios para ahorrar'
+  filter_by_character: 'Mostrar solo objetos del personaje:'
+  stackable_summary: 'Objetos que se pueden apilar. Espacios para ahorrar: {slots}'
+  stackable_description: 'Aqui puedes encontrar objetos que se pueden compactar para ocupar menos espacio. Esto puede ahorrarte hasta {slots} espacios.'
+  get_rid_summary: 'Objetos de los que deberias deshacerte. Espacios para ahorrar: {slots}'
+  get_rid_description: 'Aqui puedes encontrar objetos de los que deberias considerar deshacerte. Puedes usarlos, venderlos o descartarlos si no vale la pena venderlos. Asi puedes ahorrar hasta {slots} espacios.'

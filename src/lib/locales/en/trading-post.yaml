@@ -1,2 +1,9 @@
 buying: Buying
 selling: Selling
+item: Item
+my_offer: My offer
+age: Age
+best_offer: Best offer
+ordered_qty: '# ordered'
+outbid: Outbid
+undercut: Undercut

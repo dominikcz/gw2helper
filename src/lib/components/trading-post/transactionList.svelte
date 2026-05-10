@@ -10,6 +10,27 @@
 	export let items: TransactionCurrentItem[] = [];
 	export let offerType = '';
 
+	function isOutbid(item: TransactionCurrentItem): boolean {
+		const offer = item[offerType as keyof TransactionCurrentItem] as ApiCommercePriceOfferDto | undefined;
+		if (!offer?.unit_price) {
+			return false;
+		}
+
+		if (offerType === 'buys') {
+			return item.price < offer.unit_price;
+		}
+
+		if (offerType === 'sells') {
+			return item.price > offer.unit_price;
+		}
+
+		return false;
+	}
+
+	function outbidLabelKey(): string {
+		return offerType === 'sells' ? 'trading-post.undercut' : 'trading-post.outbid';
+	}
+
 	const tooltipOptions = {
 		customRenderers: {
 			'img.item': itemTooltipRenderer,
@@ -22,31 +43,35 @@
 		<caption></caption>
 		<thead>
 			<tr>
-				<th>Item</th>
-				<th>My offer</th>
-				<th>Age</th>
-				<th>Best offer</th>
-				<th># ordered</th>
+				<th>{$_('trading-post.item')}</th>
+				<th>{$_('trading-post.my_offer')}</th>
+				<th>{$_('trading-post.age')}</th>
+				<th>{$_('trading-post.best_offer')}</th>
+				<th>{$_('trading-post.ordered_qty')}</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each items as item, index (`${item.id}-${index}`)}
 				{@const offer = item[offerType as keyof TransactionCurrentItem] as ApiCommercePriceOfferDto}
-				<tr>
+				{@const outbid = isOutbid(item)}
+				<tr class:outbid={outbid}>
 					<td class="item">
 						<Item {item} />
 						<span class="item-name">{item.name}</span>
 					</td>
 					<td>
 						<Price value={item.price} />
+						{#if outbid}
+							<div class="status outbid">{$_(outbidLabelKey())}</div>
+						{/if}
 					</td>
 					<td class="item-time">
 						{wxdates.friendlyDurationTillNow(new Date(item.created), false)}
 					</td>
-					<td class="offer">
+					<td class="offer" data-label={$_('trading-post.best_offer')}>
 						<Price value={offer.unit_price} />
 					</td>
-					<td class="offer-qty">
+					<td class="offer-qty" data-label={$_('trading-post.ordered_qty')}>
 						{offer.quantity}
 					</td>
 				</tr>
@@ -113,10 +138,25 @@
 				background-color: rgba(0, 0, 0, 0.1);
 			}
 		}
+		tr.outbid {
+			box-shadow: inset 0 0 0 1px rgba(255, 120, 120, 0.7);
+		}
 		td {
 			padding: 0 0.6rem;
 			margin: 0.6rem 0;
 		}
+	}
+
+	.status {
+		margin-top: 0.2rem;
+		font-size: var(--step--2);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.status.outbid {
+		color: #ff8d8d;
 	}
 
 	@media screen and (max-width: 880px) {
@@ -166,12 +206,12 @@
 			}
 			&.offer {
 				&::before {
-					content: 'best offer';
+					content: attr(data-label);
 				}
 			}
 			&.offer-qty {
 				&::before {
-					content: '# ordered';
+					content: attr(data-label);
 				}
 			}
 		}

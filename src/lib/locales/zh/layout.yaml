@@ -28,6 +28,7 @@ nav:
   trading-post: 交易站
   legendary: 传奇
 no_audio: 已经设置了通知,但您的浏览器在没有用户互动的情况下防止自动播放音频. 请关闭此消息以启用声音 。
+missing_scopes: '你的令牌缺少以下权限:'
 no_token: 未提供 API 密钥
 paste_your_api_key_here: 在此粘贴您的 API 密钥
 token_ok: 成功装入密钥"{token}" 。

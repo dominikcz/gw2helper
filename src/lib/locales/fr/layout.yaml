@@ -36,6 +36,7 @@ no_audio: >-
   Vous avez des notifications configurées mais votre navigateur empêche le jeu
   automatique de l'audio sans interaction utilisateur. Veuillez fermer ce
   message pour activer le son.
+missing_scopes: 'Votre jeton ne possède pas les permissions suivantes :'
 no_token: Aucune clé API fournie
 paste_your_api_key_here: Collez votre clé API ici
 token_ok: Clef chargé avec succès « {token} ».

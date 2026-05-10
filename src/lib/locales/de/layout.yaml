@@ -37,6 +37,7 @@ no_audio: >-
   Sie haben Benachrichtigungen eingerichtet, aber Ihr Browser verhindert
   Auto-Playing Audio ohne Benutzerinteraktion. Bitte schließen Sie diese
   Nachricht, um Sound zu aktivieren.
+missing_scopes: 'Ihr Token hat keine der folgenden Berechtigungen:'
 no_token: Keine API-Schlüssel vorhanden
 paste_your_api_key_here: Fügen Sie Ihre API-Schlüssel hier ein
 token_ok: Erfolgreich geladener Schlüssel "{token}".

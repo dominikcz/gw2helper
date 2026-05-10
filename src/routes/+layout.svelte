@@ -260,7 +260,7 @@
 
 		{#if tokenInfo.name || !currentPageRequiresKey}
 			{#if missingScopes.length}
-				<h2>Your token is missing the following scopes:</h2>
+				<h2>{$_('layout.missing_scopes')}</h2>
 				<ul>
 					{#each missingScopes as scope}
 						<li>{scope}</li>

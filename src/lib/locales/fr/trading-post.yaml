@@ -1,2 +1,9 @@
 buying: Achat
-selling: Vnte
+selling: Vente
+item: Objet
+my_offer: Mon offre
+age: Age
+best_offer: Meilleure offre
+ordered_qty: '# commandes'
+outbid: Surencheri
+undercut: Prix inferieur
