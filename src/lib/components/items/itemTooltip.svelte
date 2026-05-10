@@ -1,5 +1,7 @@
 <script lang="ts">
 	import utils from "$lib/utils";
+	import helperUtils from '$lib/utils/helper-utils';
+	import { t as _ } from '$lib/services/i18n';
 	import type { ItemTooltipData } from '$lib/types/items';
 
 	interface Props {
@@ -21,6 +23,10 @@
 	function rarityClass() {
 		return item.rarity ? `rarity-${item.rarity.toLowerCase()}` : '';
 	}
+
+	function openWiki() {
+		window.open(helperUtils.wikiLink(item.name || ''), '_blank', 'noopener,noreferrer');
+	}
 </script>
 
 <div class="item-descr">
@@ -30,9 +36,13 @@
 	</div>
 
 	<div class="details">
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{#if item.description}<p>{@html item.description}</p>{/if}
 		{#if item.level}<p>Required level: {item.level}</p>{/if}
 		{#if flags}<p class="flags">{flags}</p>{/if}
+		<p class="wiki-link">
+			<button class="autotooltip-link wiki-btn" type="button" onclick={openWiki}>{$_('common.click_for_wiki')}</button>
+		</p>
 	</div>
 </div>
 
@@ -69,6 +79,14 @@
         .details{
             padding: 0.4em;
         }
+		.wiki-link {
+			margin-top: 0.5em;
+		}
+		.wiki-btn {
+			padding: 0;
+			border: 0;
+			background: transparent;
+		}
         .flags{
             font-size: 80%;
         }
