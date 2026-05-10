@@ -1,10 +1,10 @@
 import { autoTooltipInit } from "$lib/components/autotooltip/autotooltip-utils";
 
-/**
- * @param {HTMLElement} node
- * @param {{ customRenderers?: Record<string, (...args: any[]) => any> }} [options]
- */
-export function autotooltip(node, options) {
+type AutotooltipOptions = {
+    customRenderers?: Record<string, (...args: any[]) => any>;
+};
+
+export function autotooltip(node: HTMLElement, options?: AutotooltipOptions) {
     autoTooltipInit(node, options);
 
     const observer = new MutationObserver(() => {
@@ -19,10 +19,7 @@ export function autotooltip(node, options) {
     });
 
     return {
-        /**
-         * @param {{ customRenderers?: Record<string, (...args: any[]) => any> }} [nextOptions]
-         */
-        update(nextOptions) {
+        update(nextOptions?: AutotooltipOptions) {
             options = nextOptions;
             autoTooltipInit(node, options);
         },

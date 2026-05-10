@@ -8,7 +8,7 @@
 	import Clock from '$lib/services/clock.svelte';
 	import Reminders from '$lib/reminders';
 	import utils from '$lib/utils';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 
 	type ReminderEvent = {
 		name: string;

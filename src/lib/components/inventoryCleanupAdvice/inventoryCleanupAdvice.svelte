@@ -4,7 +4,7 @@
 	import { asset } from '$app/paths';
 	import Awaiter from '../awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
-	import { t as _, t } from '$lib/services/i18n.js';
+	import { t as _, t } from '$lib/services/i18n';
 	import Item from '../items/item.svelte';
 	import { sum } from '$lib/utils';
 	import SearchInput from '../searchInput.svelte';

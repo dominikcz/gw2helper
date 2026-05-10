@@ -2,7 +2,7 @@
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	/** @type {{data: any}} */
 	let { data } = $props();
 

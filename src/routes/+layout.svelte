@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 
 	import languages from '$lib/locales/languages.json';
-	import { t as _, locale } from '$lib/services/i18n.js';
+	import { t as _, locale } from '$lib/services/i18n';
 
 	import BackToTop from '$lib/components/backToTop.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
@@ -13,7 +13,7 @@
 
 	import { Howl } from 'howler';
 
-	import utils from '$lib/utils.js';
+	import utils from '$lib/utils';
 
 	import Navigation from '$lib/components/navigation.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';

@@ -4,7 +4,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from './itemTooltipRenderer';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	type ItemListEntry = {

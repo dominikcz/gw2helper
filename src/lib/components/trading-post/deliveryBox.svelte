@@ -3,8 +3,8 @@
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import { resolve } from '$app/paths';
 	import Price from '../price.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
-	import { autotooltip } from '$lib/actions/autotooltip.js';
+	import { t as _ } from '$lib/services/i18n';
+	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	type DeliveryItem = {

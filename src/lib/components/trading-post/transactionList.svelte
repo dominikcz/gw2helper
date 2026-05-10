@@ -4,7 +4,7 @@
 	import Price from '$lib/components/price.svelte';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 
 	type Offer = {
 		unit_price: number;

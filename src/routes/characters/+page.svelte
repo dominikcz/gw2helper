@@ -3,7 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import helperUtils from '$lib/utils/helper-utils';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 
 	/** @type {{data: any}} */

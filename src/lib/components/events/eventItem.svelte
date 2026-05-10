@@ -3,7 +3,7 @@
 	import helperUtils from '$lib/utils/helper-utils';
 	import Chips from '../chips/chips.svelte';
 	import themeWatcher from '$lib/stores/themeWatcher';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import WatchState from '../watch-state/watch-state.svelte';
 
 	type ChipValue = string | number;

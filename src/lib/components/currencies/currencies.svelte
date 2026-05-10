@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { autotooltip } from '$lib/actions/autotooltip.js';
+	import { autotooltip } from '$lib/actions/autotooltip';
 	import { dragHandleZone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import helperUtils from '$lib/utils/helper-utils';

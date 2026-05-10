@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import utils from '$lib/utils.js';
+import utils from '$lib/utils';
 
 export const load: PageLoad = async ({ fetch, parent }) => {
 	const { apiService } = await parent();

@@ -5,7 +5,7 @@
 	import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
 	import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 	import { asset } from '$app/paths';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { onMount } from 'svelte';
 

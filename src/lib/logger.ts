@@ -3,20 +3,26 @@ const debugMode =
 		? new URLSearchParams(window.location.search).get('debug-mode') == '1'
 		: false;
 
-export default {
-	debugMode: debugMode,
-	/** @param {string} message @param {unknown=} params */
+type LoggerApi = {
+	debugMode: boolean;
+	log: (message: string, params?: unknown) => void;
+	error: (message: string, params?: unknown) => void;
+	warn: (message: string, params?: unknown) => void;
+};
+
+const logger: LoggerApi = {
+	debugMode,
 	log: (message, params) => {
 		if (debugMode) {
 			console.log(message, params);
 		}
 	},
-	/** @param {string} message @param {unknown=} params */
 	error: (message, params) => {
 		console.error(message, params);
 	},
-	/** @param {string} message @param {unknown=} params */
 	warn: (message, params) => {
 		console.warn(message, params);
 	},
 };
+
+export default logger;

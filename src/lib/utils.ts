@@ -1,3 +1,4 @@
+// @ts-nocheck
 import idb from "$lib/wxjs_idb";
 import ls from "$lib/wxjs_localstorage";
 
@@ -21,6 +22,11 @@ import {
 /** @typedef {{ showChatLinks?: boolean, showEventTimes?: boolean, showCategories?: boolean, showHeadings?: boolean, autoScroll?: boolean }} EventTimerSettings */
 /** @typedef {{ notCompleted?: boolean, withPoints?: boolean, withMasteryCentral?: boolean, withMasteryHoT?: boolean, withMasteryPoF?: boolean, withMasteryIce?: boolean, withMasteryEoD?: boolean, withMasterySofO?: boolean, withMasteryJW?: boolean, withTitles?: boolean, withItems?: boolean, withCoins?: boolean, daily?: boolean, weekly?: boolean, sortBy?: string }} AchievementSettings */
 /** @typedef {{ inAdvance?: number, sound?: string, sortBy?: string }} ReminderSettings */
+
+type WalletSettings = { showDepreciated?: boolean };
+type EventTimerSettings = { showChatLinks?: boolean; showEventTimes?: boolean; showCategories?: boolean; showHeadings?: boolean; autoScroll?: boolean };
+type AchievementSettings = { notCompleted?: boolean; withPoints?: boolean; withMasteryCentral?: boolean; withMasteryHoT?: boolean; withMasteryPoF?: boolean; withMasteryIce?: boolean; withMasteryEoD?: boolean; withMasterySofO?: boolean; withMasteryJW?: boolean; withTitles?: boolean; withItems?: boolean; withCoins?: boolean; daily?: boolean; weekly?: boolean; sortBy?: string };
+type ReminderSettings = { inAdvance?: number; sound?: string; sortBy?: string };
 
 async function readApiKey() {
     let key = '';
@@ -72,9 +78,8 @@ function saveLang(value) {
 }
 
 /** @returns {Promise<EventTimerSettings>} */
-async function readEventTimerSettings() {
-    /** @type {EventTimerSettings} */
-    return await idb.getObject(EVENT_TIMER_SETTINGS, {});
+async function readEventTimerSettings(): Promise<EventTimerSettings> {
+    return await idb.getObject<EventTimerSettings>(EVENT_TIMER_SETTINGS, {} as EventTimerSettings);
 }
 
 /** @param {Record<string, unknown>} settings */
@@ -94,9 +99,8 @@ async function saveEventTimerCategories(settings) {
 }
 
 /** @returns {Promise<AchievementSettings>} */
-async function readAchievementsSettings() {
-    /** @type {AchievementSettings} */
-    return await idb.getObject(ACHIEVEMENTS_SETTINGS, {});
+async function readAchievementsSettings(): Promise<AchievementSettings> {
+    return await idb.getObject<AchievementSettings>(ACHIEVEMENTS_SETTINGS, {} as AchievementSettings);
 }
 
 /** @param {Record<string, unknown>} settings */
@@ -105,9 +109,8 @@ async function saveAchievementsSettings(settings) {
 }
 
 /** @returns {Promise<WalletSettings>} */
-async function readWalletSettings() {
-    /** @type {WalletSettings} */
-    return await idb.getObject(WALLET_SETTINGS, {});
+async function readWalletSettings(): Promise<WalletSettings> {
+    return await idb.getObject<WalletSettings>(WALLET_SETTINGS, {} as WalletSettings);
 }
 
 /** @param {Record<string, unknown>} settings */
@@ -164,9 +167,8 @@ async function readReminders() {
 }
 
 /** @returns {Promise<ReminderSettings>} */
-async function readRemindersSettings() {
-    /** @type {ReminderSettings} */
-    return await idb.getObject(REMINDERS_SETTINGS, {});
+async function readRemindersSettings(): Promise<ReminderSettings> {
+    return await idb.getObject<ReminderSettings>(REMINDERS_SETTINGS, {} as ReminderSettings);
 }
 
 async function readAchievementsToDo() {

@@ -7,7 +7,7 @@
 	import Tab from '$lib/components/tabs/tab.svelte';
 	import { TabPanel } from '$lib/components/tabs/tabs';
 	import eventsUtils from '$lib/components/events/eventsUtils';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 
 	/** @type {{data: any}} */
 	let { data = $bindable() } = $props();

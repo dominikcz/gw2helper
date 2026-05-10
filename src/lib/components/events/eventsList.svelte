@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EventItem from './eventItem.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	type EventItemModel = {
 		name: string;
 		watched?: boolean;

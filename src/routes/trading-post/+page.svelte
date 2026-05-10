@@ -3,7 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	import TransactionList from '$lib/components/trading-post/transactionList.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 
 	/** @type {{data: any}} */
 	let { data } = $props();

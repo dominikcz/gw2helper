@@ -5,7 +5,7 @@
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import utils from '$lib/utils';
 	import Currencies from '$lib/components/currencies/currencies.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	interface Props {
 		data: any;

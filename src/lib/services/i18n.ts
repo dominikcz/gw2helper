@@ -6,9 +6,8 @@ import utils from '$lib/utils';
 
 const namespaces = ['common', 'home', 'layout', 'account', 'achievements', 'characters', 'daily', 'events', 'guilds', 'items', 'materials', 'trading-post', 'legendary'];
 
-/** @type {Array<{ locale: string, key: string, loader: () => Promise<unknown> }>} */
-const loaders = [];
-Object.keys(languages).forEach((lang) => {
+const loaders: Array<{ locale: string; key: string; loader: () => Promise<unknown> }> = [];
+Object.keys(languages as Record<string, unknown>).forEach((lang) => {
 	namespaces.forEach((key) => {
 		loaders.push({
 			locale: lang,
@@ -28,7 +27,7 @@ export const config = {
 	loaders
 };
 
-export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(/** @type {any} */ (config));
+export const { t, loading, locales, locale, loadTranslations, setLocale } = new i18n(config as any);
 
 locale.subscribe((value) => {
 	if (value != undefined) {

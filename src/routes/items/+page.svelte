@@ -3,7 +3,7 @@
 	import Awaiter from '$lib/components/awaiter.svelte';
 	import SearchInput from '$lib/components/searchInput.svelte';
 	import SearchHelp from '$lib/components/searchHelp.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import { sum } from '$lib/utils';
 	import InventoryCleanupAdvice from '$lib/components/inventoryCleanupAdvice/inventoryCleanupAdvice.svelte';
 

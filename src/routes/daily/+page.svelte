@@ -6,7 +6,7 @@
 	import { asset } from '$app/paths';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, extractDaily, extractWeekly, extractDailyAndWeekly } from '$lib/components/achievements/achievements';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { grungeBorder } from '$lib/actions/grungeBorder';

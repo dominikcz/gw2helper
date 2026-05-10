@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Awaiter from '$lib/components/awaiter.svelte';
-	import { t as _ } from '$lib/services/i18n.js';
+	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Legendary from '$lib/components/items/legendary.svelte';
