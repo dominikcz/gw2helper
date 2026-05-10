@@ -4,34 +4,19 @@
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import type { PageData } from './$types';
-
-	type GuildData = {
-		id: string;
-		emblem: {
-			background: { layers: string[] };
-			foreground: { layers: string[] };
-			flags: string[];
-		};
-		name: string;
-		tag: string;
-		motd?: string;
-		level: number;
-		member_count: number;
-		member_capacity: number;
-		aetherium: number;
-		favor: number;
-	};
+	import type { ApiGuildDto } from '$lib/types/gw2-api';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
 <h1>{ $_('guilds.guilds') }</h1>
 <Awaiter promise={data.guilds} >
-	{#snippet children(result: GuildData[])}
+	{#snippet children(result: ApiGuildDto[])}
 		{#each result as guild (guild.id)}
+			{@const emblem = guild.emblem || { background: { id: 1, colors: [0] }, foreground: { id: 60, colors: [443] }, flags: [] }}
 			<section class="guild-info" use:grungeBorder>
 				<div class="guild-header">
-					<GuildEmblem emblem={guild.emblem} background="#777" />
+					<GuildEmblem emblem={emblem as never} background="#777" />
 					<div class="guild-h">
 						<h2>{guild.name} [{guild.tag}]</h2>
 						<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>

@@ -8,13 +8,7 @@
 	import { t as _ } from '$lib/services/i18n';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	import type { PageData } from './$types';
-
-	type DeliveryItem = {
-		id: number;
-		count: number;
-		name?: string;
-		[key: string]: unknown;
-	};
+	import type { DeliveryData, WalletCurrency } from '$lib/types/gw2-api';
 
 	interface Props {
 		data: PageData;
@@ -26,16 +20,6 @@
 	const fields = ['name', 'description'];
 	let showDepreciated = $state(false);
 	let items = [];
-
-	type WalletCurrency = {
-		id: number;
-		name: string;
-		icon: string;
-		value: number;
-		description?: string;
-		depreciated?: boolean;
-		depreciationReason?: string;
-	};
 
 	function saveSettings() {
 		utils.saveWalletSettings({
@@ -56,7 +40,7 @@
 <h1>{$_('home.title')}</h1>
 
 <Awaiter promise={data.delivery} >
-	{#snippet children(result: { coins: number; items: DeliveryItem[] })}
+	{#snippet children(result: DeliveryData)}
 		<DeliveryBox coins={result.coins} items={result.items} />
 	{/snippet}
 </Awaiter>
@@ -70,7 +54,7 @@
 <Awaiter promise={data.wallet} >
 	{#snippet children(result: WalletCurrency[])}
 		<Currencies
-			items={helperUtils.filterCollection(result, fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as WalletCurrency[]}
+			items={helperUtils.filterCollection(result as unknown as Record<string, unknown>[], fields, filter, { nonZero: !showDepreciated, nonZeroField: 'active' }) as unknown as WalletCurrency[]}
 			onWalletReorder={hndWalletReorder}
 		/>
 	{/snippet}

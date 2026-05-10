@@ -15,20 +15,11 @@
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import type { PageData } from './$types';
 	import type { AchievementsData } from '$lib/components/achievements/achievements';
+import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } from '$lib/types/gw2-api';
 
 	interface Props {
 		data: PageData;
 	}
-
-	type VaultCategoryData = {
-		objectives: Array<{ claimed: boolean; acclaim: number }>;
-		meta_reward_claimed?: boolean;
-		meta_reward_astral?: number;
-		meta_progress_current?: number;
-		meta_progress_complete?: number;
-	};
-
-	type AccountSummary = { last_modified: string };
 
 	let { data }: Props = $props();
 
@@ -36,10 +27,6 @@
 	let showApiLinks = false;
 	let todoList = $state<number[]>([]);
 
-	type WalletCurrency = {
-		id: number;
-		value: number;
-	};
 
 	// svelte-ignore non_reactive_update
 	enum Period {
@@ -98,22 +85,23 @@
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.account as Promise<AccountSummary> | AccountSummary}>
-	{#snippet children(result: AccountSummary)}
-		{#if !currentDay(result.last_modified)}
+<Awaiter promise={data.account as Promise<AccountWithLocalDates> | AccountWithLocalDates}>
+	{#snippet children(result: AccountWithLocalDates)}
+		{@const lastModified = result.last_modified || new Date(0).toISOString()}
+		{#if !currentDay(lastModified)}
 			<InfoBlock caption={$_('daily.info.hint')}>{@html $_('daily.info.hint-content')}</InfoBlock>
 		{/if}
-		<Awaiter promise={data.daily as Promise<VaultCategoryData> | VaultCategoryData}>
-			{#snippet children(resultDaily: VaultCategoryData)}
-				{#if currentDay(result.last_modified)}
+		<Awaiter promise={data.daily as Promise<WizardsVaultCategoryData> | WizardsVaultCategoryData}>
+			{#snippet children(resultDaily: WizardsVaultCategoryData)}
+				{#if currentDay(lastModified)}
 					<WizardsVaultCategory title={$_('daily.daily')} data={resultDaily} targetTime={getTimerTarget(Period.daily)} />
 				{/if}
 			{/snippet}
 		</Awaiter>
 
-		<Awaiter promise={data.weekly as Promise<VaultCategoryData> | VaultCategoryData}>
-			{#snippet children(resultWeekly: VaultCategoryData)}
-				{#if currentWeek(result.last_modified)}
+		<Awaiter promise={data.weekly as Promise<WizardsVaultCategoryData> | WizardsVaultCategoryData}>
+			{#snippet children(resultWeekly: WizardsVaultCategoryData)}
+				{#if currentWeek(lastModified)}
 					<WizardsVaultCategory title={$_('daily.weekly')} data={resultWeekly} targetTime={getTimerTarget(Period.weekly)} />
 				{/if}
 			{/snippet}
@@ -121,8 +109,8 @@
 	{/snippet}
 </Awaiter>
 
-<Awaiter promise={data.special as Promise<VaultCategoryData> | VaultCategoryData}>
-	{#snippet children(result: VaultCategoryData)}
+<Awaiter promise={data.special as Promise<WizardsVaultCategoryData> | WizardsVaultCategoryData}>
+	{#snippet children(result: WizardsVaultCategoryData)}
 		<WizardsVaultCategory title={$_('daily.special')} data={result} targetTime={getTimerTarget(Period.special)} />
 	{/snippet}
 </Awaiter>

@@ -5,25 +5,9 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n';
+	import type { ApiCommercePriceOfferDto, TransactionCurrentItem } from '$lib/types/gw2-api';
 
-	type Offer = {
-		unit_price: number;
-		quantity: number;
-	};
-
-	type TransactionItem = {
-		id: number;
-		name: string;
-		price: number;
-		created: string;
-		count?: number;
-		icon?: string;
-		rarity?: string;
-		locked?: boolean;
-		[key: string]: Offer | number | string | boolean | undefined;
-	};
-
-	export let items: TransactionItem[] = [];
+	export let items: TransactionCurrentItem[] = [];
 	export let offerType = '';
 
 	const tooltipOptions = {
@@ -47,7 +31,7 @@
 		</thead>
 		<tbody>
 			{#each items as item, index (`${item.id}-${index}`)}
-				{@const offer = item[offerType] as Offer}
+				{@const offer = item[offerType as keyof TransactionCurrentItem] as ApiCommercePriceOfferDto}
 				<tr>
 					<td class="item">
 						<Item {item} />

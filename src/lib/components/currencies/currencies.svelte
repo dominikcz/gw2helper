@@ -4,17 +4,10 @@
 	import { flip } from 'svelte/animate';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Currency from './currency.svelte';
+import type { WalletCurrency } from '$lib/types/gw2-api';
 
 	interface Props {
-		items?: Array<{
-			id: number;
-			name: string;
-			icon: string;
-			value: number;
-			description?: string;
-			depreciated?: boolean;
-			depreciationReason?: string;
-		}>;
+		items?: WalletCurrency[];
 		onWalletReorder?: (payload: { order: number[] }) => void;
 	}
 

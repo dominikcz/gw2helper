@@ -1,17 +1,33 @@
 import type { PageLoad } from './$types';
+import type { AchievementsData } from '$lib/components/achievements/achievements';
+import {
+	EMPTY_ACCOUNT_DATA,
+	type AccountWithLocalDates,
+	type WalletCurrency,
+	type WizardsVaultCategoryData,
+} from '$lib/types/gw2-api';
 
 export const load: PageLoad = async ({ fetch, parent }) => {
 	const { apiService, toDoList } = await parent();
 	const key = apiService.getApiKey();
 	type DailyLoadResult = {
-		wallet: unknown[] | Promise<unknown[]>;
-		daily: Record<string, unknown> | Promise<Record<string, unknown>>;
-		weekly: Record<string, unknown> | Promise<Record<string, unknown>>;
-		special: Record<string, unknown> | Promise<Record<string, unknown>>;
-		achievements: Record<string, unknown> | Promise<Record<string, unknown>>;
+		wallet: WalletCurrency[] | Promise<WalletCurrency[]>;
+		daily: WizardsVaultCategoryData | Promise<WizardsVaultCategoryData>;
+		weekly: WizardsVaultCategoryData | Promise<WizardsVaultCategoryData>;
+		special: WizardsVaultCategoryData | Promise<WizardsVaultCategoryData>;
+		achievements: (AchievementsData & { rewards_to_get: Map<string, number> }) | Promise<AchievementsData & { rewards_to_get: Map<string, number> }>;
 		toDoList: unknown;
 		seasonEnd: string | null;
-		account?: Promise<Record<string, unknown>>;
+		account: AccountWithLocalDates | Promise<AccountWithLocalDates>;
+	};
+
+	const emptyAchievements: AchievementsData & { rewards_to_get: Map<string, number> } = {
+		completed: 0,
+		todo: 0,
+		daily_ap: 0,
+		monthly_ap: 0,
+		categories: [],
+		rewards_to_get: new Map<string, number>(),
 	};
 
 	const returnObj: DailyLoadResult = {
@@ -19,9 +35,10 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		daily: {},
 		weekly: {},
 		special: {},
-		achievements: {},
+		achievements: emptyAchievements,
 		toDoList,
 		seasonEnd: null,
+		account: EMPTY_ACCOUNT_DATA,
 	};
 	if (key) {
 		returnObj.account = apiService.account();

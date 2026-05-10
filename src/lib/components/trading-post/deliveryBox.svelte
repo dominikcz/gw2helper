@@ -6,25 +6,12 @@
 	import { t as _ } from '$lib/services/i18n';
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
-
-	type DeliveryItem = {
-		id: number;
-		name?: string;
-		count: number;
-		description?: string;
-		type?: string;
-		subtype?: string;
-		rarity?: string;
-		flags?: string[];
-		icon?: string;
-		locked?: boolean;
-		[key: string]: unknown;
-	};
+import type { ExpandedItem } from '$lib/types/gw2-api';
 
 	interface Props {
 		showTradingPostLink?: boolean;
 		coins?: number;
-		items?: DeliveryItem[];
+		items?: ExpandedItem[];
 	}
 
 	let { showTradingPostLink = true, coins = 0, items = [] }: Props = $props();

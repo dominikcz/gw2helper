@@ -7,6 +7,7 @@
 	import { sum } from '$lib/utils';
 	import InventoryCleanupAdvice from '$lib/components/inventoryCleanupAdvice/inventoryCleanupAdvice.svelte';
 	import type { PageData } from './$types';
+	import type { ApiCharacterBagDto, CharacterWithItems, GuildStashData } from '$lib/types/gw2-api';
 
 	interface Props {
 		data: PageData;
@@ -17,20 +18,24 @@
 	let filter = $state('');
 	let filterFlags = $state(false);
 
-	type BagItem = { inventory: Array<unknown | null> };
-	type Bag = { size: number; inventory: Array<unknown | null> } | null;
-	type ItemListEntry = {
+	type Bag = ApiCharacterBagDto | null;
+	type CleanupInventoryItem = {
+		rarity: string;
 		id: number;
+		name: string;
+		icon: string;
 		count: number;
-		name?: string;
-		description?: string;
-		type?: string;
-		subtype?: string;
-		rarity?: string;
-		icon?: string;
-		flags?: string[];
+		type: string;
+		binding?: string;
+		equipped?: boolean;
+		details?: {
+			type?: string;
+		};
 	};
-	type CharacterItems = { name: string; bags: Bag[]; _items: ItemListEntry[] };
+	type CleanupCharacterItems = {
+		name: string;
+		_items: CleanupInventoryItem[];
+	};
 
 	enum SortType {
 		AsIs,
@@ -53,7 +58,7 @@
 	function availableSlots(bags: Bag[]) {
 		return bags
 			.filter(Boolean)
-			.map((x) => (x as BagItem).inventory)
+			.map((x) => (x as ApiCharacterBagDto).inventory || [])
 			.flat()
 			.filter((x: unknown | null) => x === null).length;
 	}
@@ -68,16 +73,20 @@
 	<label><input type="checkbox" bind:checked={filterFlags} /> search in item flags</label>
 </SearchInput>
 
-<InventoryCleanupAdvice bank={data.bank} shared={data.shared} charactersItems={data.charactersItems} />
+<InventoryCleanupAdvice
+	bank={data.bank as unknown as Promise<CleanupInventoryItem[]>}
+	shared={data.shared as unknown as Promise<CleanupInventoryItem[]>}
+	charactersItems={data.charactersItems as unknown as Promise<CleanupCharacterItems[]>}
+/>
 
 <h3>{$_('items.common_items')}</h3>
 
-<ItemsList summary={$_('items.bank')} items={data.bank} {filter} {filterFlags}/>
-<ItemsList summary={$_('items.shared_inventory')} items={data.shared} {filter} {filterFlags} />
+<ItemsList summary={$_('items.bank')} items={data.bank as unknown as Promise<CleanupInventoryItem[]>} {filter} {filterFlags}/>
+<ItemsList summary={$_('items.shared_inventory')} items={data.shared as unknown as Promise<CleanupInventoryItem[]>} {filter} {filterFlags} />
 
 <h3>{$_('items.guild_items')}</h3>
 <Awaiter promise={data.guildItems}>
-	{#snippet children(result: Array<{ name: string; stash: ItemListEntry[]; error?: string }>)}
+	{#snippet children(result: GuildStashData[])}
 		{#each result as guild}
 			<ItemsList summary={guild.name} items={guild.stash} error={guild.error} {filter} {filterFlags} />
 		{/each}
@@ -86,15 +95,16 @@
 
 <h3>{$_('items.characters_items')}</h3>
 <Awaiter promise={data.charactersItems}>
-	{#snippet children(result: CharacterItems[])}
+	{#snippet children(result: CharacterWithItems[])}
 		{#each result as char}
-			{@const bags = char.bags.filter(Boolean) as Array<{ size: number }>}
+			{@const allBags = char.bags || []}
+			{@const bags = allBags.filter(Boolean) as Array<{ size: number }>}
 			{@const capacity = sum(bags, 'size')}
-			{@const available = availableSlots(char.bags)}
+			{@const available = availableSlots(allBags)}
 			<!-- `${char.name} - ${char.bags.length} bags (${}) - ${sum(char.bags, 'size')} slots total` -->
 			<ItemsList
 				summary={$_('items.bags.summary', { name: char.name, available, capacity })}
-				additionalInfo={$_('items.bags.details', { count: char.bags.length, sizes: sizes(bags), capacity })}
+				additionalInfo={$_('items.bags.details', { count: allBags.length, sizes: sizes(bags), capacity })}
 				items={char._items}
 				{filter}
 				{filterFlags}

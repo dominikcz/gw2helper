@@ -6,23 +6,13 @@
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import type { PageData } from './$types';
+	import type { ApiCharacterDto } from '$lib/types/gw2-api';
 
 	let { data }: { data: PageData } = $props();
 	let filter = $state('');
 	const fields = ['name', 'race', 'gender', 'profession', 'level', 'title', 'crafting_discipline']; // nested properties not suported yet
 
-	type CharacterCraft = { discipline: string; rating: number };
-	type Character = {
-		name: string;
-		created: string;
-		gender: string;
-		race: string;
-		profession: string;
-		level: number;
-		crafting?: CharacterCraft[];
-		deaths: number;
-		age: number;
-	};
+type Character = ApiCharacterDto;
 
 	function professionIcon(name: string) {
 		return asset(`/assets/professions/${name}_icon.png`);
@@ -42,7 +32,9 @@
 	}
 
 	function deathsPerHour(char: Character) {
-		return (char.age > 3600 ? (char.deaths | 0) / helperUtils.hoursPlayed(char.age) : char.deaths | 0).toFixed(2);
+		const age = Number(char.age || 0);
+		const deaths = Number(char.deaths || 0);
+		return (age > 3600 ? deaths / helperUtils.hoursPlayed(age) : deaths).toFixed(2);
 	}
 </script>
 
@@ -51,40 +43,41 @@
 
 <Awaiter promise={data.characters}>
 	{#snippet children(result: Character[])}
-		{@const filtered = helperUtils.filterCollection(result, fields, filter) as Character[]}
-		{#each filtered.sort((a, b) => -1 * (a.age - b.age)) as char}
-			{@const days = helperUtils.tillBirthday(char.created)}
-			{@const gender = char.gender.toLowerCase()}
+			{@const filtered = helperUtils.filterCollection(result as unknown as Record<string, unknown>[], fields, filter) as unknown as Character[]}
+		{#each filtered.sort((a, b) => -1 * ((Number(a.age || 0)) - (Number(b.age || 0)))) as char}
+			{@const days = helperUtils.tillBirthday(char.created || new Date().toISOString())}
+			{@const gender = (char.gender || '').toLowerCase()}
 			<details use:grungeBorder open>
 				<summary>{char.name}</summary>
 				<article class="character">
 					<section>
 						<div class="sect-prof">
-							<span>{char.profession}</span>
-							<img src={professionIcon(char.profession)} alt={char.profession} />
-							<span>lvl. {char.level}</span>
+							<span>{char.profession || '-'}</span>
+							<img src={professionIcon(char.profession || 'Warrior')} alt={char.profession || 'Unknown profession'} />
+							<span>lvl. {char.level || 0}</span>
 						</div>
 						<div class="sect-info">
-							<div class="info">{char.gender} {char.race}</div>
+							<div class="info">{char.gender || '-'} {char.race || '-'}</div>
 							{#if char.crafting}
+								{@const crafting = char.crafting.filter((x): x is NonNullable<typeof x> => x != null)}
 								<ul class="info icons">
-									{#each char.crafting as craft}
-										<li><img src={craftIcon(craft.discipline)} alt="craft.discipline" />{craft.discipline}: {craft.rating}</li>
+									{#each crafting as craft}
+										<li><img src={craftIcon(craft.discipline || 'unknown')} alt="craft.discipline" />{craft.discipline || '-'}: {craft.rating}</li>
 									{:else}
 										<li class="no-results">{$_('characters.no_crafting_professions')}</li>
 									{/each}
 								</ul>
 							{/if}
 							<div class="info">{$_('characters.hours_played')}</div>
-							<div class="counter">{helperUtils.hoursPlayed(char.age)}</div>
+							<div class="counter">{helperUtils.hoursPlayed(Number(char.age || 0))}</div>
 						</div>
 					</section>
 					<section>
 						<div class="sect-prof">
-							<img src={icon('Present_quaggan_icon.png')} alt="present" style:width={iconScale(char.created)} />
+							<img src={icon('Present_quaggan_icon.png')} alt="present" style:width={iconScale(char.created || new Date().toISOString())} />
 						</div>
 						<div class="sect-info">
-							<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created) })}</div>
+							<div class="counter">{$_('characters.years', { age: helperUtils.age(char.created || new Date().toISOString()) })}</div>
 							<div class="info">{$_('characters.next_birthday_in')}</div>
 							<div class="counter">{days} <span class="info">{$_('characters.days', { days })}</span></div>
 						</div>
@@ -95,7 +88,7 @@
 						</div>
 						<div class="sect-info">
 							<div class="info">{$_('characters.died', { gender })}</div>
-							<div class="counter">{char.deaths} <span class="info">{$_('characters.times', { times: char.deaths })}</span></div>
+							<div class="counter">{char.deaths || 0} <span class="info">{$_('characters.times', { times: char.deaths || 0 })}</span></div>
 							<div class="info">({deathsPerHour(char)}/h)</div>
 						</div>
 					</section>

@@ -8,6 +8,7 @@
 	import { sum } from '$lib/utils';
 	import Progress from '$lib/components/progress/progress.svelte';
 	import type { PageData } from './$types';
+	import type { LegendariesData, LegendaryItemSummary } from '$lib/types/gw2-api';
 
 	interface Props {
 		data: PageData;
@@ -17,28 +18,8 @@
 
 	const armorPiecesCount = 7; // Helm, Shoulders, Coat, Gloves, Leggings, Boots, Aquatic Helm
 
-	type LegendaryItem = { id: number; name: string; icon: string; count: number; max_count: number };
-	type ArmorGroup = {
-		Helm: LegendaryItem[];
-		Shoulders: LegendaryItem[];
-		Coat: LegendaryItem[];
-		Gloves: LegendaryItem[];
-		Leggings: LegendaryItem[];
-		Boots: LegendaryItem[];
-		HelmAquatic: LegendaryItem[];
-	};
-	type TrinketsGroup = {
-		Accessory: LegendaryItem[];
-		Ring: LegendaryItem[];
-		Amulet: LegendaryItem[];
-	};
-	type LegendariesResult = {
-		armor: { Light: ArmorGroup; Medium: ArmorGroup; Heavy: ArmorGroup };
-		back: LegendaryItem[];
-		trinkets: TrinketsGroup;
-		upgrades: LegendaryItem[];
-		weapons: Record<string, LegendaryItem[]>;
-	};
+	type ArmorGroup = LegendariesData['armor']['Light'];
+	type TrinketsGroup = LegendariesData['trinkets'];
 
 	const minReqWeapons = {
 		Axe: 2,
@@ -62,39 +43,43 @@
 		Warhorn: 1,
 	} as Record<string, number>;
 
-	function done(items: LegendaryItem[], minReq: number) {
-		const completed = sum(items, 'count');
+	function sumCount(items: LegendaryItemSummary[]) {
+		return sum(items as unknown as Record<string, unknown>[], 'count');
+	}
+
+	function done(items: LegendaryItemSummary[], minReq: number) {
+		const completed = sumCount(items);
 		return completed >= minReq;
 	}
 
 	function completionArmor(data: ArmorGroup) {
 		let completed = 0;
-		if (sum(data.Helm, 'count')) completed++;
-		if (sum(data.Shoulders, 'count')) completed++;
-		if (sum(data.Coat, 'count')) completed++;
-		if (sum(data.Gloves, 'count')) completed++;
-		if (sum(data.Leggings, 'count')) completed++;
-		if (sum(data.Boots, 'count')) completed++;
+		if (sumCount(data.Helm)) completed++;
+		if (sumCount(data.Shoulders)) completed++;
+		if (sumCount(data.Coat)) completed++;
+		if (sumCount(data.Gloves)) completed++;
+		if (sumCount(data.Leggings)) completed++;
+		if (sumCount(data.Boots)) completed++;
 		return completed;
 	}
 
-	function completionTrinkets(data: { back: LegendaryItem[]; trinkets: TrinketsGroup }) {
+	function completionTrinkets(data: { back: LegendaryItemSummary[]; trinkets: TrinketsGroup }) {
 		let completed = 0;
-		if (sum(data.back, 'count')) completed++;
-		if (sum(data.trinkets.Accessory, 'count')) completed++;
-		completed += Math.min(2, sum(data.trinkets.Ring, 'count')); // there are 2 rings, each with 2 mac_count, but we only want 2 as max
-		if (sum(data.trinkets.Amulet, 'count')) completed++;
+		if (sumCount(data.back)) completed++;
+		if (sumCount(data.trinkets.Accessory)) completed++;
+		completed += Math.min(2, sumCount(data.trinkets.Ring)); // there are 2 rings, each with 2 mac_count, but we only want 2 as max
+		if (sumCount(data.trinkets.Amulet)) completed++;
 		return completed;
 	}
 
-	function completionUpgrades(data: { upgrades: LegendaryItem[] }) {
-		return sum(data.upgrades, 'count');
+	function completionUpgrades(data: { upgrades: LegendaryItemSummary[] }) {
+		return sumCount(data.upgrades);
 	}
 
-	function completionWeapons(data: Record<string, LegendaryItem[]>) {
+	function completionWeapons(data: Record<string, LegendaryItemSummary[]>) {
 		let completed = 0;
 		Object.keys(minReqWeapons).forEach((x) => {
-			completed += Math.min(minReqWeapons[x], sum(data[x], 'count'));
+			completed += Math.min(minReqWeapons[x], sumCount(data[x]));
 		});
 		return completed;
 	}
@@ -110,7 +95,7 @@
 
 <h3>{$_('legendary.armor')}</h3>
 
-{#snippet unlocksList(caption: string, items: LegendaryItem[], minReq = 1, restricted = false)}
+{#snippet unlocksList(caption: string, items: LegendaryItemSummary[], minReq = 1, restricted = false)}
 	<div class="equip" class:done={done(items, minReq)} class:restricted>
 		<h4>{caption}</h4>
 		<div class="unlocks">
@@ -142,8 +127,8 @@
 	</details>
 {/snippet}
 
-<Awaiter promise={data.legendaries as Promise<LegendariesResult> | LegendariesResult}>
-	{#snippet children(result: LegendariesResult)}
+<Awaiter promise={data.legendaries as Promise<LegendariesData> | LegendariesData}>
+	{#snippet children(result: LegendariesData)}
 		{@const progressTrinkets = completionTrinkets(result)}
 		{@const progressUpgrades = completionUpgrades(result)}
 		{@render unlockGroup($_('legendary.armor_type_short.light'), result.armor.Light)}
@@ -181,8 +166,8 @@
 
 <h3>{$_('legendary.weapons')}</h3>
 
-<Awaiter promise={data.legendaries as Promise<LegendariesResult> | LegendariesResult}>
-	{#snippet children(result: LegendariesResult)}
+<Awaiter promise={data.legendaries as Promise<LegendariesData> | LegendariesData}>
+	{#snippet children(result: LegendariesData)}
 		{@const progressWeapons = completionWeapons(result.weapons)}
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>

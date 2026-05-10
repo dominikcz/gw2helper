@@ -7,6 +7,42 @@ import wxjs_types from "./wxjs_types";
 import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 import { groupBy, mapFields } from "./utils/helper-utils";
 import wxdates from "./wxjs_dates";
+import type { AchievementBit } from "$lib/types/achievements";
+import type { ItemTooltipData } from "$lib/types/items";
+import type {
+    AccountWithLocalDates,
+    ApiAccountAchievementDto,
+    ApiAccountDto,
+    ApiAchievementCategoryDto,
+    ApiAchievementDto,
+    ApiAchievementRewardDto,
+    ApiCharacterBagDto,
+    ApiCharacterCraftingDto,
+    ApiCharacterDto,
+    ApiCommerceDeliveryDto,
+    ApiCommercePriceDto,
+    ApiCommercePriceOfferDto,
+    ApiCommerceTransactionDto,
+    ApiCurrencyDto,
+    ApiGuildDto,
+    ApiGuildStashSectionDto,
+    ApiItemDto,
+    ApiLegendaryArmoryDto,
+    ApiAccountLegendaryArmoryDto,
+    ApiMiniDto,
+    ApiSkinDto,
+    ApiWalletDto,
+    CharacterWithItems,
+    DeliveryData,
+    ExpandedItem,
+    GuildStashData,
+    LegendariesData,
+    LegendaryItemSummary,
+    TransactionCurrentItem,
+    WalletCurrency,
+    WizardsVaultCategoryData,
+} from "$lib/types/gw2-api";
+import type { AchievementsData } from "$lib/components/achievements/achievements";
 
 const defaultApiUrl = "https://api.guildwars2.com";
 const mockApiUrl = "http://localhost:3000";
@@ -81,8 +117,82 @@ const realApi = getQueryStringFlag('real-api');
 interface CacheEntry {
     time: Date | string;
     timeout: number;
-    data: any;
+    data: unknown;
 }
+
+type Dictionary = Record<string, unknown>;
+
+type ApiListItem = {
+    id: number;
+    [key: string]: unknown;
+};
+
+type ItemLike = ApiItemDto & ItemTooltipData & {
+    id: number;
+    details?: { type?: string; description?: string } & Dictionary;
+    upgrades?: number[];
+    infusions?: number[];
+    charges?: number;
+    subtype?: string;
+    subdescr?: string;
+    [key: string]: unknown;
+};
+
+type CharacterBag = ApiCharacterBagDto;
+
+type CharacterData = ApiCharacterDto & {
+    bags?: Array<CharacterBag | null>;
+    equipment?: Array<ItemLike | null>;
+    crafting?: Array<ApiCharacterCraftingDto | null>;
+    _items?: ExpandedItem[];
+    [key: string]: unknown;
+};
+
+type TransactionData = ApiCommerceTransactionDto;
+
+type TransactionExpanded = TransactionData & {
+    transId: number;
+    id: number;
+    count: number;
+};
+
+type AchievementReward = ApiAchievementRewardDto;
+
+type AchievementTier = {
+    count: number;
+    points?: number;
+};
+
+type AchievementData = ApiAchievementDto & {
+    bits?: AchievementBit[];
+    tiers?: AchievementTier[];
+    rewards?: AchievementReward[];
+    rewardsObj?: Partial<Record<string, AchievementReward[]>>;
+    [key: string]: unknown;
+};
+
+type AchievementCategoryData = Omit<ApiAchievementCategoryDto, 'achievements'> & {
+    ignore?: boolean;
+    name: string;
+    description?: string;
+    achievements: AchievementData[];
+    points_to_get?: number;
+    points_done?: number;
+    _rewards_to_get?: AchievementReward[];
+    rewards_to_get?: Map<string, number>;
+};
+
+type AccountAchievementData = ApiAccountAchievementDto & {
+    bits?: number[];
+    bits_done?: number[];
+    [key: string]: unknown;
+};
+
+type AccountData = ApiAccountDto & {
+    created_local?: string;
+    last_modified_local?: string;
+    [key: string]: unknown;
+};
 
 interface TokenInfo {
     id: string;
@@ -100,19 +210,19 @@ interface ApiClientOptions extends RequestInit {
     onError(request: RequestInfo | string, response: Response, options: object): void;
     fetchFunction: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
     debug: boolean;
-    transform?: (data: any) => any;
+    transform?: (data: unknown) => unknown;
 }
 
-let _items: [number, any][] | undefined;
-let _minis: [number, any][] | undefined;
-let _skins: [number, any][] | undefined;
-let _achievements: [number, any][] | undefined;
-let itemsCache: Map<number, any>;
-let minisCache: Map<number, any>;
-let skinsCache: Map<number, any>;
-let achievementsCache: Map<number, any>;
+let _items: [number, ItemLike][] | undefined;
+let _minis: [number, ApiMiniDto][] | undefined;
+let _skins: [number, ApiSkinDto][] | undefined;
+let _achievements: [number, AchievementData][] | undefined;
+let itemsCache: Map<number, ItemLike>;
+let minisCache: Map<number, ApiMiniDto>;
+let skinsCache: Map<number, ApiSkinDto>;
+let achievementsCache: Map<number, AchievementData>;
 let requestCache: Map<string, CacheEntry>;
-let inflightItems: Map<number, Promise<any>> = new Map();
+let inflightItems: Map<number, Promise<ItemLike[]>> = new Map();
 let _tokenInfo: TokenInfo = {
     id: '',
     name: '',
@@ -165,7 +275,7 @@ const tryCache = (req: string): CacheEntry | undefined => {
     return undefined;
 };
 
-const cacheRequest = async (req: string, value: any) => {
+const cacheRequest = async (req: string, value: unknown) => {
     const obj: CacheEntry = {
         time: new Date(),
         timeout: CACHE_TIMEOUT,
@@ -175,7 +285,7 @@ const cacheRequest = async (req: string, value: any) => {
     await ls.set(requestCacheName(), [...requestCache.entries()]);
 };
 
-const getFromAchievementsCache = (key: string): any => {
+const getFromAchievementsCache = (key: string): AchievementData | undefined => {
     return achievementsCache.get(Number(key));
 }
 
@@ -228,10 +338,10 @@ const readSettings = async () => {
     }
 }
 
-const apiClient = async (req: string | RequestInfo, query: string, options?: Partial<ApiClientOptions>) => {
+const apiClient = async <T = unknown>(req: string | RequestInfo, query: string, options?: Partial<ApiClientOptions>): Promise<T> => {
     if (!_apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
-        return null;
+        return null as unknown as T;
     }
     const scopeReq = typeof req === 'string' ? req : req instanceof Request ? req.url : String(req);
     let missingScopes = getScopes(scopeReq).filter(x => !_tokenInfo.permissions.includes(x));
@@ -245,7 +355,7 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
     const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
     if (cacheEntry !== undefined) {
         Logger.log("requestCache is valid, returning cached response");
-        return cacheEntry.data;
+        return cacheEntry.data as T;
     }
 
     Logger.log("requestCache is INVALID, refreshing...");
@@ -291,45 +401,45 @@ const apiClient = async (req: string | RequestInfo, query: string, options?: Par
         }
         cacheRequest(origReq, data);
         Logger.log(`requestCache for ${origReq} updated`, data);
-        return data;
+        return data as T;
     }
 
     Logger.warn(`got response.status = ${response?.status} for ${origReq}... returning empty`);
-    return query ? [] : {};
+    return (query ? [] : {}) as T;
 };
 
-const charactersItems = async () => {
-    const rawData: any[] = (await apiClient("/v2/characters", "ids=all")) || [];
+const charactersItems = async (): Promise<CharacterWithItems[]> => {
+    const rawData: CharacterData[] = (await apiClient<CharacterData[]>("/v2/characters", "ids=all")) || [];
     for (const char of rawData) {
-        let bags = (char.bags || []).filter((x: any) => x != null).map((x: any) => ({ id: x.id, size: x.size, count: 1 }));
+        let bags = (char.bags || []).filter((x): x is CharacterBag => x != null).map((x) => ({ id: x.id, count: 1 }));
         let itemsInBags = (char.bags || [])
-            .filter((x: any) => x != null)
-            .map((bag: any) => bag.inventory)
+            .filter((x): x is CharacterBag => x != null)
+            .map((bag) => bag.inventory)
             .flat()
-            .filter((x: any) => x != null);
-        let equipment = (char.equipment || []).flat().filter((x: any) => x != null).map((x: any) => ({ ...x, count: 1, equipped: true }));
-        let charItems = bags.concat(itemsInBags).concat(equipment);
+            .filter((x): x is ItemLike => x != null);
+        let equipment = (char.equipment || []).flat().filter((x): x is ItemLike => x != null).map((x) => ({ ...x, count: 1, equipped: true }));
+        let charItems: ItemLike[] = [...bags, ...itemsInBags, ...equipment];
         const addons: number[] = [];
-        charItems.forEach((x: any) => {
+        charItems.forEach((x) => {
             addons.push(...(x.upgrades || []), ...(x.infusions || []));
         })
         charItems.push(...addons.map((x: number) => ({ id: x, count: 1, equipped: true })))
-        let ids: number[] = charItems.map((x: any) => x.id);
-        char._items = await expandItems(ids, charItems);
+        let ids: number[] = charItems.map((x) => x.id);
+        char._items = (await expandItems(ids, charItems)) as ExpandedItem[];
     }
-    return rawData;
+    return rawData as CharacterWithItems[];
 };
 
-const materials = async () => {
-    const rawData: any[] = (await apiClient("/v2/account/materials", "")) || [];
-    const ids: number[] = rawData.map((x: any) => x.id);
-    return expandItems(ids, rawData);
+const materials = async (): Promise<ExpandedItem[]> => {
+    const rawData: ItemLike[] = (await apiClient<ItemLike[]>("/v2/account/materials", "")) || [];
+    const ids: number[] = rawData.map((x) => x.id);
+    return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
 
-function sumQuantities(data: any[]) {
+function sumQuantities(data: TransactionExpanded[]): TransactionExpanded[] {
     // for more general function use sumGroupBy from utils.js
-    return Object.values(data.reduce((result: Record<string, any>, item: any) => {
+    return Object.values(data.reduce((result: Record<string, TransactionExpanded>, item) => {
         // Create a unique key combining item_id and price
         const key = `${item.item_id}-${item.price}`;
         // If the key already exists, add to the existing quantity
@@ -343,8 +453,8 @@ function sumQuantities(data: any[]) {
     }, {})); // Initialize with an empty object
 }
 
-const _getTransactions = async (_transactions: any[]) => {
-    const transactions = _transactions.map((x: any) => ({
+const _getTransactions = async (_transactions: TransactionData[]): Promise<TransactionCurrentItem[]> => {
+    const transactions: TransactionExpanded[] = _transactions.map((x) => ({
         ...x,
         transId: x.id,
         id: x.item_id,
@@ -353,20 +463,20 @@ const _getTransactions = async (_transactions: any[]) => {
     }));
 
 
-    const ids: number[] = transactions.map((x: any) => x.id);
+    const ids: number[] = transactions.map((x) => x.id);
 
     // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
     let sum = sumQuantities(transactions);
     sum = await expandItems(ids, sum);
     sum = await expandPrices(ids, sum);
     // console.log('sum', sum, transactions)
-    return sum;
+    return sum as TransactionCurrentItem[];
 }
 
-const transactionsCurrent = async () => {
+const transactionsCurrent = async (): Promise<{ buys: TransactionCurrentItem[]; sells: TransactionCurrentItem[] }> => {
     const [_buys, _sells] = await Promise.all([
-        apiClient("/v2/commerce/transactions/current/buys", ""),
-        apiClient("/v2/commerce/transactions/current/sells", "")
+        apiClient<TransactionData[]>("/v2/commerce/transactions/current/buys", ""),
+        apiClient<TransactionData[]>("/v2/commerce/transactions/current/sells", "")
     ]);
     const [buys, sells] = await Promise.all([
         _getTransactions(_buys),
@@ -375,16 +485,16 @@ const transactionsCurrent = async () => {
     return { buys, sells };
 }
 
-const _getGuilds = async (full: boolean = false) => {
-    const account = await apiClient("/v2/account", "");
+const _getGuilds = async (full: boolean = false): Promise<ApiGuildDto[]> => {
+    const account = await apiClient<AccountData>("/v2/account", "");
     // concat and remove duplicates
-    const _guilds = [...new Set([...(account.guild_leader || []), ...account.guilds])];
+    const _guilds = [...new Set([...(account.guild_leader || []), ...(account.guilds || [])])];
 
-        let tasks: Promise<any>[] = [];
+        let tasks: Array<Promise<ApiGuildDto>> = [];
         for (const guild of _guilds) {
-            tasks.push(apiClient(`/v2/guild/${guild}`, ""));
+            tasks.push(apiClient<ApiGuildDto>(`/v2/guild/${guild}`, ""));
         }
-        let _rawData: any[] = (await Promise.all(tasks)).flat();
+        let _rawData: ApiGuildDto[] = (await Promise.all(tasks)).flat();
         const defEmblem = {
             background: {
                 id: 1,
@@ -397,10 +507,10 @@ const _getGuilds = async (full: boolean = false) => {
             flags: []
         };
         if (full) {
-            _rawData.forEach((x: any) => {
+            _rawData.forEach((x) => {
                 x.emblem ??= defEmblem
             });
-            const _emblems = _rawData.map((x: any) => x.emblem);
+            const _emblems = _rawData.map((x) => x.emblem as { background: { id: number; colors: Array<number | { id: number }> }; foreground: { id: number; colors: Array<number | { id: number }> } });
             const fgs: number[] = [];
             const bgs: number[] = [];
             let clrs: number[] = [];
@@ -409,21 +519,25 @@ const _getGuilds = async (full: boolean = false) => {
             for (const emblem of _emblems) {
                 bgs.push(emblem.background.id);
                 fgs.push(emblem.foreground.id);
-                clrs.push(...emblem.background.colors.map((x: any) => wx.isObject(x) ? x.id : x));
-                clrs.push(...emblem.foreground.colors.map((x: any) => wx.isObject(x) ? x.id : x));
+                clrs.push(...emblem.background.colors.map((x) => wx.isObject(x) ? Number((x as { id: number }).id) : Number(x)));
+                clrs.push(...emblem.foreground.colors.map((x) => wx.isObject(x) ? Number((x as { id: number }).id) : Number(x)));
             }
             clrs = [...new Set(clrs)].filter(x => x != null);
             const [colors, foregrounds, backgrounds] = await Promise.all([
-                clrs.length ? apiClient('/v2/colors', "ids=" + clrs.join(',')) : [],
-                apiClient('/v2/emblem/foregrounds', "ids=" + fgs.join(',')),
-                apiClient('/v2/emblem/backgrounds', "ids=" + bgs.join(','))
+                clrs.length ? apiClient<Array<ApiListItem & { id: number }>>('/v2/colors', "ids=" + clrs.join(',')) : Promise.resolve([]),
+                apiClient<Array<ApiListItem & { id: number }>>('/v2/emblem/foregrounds', "ids=" + fgs.join(',')),
+                apiClient<Array<ApiListItem & { id: number }>>('/v2/emblem/backgrounds', "ids=" + bgs.join(','))
             ]);
             for (const item of _rawData) {
-                if (item.emblem) {
-                    addPropertiesById(item.emblem.foreground, foregrounds);
-                    addPropertiesById(item.emblem.background, backgrounds);
-                    item.emblem.foreground.colors = item.emblem.foreground.colors.map((color: any) => colors.find((x: any) => color == x.id));
-                    item.emblem.background.colors = item.emblem.background.colors.map((color: any) => colors.find((x: any) => color == x.id));
+                const emblem = item.emblem as {
+                    foreground: { colors: Array<number | { id: number } | undefined> } & Dictionary;
+                    background: { colors: Array<number | { id: number } | undefined> } & Dictionary;
+                } | undefined;
+                if (emblem) {
+                    addPropertiesById(emblem.foreground, foregrounds);
+                    addPropertiesById(emblem.background, backgrounds);
+                    emblem.foreground.colors = emblem.foreground.colors.map((color) => colors.find((x) => Number(color) == x.id) ?? color);
+                    emblem.background.colors = emblem.background.colors.map((color) => colors.find((x) => Number(color) == x.id) ?? color);
                 }
             }
             // console.log('emblems', {bgs, fgs, clrs});
@@ -432,23 +546,23 @@ const _getGuilds = async (full: boolean = false) => {
     return _rawData;
 }
 
-const guildItems = async () => {
-    const items: any[] = [];
+const guildItems = async (): Promise<GuildStashData[]> => {
+    const items: GuildStashData[] = [];
     const guilds = await _getGuilds(false);
     for (const guild of guilds) {
         try {
-            let stashRaw: any[] | any = await apiClient(`/v2/guild/${guild.id}/stash`, "");
+            let stashRaw: unknown = await apiClient<unknown>(`/v2/guild/${guild.id}/stash`, "");
             if (!wxjs_types.isArray(stashRaw)) {
                 continue;
             }
-            stashRaw = stashRaw
-                .map((x: any) => x.inventory)
+            const normalizedStashRaw = (stashRaw as ApiGuildStashSectionDto[])
+                .map((x) => x.inventory as ItemLike[] | null | undefined)
                 .flat()
-                .filter((x: any) => x != null);
-            const ids = stashRaw.map((x: any) => x.id);
+                .filter((x: ItemLike | null | undefined): x is ItemLike => x != null);
+            const ids = normalizedStashRaw.map((x) => x.id);
             items.push({
                 name: guild.name,
-                stash: await expandItems(ids, stashRaw),
+                stash: (await expandItems(ids, normalizedStashRaw)) as ExpandedItem[],
             });
         } catch (error) {
             items.push({
@@ -461,40 +575,40 @@ const guildItems = async () => {
     return items;
 };
 
-const characters = async () => {
-    const resp: any[] = (await apiClient("/v2/characters", "ids=all")) || [];
-    return resp.map((x: any) => ({ ...x, crafting_discipline: (x.crafting || []).map((c: any) => c.discipline).flat().join(', ') }));
+const characters = async (): Promise<Array<ApiCharacterDto & { crafting_discipline: string }>> => {
+    const resp: CharacterData[] = (await apiClient<CharacterData[]>("/v2/characters", "ids=all")) || [];
+    return resp.map((x) => ({ ...x, crafting_discipline: (x.crafting || []).map((c) => c?.discipline).flat().join(', ') }));
 };
 
-const guilds = async () => {
-    return _getGuilds(true);
+const guilds = async (): Promise<ApiGuildDto[]> => {
+    return _getGuilds(true) as Promise<ApiGuildDto[]>;
 };
 
 const items = (x: string) => {
     return apiClient("/v2/items", `ids=${x}`);
 };
 
-const legendaries = async () => {
-    const [available, unlocked]: [any[], any[]] = await Promise.all([
-        apiClient("/v2/legendaryarmory", `ids=all`),
-        apiClient("/v2/account/legendaryarmory", ``)
+const legendaries = async (): Promise<LegendariesData> => {
+    const [available, unlocked]: [ApiLegendaryArmoryDto[], ApiAccountLegendaryArmoryDto[]] = await Promise.all([
+        apiClient<ApiLegendaryArmoryDto[]>("/v2/legendaryarmory", `ids=all`),
+        apiClient<ApiAccountLegendaryArmoryDto[]>("/v2/account/legendaryarmory", ``)
     ]);
-    const ids: number[] = available.map((x: any) => x.id);
+    const ids: number[] = available.map((x) => x.id);
     const expanded = await expandItems(ids, available);
     const data = mergeById(expanded, unlocked);
-    const armor = (groupBy as any)(data.filter((x: any) => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']);
-    const trinkets = (groupBy as any)(data.filter((x: any) => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
-    const back = data.filter((x: any) => x.type === "Back").map((x: any) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']));
-    const upgrades = data.filter((x: any) => ['Rune', 'Sigil'].includes(x.subtype) || x.type == 'Relic').map((x: any) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]));
-    const _weapons = data.filter((x: any) => x.type === "Weapon");
-    _weapons.forEach((x: any) => {
+    const armor = groupBy(data.filter((x) => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['armor'];
+    const trinkets = groupBy(data.filter((x) => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['trinkets'];
+    const back = data.filter((x) => x.type === "Back").map((x) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendaryItemSummary);
+    const upgrades = data.filter((x) => ['Rune', 'Sigil'].includes(String(x.subtype)) || x.type == 'Relic').map((x) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]) as unknown as LegendaryItemSummary);
+    const _weapons = data.filter((x) => x.type === "Weapon");
+    _weapons.forEach((x) => {
         // change subtype naming to match current one in game & Wiki
         if (x.subtype == 'Harpoon') x.subtype = 'Spear';
         else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
         else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
         else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
     })
-    const weapons = (groupBy as any)(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']);
+    const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['weapons'];
     return { armor, trinkets, back, upgrades, weapons };
 };
 
@@ -502,63 +616,72 @@ const prices = (x: string) => {
     return apiClient("/v2/commerce/prices", `ids=${x}`);
 };
 
-const account = async () => {
-    const _acc = await apiClient("/v2/account", `v=${SCHEMA_VERSION}`);
-    _acc.created_local = new Date(_acc.created).toLocaleString();
-    _acc.last_modified_local = new Date(_acc.last_modified).toLocaleString();
-    return _acc;
+const account = async (): Promise<AccountWithLocalDates> => {
+    const _acc = await apiClient<AccountData>("/v2/account", `v=${SCHEMA_VERSION}`);
+    _acc.created_local = _acc.created ? new Date(_acc.created).toLocaleString() : '';
+    _acc.last_modified_local = _acc.last_modified ? new Date(_acc.last_modified).toLocaleString() : '';
+    return _acc as AccountWithLocalDates;
 };
 
-const sharedInventory = async () => {
-    const resp: any[] = (await apiClient("/v2/account/inventory", "")) || [];
+const sharedInventory = async (): Promise<ExpandedItem[]> => {
+    const resp: Array<ItemLike | null> = (await apiClient<Array<ItemLike | null>>("/v2/account/inventory", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x: any) => x != null);
-    const ids: number[] = rawData.map((x: any) => x.id);
-    return expandItems(ids, rawData);
+    const rawData = resp.filter((x): x is ItemLike => x != null);
+    const ids: number[] = rawData.map((x) => x.id);
+    return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
-const bank = async () => {
-    const resp: any[] = (await apiClient("/v2/account/bank", "")) || [];
+const bank = async (): Promise<ExpandedItem[]> => {
+    const resp: Array<ItemLike | null> = (await apiClient<Array<ItemLike | null>>("/v2/account/bank", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x: any) => x != null);
-    const ids: number[] = rawData.map((x: any) => x.id);
-    return expandItems(ids, rawData);
+    const rawData = resp.filter((x): x is ItemLike => x != null);
+    const ids: number[] = rawData.map((x) => x.id);
+    return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
 const tokenInfo = async (): Promise<TokenInfo> => {
     return apiClient("/v2/tokeninfo", "");
 };
 
-const achievements = async (all: boolean = false) => {
+const achievements = async (all: boolean = false): Promise<AchievementsData & { rewards_to_get: Map<string, number> }> => {
     const [categories, account, account_achievements, allIds] = await Promise.all([
-        apiClient("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
-        apiClient("/v2/account", ""),
-        apiClient("/v2/account/achievements", ""),
-        apiClient("/v2/achievements", "")
+        apiClient<ApiAchievementCategoryDto[]>("/v2/achievements/categories", `ids=all&v=2022-03-23T19:00:00.000Z`),
+        apiClient<AccountData>("/v2/account", ""),
+        apiClient<AccountAchievementData[]>("/v2/account/achievements", ""),
+        apiClient<number[]>("/v2/achievements", "")
     ]);
 
-    const normalizedAccountAchievements = (account_achievements || []).map((x: any) => ({
+    const normalizedAccountAchievements = (account_achievements || []).map((x) => ({
         ...x,
         bits_done: Array.isArray(x.bits_done) ? [...x.bits_done] : [...(x.bits || [])],
     }));
 
-    return expandAchievements(account, categories, normalizedAccountAchievements, allIds);
+    const normalizedCategories: AchievementCategoryData[] = categories.map((cat) => ({
+        ...cat,
+        name: cat.name || '',
+        description: cat.description || '',
+        rewards_to_get: new Map<string, number>(),
+        points_to_get: 0,
+        achievements: cat.achievements.map((entry) => ({ id: typeof entry === 'number' ? entry : entry.id, name: '' })),
+    }));
+
+    return (await expandAchievements(account, normalizedCategories, normalizedAccountAchievements, allIds)) as AchievementsData & { rewards_to_get: Map<string, number> };
 };
 
-const hydrateAchievementBits = async (bits: any[] = []) => {
+const hydrateAchievementBits = async (bits: AchievementBit[] = []) => {
     if (!Array.isArray(bits) || !bits.length) return;
 
     const skinIds = [...new Set(
         bits
-            .filter((bit: any) => bit?.type === 'Skin' && bit?.id != null)
-            .map((bit: any) => Number(bit.id))
+            .filter((bit) => bit?.type === 'Skin' && bit?.id != null)
+            .map((bit) => Number(bit.id))
             .filter((id: number) => Number.isFinite(id))
     )];
 
     const miniIds = [...new Set(
         bits
-            .filter((bit: any) => bit?.type === 'Minipet' && bit?.id != null)
-            .map((bit: any) => Number(bit.id))
+            .filter((bit) => bit?.type === 'Minipet' && bit?.id != null)
+            .map((bit) => Number(bit.id))
             .filter((id: number) => Number.isFinite(id))
     )];
 
@@ -568,11 +691,11 @@ const hydrateAchievementBits = async (bits: any[] = []) => {
     ]);
 };
 
-const achievementsInfo = async (ids: string) => {
-    return apiClient("/v2/achievements", "ids=" + ids);
+const achievementsInfo = async (ids: string): Promise<AchievementData[]> => {
+    return apiClient<AchievementData[]>("/v2/achievements", "ids=" + ids);
 };
 
-const minis = async (ids: number[]) => {
+const minis = async (ids: number[]): Promise<void> => {
     ids = ids.filter((x: number) => !minisCache.has(x));
     const batches = [];
     do {
@@ -582,8 +705,8 @@ const minis = async (ids: number[]) => {
         }
     } while (ids.length > 0);
     if (batches.length) {
-        const tasks = batches.map((ids) => apiClient("/v2/minis", "ids=" + ids));
-        const resp = (await Promise.all(tasks)).flat();
+        const tasks = batches.map((ids) => apiClient<ApiMiniDto[]>("/v2/minis", "ids=" + ids));
+        const resp: ApiMiniDto[] = (await Promise.all(tasks)).flat();
         resp.forEach((x) => {
             if (x) {
                 minisCache.set(x.id, x);
@@ -594,7 +717,7 @@ const minis = async (ids: number[]) => {
 
 }
 
-const skins = async (ids: number[]) => {
+const skins = async (ids: number[]): Promise<void> => {
     ids = ids.filter((x: number) => !skinsCache.has(x));
     const batches = [];
     do {
@@ -604,8 +727,8 @@ const skins = async (ids: number[]) => {
         }
     } while (ids.length > 0);
     if (batches.length) {
-        const tasks = batches.map((ids) => apiClient("/v2/skins", "ids=" + ids));
-        const resp = (await Promise.all(tasks)).flat();
+        const tasks = batches.map((ids) => apiClient<ApiSkinDto[]>("/v2/skins", "ids=" + ids));
+        const resp: ApiSkinDto[] = (await Promise.all(tasks)).flat();
         resp.forEach((x) => {
             if (x) {
                 skinsCache.set(x.id, x);
@@ -616,7 +739,7 @@ const skins = async (ids: number[]) => {
 
 }
 
-const currencies = async (order: number[] = []) => {
+const currencies = async (order: number[] = []): Promise<WalletCurrency[]> => {
     const depreciated = [
         {
             reason: 'Replaced by "Tales of Dungeon Delving"',
@@ -634,52 +757,56 @@ const currencies = async (order: number[] = []) => {
     // denormalize
     const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
     const ignored = [74];
-    const resp = await apiClient("/v2/currencies", `ids=all`);
-    const _rawData = resp.filter((x: any) => !ignored.includes(x.id)).map((x: any) => ({ ...x, active: 1 }));
+    type CurrencyEntry = ApiCurrencyDto & { depreciated?: boolean; active?: number; [key: string]: unknown };
+    const resp = await apiClient<CurrencyEntry[]>("/v2/currencies", `ids=all`);
+    const _rawData = resp.filter((x) => !ignored.includes(x.id)).map((x) => ({ ...x, active: 1, value: 0 }));
     const _data = mergeById(_rawData, _dep);
     _data.forEach(x => {
         const idx = order.findIndex(y => y == x.id)
         x.order = (idx >= 0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
     });
-    return _data.sort((a, b) => a.order - b.order);
+    return _data.sort((a, b) => a.order - b.order) as unknown as WalletCurrency[];
 }
 
-const wallet = async (order: number[] = []) => {
+const wallet = async (order: number[] = []): Promise<WalletCurrency[]> => {
     const [_curr, _wallet] = await Promise.all([
         currencies(order),
-        apiClient("/v2/account/wallet", "")
+        apiClient<ApiWalletDto[]>("/v2/account/wallet", "")
     ]);
-    return mergeById(_curr, _wallet);
+    return (mergeById(_curr, _wallet) as Array<WalletCurrency & { value?: number }>).map((x) => ({ ...x, value: x.value ?? 0 }));
 }
 
 
 
-const delivery = async () => {
-    const resp = await apiClient("/v2/commerce/delivery", "");
-    const ids = resp.items.map((x: any) => x.id);
-    resp.items = await expandItems(ids, resp.items);
-    return resp;
+const delivery = async (): Promise<DeliveryData> => {
+    const resp = await apiClient<ApiCommerceDeliveryDto>("/v2/commerce/delivery", "");
+    const ids = resp.items.map((x) => x.id);
+    const expanded = await expandItems(ids, resp.items as ItemLike[]);
+    return {
+        ...resp,
+        items: expanded as ExpandedItem[],
+    };
 };
 
-const wizardVaultSorted = async (promise: Promise<any>) => {
+const wizardVaultSorted = async (promise: Promise<WizardsVaultCategoryData>): Promise<WizardsVaultCategoryData> => {
     const resp = await promise;
-    const byClaimed = Object.groupBy((resp.objectives || []) as any[], (x: any) => String(Boolean(x.claimed))) as Record<string, any[]>;
+    const byClaimed = Object.groupBy((resp.objectives || []), (x) => String(Boolean(x.claimed))) as Record<string, NonNullable<WizardsVaultCategoryData['objectives']>>;
     byClaimed.false ??= [];
     byClaimed.true ??= [];
-    resp.objectives = byClaimed.false.sort((a: any, b: any) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
-    resp.objectives.push(...byClaimed.true.sort((a: any, b: any) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
+    resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
+    resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
     return resp;
 }
 
-const wizardsVaultDaily = async () => {
+const wizardsVaultDaily = async (): Promise<WizardsVaultCategoryData> => {
     return wizardVaultSorted(apiClient("/v2/account/wizardsvault/daily", ""));
 }
 
-const wizardsVaultWeekly = async () => {
+const wizardsVaultWeekly = async (): Promise<WizardsVaultCategoryData> => {
     return wizardVaultSorted(apiClient("/v2/account/wizardsvault/weekly", ""));
 }
 
-const wizardsVaultSpecial = async () => {
+const wizardsVaultSpecial = async (): Promise<WizardsVaultCategoryData> => {
     return wizardVaultSorted(apiClient("/v2/account/wizardsvault/special", ""));
 }
 
@@ -709,22 +836,23 @@ const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
     // console.log('tokenInfo', _tokenInfo)
 };
 
-const mergeById = (a1: any[], a2: any[]) => {
-    return a1.filter((x) => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
+const mergeById = <TBase extends { id: number }, TDetails extends { id: number }>(a1: TBase[], a2: TDetails[]) => {
+    return a1.filter((x): x is TBase => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
 };
 
-const addPropertiesById = (base: any, details: any[]) => {
+const addPropertiesById = <TBase extends Dictionary & { id?: number }, TDetails extends { id: number } & Dictionary>(base: TBase, details: TDetails[]) => {
     const clone = JSON.parse(JSON.stringify(base));
     const match = details.find(x => x.id == base.id);
+    if (!match) return;
     // console.log('addPropertiesById', {clone, details})
     for (const key of Object.keys(match)) {
         if (key != 'id') {
-            base[key] = match[key];
+            (base as Dictionary)[key] = match[key as keyof TDetails];
         }
     }
 }
 
-const expandItems = async (ids: Array<number>, collection: any[]) => {
+const expandItems = async <T extends { id: number }>(ids: Array<number>, collection: T[]): Promise<Array<T & ItemLike>> => {
     // get rid of nulls, invalid ids and duplicates
     ids = [...new Set(ids.filter((x) => x && !INVALID_ITEM_IDS.includes(x)))];
     const toFetch = ids.filter((x) => !itemsCache.has(x) && !inflightItems.has(x));
@@ -750,7 +878,7 @@ const expandItems = async (ids: Array<number>, collection: any[]) => {
             }
         } while (remaining.length > 0);
 
-        const fetchPromise = Promise.all(batches.map((ids) => items(ids))).then(results => results.flat());
+        const fetchPromise = Promise.all(batches.map((ids) => items(ids) as Promise<ItemLike[]>)).then(results => results.flat());
 
         // Register each id as inflight
         for (const id of allToFetch) {
@@ -758,7 +886,7 @@ const expandItems = async (ids: Array<number>, collection: any[]) => {
         }
 
         try {
-            const resp = await fetchPromise;
+            const resp: ItemLike[] = await fetchPromise;
             resp.forEach((x) => {
                 if (x) {
                     itemsCache.set(x.id, x);
@@ -779,8 +907,8 @@ const expandItems = async (ids: Array<number>, collection: any[]) => {
         console.warn('expandItems: items NOT in cache after fetch:', missingFromCache);
     }
     const knownItems = ids.map((x) => itemsCache.get(x)).filter(x => x != null);
-    const data = mergeById(collection, knownItems);
-    const missingAfterMerge = data.filter(x => x.id && !x.name && !INVALID_ITEM_IDS.includes(x.id));
+    const data = mergeById(collection, knownItems) as Array<T & ItemLike>;
+    const missingAfterMerge = data.filter(x => x.id && !(x as { name?: string }).name && !INVALID_ITEM_IDS.includes(x.id));
     if (missingAfterMerge.length) {
         console.warn('expandItems: items without name after merge:', missingAfterMerge.map(x => x.id), { collectionSize: collection.length, knownItemsSize: knownItems.length, idsSize: ids.length });
     }
@@ -789,7 +917,7 @@ const expandItems = async (ids: Array<number>, collection: any[]) => {
     return data;
 };
 
-const expandPrices = async (ids: Array<number>, collection: any[]) => {
+const expandPrices = async <T extends { id: number }>(ids: Array<number>, collection: T[]): Promise<Array<T & ApiCommercePriceDto>> => {
     ids = ids.filter((x) => !INVALID_ITEM_IDS.includes(x));
 
     const data = [];
@@ -802,19 +930,19 @@ const expandPrices = async (ids: Array<number>, collection: any[]) => {
     } while (ids.length > 0);
     if (batches.length) {
         const tasks = batches.map((ids) => prices(ids));
-        const resp = (await Promise.all(tasks)).flat();
+        const resp: ApiCommercePriceDto[] = (await Promise.all(tasks as Array<Promise<ApiCommercePriceDto[]>>)).flat();
         data.push(...mergeById(collection, resp)); // have to merge based on collection, not list of prices because it otherwise ommits transactions with other asking price
     }
-    return data;
+    return data as Array<T & ApiCommercePriceDto>;
 };
 
-const expandAchievements = async (account: any, categories: any[], accountAchievements: any[], allIds: number[]) => {
+const expandAchievements = async (account: AccountData, categories: AchievementCategoryData[], accountAchievements: AccountAchievementData[], allIds: number[]) => {
     Object.keys(ACHIEVEMENTS_NOT_IN_API).forEach((x: string) => {
         allIds.push(...(ACHIEVEMENTS_NOT_IN_API[x] || []));
     })
 
     const knownIds = [...achievementsCache.keys()];
-    const _doneIds = accountAchievements.filter((x: any) => x.done === true).map((x: any) => x.id);
+    const _doneIds = accountAchievements.filter((x) => x.done === true).map((x) => x.id);
     const _notDone = allIds.filter((x: number) => !_doneIds.includes(x));
     const missingIds = allIds.filter((x: number) => !INVALID_ACHIEVEMENTS_IDS.includes(x) && !knownIds.includes(x));
 
@@ -830,18 +958,18 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
     if (batches.length) {
         // and make requests in parallel
         const tasks = batches.map((ids) => achievementsInfo(ids));
-        const resp = (await Promise.all(tasks)).filter(x => wxjs_types.isArray(x)).flat();
+        const resp: AchievementData[] = (await Promise.all(tasks)).filter(x => wxjs_types.isArray(x)).flat();
         const itemIds: number[] = [];
         const skinIds: number[] = [];
         const miniIds: number[] = [];
-        resp.forEach(async (x: any) => {
+        resp.forEach((x: AchievementData) => {
             if (x) {
-                x.description = toHtml(x.description)
+                x.description = toHtml(x.description ?? null)
                 if (x.type == 'ItemSet' && x.bits) {
 
-                    itemIds.push(...(x.bits.filter((xx: any) => xx.type == "Item").map((xxx: any) => xxx.id)));
-                    skinIds.push(...(x.bits.filter((xx: any) => xx.type == "Skin").map((xxx: any) => xxx.id)));
-                    miniIds.push(...(x.bits.filter((xx: any) => xx.type == "Minipet").map((xxx: any) => xxx.id)));
+                    itemIds.push(...(x.bits.filter((xx) => xx.type == "Item" && xx.id != null).map((xxx) => Number(xxx.id))));
+                    skinIds.push(...(x.bits.filter((xx) => xx.type == "Skin" && xx.id != null).map((xxx) => Number(xxx.id))));
+                    miniIds.push(...(x.bits.filter((xx) => xx.type == "Minipet" && xx.id != null).map((xxx) => Number(xxx.id))));
                 }
                 achievementsCache.set(x.id, x);
             }
@@ -870,8 +998,8 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
 
     const achievsInCategories: number[] = [];
     const noCategory: number[] = [];
-    categories.forEach((cat: any) => {
-        achievsInCategories.push(...cat.achievements.map((x: any) => x.id));
+    categories.forEach((cat) => {
+        achievsInCategories.push(...cat.achievements.map((x) => Number((x as { id?: number }).id || 0)).filter((x) => x > 0));
     });
     allIds.forEach((id: number) => {
         if (!ignored_achievements.includes(id) && !achievsInCategories.includes(id)) {
@@ -885,10 +1013,10 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
         name: "__MISSING__",
         description: "Achievements with no category",
         icon: "/gw2helper/assets/rewards/Daily_Achievement.png",
-        achievements: noCategory.map((x: number) => ({ id: x }))
+        achievements: noCategory.map((x: number) => ({ id: x, name: '' }))
     });
 
-    categories.forEach((cat: any) => {
+    categories.forEach((cat) => {
         // if (ACHIEVEMENTS_NOT_IN_API[cat.id]) {
         //     const tmp = cat.achievements;
         //     tmp.push(...(ACHIEVEMENTS_NOT_IN_API[cat.id].map(x => ({ id: x }))));
@@ -896,13 +1024,16 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
         // }
         _log += `${cat.id}, // ${cat.name}\n`;
         cat.ignore = (ignored_achievements.includes(cat.id)) ? true : false;
-        cat.achievements = cat.achievements.map((x: any) => {
+        const categoryAchievements = cat.achievements
+            .map((entry) => ({ id: Number((entry as { id?: number }).id || 0) }))
+            .filter((entry): entry is { id: number } => entry.id > 0);
+        cat.achievements = categoryAchievements.map((x) => {
             let achiev = achievementsCache.get(x.id);
             if (!achiev) {
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchievements.find((acv: any) => acv.id == x.id) || {
+            const mine = accountAchievements.find((acv) => acv.id == x.id) || {
                 id: x.id,
                 current: 0,
                 repeated: 0,
@@ -911,26 +1042,27 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
                 max: achiev.bits != undefined ? achiev.bits.length : 0,
             };
             mine.repeated ??= 0;
+            const { bits: _mineBits, ...mineRest } = mine;
             let points_per_tier = 0;
             let points_done = 0;
             let points_to_get = 0;
 
             if (achiev.tiers) {
-                const tiers_done = achiev.tiers.filter((t: any) => t.count <= mine.current);
-                const tiers_todo = achiev.tiers.filter((t: any) => t.count > mine.current);
-                points_per_tier = sum(achiev.tiers, 'points');
-                points_done = points_per_tier * mine.repeated + sum(tiers_done, 'points');
+                const tiers_done = achiev.tiers.filter((t) => t.count <= Number(mine.current || 0));
+                const tiers_todo = achiev.tiers.filter((t) => t.count > Number(mine.current || 0));
+                points_per_tier = sum(achiev.tiers as unknown as Array<Record<string, unknown>>, 'points' as never);
+                points_done = points_per_tier * mine.repeated + sum(tiers_done as unknown as Array<Record<string, unknown>>, 'points' as never);
                 if (achiev.point_cap && (achiev.point_cap < points_done)) {
                     points_done = achiev.point_cap;
                 }
-                points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo, 'points');
+                points_to_get = (achiev.point_cap && (points_done >= achiev.point_cap)) ? 0 : sum(tiers_todo as unknown as Array<Record<string, unknown>>, 'points' as never);
             }
-            achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards as any[], (x: any) => x.type.toLowerCase()) : {};
+            achiev.rewardsObj = achiev.rewards ? Object.groupBy(achiev.rewards, (x) => x.type.toLowerCase()) : {};
             achiev.icon ??= cat.icon;
 
             return {
                 ...achiev,
-                ...mine,
+                ...mineRest,
                 points_per_tier,
                 points_done,
                 points_to_get,
@@ -940,19 +1072,19 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
         if (cat.id == 0) {
             // console.log('missing...')
             // remove daily and weekly from missing achievements
-            cat.achievements = cat.achievements.filter((x: any) => !(x.flags.includes('Daily') || x.flags.includes('Weekly')));
+            cat.achievements = cat.achievements.filter((x) => !((x.flags || []).includes('Daily') || (x.flags || []).includes('Weekly')));
             // console.log('missing', cat.achievements)
         }
-        cat.points_to_get = sum(cat.achievements, 'points_to_get');
-        cat.points_done = sum(cat.achievements, 'points_done');
-        cat._rewards_to_get = cat.achievements.filter((x: any) => !x.done && x.rewards).flatMap((x: any) => x.rewards)
+        cat.points_to_get = sum(cat.achievements as Array<Record<string, unknown>>, 'points_to_get' as never);
+        cat.points_done = sum(cat.achievements as Array<Record<string, unknown>>, 'points_done' as never);
+        cat._rewards_to_get = cat.achievements.filter((x) => !x.done && x.rewards).flatMap((x) => x.rewards || [])
         // aggregating and mapping from array of objects to object with nested arrays of objects, group by 'type' field
         // cat.rewards = Object.groupBy(cat_rewards, x => x.type.toLowerCase())
         // cat.titles_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.title).length;
         // cat.items_to_get = cat.achievements.filter(x => !x.done && x.rewardsObj.item).length;
 
         cat.rewards_to_get = new Map();
-        sumRewards(cat.rewards_to_get, cat._rewards_to_get);
+        sumRewards(cat.rewards_to_get as Map<string, number>, cat._rewards_to_get as AchievementReward[]);
         // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
     })
 
@@ -964,18 +1096,18 @@ const expandAchievements = async (account: any, categories: any[], accountAchiev
 
     const rewards_to_get = new Map();
 
-    categories.forEach((x: any) => {
-        sumRewards(rewards_to_get, x._rewards_to_get)
+    categories.forEach((x) => {
+        sumRewards(rewards_to_get, x._rewards_to_get as AchievementReward[])
     });
 
     return {
         completed: _doneIds.length,
         todo: _notDone.length,
-        daily_ap: account.daily_ap,
-        monthly_ap: account.monthly_ap,
+        daily_ap: account.daily_ap ?? 0,
+        monthly_ap: account.monthly_ap ?? 0,
         categories,
         rewards_to_get,
-    }
+    } as unknown;
 };
 
 const toHtml = (text: string | null): string => {
@@ -988,12 +1120,12 @@ const toHtml = (text: string | null): string => {
     return descr;
 }
 
-const additionalMapping = (data: any[]) => {
-    data.forEach((element: any) => {
+const additionalMapping = <T extends { description?: string; details?: { type?: string; description?: string }; subtype?: string; subdescr?: string; charges?: number; count?: number }>(data: T[]) => {
+    data.forEach((element) => {
         if (element.charges) {
             element.count = element.charges;
         }
-        element.description = toHtml(element.description);
+        element.description = toHtml(element.description ?? null);
         if (element.details) {
             if (element.details.type) {
                 element.subtype = element.details.type;
