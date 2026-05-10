@@ -37,20 +37,6 @@
 		_items: CleanupInventoryItem[];
 	};
 
-	enum SortType {
-		AsIs,
-		Slots,
-	}
-	let sortBy: SortType = SortType.AsIs;
-
-	function sortAsIs() {
-		sortBy = SortType.AsIs;
-	}
-
-	function sortBySlots() {
-		sortBy = SortType.Slots;
-	}
-
 	function sizes(bags: Array<{ size: number }>) {
 		return bags.map((x: { size: number }) => x.size).join(', ');
 	}

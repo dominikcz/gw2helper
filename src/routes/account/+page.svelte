@@ -18,6 +18,23 @@
 	let { data }: Props = $props();
 	let perm = $state<string[]>([]);
 
+	const expansions: Array<{
+		access: string;
+		titleKey: string;
+		imgFile: string;
+		wikiSlug: string;
+		showOnlyWhenOwned?: boolean;
+	}> = [
+		{ access: 'PlayForFree', titleKey: 'account.play_for_free', imgFile: '400px-GW2Logo_new.png', wikiSlug: 'Guild_Wars_2', showOnlyWhenOwned: true },
+		{ access: 'GuildWars2', titleKey: 'account.base_game', imgFile: '400px-GW2Logo_new.png', wikiSlug: 'Guild_Wars_2', showOnlyWhenOwned: true },
+		{ access: 'HeartOfThorns', titleKey: 'account.heart_of_thorns', imgFile: '400px-HoT_Texture_Centered_Trans.png', wikiSlug: 'Guild_Wars_2:_Heart_of_Thorns' },
+		{ access: 'PathOfFire', titleKey: 'account.path_of_fire', imgFile: '400px-GW2-PoF_Texture_Centered_Trans.png', wikiSlug: 'Guild_Wars_2:_Path_of_Fire' },
+		{ access: 'EndOfDragons', titleKey: 'account.end_of_dragons', imgFile: '400px-EoD_Texture_Trans.png', wikiSlug: 'Guild_Wars_2:_End_of_Dragons' },
+		{ access: 'SecretsOfTheObscure', titleKey: 'account.secrets_of_the_obscure', imgFile: '400px-Secrets_of_the_Obscure_logo.png', wikiSlug: 'Guild_Wars_2:_Secrets_of_the_Obscure' },
+		{ access: 'JanthirWilds', titleKey: 'account.janthir_wilds', imgFile: '400px-Janthir_Wilds_logo.png', wikiSlug: 'Guild_Wars_2:_Janthir_Wilds' },
+		{ access: 'VisionsOfEternity', titleKey: 'account.visions_of_eternity', imgFile: '400px-Visions_of_Eternity_logo.png', wikiSlug: 'Guild_Wars_2:_Visions_of_Eternity' },
+	];
+
 	function has(account: { access: string[] }, content: string): boolean {
 		return account.access.includes(content);
 	}
@@ -47,81 +64,18 @@
 		</WidgetsGroup>
 
 		<WidgetsGroup name={$_('account.accessible_content')}>
-			{#if has(result, 'PlayForFree')}
-				<WidgetImg
-					title={$_('account.play_for_free')}
-					url={asset('/assets/400px-GW2Logo_new.png')}
-					link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
-					linkTitle={$_('common.read_more_on_wiki')}
-					class="autotooltip"
-					active={true}
-				/>
-			{/if}
-
-			{#if has(result, 'GuildWars2')}
-				<WidgetImg
-					title={$_('account.base_game')}
-					url={asset('/assets/400px-GW2Logo_new.png')}
-					link="https://wiki.guildwars2.com/wiki/Guild_Wars_2"
-					linkTitle={$_('common.read_more_on_wiki')}
-					class="autotooltip"
-					active={true}
-				/>
-			{/if}
-
-			<WidgetImg
-				title={$_('account.heart_of_thorns')}
-				url={asset('/assets/400px-HoT_Texture_Centered_Trans.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Heart_of_Thorns"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'HeartOfThorns')}
-			/>
-
-			<WidgetImg
-				title={$_('account.path_of_fire')}
-				url={asset('/assets/400px-GW2-PoF_Texture_Centered_Trans.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Path_of_Fire"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'PathOfFire')}
-			/>
-
-			<WidgetImg
-				title={$_('account.end_of_dragons')}
-				url={asset('/assets/400px-EoD_Texture_Trans.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_End_of_Dragons"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'EndOfDragons')}
-			/>
-
-			<WidgetImg
-				title={$_('account.secrets_of_the_obscure')}
-				url={asset('/assets/400px-Secrets_of_the_Obscure_logo.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Secrets_of_the_Obscure"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'SecretsOfTheObscure')}
-			/>
-
-			<WidgetImg
-				title={$_('account.janthir_wilds')}
-				url={asset('/assets/400px-Janthir_Wilds_logo.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Janthir_Wilds"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'JanthirWilds')}
-			/>
-
-			<WidgetImg
-				title={$_('account.visions_of_eternity')}
-				url={asset('/assets/400px-Visions_of_Eternity_logo.png')}
-				link="https://wiki.guildwars2.com/wiki/Guild_Wars_2:_Visions_of_Eternity"
-				linkTitle={$_('common.read_more_on_wiki')}
-				class="autotooltip"
-				active={has(result, 'VisionsOfEternity')}
-			/>
+			{#each expansions as exp}
+				{#if !exp.showOnlyWhenOwned || has(result, exp.access)}
+					<WidgetImg
+						title={$_(exp.titleKey)}
+						url={asset(`/assets/${exp.imgFile}`)}
+						link={`https://wiki.guildwars2.com/wiki/${exp.wikiSlug}`}
+						linkTitle={$_('common.read_more_on_wiki')}
+						class="autotooltip"
+						active={has(result, exp.access)}
+					/>
+				{/if}
+			{/each}
 		</WidgetsGroup>
 
 		{#if perm.includes('progression')}

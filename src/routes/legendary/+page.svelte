@@ -5,8 +5,15 @@
 	import { autotooltip } from '$lib/actions/autotooltip';
 	import Legendary from '$lib/components/items/legendary.svelte';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
-	import { sum } from '$lib/utils';
 	import Progress from '$lib/components/progress/progress.svelte';
+	import {
+		minReqWeapons,
+		done,
+		completionArmor,
+		completionTrinkets,
+		completionUpgrades,
+		completionWeapons,
+	} from '$lib/components/items/legendary-utils';
 	import type { PageData } from './$types';
 	import type { LegendariesData, LegendaryItemSummary } from '$lib/types/gw2-api';
 
@@ -19,70 +26,6 @@
 	const armorPiecesCount = 7; // Helm, Shoulders, Coat, Gloves, Leggings, Boots, Aquatic Helm
 
 	type ArmorGroup = LegendariesData['armor']['Light'];
-	type TrinketsGroup = LegendariesData['trinkets'];
-
-	const minReqWeapons = {
-		Axe: 2,
-		Dagger: 2,
-		Focus: 1,
-		Greatsword: 1,
-		Hammer: 1,
-		'Harpoon gun': 1,
-		'Long bow': 1,
-		Mace: 2,
-		Pistol: 2,
-		Rifle: 1,
-		Scepter: 1,
-		Shield: 1,
-		'Short bow': 1,
-		Spear: 1,
-		Staff: 1,
-		Sword: 2,
-		Torch: 1,
-		Trident: 1,
-		Warhorn: 1,
-	} as Record<string, number>;
-
-	function sumCount(items: LegendaryItemSummary[]) {
-		return sum(items as unknown as Record<string, unknown>[], 'count');
-	}
-
-	function done(items: LegendaryItemSummary[], minReq: number) {
-		const completed = sumCount(items);
-		return completed >= minReq;
-	}
-
-	function completionArmor(data: ArmorGroup) {
-		let completed = 0;
-		if (sumCount(data.Helm)) completed++;
-		if (sumCount(data.Shoulders)) completed++;
-		if (sumCount(data.Coat)) completed++;
-		if (sumCount(data.Gloves)) completed++;
-		if (sumCount(data.Leggings)) completed++;
-		if (sumCount(data.Boots)) completed++;
-		return completed;
-	}
-
-	function completionTrinkets(data: { back: LegendaryItemSummary[]; trinkets: TrinketsGroup }) {
-		let completed = 0;
-		if (sumCount(data.back)) completed++;
-		if (sumCount(data.trinkets.Accessory)) completed++;
-		completed += Math.min(2, sumCount(data.trinkets.Ring)); // there are 2 rings, each with 2 mac_count, but we only want 2 as max
-		if (sumCount(data.trinkets.Amulet)) completed++;
-		return completed;
-	}
-
-	function completionUpgrades(data: { upgrades: LegendaryItemSummary[] }) {
-		return sumCount(data.upgrades);
-	}
-
-	function completionWeapons(data: Record<string, LegendaryItemSummary[]>) {
-		let completed = 0;
-		Object.keys(minReqWeapons).forEach((x) => {
-			completed += Math.min(minReqWeapons[x], sumCount(data[x]));
-		});
-		return completed;
-	}
 
 	const tooltipOptions = {
 		customRenderers: {
@@ -161,13 +104,8 @@
 				{@render unlocksList($_('legendary.upgrades'), result.upgrades, 3)}
 			</article>
 		</details>
-	{/snippet}
-</Awaiter>
 
-<h3>{$_('legendary.weapons')}</h3>
-
-<Awaiter promise={data.legendaries as Promise<LegendariesData> | LegendariesData}>
-	{#snippet children(result: LegendariesData)}
+		<h3>{$_('legendary.weapons')}</h3>
 		{@const progressWeapons = completionWeapons(result.weapons)}
 		<details use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>

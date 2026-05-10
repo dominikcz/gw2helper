@@ -13,6 +13,8 @@
 	import AchievList from '$lib/components/achievements/achievList.svelte';
 	import AchievGroup from '$lib/components/achievements/achievGroup.svelte';
 	import { sort, filteredAchievements, expandToDoList } from '$lib/components/achievements/achievements';
+	import AchievementFilters from '$lib/components/achievements/achievementFilters.svelte';
+	import { defaultFilters, applySettings } from '$lib/components/achievements/achievementFiltersUtils';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import type { PageData } from './$types';
@@ -25,22 +27,7 @@
 
 	let filter = $state('');
 	let showApiLinks = $state(false);
-
-	let notCompleted = $state(true);
-	let withPoints = $state(false);
-	let withMasteryCentral = $state(false);
-	let withMasteryHoT = $state(false);
-	let withMasteryPoF = $state(false);
-	let withMasteryIce = $state(false);
-	let withMasteryEoD = $state(false);
-	let withMasterySofO = $state(false);
-	let withMasteryJW = $state(false);
-	let withTitles = $state(false);
-	let withItems = $state(false);
-	let withCoins = $state(false);
-	let daily = $state(false);
-	let weekly = $state(false);
-	let sortBy = $state('ap');
+	let filters = $state({ ...defaultFilters });
 	let todoList = $state<number[]>([]);
 
 	type MasteryReward = { region: string };
@@ -63,77 +50,38 @@
 	onMount(async () => {
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
 		const settings = await data.settings as AchievementSettings;
-		if (settings.notCompleted !== undefined) notCompleted = settings.notCompleted;
-		if (settings.withPoints !== undefined) withPoints = settings.withPoints;
-		if (settings.withMasteryCentral !== undefined) withMasteryCentral = settings.withMasteryCentral;
-		if (settings.withMasteryHoT !== undefined) withMasteryHoT = settings.withMasteryHoT;
-		if (settings.withMasteryPoF !== undefined) withMasteryPoF = settings.withMasteryPoF;
-		if (settings.withMasteryIce !== undefined) withMasteryIce = settings.withMasteryIce;
-		if (settings.withMasteryEoD !== undefined) withMasteryEoD = settings.withMasteryEoD;
-		if (settings.withMasterySofO !== undefined) withMasterySofO = settings.withMasterySofO;
-		if (settings.withMasteryJW !== undefined) withMasteryJW = settings.withMasteryJW;
-		if (settings.withTitles !== undefined) withTitles = settings.withTitles;
-		if (settings.withItems !== undefined) withItems = settings.withItems;
-		if (settings.withCoins !== undefined) withCoins = settings.withCoins;
-		if (settings.daily !== undefined) daily = settings.daily;
-		if (settings.weekly !== undefined) weekly = settings.weekly;
-		if (settings.sortBy !== undefined) sortBy = settings.sortBy;
-
+		applySettings(filters, settings);
 		todoList = await data.toDoList;
-		// console.log('todo', todoList);
 	});
 
 	function achievFilterCallback(achiev: AchievementLike) {
 		const rewardsObj = achiev.rewardsObj ?? {};
 		const mastery = rewardsObj.mastery || [];
-		const notCompletedOK = !notCompleted || !achiev.done;
-		const withPointsOK = !withPoints || (achiev.points_to_get ?? 0) > 0;
-		const withTitlesOK = !withTitles || !!rewardsObj.title;
-		const withItemsOK = !withItems || !!rewardsObj.item;
-		const withCoinsOK = !withCoins || !!rewardsObj.coins;
+		const notCompletedOK = !filters.notCompleted || !achiev.done;
+		const withPointsOK = !filters.withPoints || (achiev.points_to_get ?? 0) > 0;
+		const withTitlesOK = !filters.withTitles || !!rewardsObj.title;
+		const withItemsOK = !filters.withItems || !!rewardsObj.item;
+		const withCoinsOK = !filters.withCoins || !!rewardsObj.coins;
 		const flags = achiev.flags ?? [];
-		const dailyWeeklyOK = (!daily && !weekly) || (daily && flags.includes('Daily')) || (weekly && flags.includes('Weekly'));
+		const dailyWeeklyOK = (!filters.daily && !filters.weekly) || (filters.daily && flags.includes('Daily')) || (filters.weekly && flags.includes('Weekly'));
 		const requiredRegions: string[] = [];
-		if (withMasteryCentral) requiredRegions.push('Tyria');
-		if (withMasteryHoT) requiredRegions.push('Maguuma');
-		if (withMasteryPoF) requiredRegions.push('Desert');
-		if (withMasteryIce) requiredRegions.push('Tundra');
-		if (withMasteryEoD) requiredRegions.push('Jade');
-		if (withMasterySofO) requiredRegions.push('Sky');
-		if (withMasteryJW) requiredRegions.push('Unknown');
+		if (filters.withMasteryCentral) requiredRegions.push('Tyria');
+		if (filters.withMasteryHoT) requiredRegions.push('Maguuma');
+		if (filters.withMasteryPoF) requiredRegions.push('Desert');
+		if (filters.withMasteryIce) requiredRegions.push('Tundra');
+		if (filters.withMasteryEoD) requiredRegions.push('Jade');
+		if (filters.withMasterySofO) requiredRegions.push('Sky');
+		if (filters.withMasteryJW) requiredRegions.push('Unknown');
 
 		const withMasteryOK = !requiredRegions.length || !!mastery.find((x: MasteryReward) => requiredRegions.includes(x.region));
-
 		const filterOK = helperUtils.fullTextSearch(filter, achiev, ['name', 'desription', 'requirement', 'id']);
 
-		const achiev_res = notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && dailyWeeklyOK && filterOK;
-
-		// if (item.id == 75) {
-		// 	console.log(`  ${achiev.name}`, { achiev_res, notCompletedOK, withPointsOK, withMasteryOK, filterOK });
-		// }
-		return achiev_res;
+		return notCompletedOK && withPointsOK && withTitlesOK && withItemsOK && withCoinsOK && withMasteryOK && dailyWeeklyOK && filterOK;
 	}
 
 	function saveSettings() {
-		utils.saveAchievementsSettings({
-			notCompleted,
-			withPoints,
-			withMasteryCentral,
-			withMasteryHoT,
-			withMasteryPoF,
-			withMasteryIce,
-			withMasteryEoD,
-			withMasterySofO,
-			withMasteryJW,
-			withTitles,
-			withItems,
-			withCoins,
-			daily,
-			weekly,
-			sortBy,
-		});
+		utils.saveAchievementsSettings(filters);
 	}
-
 </script>
 
 <h1>{$_('achievements.achievements')}</h1>
@@ -143,22 +91,7 @@
 <Awaiter promise={data.achievements as Promise<AchievementsData> | AchievementsData}>
 	{#snippet children(result: AchievementsData)}
 		{@const typedResult = result as AchievementsView}
-		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, {
-			notCompleted,
-			withPoints,
-			withMasteryCentral,
-			withMasteryHoT,
-			withMasteryPoF,
-			withMasteryIce,
-			withMasteryEoD,
-			withMasterySofO,
-			withMasteryJW,
-			withTitles,
-			withItems,
-			withCoins,
-			daily,
-			weekly,
-		})}
+		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, filters)}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={typedResult.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
@@ -199,32 +132,7 @@
 				</div>
 
 				<TabPanel>
-					<fieldset class="settings">
-						<legend>{$_('common.settings')}</legend>
-
-						<label><input type="checkbox" bind:checked={notCompleted} /> {$_('achievements.not_completed')}</label>
-						<label><input type="checkbox" bind:checked={withPoints} /> {$_('achievements.giving_points')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryCentral} /> {$_('achievements.central_tyria_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryHoT} /> {$_('achievements.hot_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryPoF} /> {$_('achievements.pof_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryIce} /> {$_('achievements.icebrood_saga_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryEoD} /> {$_('achievements.eod_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasterySofO} /> {$_('achievements.sofo_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withMasteryJW} /> {$_('achievements.janthir_wilds_mastery')}</label>
-						<label><input type="checkbox" bind:checked={withTitles} /> {$_('achievements.giving_titles')}</label>
-						<label><input type="checkbox" bind:checked={withItems} /> {$_('achievements.giving_items')}</label>
-						<label><input type="checkbox" bind:checked={withCoins} /> {$_('achievements.giving_gold')}</label>
-						<label><input type="checkbox" bind:checked={daily} /> {$_('achievements.daily')}</label>
-						<label><input type="checkbox" bind:checked={weekly} /> {$_('achievements.weekly')}</label>
-
-						<div class="group">
-							<label><input type="radio" name="sort" value="ap" bind:group={sortBy} /> {$_('achievements.sort_by_points')}</label>
-							<label><input type="radio" name="sort" value="name" bind:group={sortBy} /> {$_('achievements.sort_by_name')}</label>
-							<label><input type="radio" name="sort" value="order" bind:group={sortBy} /> {$_('achievements.sort_by_in_game_order')}</label>
-						</div>
-
-						<button onclick={saveSettings}>{$_('common.save_settings')}</button>
-					</fieldset>
+					<AchievementFilters {filters} onSave={saveSettings} />
 
 					<section>
 						<SearchInput bind:value={filter} name="filter" id="filter" placeholder={$_('common.too_much_data')} />
@@ -232,8 +140,8 @@
 
 					<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: typedResult.categories.length })}</span>
 					<div class="achiev-container" use:grungeBorder>
-						{#each sort(_result.categories as import('$lib/components/achievements/achievements').CategoryLike[], sortBy) as category (category.id)}
-							<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
+						{#each sort(_result.categories as import('$lib/components/achievements/achievements').CategoryLike[], filters.sortBy) as category (category.id)}
+							<AchievGroup {category} {showApiLinks} sortBy={filters.sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 						{/each}
 					</div>
 				</TabPanel>
