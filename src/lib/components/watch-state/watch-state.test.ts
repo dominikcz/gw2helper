@@ -1,43 +1,31 @@
 import { describe, expect, it } from 'vitest';
-import { render } from 'svelte/server';
+import { render } from '@testing-library/svelte';
 import WatchState from '$lib/components/watch-state/watch-state.svelte';
 
 describe('watch-state', () => {
 	describe('watch-state', () => {
 		it('renders button with title and aria-label', () => {
-			const view = render(WatchState, {
-				props: {
-					watched: false,
-					title: 'Click to watch',
-					onClick: () => {},
-				},
+			const { getByRole } = render(WatchState, {
+				props: { watched: false, title: 'Click to watch', onClick: () => {} },
 			});
-			expect(view.body).toContain('<button');
-			expect(view.body).toContain('title="Click to watch"');
-			expect(view.body).toContain('aria-label="watched state"');
+			const btn = getByRole('button', { name: 'watched state' });
+			expect(btn).toHaveAttribute('title', 'Click to watch');
 		});
 
 		it('renders watched class when watched is true', () => {
-			const view = render(WatchState, {
-				props: {
-					watched: true,
-					title: 'Click to unwatch',
-					onClick: () => {},
-				},
+			const { container } = render(WatchState, {
+				props: { watched: true, title: 'Click to unwatch', onClick: () => {} },
 			});
-			expect(view.body).toMatch(/class="[^"]*watched[^"]*"/);
+			expect(container.querySelector('button')).toHaveClass('watched');
 		});
 
 		it('does not render watched class when watched is false', () => {
-			const view = render(WatchState, {
-				props: {
-					watched: false,
-					title: 'Click to watch',
-					onClick: () => {},
-				},
+			const { container } = render(WatchState, {
+				props: { watched: false, title: 'Click to watch', onClick: () => {} },
 			});
-			expect(view.body).not.toMatch(/class="[^"]*watched[^"]*watched-state[^"]*"/);
-			expect(view.body).toMatch(/class="[^"]*watched-state[^"]*"/);
+			const btn = container.querySelector('button');
+			expect(btn).toHaveClass('watched-state');
+			expect(btn).not.toHaveClass('watched');
 		});
 	});
 });

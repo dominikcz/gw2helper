@@ -1,20 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { render } from 'svelte/server';
+import { render } from '@testing-library/svelte';
 import AstralAcclaim from '$lib/components/branding/astralAcclaim.svelte';
 
 describe('branding', () => {
 	describe('astralAcclaim', () => {
 		it('renders wiki link and image', () => {
-			const view = render(AstralAcclaim);
-			expect(view.body).toMatch(/class="[^"]*tooltip-link[^"]*"/);
-			expect(view.body).toContain('href="https://wiki.guildwars2.com/wiki/Astral_Acclaim"');
-			expect(view.body).toContain('target="_blank"');
-			expect(view.body).toContain('Astral_Acclaim.png');
+			const { container } = render(AstralAcclaim);
+			const link = container.querySelector('a')!;
+			expect(link).toHaveClass('tooltip-link');
+			expect(link).toHaveAttribute('href', 'https://wiki.guildwars2.com/wiki/Astral_Acclaim');
+			expect(link).toHaveAttribute('target', '_blank');
+			expect(container.querySelector('img[src*="Astral_Acclaim.png"]')).toBeInTheDocument();
 		});
 
 		it('renders image alt text', () => {
-			const view = render(AstralAcclaim);
-			expect(view.body).toContain('alt="Astral Acclaim"');
+			const { container } = render(AstralAcclaim);
+			expect(container.querySelector('img')).toHaveAttribute('alt', 'Astral Acclaim');
 		});
 	});
 });

@@ -7,7 +7,7 @@ const config: PlaywrightTestConfig = {
 		reuseExistingServer: true,
 		timeout: 120000
 	},
-	testDir: 'tests',
+	testDir: 'e2e',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	use: {
 		baseURL: 'http://localhost:4173/gw2helper'

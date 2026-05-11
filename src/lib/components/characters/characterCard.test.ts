@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render } from 'svelte/server';
+import { render } from '@testing-library/svelte';
 import CharacterCard from '$lib/components/characters/characterCard.svelte';
 
 const mockChar = {
@@ -8,7 +8,7 @@ const mockChar = {
 	race: 'Sylvari',
 	gender: 'Male',
 	level: 80,
-	age: 3_600_000, // seconds
+	age: 3_600_000,
 	deaths: 42,
 	created: '2020-01-01T00:00:00Z',
 	crafting: [
@@ -20,65 +20,59 @@ const mockChar = {
 describe('characters', () => {
 	describe('characterCard', () => {
 		it('renders character name in summary', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('<summary>Aegnor</summary>');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container.querySelector('summary')).toHaveTextContent('Aegnor');
 		});
 
 		it('renders profession and level', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('Ranger');
-			expect(view.body).toContain('lvl. 80');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container).toHaveTextContent('Ranger');
+			expect(container).toHaveTextContent('lvl. 80');
 		});
 
 		it('renders profession icon path', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('Ranger_icon.png');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container.querySelector('img[src*="Ranger_icon.png"]')).toBeInTheDocument();
 		});
 
 		it('renders race and gender', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('Male');
-			expect(view.body).toContain('Sylvari');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container).toHaveTextContent('Male');
+			expect(container).toHaveTextContent('Sylvari');
 		});
 
 		it('renders crafting disciplines and ratings', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('Armorsmith');
-			expect(view.body).toContain('500');
-			expect(view.body).toContain('Leatherworker');
-			expect(view.body).toContain('400');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container).toHaveTextContent('Armorsmith');
+			expect(container).toHaveTextContent('500');
+			expect(container).toHaveTextContent('Leatherworker');
+			expect(container).toHaveTextContent('400');
 		});
 
 		it('renders deaths count', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('42');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container).toHaveTextContent('42');
 		});
 
 		it('renders open details element', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('<details');
-			expect(view.body).toContain('open');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container.querySelector('details[open]')).toBeInTheDocument();
 		});
 
 		it('renders fallback profession when missing', () => {
-			const view = render(CharacterCard, {
-				props: { char: { ...mockChar, profession: undefined } },
-			});
-			expect(view.body).toContain('Warrior_icon.png');
-			expect(view.body).toContain('-');
+			const { container } = render(CharacterCard, { props: { char: { ...mockChar, profession: undefined } } });
+			expect(container.querySelector('img[src*="Warrior_icon.png"]')).toBeInTheDocument();
 		});
 
 		it('renders gravestone and birthday images', () => {
-			const view = render(CharacterCard, { props: { char: mockChar } });
-			expect(view.body).toContain('Grave_Finisher.png');
-			expect(view.body).toContain('Present_quaggan_icon.png');
+			const { container } = render(CharacterCard, { props: { char: mockChar } });
+			expect(container.querySelector('img[src*="Grave_Finisher.png"]')).toBeInTheDocument();
+			expect(container.querySelector('img[src*="Present_quaggan_icon.png"]')).toBeInTheDocument();
 		});
 
 		it('renders character with empty crafting list', () => {
-			const view = render(CharacterCard, {
-				props: { char: { ...mockChar, crafting: [] } },
-			});
-			expect(view.body).toContain(mockChar.name);
+			const { container } = render(CharacterCard, { props: { char: { ...mockChar, crafting: [] } } });
+			expect(container.querySelector('summary')).toHaveTextContent(mockChar.name);
 		});
 	});
 });

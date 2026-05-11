@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from 'svelte/server';
 import eventsUtils from '$lib/components/events/eventsUtils';
 
 vi.mock('$lib/stores/themeWatcher', () => ({
@@ -9,25 +8,19 @@ vi.mock('$lib/stores/themeWatcher', () => ({
 	},
 }));
 
-// eventTimerTime requires eventsUtils.getTimeSegments which needs the metas data initialized
-// We test the utility functions directly and do basic SSR rendering where possible.
-
 describe('events', () => {
 	describe('eventsUtils', () => {
 		describe('getColor', () => {
 			it('returns rgb string from number array', () => {
-				const result = eventsUtils.getColor([100, 150, 200], false);
-				expect(result).toBe('rgb(100,150,200)');
+				expect(eventsUtils.getColor([100, 150, 200], false)).toBe('rgb(100,150,200)');
 			});
 
 			it('returns raw string when given a string color', () => {
-				const result = eventsUtils.getColor('#ff0000', false);
-				expect(result).toBe('#ff0000');
+				expect(eventsUtils.getColor('#ff0000', false)).toBe('#ff0000');
 			});
 
 			it('returns default black for undefined colors', () => {
-				const result = eventsUtils.getColor(undefined, false);
-				expect(result).toBe('rgb(0,0,0)');
+				expect(eventsUtils.getColor(undefined, false)).toBe('rgb(0,0,0)');
 			});
 
 			it('returns gradient for nested arrays', () => {
@@ -47,16 +40,12 @@ describe('events', () => {
 		describe('getHour', () => {
 			it('returns HH:MM formatted string', () => {
 				const date = new Date('2024-01-15T14:30:00');
-				const result = eventsUtils.getHour(date);
-				expect(result).toMatch(/^\d{2}:\d{2}$/);
-				expect(result).toBe('14:30');
+				expect(eventsUtils.getHour(date)).toBe('14:30');
 			});
 
 			it('pads single-digit hours', () => {
 				const date = new Date('2024-01-15T09:05:00');
-				const result = eventsUtils.getHour(date);
-				expect(result).toMatch(/^\d{2}:\d{2}$/);
-				expect(result).toBe('09:05');
+				expect(eventsUtils.getHour(date)).toBe('09:05');
 			});
 		});
 	});

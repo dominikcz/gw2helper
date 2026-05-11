@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
 import pkg from './package.json' with { type: 'json' };
 import ViteYaml from '@modyfi/vite-plugin-yaml';
 import { searchForWorkspaceRoot } from 'vite';
@@ -7,31 +8,37 @@ import { searchForWorkspaceRoot } from 'vite';
 export default defineConfig({
 	build: {
 		target: 'esnext',
-		// rollupOptions: {
-		// 	output: {
-		// 		manualChunks: (id) => {
-		// 			if (id.includes('node_modules/svelte') || id.includes('node_modules/@sveltejs')) {
-		// 				return 'vendor-svelte';
-		// 			}
-		// 			if (id.includes('node_modules/sveltekit-i18n') || id.includes('node_modules/@sveltekit-i18n')) {
-		// 				return 'vendor-i18n';
-		// 			}
-		// 			if (id.includes('node_modules/howler')) {
-		// 				return 'vendor-audio';
-		// 			}
-		// 			if (id.includes('node_modules')) {
-		// 				return 'vendor';
-		// 			}
-		// 		}
-		// 	}
-		// }
 	},
 	plugins: [sveltekit(), ViteYaml()],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}'],
-		setupFiles: ['src/test/setup-i18n.ts']
+		expect: { requireAssertions: true },
+		projects: [
+			{
+				extends: './vite.config.ts',
+				test: {
+					name: 'client',
+					browser: {
+						enabled: true,
+						provider: playwright(),
+						instances: [{ browser: 'chromium', headless: true }],
+					},
+					include: ['src/lib/components/**/*.{test,spec}.{js,ts}'],
+					setupFiles: ['src/test/setup-i18n.ts', 'src/test/setup-testing-library.ts'],
+					exclude: ['src/lib/server/**'],
+				},
+			},
+			{
+				extends: './vite.config.ts',
+				test: {
+					name: 'server',
+					environment: 'node',
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					exclude: ['src/lib/components/**/*.{test,spec}.{js,ts}'],
+					setupFiles: ['src/test/setup-i18n.ts'],
+				},
+			},
+		],
 	},
-	// assetsInclude: ['**/*.yaml', '**/*.json'],
 	define: {
 		__NAME__: `"${pkg.name}"`,
 		__VERSION__: `"${pkg.version}"`

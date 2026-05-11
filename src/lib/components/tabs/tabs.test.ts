@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { render } from 'svelte/server';
+import { render } from '@testing-library/svelte';
 import Tabs from '$lib/components/tabs/tabs.svelte';
 
 describe('tabs', () => {
 	describe('tabs', () => {
 		it('renders tabs wrapper', () => {
-			const view = render(Tabs);
-			expect(view.body).toMatch(/class="[^"]*tabs[^"]*"/);
+			const { container } = render(Tabs);
+			expect(container.querySelector('.tabs')).toBeInTheDocument();
 		});
 	});
 

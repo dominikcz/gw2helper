@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render } from 'svelte/server';
+import { render } from '@testing-library/svelte';
 import AchievementFilters from './achievementFilters.svelte';
 import { defaultFilters, applySettings, type AchievFilterState } from './achievementFiltersUtils';
 
@@ -9,29 +9,23 @@ function makeFilters(): AchievFilterState {
 
 describe('AchievementFilters', () => {
 	it('renders a fieldset', () => {
-		const filters = makeFilters();
-		const { body } = render(AchievementFilters, { props: { filters } });
-		expect(body).toMatch(/<fieldset/);
+		const { container } = render(AchievementFilters, { props: { filters: makeFilters() } });
+		expect(container.querySelector('fieldset')).toBeInTheDocument();
 	});
 
 	it('renders 14 checkboxes', () => {
-		const filters = makeFilters();
-		const { body } = render(AchievementFilters, { props: { filters } });
-		const count = (body.match(/type="checkbox"/g) ?? []).length;
-		expect(count).toBe(14);
+		const { container } = render(AchievementFilters, { props: { filters: makeFilters() } });
+		expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(14);
 	});
 
 	it('renders 3 radio buttons for sortBy', () => {
-		const filters = makeFilters();
-		const { body } = render(AchievementFilters, { props: { filters } });
-		const count = (body.match(/type="radio"/g) ?? []).length;
-		expect(count).toBe(3);
+		const { container } = render(AchievementFilters, { props: { filters: makeFilters() } });
+		expect(container.querySelectorAll('input[type="radio"]')).toHaveLength(3);
 	});
 
 	it('renders save button', () => {
-		const filters = makeFilters();
-		const { body } = render(AchievementFilters, { props: { filters } });
-		expect(body).toMatch(/<button/);
+		const { container } = render(AchievementFilters, { props: { filters: makeFilters() } });
+		expect(container.querySelector('button')).toBeInTheDocument();
 	});
 });
 
@@ -46,7 +40,7 @@ describe('applySettings', () => {
 	it('does not overwrite with undefined values', () => {
 		const filters = makeFilters();
 		applySettings(filters, { notCompleted: undefined });
-		expect(filters.notCompleted).toBe(true); // default value preserved
+		expect(filters.notCompleted).toBe(true);
 	});
 
 	it('ignores unknown keys', () => {
