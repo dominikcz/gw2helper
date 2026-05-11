@@ -31,6 +31,8 @@
 		pointsToGet?: number;
 		tiers?: Tier[];
 		onToggleTodo?: (event: { id: number; todo: boolean }) => void;
+		showTooltip?: boolean;
+		showDetailsLink?: boolean;
 	}
 
 	let {
@@ -51,6 +53,8 @@
 		pointsToGet = 0,
 		tiers = [],
 		onToggleTodo = () => {},
+		showTooltip = true,
+		showDetailsLink = true,
 	}: Props = $props();
 
 	const showApiLinks = getQueryStringFlag('show-api-links');
@@ -74,14 +78,20 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
-	<div class="head autotooltip" data-autotooltip-renderer="achiev.progress" data-autotooltip-id={id} data-autotooltip-params={JSON.stringify(bitsDone)}>
+	<div
+		class="head"
+		class:autotooltip={showTooltip}
+		data-autotooltip-renderer={showTooltip ? 'achiev.progress' : undefined}
+		data-autotooltip-id={showTooltip ? id : undefined}
+		data-autotooltip-params={showTooltip ? JSON.stringify(bitsDone) : undefined}
+	>
 		{#if icon}
 			<img src={icon} alt={name} />
 		{/if}
 
 		{#if max}
-			<progress value={(current ?? 0) <= max ? (current ?? 0) : max} {max} data-autotooltip-id={id}></progress>
-			<span data-autotooltip-id={id}>{(current ?? 0) <= max ? (current ?? 0) : max} / {max}</span>
+			<progress value={(current ?? 0) <= max ? (current ?? 0) : max} {max} data-autotooltip-id={showTooltip ? id : undefined}></progress>
+			<span data-autotooltip-id={showTooltip ? id : undefined}>{(current ?? 0) <= max ? (current ?? 0) : max} / {max}</span>
 		{/if}
 
 		{#if flags && flags.includes('Hidden')}
@@ -97,9 +107,11 @@
 				<a href={`https://api.guildwars2.com/v2/achievements/${id}`} target="_blank" rel="noopener noreferrer">id: {id}</a>
 			</small>
 		{/if}
-		<a class="achiev-details" href={resolve(`/achievements/${id}/`)} title={$_('achievements.view_details')}>
-			{$_('achievements.details')}
-		</a>
+		{#if showDetailsLink}
+			<a class="achiev-details" href={resolve(`/achievements/${id}/`)} title={$_('achievements.view_details')}>
+				{$_('achievements.details')}
+			</a>
+		{/if}
 		<button type="button" class="wiki-btn" title={$_('common.read_more_on_wiki')} onclick={openWiki}>
 			<Wiki width="1.5em" height="1.5em" />
 		</button>
@@ -159,7 +171,7 @@
 				color: var(--gw2helper-module-text);
 			}
 			.achiev-details {
-				font-size: x-small;
+				font-size: small;
 				text-decoration: underline;
 			}
 			.wiki-btn {

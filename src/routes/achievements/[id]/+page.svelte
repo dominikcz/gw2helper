@@ -83,10 +83,16 @@
 	}
 </script>
 
+			<p>
+				<a class="back-link" href={resolve('/achievements/')}>
+					<img src={asset('/assets/Game_menu_return_icon.png')} alt="back" />
+					<span>{$_('achievements.back_to_list')}</span>
+				</a>
+			</p>
+
 {#if !data.achievement}
 	<h1>{$_('achievements.achievements')}</h1>
 	<p class="no-results">{$_('achievements.details_not_found')}</p>
-	<p><a href={resolve('/achievements/')}>{$_('achievements.back_to_list')}</a></p>
 {:else}
 	{@const achiev = data.achievement}
 	{@const bits = (achiev.bits || []) as AchievementBit[]}
@@ -117,7 +123,6 @@
 	{@const hasProgressSection = bits.length > 0}
 	<section class="achiev-details-page">
 		<div class="page-head">
-			<p><a href={resolve('/achievements/')}>{$_('achievements.back_to_list')}</a></p>
 			{#if data.category?.name}
 				<h2>{data.category.name}</h2>
 			{/if}
@@ -140,6 +145,8 @@
 			{bitsDone}
 			pointsToGet={achiev.points_to_get}
 			tiers={achiev.tiers as Array<{ count: number; points?: number }>}
+			showTooltip={false}
+			showDetailsLink={false}
 			{onToggleTodo}
 		/>
 
@@ -367,6 +374,18 @@
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 0.4em;
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45em;
+
+		img {
+			width: 1.3em;
+			height: 1.3em;
+			object-fit: contain;
+		}
 	}
 
 	.details-grid {

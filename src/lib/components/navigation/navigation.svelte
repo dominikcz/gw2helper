@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 	import ArrowBack from './arrowBack.svelte';
 	import ArrowForward from './arrowForward.svelte';
 
@@ -81,6 +82,28 @@
 			scrollRight();
 		}
 	}
+
+	function normalizePath(path: string): string {
+		if (!path) return '/';
+		if (path === '/') return '/';
+		return path.endsWith('/') ? path.slice(0, -1) : path;
+	}
+
+	function isItemActive(itemSlug: string) {
+		if (!active) return false;
+
+		const appRoot = normalizePath(resolve('/'));
+		const item = normalizePath(itemSlug);
+		const current = normalizePath(active);
+
+		// Home/root item should be active only on exact route match.
+		if (item === appRoot) {
+			return current === item;
+		}
+
+		// Other links stay active on nested routes, but only on path segment boundaries.
+		return current === item || current.startsWith(`${item}/`);
+	}
 </script>
 
 <svelte:window onresize={hndScroll} />
@@ -90,7 +113,7 @@
 		<a class="nav-btn left" href={'#'} onclick={navLeft} onkeydown={navLeft} role="button" tabindex="0"><ArrowBack /></a>
 	{/if}
 	{#each items as item, i}
-		<a href={item.slug} data-sveltekit-preload-data="tap" class:active={active == item.slug}>{item.label}</a>
+		<a href={item.slug} data-sveltekit-preload-data="tap" class:active={isItemActive(item.slug)}>{item.label}</a>
 	{/each}
 	{#if showScrollButtons && navRightVisible}
 		<a class="nav-btn right" href={'#'} onclick={navRight} onkeydown={navRight} role="button" tabindex="0"><ArrowForward /></a>
