@@ -1,15 +1,16 @@
 
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
 // https://wiki.guildwars2.com/index.php?title=Widget:Event_timer/data.json&action=raw
-// last update: 2025-11-01
+// last update: 2026-05-11
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
 export const wikiData = {
     "t": {
+        "category": "",
         "name": "",
         "segments": {
-            "0": {
+            "1": {
                 "name": "",
                 "bg": "transparent"
             }
@@ -18,13 +19,13 @@ export const wikiData = {
             "partial": [],
             "pattern": [
                 {
-                    "r": 0,
+                    "r": 1,
                     "d": 15
                 }
             ]
         }
     },
-    "dn": {
+    "core-dn": {
         "category": "Core Tyria",
         "name": "Day and night",
         "segments": {
@@ -110,7 +111,7 @@ export const wikiData = {
             ]
         }
     },
-    "wb": {
+    "core-wb": {
         "category": "Core Tyria",
         "name": "World bosses",
         "link": "World boss",
@@ -120,59 +121,59 @@ export const wikiData = {
                 "link": "Kill Admiral Taidha Covington",
                 "chatlink": "[\u0026BKgBAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
-                "name": "Claw of Jormag",
-                "link": "Defeat the Claw of Jormag",
-                "chatlink": "[\u0026BHoCAAA=]",
+                "name": "Svanir Shaman Chief",
+                "link": "Kill the Svanir shaman chief to break his control over the ice elemental",
+                "chatlink": "[\u0026BMIDAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    236,
+                    128,
+                    128
                 ]
             },
             "3": {
-                "name": "Fire Elemental",
-                "link": "Destroy the fire elemental created from chaotic energy fusing with the C.L.E.A.N. 5000's energy core",
-                "chatlink": "[\u0026BEcAAAA=]",
-                "bg": [
-                    251,
-                    132,
-                    152
-                ]
-            },
-            "4": {
-                "name": "Golem Mark II",
-                "link": "Defeat the Inquest's golem Mark II",
-                "chatlink": "[\u0026BNQCAAA=]",
-                "bg": [
-                    234,
-                    98,
-                    121
-                ]
-            },
-            "5": {
-                "name": "Great Jungle Wurm",
-                "link": "Defeat the great jungle wurm",
-                "chatlink": "[\u0026BEEFAAA=]",
-                "bg": [
-                    251,
-                    132,
-                    152
-                ]
-            },
-            "6": {
                 "name": "Megadestroyer",
                 "link": "Kill the megadestroyer before it blows everyone up",
                 "chatlink": "[\u0026BM0CAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "4": {
+                "name": "Fire Elemental",
+                "link": "Destroy the fire elemental created from chaotic energy fusing with the C.L.E.A.N. 5000's energy core",
+                "chatlink": "[\u0026BEcAAAA=]",
+                "bg": [
+                    236,
+                    128,
+                    128
+                ]
+            },
+            "5": {
+                "name": "The Shatterer",
+                "link": "Slay the Shatterer",
+                "chatlink": "[\u0026BE4DAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "6": {
+                "name": "Great Jungle Wurm",
+                "link": "Defeat the great jungle wurm",
+                "chatlink": "[\u0026BEEFAAA=]",
+                "bg": [
+                    236,
+                    128,
+                    128
                 ]
             },
             "7": {
@@ -180,9 +181,9 @@ export const wikiData = {
                 "link": "Defeat Ulgoth the Modniir and his minions",
                 "chatlink": "[\u0026BLAAAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "8": {
@@ -190,29 +191,29 @@ export const wikiData = {
                 "link": "Defeat the shadow behemoth",
                 "chatlink": "[\u0026BPcAAAA=]",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    236,
+                    128,
+                    128
                 ]
             },
             "9": {
-                "name": "Svanir Shaman Chief",
-                "link": "Kill the Svanir shaman chief to break his control over the ice elemental",
-                "chatlink": "[\u0026BMIDAAA=]",
+                "name": "Claw of Jormag",
+                "link": "Defeat the Claw of Jormag",
+                "chatlink": "[\u0026BHoCAAA=]",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    215,
+                    100,
+                    100
                 ]
             },
             "10": {
-                "name": "The Shatterer",
-                "link": "Slay the Shatterer",
-                "chatlink": "[\u0026BE4DAAA=]",
+                "name": "Golem Mark II",
+                "link": "Defeat the Inquest's golem Mark II",
+                "chatlink": "[\u0026BNQCAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -224,11 +225,7 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 9,
-                    "d": 15
-                },
-                {
-                    "r": 6,
+                    "r": 2,
                     "d": 15
                 },
                 {
@@ -236,11 +233,15 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 10,
+                    "r": 4,
                     "d": 15
                 },
                 {
                     "r": 5,
+                    "d": 15
+                },
+                {
+                    "r": 6,
                     "d": 15
                 },
                 {
@@ -252,11 +253,7 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 4,
-                    "d": 15
-                },
-                {
-                    "r": 9,
+                    "r": 10,
                     "d": 15
                 },
                 {
@@ -264,7 +261,11 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 3,
+                    "r": 9,
+                    "d": 15
+                },
+                {
+                    "r": 4,
                     "d": 15
                 },
                 {
@@ -272,27 +273,7 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 5,
-                    "d": 15
-                },
-                {
                     "r": 6,
-                    "d": 15
-                },
-                {
-                    "r": 8,
-                    "d": 15
-                },
-                {
-                    "r": 10,
-                    "d": 15
-                },
-                {
-                    "r": 9,
-                    "d": 15
-                },
-                {
-                    "r": 7,
                     "d": 15
                 },
                 {
@@ -300,7 +281,7 @@ export const wikiData = {
                     "d": 15
                 },
                 {
-                    "r": 4,
+                    "r": 8,
                     "d": 15
                 },
                 {
@@ -309,6 +290,26 @@ export const wikiData = {
                 },
                 {
                     "r": 2,
+                    "d": 15
+                },
+                {
+                    "r": 7,
+                    "d": 15
+                },
+                {
+                    "r": 4,
+                    "d": 15
+                },
+                {
+                    "r": 10,
+                    "d": 15
+                },
+                {
+                    "r": 6,
+                    "d": 15
+                },
+                {
+                    "r": 9,
                     "d": 15
                 },
                 {
@@ -318,7 +319,7 @@ export const wikiData = {
             ]
         }
     },
-    "hwb": {
+    "core-hwb": {
         "category": "Core Tyria",
         "name": "Hard world bosses",
         "link": "World boss",
@@ -326,9 +327,9 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    249,
+                    155,
+                    155
                 ]
             },
             "1": {
@@ -336,9 +337,9 @@ export const wikiData = {
                 "link": "Triple Trouble",
                 "chatlink": "[\u0026BKoBAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
@@ -346,9 +347,9 @@ export const wikiData = {
                 "link": "Defeat the Karka Queen threatening the settlements",
                 "chatlink": "[\u0026BNUGAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "3": {
@@ -356,9 +357,9 @@ export const wikiData = {
                 "link": "Defeat Tequatl the Sunless",
                 "chatlink": "[\u0026BNABAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -524,7 +525,7 @@ export const wikiData = {
             "pattern": []
         }
     },
-    "la": {
+    "core-la": {
         "category": "Core Tyria",
         "name": "Ley-Line Anomaly",
         "link": "Legendary Ley-Line Anomaly",
@@ -532,9 +533,9 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    249,
+                    155,
+                    155
                 ]
             },
             "1": {
@@ -542,9 +543,9 @@ export const wikiData = {
                 "link": "Defeat the Ley-Line Anomaly to disperse its destructive energy before it overloads",
                 "chatlink": "[\u0026BEwCAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
@@ -552,9 +553,9 @@ export const wikiData = {
                 "link": "Defeat the Ley-Line Anomaly to disperse its destructive energy before it overloads",
                 "chatlink": "[\u0026BOcBAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "3": {
@@ -562,9 +563,9 @@ export const wikiData = {
                 "link": "Defeat the Ley-Line Anomaly to disperse its destructive energy before it overloads",
                 "chatlink": "[\u0026BOQAAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -623,7 +624,75 @@ export const wikiData = {
             ]
         }
     },
-    "fi": {
+    "core-in": {
+        "category": "Core Tyria",
+        "name": "Invasions",
+        "link": "Dynamic event",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    249,
+                    155,
+                    155
+                ]
+            },
+            "1": {
+                "name": "Awakened Invasion",
+                "link": "Defeat the invading Awakened",
+                "bg": [
+                    236,
+                    128,
+                    128
+                ]
+            },
+            "2": {
+                "name": "Defeat Scarlet's minions",
+                "link": "Defeat the invading minions of Scarlet Briar",
+                "chatlink": "[\u0026BOQAAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 0,
+                    "d": 30
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 15
+                },
+                {
+                    "r": 2,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 15
+                },
+                {
+                    "r": 1,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 45
+                }
+            ]
+        }
+    },
+    "core-fi": {
         "category": "Core Tyria",
         "name": "Fractal Incursions",
         "link": "Defeat the enemy spawned by the fractal incursion",
@@ -631,9 +700,9 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    249,
+                    155,
+                    155
                 ]
             },
             "1": {
@@ -641,9 +710,9 @@ export const wikiData = {
                 "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BN0AAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
@@ -651,9 +720,9 @@ export const wikiData = {
                 "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BHUAAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "3": {
@@ -661,9 +730,9 @@ export const wikiData = {
                 "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": " [\u0026BLQAAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "4": {
@@ -671,9 +740,9 @@ export const wikiData = {
                 "link": "Defeat the enemy spawned by the fractal incursion",
                 "chatlink": "[\u0026BBIAAAA=]",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -715,7 +784,7 @@ export const wikiData = {
             ]
         }
     },
-    "euat": {
+    "core-ateu": {
         "category": "Core Tyria",
         "name": "EU PvP Tournaments",
         "link": "Automated Tournaments",
@@ -723,45 +792,45 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    249,
+                    155,
+                    155
                 ]
             },
             "1": {
                 "name": "Automated Tournament: Balthazar's Brawl",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
                 "name": "Automated Tournament: Grenth's Game",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "3": {
                 "name": "Automated Tournament: Melandru's Matchup",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "4": {
                 "name": "Automated Tournament: Lyssa's Legions",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -808,7 +877,7 @@ export const wikiData = {
             ]
         }
     },
-    "naat": {
+    "core-atna": {
         "category": "Core Tyria",
         "name": "NA PvP Tournaments",
         "link": "Automated Tournaments",
@@ -816,45 +885,45 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    132,
-                    152
+                    249,
+                    155,
+                    155
                 ]
             },
             "1": {
                 "name": "Automated Tournament: Balthazar's Brawl",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "2": {
                 "name": "Automated Tournament: Grenth's Game",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "3": {
                 "name": "Automated Tournament: Melandru's Matchup",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             },
             "4": {
                 "name": "Automated Tournament: Lyssa's Legions",
                 "link": "Automated Tournaments#Daily_tournaments",
                 "bg": [
-                    234,
-                    98,
-                    121
+                    215,
+                    100,
+                    100
                 ]
             }
         },
@@ -896,128 +965,7 @@ export const wikiData = {
             ]
         }
     },
-    "eotn": {
-        "category": "Living World Season 1",
-        "name": "Eye of the North",
-        "link": "Eye of the North",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    251,
-                    132,
-                    152
-                ]
-            },
-            "1": {
-                "name": "Twisted Marionette (Public)",
-                "link": "The Twisted Marionette",
-                "chatlink": "[\u0026BAkMAAA=]",
-                "bg": [
-                    234,
-                    98,
-                    121
-                ]
-            },
-            "2": {
-                "name": "Tower of Nightmares (Public)",
-                "link": "The Tower of Nightmares (meta event)",
-                "chatlink": "[\u0026BAkMAAA=]",
-                "bg": [
-                    234,
-                    98,
-                    121
-                ]
-            },
-            "3": {
-                "name": "Battle For Lion's Arch (Public)",
-                "link": "The Battle For Lion's Arch",
-                "chatlink": "[\u0026BAkMAAA=]",
-                "bg": [
-                    234,
-                    98,
-                    121
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [],
-            "pattern": [
-                {
-                    "r": 1,
-                    "d": 20
-                },
-                {
-                    "r": 0,
-                    "d": 10
-                },
-                {
-                    "r": 3,
-                    "d": 15
-                },
-                {
-                    "r": 0,
-                    "d": 45
-                },
-                {
-                    "r": 2,
-                    "d": 15
-                },
-                {
-                    "r": 0,
-                    "d": 15
-                }
-            ]
-        }
-    },
-    "si": {
-        "category": "Living World Season 1",
-        "name": "Scarlet's Invasion",
-        "link": "Defeat the invading minions of Scarlet Briar",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    251,
-                    132,
-                    152
-                ]
-            },
-            "1": {
-                "name": "Defeat Scarlet's minions",
-                "link": "Defeat the invading minions of Scarlet Briar",
-                "chatlink": "[\u0026BOQAAAA=]",
-                "bg": [
-                    234,
-                    98,
-                    121
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [
-                {
-                    "r": 0,
-                    "d": 60
-                },
-                {
-                    "r": 1,
-                    "d": 15
-                }
-            ],
-            "pattern": [
-                {
-                    "r": 0,
-                    "d": 105
-                },
-                {
-                    "r": 1,
-                    "d": 15
-                }
-            ]
-        }
-    },
-    "dt": {
+    "lws2-dt": {
         "category": "Living World Season 2",
         "name": "Dry Top",
         "segments": {
@@ -1055,7 +1003,7 @@ export const wikiData = {
             ]
         }
     },
-    "vb": {
+    "hot-vb": {
         "category": "Heart of Thorns",
         "name": "Verdant Brink",
         "segments": {
@@ -1115,7 +1063,7 @@ export const wikiData = {
             ]
         }
     },
-    "ab": {
+    "hot-ab": {
         "category": "Heart of Thorns",
         "name": "Auric Basin",
         "segments": {
@@ -1198,7 +1146,7 @@ export const wikiData = {
             ]
         }
     },
-    "td": {
+    "hot-td": {
         "category": "Heart of Thorns",
         "name": "Tangled Depths",
         "segments": {
@@ -1262,7 +1210,7 @@ export const wikiData = {
             ]
         }
     },
-    "ds": {
+    "hot-ds": {
         "category": "Heart of Thorns",
         "name": "Dragon's Stand",
         "segments": {
@@ -1301,7 +1249,7 @@ export const wikiData = {
             ]
         }
     },
-    "ld": {
+    "lws3-ld": {
         "category": "Living World Season 3",
         "name": "Lake Doric",
         "segments": {
@@ -1310,9 +1258,9 @@ export const wikiData = {
                 "link": "White Mantle Control: Saidra's Haven",
                 "chatlink": "[\u0026BK0JAAA=]",
                 "bg": [
-                    159,
-                    217,
-                    147
+                    121,
+                    181,
+                    108
                 ]
             },
             "2": {
@@ -1330,9 +1278,9 @@ export const wikiData = {
                 "link": "White Mantle Control: Noran's Homestead",
                 "chatlink": "[\u0026BK8JAAA=]",
                 "bg": [
-                    121,
-                    181,
-                    108
+                    159,
+                    217,
+                    147
                 ]
             }
         },
@@ -1359,16 +1307,16 @@ export const wikiData = {
             ]
         }
     },
-    "co": {
+    "pof-co": {
         "category": "Path of Fire",
         "name": "Crystal Oasis",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    199,
-                    132
+                    224,
+                    164,
+                    197
                 ]
             },
             "1": {
@@ -1376,9 +1324,9 @@ export const wikiData = {
                 "link": "Casino Blitz",
                 "chatlink": "[\u0026BLsKAAA=]",
                 "bg": [
-                    234,
-                    175,
-                    98
+                    212,
+                    138,
+                    179
                 ]
             },
             "2": {
@@ -1386,9 +1334,9 @@ export const wikiData = {
                 "link": "Casino Blitz",
                 "chatlink": "[\u0026BLsKAAA=]",
                 "bg": [
-                    215,
-                    150,
-                    66
+                    205,
+                    121,
+                    170
                 ]
             }
         },
@@ -1423,16 +1371,16 @@ export const wikiData = {
             ]
         }
     },
-    "dh": {
+    "pof-dh": {
         "category": "Path of Fire",
         "name": "Desert Highlands",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    199,
-                    132
+                    224,
+                    164,
+                    197
                 ]
             },
             "1": {
@@ -1440,9 +1388,9 @@ export const wikiData = {
                 "link": "The Search for Buried Treasure",
                 "chatlink": "[\u0026BGsKAAA=]",
                 "bg": [
-                    234,
-                    175,
-                    98
+                    212,
+                    138,
+                    179
                 ]
             }
         },
@@ -1469,16 +1417,16 @@ export const wikiData = {
             ]
         }
     },
-    "er": {
+    "pof-er": {
         "category": "Path of Fire",
         "name": "Elon Riverlands",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    199,
-                    132
+                    224,
+                    164,
+                    197
                 ]
             },
             "1": {
@@ -1486,9 +1434,9 @@ export const wikiData = {
                 "link": "The Path to Ascension",
                 "chatlink": "[\u0026BFMKAAA=]",
                 "bg": [
-                    234,
-                    175,
-                    98
+                    212,
+                    138,
+                    179
                 ]
             },
             "2": {
@@ -1496,9 +1444,9 @@ export const wikiData = {
                 "link": "The Path to Ascension",
                 "chatlink": "[\u0026BFMKAAA=]",
                 "bg": [
-                    215,
-                    150,
-                    66
+                    205,
+                    121,
+                    170
                 ]
             }
         },
@@ -1525,34 +1473,34 @@ export const wikiData = {
             ]
         }
     },
-    "de": {
+    "pof-td": {
         "category": "Path of Fire",
         "name": "The Desolation",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    199,
-                    132
+                    224,
+                    164,
+                    197
                 ]
             },
             "1": {
                 "name": "Maws of Torment",
                 "chatlink": "[\u0026BKMKAAA=]",
                 "bg": [
-                    215,
-                    150,
-                    66
+                    212,
+                    138,
+                    179
                 ]
             },
             "2": {
                 "name": "Junundu Rising",
                 "chatlink": "[\u0026BMEKAAA=]",
                 "bg": [
-                    234,
-                    175,
-                    98
+                    205,
+                    121,
+                    170
                 ]
             }
         },
@@ -1599,34 +1547,34 @@ export const wikiData = {
             ]
         }
     },
-    "dv": {
+    "pof-dv": {
         "category": "Path of Fire",
         "name": "Domain of Vabbi",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    251,
-                    199,
-                    132
+                    224,
+                    164,
+                    197
                 ]
             },
             "1": {
                 "name": "Serpents' Ire",
                 "chatlink": "[\u0026BHQKAAA=]",
                 "bg": [
-                    234,
-                    175,
-                    98
+                    212,
+                    138,
+                    179
                 ]
             },
             "2": {
                 "name": "Forged with Fire",
                 "chatlink": "[\u0026BO0KAAA=]",
                 "bg": [
-                    215,
-                    150,
-                    66
+                    205,
+                    121,
+                    170
                 ]
             }
         },
@@ -1657,57 +1605,16 @@ export const wikiData = {
             ]
         }
     },
-    "ai": {
-        "category": "Living World Season 4",
-        "name": "Awakened Invasion",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    187,
-                    119,
-                    207
-                ]
-            },
-            "1": {
-                "name": "Awakened Invasion",
-                "link": "Defeat the invading Awakened",
-                "bg": [
-                    157,
-                    65,
-                    185
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [
-                {
-                    "r": 0,
-                    "d": 30
-                }
-            ],
-            "pattern": [
-                {
-                    "r": 1,
-                    "d": 15
-                },
-                {
-                    "r": 0,
-                    "d": 45
-                }
-            ]
-        }
-    },
-    "di": {
+    "lws4-di": {
         "category": "Living World Season 4",
         "name": "Domain of Istan",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    187,
-                    119,
-                    207
+                    198,
+                    176,
+                    212
                 ]
             },
             "1": {
@@ -1715,9 +1622,9 @@ export const wikiData = {
                 "link": "Palawadan, Jewel of Istan (meta event)",
                 "chatlink": "[\u0026BAkLAAA=]",
                 "bg": [
-                    157,
-                    65,
-                    185
+                    170,
+                    150,
+                    209
                 ]
             }
         },
@@ -1740,16 +1647,16 @@ export const wikiData = {
             ]
         }
     },
-    "jb": {
+    "lws4-jb": {
         "category": "Living World Season 4",
         "name": "Jahai Bluffs",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    187,
-                    119,
-                    207
+                    198,
+                    176,
+                    212
                 ]
             },
             "1": {
@@ -1757,9 +1664,9 @@ export const wikiData = {
                 "link": "Dangerous Prey",
                 "chatlink": "[\u0026BIMLAAA=]",
                 "bg": [
-                    175,
-                    96,
-                    199
+                    170,
+                    150,
+                    209
                 ]
             },
             "2": {
@@ -1767,9 +1674,9 @@ export const wikiData = {
                 "link": "Destroy the Death-Branded Shatterer",
                 "chatlink": "[\u0026BJMLAAA=]",
                 "bg": [
-                    157,
-                    65,
-                    185
+                    160,
+                    135,
+                    212
                 ]
             }
         },
@@ -1804,16 +1711,16 @@ export const wikiData = {
             ]
         }
     },
-    "tp": {
+    "lws4-tp": {
         "category": "Living World Season 4",
         "name": "Thunderhead Peaks",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    187,
-                    119,
-                    207
+                    198,
+                    176,
+                    212
                 ]
             },
             "1": {
@@ -1821,18 +1728,18 @@ export const wikiData = {
                 "link": "Thunderhead Keep (meta event)",
                 "chatlink": "[\u0026BLsLAAA=]",
                 "bg": [
-                    157,
-                    65,
-                    185
+                    170,
+                    150,
+                    209
                 ]
             },
             "2": {
                 "name": "The Oil Floes",
                 "chatlink": "[\u0026BKYLAAA=]",
                 "bg": [
-                    157,
-                    65,
-                    185
+                    160,
+                    135,
+                    212
                 ]
             }
         },
@@ -1871,15 +1778,15 @@ export const wikiData = {
             ]
         }
     },
-    "gv": {
+    "lws5-gv": {
         "category": "The Icebrood Saga",
         "name": "Grothmar Valley",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    132,
-                    201,
+                    145,
+                    207,
                     251
                 ]
             },
@@ -1967,15 +1874,15 @@ export const wikiData = {
             ]
         }
     },
-    "bm": {
+    "lws5-bm": {
         "category": "The Icebrood Saga",
         "name": "Bjora Marches",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    132,
-                    201,
+                    145,
+                    207,
                     251
                 ]
             },
@@ -2059,49 +1966,7 @@ export const wikiData = {
             ]
         }
     },
-    "dsp": {
-        "category": "The Icebrood Saga",
-        "name": "Dragonstorm",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    132,
-                    201,
-                    251
-                ]
-            },
-            "1": {
-                "name": "Dragonstorm (Public)",
-                "link": "Dragonstorm",
-                "chatlink": "[\u0026BAkMAAA=]",
-                "bg": [
-                    66,
-                    153,
-                    215
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [
-                {
-                    "r": 0,
-                    "d": 60
-                }
-            ],
-            "pattern": [
-                {
-                    "r": 1,
-                    "d": 20
-                },
-                {
-                    "r": 0,
-                    "d": 100
-                }
-            ]
-        }
-    },
-    "cdn": {
+    "eod-dn": {
         "category": "End of Dragons",
         "name": "Cantha: Day and night",
         "link": "Day and night",
@@ -2188,16 +2053,16 @@ export const wikiData = {
             ]
         }
     },
-    "sp": {
+    "eod-sp": {
         "category": "End of Dragons",
         "name": "Seitung Province",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    138,
-                    234,
-                    244
+                    159,
+                    242,
+                    251
                 ]
             },
             "1": {
@@ -2229,16 +2094,16 @@ export const wikiData = {
             ]
         }
     },
-    "nkc": {
+    "eod-nkc": {
         "category": "End of Dragons",
         "name": "New Kaineng City",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    138,
-                    234,
-                    244
+                    159,
+                    242,
+                    251
                 ]
             },
             "1": {
@@ -2265,16 +2130,16 @@ export const wikiData = {
             ]
         }
     },
-    "tew": {
+    "eod-ew": {
         "category": "End of Dragons",
         "name": "The Echovald Wilds",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    138,
-                    234,
-                    244
+                    159,
+                    242,
+                    251
                 ]
             },
             "1": {
@@ -2320,7 +2185,7 @@ export const wikiData = {
             ]
         }
     },
-    "dre": {
+    "eod-de": {
         "category": "End of Dragons",
         "name": "Dragon's End",
         "segments": {
@@ -2383,16 +2248,16 @@ export const wikiData = {
             ]
         }
     },
-    "sa": {
+    "soto-sa": {
         "category": "Secrets of the Obscure",
         "name": "Skywatch Archipelago",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    250,
-                    206,
-                    133
+                    246,
+                    194,
+                    100
                 ]
             },
             "1": {
@@ -2425,7 +2290,7 @@ export const wikiData = {
             ]
         }
     },
-    "wt": {
+    "soto-wt": {
         "category": "Secrets of the Obscure",
         "name": "Wizard's Tower",
         "link": "The Wizard's Tower",
@@ -2433,9 +2298,9 @@ export const wikiData = {
             "0": {
                 "name": "",
                 "bg": [
-                    250,
-                    206,
-                    133
+                    246,
+                    194,
+                    100
                 ]
             },
             "1": {
@@ -2500,16 +2365,16 @@ export const wikiData = {
             ]
         }
     },
-    "am": {
+    "soto-am": {
         "category": "Secrets of the Obscure",
         "name": "Amnytas",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    250,
-                    206,
-                    133
+                    246,
+                    194,
+                    100
                 ]
             },
             "1": {
@@ -2537,59 +2402,16 @@ export const wikiData = {
             ]
         }
     },
-    "con": {
-        "category": "Secrets of the Obscure",
-        "name": "Conv.: Outer Nayos",
-        "link": "Convergence: Outer Nayos",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    250,
-                    206,
-                    133
-                ]
-            },
-            "1": {
-                "name": "Convergence: Outer Nayos",
-                "link": "Convergence: Outer Nayos",
-                "chatlink": "[\u0026BB8OAAA=]",
-                "bg": [
-                    226,
-                    171,
-                    73
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [
-                {
-                    "r": 0,
-                    "d": 90
-                }
-            ],
-            "pattern": [
-                {
-                    "r": 1,
-                    "d": 10
-                },
-                {
-                    "r": 0,
-                    "d": 170
-                }
-            ]
-        }
-    },
-    "js": {
+    "jw-js": {
         "category": "Janthir Wilds",
         "name": "Janthir Syntri",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    196,
-                    212,
-                    255
+                    171,
+                    191,
+                    244
                 ]
             },
             "1": {
@@ -2621,16 +2443,16 @@ export const wikiData = {
             ]
         }
     },
-    "bn": {
+    "jw-bn": {
         "category": "Janthir Wilds",
         "name": "Bava Nisos",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    196,
-                    212,
-                    255
+                    171,
+                    191,
+                    244
                 ]
             },
             "1": {
@@ -2662,45 +2484,7 @@ export const wikiData = {
             ]
         }
     },
-    "cmb": {
-        "category": "Janthir Wilds",
-        "name": "Conv.: Mount Balrior",
-        "link": "Convergence: Mount Balrior",
-        "segments": {
-            "0": {
-                "name": "",
-                "bg": [
-                    196,
-                    212,
-                    255
-                ]
-            },
-            "1": {
-                "name": "Convergence: Mount Balrior",
-                "link": "Convergence: Mount Balrior",
-                "chatlink": "[\u0026BK4OAAA=]",
-                "bg": [
-                    146,
-                    170,
-                    235
-                ]
-            }
-        },
-        "sequences": {
-            "partial": [],
-            "pattern": [
-                {
-                    "r": 1,
-                    "d": 10
-                },
-                {
-                    "r": 0,
-                    "d": 170
-                }
-            ]
-        }
-    },
-    "cad": {
+    "voe-dn": {
         "category": "Visions of Eternity",
         "name": "Castora: Day and night",
         "link": "Day and night",
@@ -2787,25 +2571,25 @@ export const wikiData = {
             ]
         }
     },
-    "shs": {
+    "voe-ss": {
         "category": "Visions of Eternity",
         "name": "Shipwreck Strand",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    241,
-                    182,
-                    161
+                    250,
+                    160,
+                    125
                 ]
             },
             "1": {
-                "name": "Hammerhart Rumble",
+                "name": "Hammerhart Rumble!",
                 "chatlink": "[\u0026BJEPAAA=]",
                 "bg": [
-                    223,
-                    91,
-                    44
+                    242,
+                    126,
+                    84
                 ]
             }
         },
@@ -2828,25 +2612,25 @@ export const wikiData = {
             ]
         }
     },
-    "stw": {
+    "voe-sw": {
         "category": "Visions of Eternity",
         "name": "Starlit Weald",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    241,
-                    182,
-                    161
+                    250,
+                    160,
+                    125
                 ]
             },
             "1": {
                 "name": "Secrets of the Weald",
                 "chatlink": "[\u0026BJ4PAAA=]",
                 "bg": [
-                    223,
-                    91,
-                    44
+                    242,
+                    126,
+                    84
                 ]
             }
         },
@@ -2873,16 +2657,162 @@ export const wikiData = {
             ]
         }
     },
-    "lc": {
+    "public-eotn": {
+        "category": "Public Instances",
+        "name": "Eye of the North",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    249,
+                    155,
+                    155
+                ]
+            },
+            "1": {
+                "name": "Twisted Marionette",
+                "link": "The Twisted Marionette",
+                "chatlink": "[\u0026BAkMAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "2": {
+                "name": "Battle For Lion's Arch",
+                "link": "The Battle For Lion's Arch",
+                "chatlink": "[\u0026BAkMAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "3": {
+                "name": "Dragonstorm",
+                "link": "Dragonstorm",
+                "chatlink": "[\u0026BAkMAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "4": {
+                "name": "Tower of Nightmares",
+                "link": "The Tower of Nightmares (meta event)",
+                "chatlink": "[\u0026BAkMAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 20
+                },
+                {
+                    "r": 0,
+                    "d": 10
+                },
+                {
+                    "r": 2,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 15
+                },
+                {
+                    "r": 3,
+                    "d": 20
+                },
+                {
+                    "r": 0,
+                    "d": 10
+                },
+                {
+                    "r": 4,
+                    "d": 15
+                },
+                {
+                    "r": 0,
+                    "d": 15
+                }
+            ]
+        }
+    },
+    "public-con": {
+        "category": "Public Instances",
+        "name": "Convergence",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    249,
+                    155,
+                    155
+                ]
+            },
+            "1": {
+                "name": "Mount Balrior",
+                "link": "Convergence: Mount Balrior",
+                "chatlink": "[\u0026BK4OAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            },
+            "2": {
+                "name": "Outer Nayos",
+                "link": "Convergence: Outer Nayos",
+                "chatlink": "[\u0026BB8OAAA=]",
+                "bg": [
+                    215,
+                    100,
+                    100
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 10
+                },
+                {
+                    "r": 0,
+                    "d": 80
+                },
+                {
+                    "r": 2,
+                    "d": 10
+                },
+                {
+                    "r": 0,
+                    "d": 80
+                }
+            ]
+        }
+    },
+    "festival-lc": {
         "category": "Special Events",
         "name": "Labyrinthine Cliffs",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    138,
-                    234,
-                    244
+                    94,
+                    225,
+                    240
                 ]
             },
             "1": {
@@ -3000,16 +2930,16 @@ export const wikiData = {
             ]
         }
     },
-    "db": {
+    "festival-db": {
         "category": "Special Events",
         "name": "Dragon Bash",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    138,
-                    234,
-                    244
+                    94,
+                    225,
+                    240
                 ]
             },
             "1": {
@@ -3091,16 +3021,16 @@ export const wikiData = {
             ]
         }
     },
-    "ha": {
+    "festival-ha": {
         "category": "Special Events",
         "name": "Halloween",
         "segments": {
             "0": {
                 "name": "",
                 "bg": [
-                    242,
-                    215,
-                    162
+                    251,
+                    185,
+                    58
                 ]
             },
             "1": {
