@@ -5,5 +5,6 @@ my_offer: 我的报价
 age: 时长
 best_offer: 最优报价
 ordered_qty: '# 订单数'
+ordered_qty_value: '{value, number}'
 outbid: 出价被超过
 undercut: 被压价

@@ -72,7 +72,7 @@
 						<Price value={offer.unit_price} />
 					</td>
 					<td class="offer-qty" data-label={$_('trading-post.ordered_qty')}>
-						{offer.quantity}
+						{$_('trading-post.ordered_qty_value', { value: offer.quantity })}
 					</td>
 				</tr>
 			{:else}

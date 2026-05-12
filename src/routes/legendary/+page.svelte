@@ -51,7 +51,7 @@
 
 {#snippet unlockGroup(caption: string, weightData: ArmorGroup)}
 	{@const progressArmor = completionArmor(weightData)}
-	<details use:grungeBorder use:autotooltip={tooltipOptions}>
+	<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
 		<summary
 			>{$_('legendary.armor_type.'+caption.toLowerCase())}
 			<div class="info">
@@ -78,7 +78,7 @@
 		{@render unlockGroup($_('legendary.armor_type_short.medium'), result.armor.Medium)}
 		{@render unlockGroup($_('legendary.armor_type_short.heavy'), result.armor.Heavy)}
 
-		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>
 				{$_('legendary.trinkets')}
 				<div class="info">
@@ -93,7 +93,7 @@
 			</article>
 		</details>
 
-		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>
 				{$_('legendary.upgrades')}
 				<div class="info">
@@ -107,7 +107,7 @@
 
 		<h3>{$_('legendary.weapons')}</h3>
 		{@const progressWeapons = completionWeapons(result.weapons)}
-		<details use:grungeBorder use:autotooltip={tooltipOptions}>
+		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
 			<summary>
 				{$_('legendary.weapons')}
 				<div class="info">

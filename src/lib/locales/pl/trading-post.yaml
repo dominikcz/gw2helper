@@ -5,5 +5,6 @@ my_offer: Moja oferta
 age: Wiek oferty
 best_offer: Najlepsza oferta
 ordered_qty: '# zamówiono'
+ordered_qty_value: '{value, number}'
 outbid: Przelicytowano
 undercut: Ktoś wystawił taniej
