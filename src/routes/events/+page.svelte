@@ -27,9 +27,9 @@
 	onMount(async () => {
 		const currentSeason = data.apiService.currentSeason();
 		const specialEvents = [
-			'lc', // Labyrinthine Cliffs
-			'db', // Day and night
-			'ha', // Halloween
+			'festival-lc', // Labyrinthine Cliffs
+			'festival-db', // Day and night
+			'festival-ha', // Halloween
 		].filter((season) => season !== currentSeason);
 		console.log('Current season:', currentSeason);
 		// remove all special events but currentSeason
