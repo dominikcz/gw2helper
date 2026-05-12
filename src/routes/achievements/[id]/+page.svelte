@@ -3,6 +3,7 @@
 	import apiService from '$lib/apiService';
 	import Achievement from '$lib/components/achievements/achievement.svelte';
 	import AchievementProgress from '$lib/components/achievements/achievementProgress.svelte';
+	import RewardRow from '$lib/components/achievements/rewardRow.svelte';
 	import Item from '$lib/components/items/item.svelte';
 	import Linkable from '$lib/components/ui/linkable.svelte';
 	import Price from '$lib/components/currencies/price.svelte';
@@ -156,36 +157,32 @@
 					<h3>{$_('achievements.rewards_breakdown')}</h3>
 					<ul class="reward-list">
 						{#if String(achiev.type || 'Default') === 'ItemSet'}
-							<li class="reward-row">
-								<img src={asset('/assets/rewards/Talk_collection_option.png')} alt="collection" />
+							<RewardRow icon={asset('/assets/rewards/Talk_collection_option.png')} alt="collection">
 								<span>{$_('achievements.achievement_is_collection')}</span>
-							</li>
+							</RewardRow>
 						{/if}
 
 						{#if titleRewards.length}
 							{#each titleRewards as reward, idx (`title-${reward.id ?? idx}-${idx}`)}
 								{@const titleId = Number(reward.id || 0)}
 								{@const title = rewardTitlesMap.get(titleId)}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Title_icon.png')} alt="title" />
+								<RewardRow icon={asset('/assets/rewards/Title_icon.png')} alt="title">
 									<span>{$_('achievements.achievement_is_title')}</span>
 									{#if title?.name}
 										<Linkable link={helperUtils.wikiLink(title.name)} rel="noopener noreferrer">{title.name}</Linkable>
 									{:else}
 										<span>{$_('achievements.reward_title_with_id', { id: reward.id })}</span>
 									{/if}
-								</li>
+								</RewardRow>
 							{/each}
 						{:else if rewards.title}
-							<li class="reward-row">
-								<img src={asset('/assets/rewards/Title_icon.png')} alt="title" />
+							<RewardRow icon={asset('/assets/rewards/Title_icon.png')} alt="title">
 								<span>{$_('achievements.achievement_is_title')}</span>
-							</li>
+							</RewardRow>
 						{/if}
 
 						{#if itemRewards.length}
-							<li class="reward-row reward-row-items">
-								<img src={asset('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item" />
+							<RewardRow className="reward-row-items" icon={asset('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item">
 								<div class="reward-items-content">
 									<span>{$_('achievements.achievement_is_item')}</span>
 									<ul class="reward-items-list">
@@ -211,94 +208,81 @@
 										{/each}
 									</ul>
 								</div>
-							</li>
+							</RewardRow>
 						{:else if rewards.item}
-							<li class="reward-row">
-								<img src={asset('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item" />
+							<RewardRow icon={asset('/assets/rewards/Achievement_Chest_interface_icon.png')} alt="item">
 								<span>{$_('achievements.achievement_is_item')}</span>
-							</li>
+							</RewardRow>
 						{/if}
 
 						{#if coinRewards.length}
 							{#each coinRewards as reward, idx (`coins-${idx}`)}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Gold_coin_highres.png')} alt="coins" />
+								<RewardRow icon={asset('/assets/rewards/Gold_coin_highres.png')} alt="coins">
 									<span>{$_('achievements.giving_gold')}</span>
 									<Price value={reward.count || 0} />
-								</li>
+								</RewardRow>
 							{/each}
 						{:else if rewards.coins?.length}
-							<li class="reward-row">
-								<img src={asset('/assets/rewards/Gold_coin_highres.png')} alt="coins" />
+							<RewardRow icon={asset('/assets/rewards/Gold_coin_highres.png')} alt="coins">
 								<span>{$_('achievements.giving_gold')}</span>
 								<Price value={rewards.coins[0].count} />
-							</li>
+							</RewardRow>
 						{/if}
 
 						{#if masteryRewards.length}
 							{#each masteryRewards as reward, idx (`mastery-${reward.region ?? idx}-${idx}`)}
-								<li class="reward-row">
-									<img src={masteryIcon(reward.region)} alt="mastery" />
+								<RewardRow icon={masteryIcon(reward.region)} alt="mastery">
 									<span>{masteryText(reward.region)}</span>
-								</li>
+								</RewardRow>
 							{/each}
 						{:else}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Tyria')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Central_Tyria.png')} alt="mastery Tyria" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Central_Tyria.png')} alt="mastery Tyria">
 									<span>{$_('achievements.achievement_is_mastery_tyria')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Maguuma')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Heart_of_Thorns.png')} alt="mastery HoT" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Heart_of_Thorns.png')} alt="mastery HoT">
 									<span>{$_('achievements.achievement_is_mastery_hot')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Desert')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Path_of_Fire.png')} alt="mastery PoF" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Path_of_Fire.png')} alt="mastery PoF">
 									<span>{$_('achievements.achievement_is_mastery_pof')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Tundra')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Icebrood_Saga.png')} alt="mastery Icebrood" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Icebrood_Saga.png')} alt="mastery Icebrood">
 									<span>{$_('achievements.achievement_is_mastery_ice')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Jade')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_End_of_Dragons.png')} alt="mastery EoD" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_End_of_Dragons.png')} alt="mastery EoD">
 									<span>{$_('achievements.achievement_is_mastery_eod')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Sky')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')} alt="mastery SotO" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Secrets_of_the_Obscure.png')} alt="mastery SotO">
 									<span>{$_('achievements.achievement_is_mastery_soto')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 							{#if rewards.mastery?.find((x: MasteryReward) => x.region == 'Unknown')}
-								<li class="reward-row">
-									<img src={asset('/assets/rewards/Mastery_point_Janthir_Wilds.png')} alt="mastery JW" />
+								<RewardRow icon={asset('/assets/rewards/Mastery_point_Janthir_Wilds.png')} alt="mastery JW">
 									<span>{$_('achievements.achievement_is_mastery_jw')}</span>
-								</li>
+								</RewardRow>
 							{/if}
 						{/if}
 
 						{#if pointsToGet > 0}
-							<li class="reward-row ap-left">
-								<img src={asset('/assets/rewards/AP.png')} alt="AP" />
+							<RewardRow className="ap-left" icon={asset('/assets/rewards/AP.png')} alt="AP">
 								<span>{$_('achievements.achievement_can_get', { pointsToGet })}</span>
-							</li>
+							</RewardRow>
 						{/if}
 
 						{#if max}
-							<li class="reward-row">
-								<img src={asset('/assets/rewards/Achievements_Summary.png')} alt="progress" />
+							<RewardRow icon={asset('/assets/rewards/Achievements_Summary.png')} alt="progress">
 								<span>{$_('achievements.exact_progress', { current: Math.min(current, max), max })}</span>
-							</li>
+							</RewardRow>
 						{/if}
 					</ul>
 
@@ -437,10 +421,6 @@
 		:global(a) {
 			font-size: 0.95em;
 		}
-	}
-
-	.reward-row-items {
-		align-items: flex-start;
 	}
 
 	.reward-items-content {

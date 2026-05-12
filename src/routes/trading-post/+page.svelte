@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
-	import { grungeBorder } from '$lib/actions/grungeBorder';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
+	import CollapsibleSection from '$lib/components/ui/collapsibleSection.svelte';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';
 	import TransactionList from '$lib/components/trading-post/transactionList.svelte';
 	import { t as _ } from '$lib/services/i18n';
@@ -21,15 +21,13 @@
 <Awaiter promise={data.current} >
 	{#snippet children(result: { buys: TransactionCurrentItem[]; sells: TransactionCurrentItem[] })}
 		<div class="trading-container">
-			<details open use:grungeBorder >
-				<summary>{$_('trading-post.buying')}</summary>
+			<CollapsibleSection summary={$_('trading-post.buying')} open={true}>
 				<TransactionList items={result.buys} offerType="buys" />
-			</details>
+			</CollapsibleSection>
 
-			<details open use:grungeBorder >
-				<summary>{$_('trading-post.selling')}</summary>
+			<CollapsibleSection summary={$_('trading-post.selling')} open={true}>
 				<TransactionList items={result.sells} offerType="sells" />
-			</details>
+			</CollapsibleSection>
 		</div>
 	{/snippet}
 </Awaiter>
@@ -43,7 +41,7 @@
 	@media (min-width: 900px) {
 		.trading-container {
 			flex-flow: row wrap;
-			details {
+			:global(details) {
 				// min-width: 45%;
 				flex-grow: 1;
 			}

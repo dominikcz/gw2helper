@@ -1,9 +1,8 @@
 ﻿<script lang="ts">
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
-	import { grungeBorder } from '$lib/actions/grungeBorder';
-	import { autotooltip } from '$lib/actions/autotooltip';
 	import Legendary from '$lib/components/items/legendary.svelte';
+	import CollapsibleSection from '$lib/components/ui/collapsibleSection.svelte';
 	import { itemTooltipRenderer } from '$lib/components/items/itemTooltipRenderer';
 	import Progress from '$lib/components/progress/progress.svelte';
 	import {
@@ -42,7 +41,7 @@
 	<div class="equip" class:done={done(items, minReq)} class:restricted>
 		<h4>{caption}</h4>
 		<div class="unlocks">
-			{#each items as item}
+			{#each items as item (item.id)}
 				<Legendary {item} />
 			{/each}
 		</div>
@@ -51,13 +50,18 @@
 
 {#snippet unlockGroup(caption: string, weightData: ArmorGroup)}
 	{@const progressArmor = completionArmor(weightData)}
-	<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
-		<summary
-			>{$_('legendary.armor_type.'+caption.toLowerCase())}
+	<CollapsibleSection
+		summary={$_('legendary.armor_type.' + caption.toLowerCase())}
+		className=""
+		tooltip={true}
+		stickyTooltip={true}
+		tooltipOptions={tooltipOptions}
+	>
+		{#snippet summaryExtra()}
 			<div class="info">
 				<Progress value={progressArmor} max={armorPiecesCount} label={`${progressArmor} / ${armorPiecesCount}`} />
 			</div>
-		</summary>
+		{/snippet}
 		<article>
 			{@render unlocksList($_('legendary.armor_pieces.helm'), weightData.Helm, 1, true)}
 			{@render unlocksList($_('legendary.armor_pieces.shoulders'), weightData.Shoulders, 1, true)}
@@ -67,7 +71,7 @@
 			{@render unlocksList($_('legendary.armor_pieces.boots'), weightData.Boots, 1, true)}
 			{@render unlocksList($_('legendary.armor_pieces.aquatic'), weightData.HelmAquatic, 1, true)}
 		</article>
-	</details>
+	</CollapsibleSection>
 {/snippet}
 
 <Awaiter promise={data.legendaries as Promise<LegendariesData> | LegendariesData}>
@@ -78,48 +82,45 @@
 		{@render unlockGroup($_('legendary.armor_type_short.medium'), result.armor.Medium)}
 		{@render unlockGroup($_('legendary.armor_type_short.heavy'), result.armor.Heavy)}
 
-		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
-			<summary>
-				{$_('legendary.trinkets')}
+		<CollapsibleSection summary={$_('legendary.trinkets')} tooltip={true} stickyTooltip={true} tooltipOptions={tooltipOptions}>
+			{#snippet summaryExtra()}
 				<div class="info">
 					<Progress value={progressTrinkets} max={5} label={`${progressTrinkets} / 5`} />
 				</div>
-			</summary>
+			{/snippet}
 			<article>
 				{@render unlocksList($_('legendary.armor_pieces.back_item'), result.back)}
 				{@render unlocksList($_('legendary.armor_pieces.accessory'), result.trinkets.Accessory)}
 				{@render unlocksList($_('legendary.armor_pieces.ring'), result.trinkets.Ring, 2)}
 				{@render unlocksList($_('legendary.armor_pieces.amulet'), result.trinkets.Amulet)}
 			</article>
-		</details>
+		</CollapsibleSection>
 
-		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
-			<summary>
-				{$_('legendary.upgrades')}
+		<CollapsibleSection summary={$_('legendary.upgrades')} tooltip={true} stickyTooltip={true} tooltipOptions={tooltipOptions}>
+			{#snippet summaryExtra()}
 				<div class="info">
 					<Progress value={progressUpgrades} max={3} label={`${progressUpgrades} / 3`} />
 				</div>
-			</summary>
+			{/snippet}
 			<article>
 				{@render unlocksList($_('legendary.upgrades'), result.upgrades, 3)}
 			</article>
-		</details>
+		</CollapsibleSection>
 
 		<h3>{$_('legendary.weapons')}</h3>
 		{@const progressWeapons = completionWeapons(result.weapons)}
-		<details class="autotooltip autotooltip-sticky" use:grungeBorder use:autotooltip={tooltipOptions}>
-			<summary>
-				{$_('legendary.weapons')}
+		<CollapsibleSection summary={$_('legendary.weapons')} tooltip={true} stickyTooltip={true} tooltipOptions={tooltipOptions}>
+			{#snippet summaryExtra()}
 				<div class="info">
 					<Progress value={progressWeapons} max={24} label={`${progressWeapons} / 24`} />
 				</div>
-			</summary>
+			{/snippet}
 			<article>
 				{#each Object.keys(minReqWeapons) as x}
 					{@render unlocksList(x, result.weapons[x], minReqWeapons[x])}
 				{/each}
 			</article>
-		</details>
+		</CollapsibleSection>
 	{/snippet}
 </Awaiter>
 
