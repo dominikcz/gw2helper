@@ -20,6 +20,7 @@ legal:
     2015 ArenaNet, Inc. Wszelkie prawa zastrzeżone. Wszystkie pozostałe znaki
     towarowe są własnością ich właścicieli. Ta strona wykorzystuje również
     obrazy i dane z <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+missing_scopes: 'Twój token nie ma wymaganych uprawnień:'
 nav:
   account: Konto
   achievements: Osiągnięcia
@@ -29,16 +30,35 @@ nav:
   guilds: Gildie
   home: Start
   items: Przedmioty
+  legendary: Legendarne
   materials: Materiały
   trading-post: Giełda
-  legendary: Legendarne
+network_error: Błąd sieci
 no_audio: >-
   Masz skonfigurowane powiadomienia, ale przeglądarka zapobiega automatycznemu
   odtwarzaniu dźwięku bez interakcji użytkownika. Proszę zamknąć tę wiadomość,
   aby włączyć dźwięk.
-missing_scopes: 'Twój token nie ma wymaganych uprawnień:'
 no_token: Brak klucza API
 paste_your_api_key_here: Wklej tutaj swój klucz API
+retry: Spróbuj ponownie
+share_copy: Skopiuj do schowka
+share_email: Wyślij e-mailem
+share_facebook: Wyślij przez Facebook
+share_headline_label: Udostępnij z treścią
+share_headline_placeholder: Sprawdź moją stronę GW2 Helper
+share_instagram: Wyślij przez Instagram
+share_instagram_hint: Link skopiowany. Wklej go w wiadomości/poście na Instagramie.
+share_link_copied: Link do udostępnienia skopiowany do schowka.
+share_link_failed: Nie udało się przygotować linku do udostępnienia.
+share_link_missing_key: Najpierw podaj klucz API.
+share_page_prompt: Udostępnij tę stronę
+share_page_warning: >-
+  Uwaga: ten link zawiera Twój klucz API. Udostępniaj go tylko osobom, którym
+  ufasz.
+share_this_page: Udostępnij tę stronę
+share_whatsapp: Wyślij przez WhatsApp
+share_x: Wyślij przez X
+token_error: Błąd tokenu
 token_ok: Udane wczytanie klucza "{token}".
 waypoint_to_top: Teleportuj do góry
 your_api_key: 'Twój klucz API:'

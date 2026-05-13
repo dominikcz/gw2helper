@@ -20,6 +20,7 @@ legal:
     Inc. Todos los derechos reservados. Todas las demás marcas son propiedad de
     sus respectivos propietarios. Este sitio utiliza también imágenes y datos de
     <a href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+missing_scopes: 'A tu token le faltan los siguientes permisos:'
 nav:
   account: Cuenta
   achievements: Logros
@@ -29,16 +30,35 @@ nav:
   guilds: Guilds
   home: Home
   items: Temas
+  legendary: Legendario
   materials: Materiales
   trading-post: Bazar
-  legendary: Legendario
+network_error: Error de red
 no_audio: >-
   Usted tiene notificaciones establecidas pero su navegador evita el audio de
   reproducción automática sin interacción con el usuario. Por favor, cierre este
   mensaje para permitir el sonido.
-missing_scopes: 'A tu token le faltan los siguientes permisos:'
 no_token: No API key provided
 paste_your_api_key_here: Pruebe su clave de API aquí
+retry: Reintentar
+share_copy: Copiar al portapapeles
+share_email: Enviar por e-mail
+share_facebook: Enviar por Facebook
+share_headline_label: Compartir con texto
+share_headline_placeholder: Mira mi página de GW2 Helper
+share_instagram: Enviar por Instagram
+share_instagram_hint: Enlace copiado. Pégalo en tu mensaje/publicación de Instagram.
+share_link_copied: Enlace para compartir copiado al portapapeles.
+share_link_failed: No se pudo preparar el enlace para compartir.
+share_link_missing_key: Primero proporciona tu clave API.
+share_page_prompt: Comparte esta página
+share_page_warning: >-
+  Advertencia: este enlace incluye tu clave API. Compártelo solo con personas de
+  confianza.
+share_this_page: Compartir esta página
+share_whatsapp: Enviar por WhatsApp
+share_x: Enviar por X
+token_error: Error del token
 token_ok: Clave cargada exitosamente "{token}".
-waypoint_to_top: waypoint to top
+waypoint_to_top: punto de ruta arriba
 your_api_key: 'Tu clave de API:'

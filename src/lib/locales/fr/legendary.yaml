@@ -1,14 +1,30 @@
-legendary: Légendaire
 armor: Armure
-armor_type:
-  light: Armure légère
-  medium: Armure moyenne
-  heavy: Armure lourde
+armor_pieces:
+  accessory: Accessoire
+  amulet: Amulette
+  aquatic: Casque aquatique
+  back_item: Objet dorsal
+  boots: Bottes
+  coat: Manteau
+  gloves: Gants
+  helm: Heaume
+  leggings: Jambières
+  ring: Anneau
+  shoulders: Épaulières
 armor_set:
   pve: Ensemble d'armure PvE
-  raid: Ensemble d'armure Raid
   pvp: Ensemble d'armure PvP
+  raid: Ensemble d'armure Raid
   wvw: Ensemble d'armure WvW
+armor_type:
+  heavy: Armure lourde
+  light: Armure légère
+  medium: Armure moyenne
+armor_type_short:
+  heavy: Lourde
+  light: Légère
+  medium: Moyenne
+legendary: Légendaire
 trinkets: Les colifichets
 upgrades: Composant d'amélioration
 weapons: Armes

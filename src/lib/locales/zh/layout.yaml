@@ -15,6 +15,7 @@ legal:
   unofficial_site: >-
     这个非官方网站包括艺术和其他资产,即2015 ArenaNet Inc. 版权所有。 其他商标均为各自所有者的财产. 该网站还使用来自 <a
     href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+missing_scopes: '你的令牌缺少以下权限:'
 nav:
   account: 账户
   achievements: 成绩
@@ -24,13 +25,30 @@ nav:
   guilds: 团体
   home: 页 次
   items: 项目
+  legendary: 传奇
   materials: 材料
   trading-post: 交易站
-  legendary: 传奇
+network_error: 网络错误
 no_audio: 已经设置了通知,但您的浏览器在没有用户互动的情况下防止自动播放音频. 请关闭此消息以启用声音 。
-missing_scopes: '你的令牌缺少以下权限:'
 no_token: 未提供 API 密钥
 paste_your_api_key_here: 在此粘贴您的 API 密钥
+retry: 重试
+share_copy: 复制到剪贴板
+share_email: 通过电子邮件发送
+share_facebook: 通过 Facebook 发送
+share_headline_label: 带文本分享
+share_headline_placeholder: 看看我的 GW2 Helper 页面
+share_instagram: 通过 Instagram 发送
+share_instagram_hint: 链接已复制。请粘贴到 Instagram 消息/帖子中。
+share_link_copied: 分享链接已复制到剪贴板。
+share_link_failed: 无法生成分享链接。
+share_link_missing_key: 请先提供 API 密钥。
+share_page_prompt: 分享此页面
+share_page_warning: 警告：此链接包含您的 API 密钥。请仅分享给您信任的人。
+share_this_page: 分享此页面
+share_whatsapp: 通过 WhatsApp 发送
+share_x: 通过 X 发送
+token_error: 令牌错误
 token_ok: 成功装入密钥"{token}" 。
 waypoint_to_top: 向上方向移动
 your_api_key: '您的 API 密钥 :'

@@ -1,16 +1,29 @@
+bags:
+  details: |-
+    {count} {count, plural,
+      one {Taschenplatz}
+      other {Taschenplätze}
+    }. Größen der ausgerüsteten Taschen: {sizes}. Insgesamt {capacity} Plätze
+  summary: |-
+    {name} - Freie Plätze: {available} von {capacity}
 bank: Bank
 characters_items: Gegenstände der Charakters
+cleanup:
+  all_characters: '--- alle ---'
+  filter_by_character: 'Nur Gegenstande des Charakters anzeigen:'
+  get_rid_description: >-
+    Hier findest du Gegenstande, die du loswerden solltest. Du kannst sie
+    benutzen, verkaufen oder entsorgen, wenn sich ein Verkauf nicht lohnt. So
+    kannst du bis zu {slots} Platze sparen.
+  get_rid_summary: 'Gegenstande, die du loswerden solltest. Freie Platze: {slots}'
+  slots_to_save: 'Freie Platze: {slots}'
+  stackable_description: >-
+    Hier findest du Gegenstande, die gestapelt werden konnen, um weniger Platz
+    zu belegen. So kannst du bis zu {slots} Platze sparen.
+  stackable_summary: 'Stapelbare Gegenstande. Freie Platze: {slots}'
+  summary: 'Inventar-Bereinigung: {slots} freie Platze moglich'
 common_items: Allgemeines
 guild_items: Gildengegenstände
 items: Gegenstände
 search_in_flags: in Gegenstands-Flags suchen
 shared_inventory: Gemeinschaftsinventar
-cleanup:
-  all_characters: '--- alle ---'
-  slots_to_save: 'Freie Platze: {slots}'
-  summary: 'Inventar-Bereinigung: {slots} freie Platze moglich'
-  filter_by_character: 'Nur Gegenstande des Charakters anzeigen:'
-  stackable_summary: 'Stapelbare Gegenstande. Freie Platze: {slots}'
-  stackable_description: 'Hier findest du Gegenstande, die gestapelt werden konnen, um weniger Platz zu belegen. So kannst du bis zu {slots} Platze sparen.'
-  get_rid_summary: 'Gegenstande, die du loswerden solltest. Freie Platze: {slots}'
-  get_rid_description: 'Hier findest du Gegenstande, die du loswerden solltest. Du kannst sie benutzen, verkaufen oder entsorgen, wenn sich ein Verkauf nicht lohnt. So kannst du bis zu {slots} Platze sparen.'

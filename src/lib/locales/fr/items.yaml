@@ -1,16 +1,30 @@
+bags:
+  details: |-
+    {count} {count, plural,
+      one {emplacement de sac}
+      other {emplacements de sac}
+    }. Tailles des sacs équipés : {sizes}. {capacity} emplacements au total
+  summary: |-
+    {name} - Emplacements libres : {available} sur {capacity}
 bank: Banque
 characters_items: Éléments de caractères
+cleanup:
+  all_characters: '--- tous ---'
+  filter_by_character: 'Afficher uniquement les objets du personnage:'
+  get_rid_description: >-
+    Vous trouverez ci-dessous des objets dont vous devriez envisager de vous
+    debarrasser. Vous pouvez les utiliser, les vendre ou les jeter s'ils ne
+    valent pas la peine d'etre vendus. Vous pouvez ainsi gagner jusqu'a {slots}
+    emplacements.
+  get_rid_summary: 'Objets dont vous devriez vous debarrasser. Emplacements a liberer: {slots}'
+  slots_to_save: 'Emplacements a liberer: {slots}'
+  stackable_description: >-
+    Vous trouverez ci-dessous des objets qui peuvent etre compactes pour occuper
+    moins d'espace. Cela peut vous faire gagner jusqu'a {slots} emplacements.
+  stackable_summary: 'Objets empilables. Emplacements a liberer: {slots}'
+  summary: 'Conseils de nettoyage de l''inventaire: {slots} emplacements a liberer'
 common_items: Points communs
 guild_items: Éléments de la guilde
 items: Objects
 search_in_flags: rechercher dans les drapeaux d'objet
 shared_inventory: Inventaire partagé
-cleanup:
-  all_characters: '--- tous ---'
-  slots_to_save: 'Emplacements a liberer: {slots}'
-  summary: "Conseils de nettoyage de l'inventaire: {slots} emplacements a liberer"
-  filter_by_character: 'Afficher uniquement les objets du personnage:'
-  stackable_summary: 'Objets empilables. Emplacements a liberer: {slots}'
-  stackable_description: "Vous trouverez ci-dessous des objets qui peuvent etre compactes pour occuper moins d'espace. Cela peut vous faire gagner jusqu'a {slots} emplacements."
-  get_rid_summary: 'Objets dont vous devriez vous debarrasser. Emplacements a liberer: {slots}'
-  get_rid_description: "Vous trouverez ci-dessous des objets dont vous devriez envisager de vous debarrasser. Vous pouvez les utiliser, les vendre ou les jeter s'ils ne valent pas la peine d'etre vendus. Vous pouvez ainsi gagner jusqu'a {slots} emplacements."

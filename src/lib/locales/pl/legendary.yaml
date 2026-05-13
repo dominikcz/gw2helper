@@ -1,14 +1,30 @@
-legendary: Legendarne
 armor: Zbroje
-armor_type:
-  light: Zbroje lekkie
-  medium: Zbroje średnie
-  heavy: Zbroje ciężkie
+armor_pieces:
+  accessory: Akcesorium
+  amulet: Amulet
+  aquatic: Wodne nakrycie głowy
+  back_item: Przedmiot na plecy
+  boots: Buty
+  coat: Płaszcz
+  gloves: Rękawice
+  helm: Hełm
+  leggings: Nogawice
+  ring: Pierścień
+  shoulders: Naramienniki
 armor_set:
   pve: Zestaw PvE
-  raid: Zestaw Raid
   pvp: Zestaw PvP
+  raid: Zestaw Raid
   wvw: Zestaw WvW
+armor_type:
+  heavy: Zbroje ciężkie
+  light: Zbroje lekkie
+  medium: Zbroje średnie
+armor_type_short:
+  heavy: Ciężka
+  light: Lekka
+  medium: Średnia
+legendary: Legendarne
 trinkets: Biżuteria
 upgrades: Ulepszenia
 weapons: Bronie

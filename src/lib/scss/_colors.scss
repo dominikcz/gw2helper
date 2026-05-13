@@ -65,7 +65,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--gw2helper-not-important: #{$notimportant};
 	--gw2helper-module-shadow: #{$box-shadow};
 	--gw2helper-module-shadow-hover: #{$box-shadow-hover};
-	--box-shadow-strong: 0px 0px 16px 0px rgba(0, 0, 0, 1);
+	--box-shadow-strong: 0px 0px 16px 0px rgba(0, 0, 0, 0.8);
+	--drop-shadow-strong: 0 0 16px rgba(0, 0, 0, 0.8);
 
 	--gw2helper-tooltip-background: #222;
 	--gw2helper-tooltip-text: #f0f0f0;

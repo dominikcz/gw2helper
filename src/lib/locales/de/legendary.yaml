@@ -1,14 +1,30 @@
-legendary: Legendär
 armor: Rüstung
-armor_type:
-  light: Leichte Rüstung
-  medium: Mittlere Rüstung
-  heavy: Schwere Rüstung
+armor_pieces:
+  accessory: Accessoire
+  amulet: Amulett
+  aquatic: Aquatische Kopfbedeckung
+  back_item: Rücken-Gegenstand
+  boots: Stiefel
+  coat: Mantel
+  gloves: Handschuhe
+  helm: Helm
+  leggings: Beinschienen
+  ring: Ring
+  shoulders: Schultern
 armor_set:
   pve: PvE-Rüstungsset
-  raid: Raid-Rüstungsset
   pvp: PvP-Rüstungsset
+  raid: Raid-Rüstungsset
   wvw: WvW-Rüstungsset
+armor_type:
+  heavy: Schwere Rüstung
+  light: Leichte Rüstung
+  medium: Mittlere Rüstung
+armor_type_short:
+  heavy: Schwer
+  light: Leicht
+  medium: Mittel
+legendary: Legendär
 trinkets: Schmuckstücke
 upgrades: Upgrades
 weapons: Waffen

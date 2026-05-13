@@ -21,6 +21,7 @@ legal:
     Eigentum ihrer jeweiligen Eigentümer. Diese Seite nutzt auch Bilder und
     Daten von <a href="https://wiki.guildwars2.com/">In den Guild Wars 2
     Wiki</a>
+missing_scopes: 'Ihr Token hat keine der folgenden Berechtigungen:'
 nav:
   account: Account
   achievements: Erfolge
@@ -30,16 +31,35 @@ nav:
   guilds: Gilden
   home: Home
   items: Gegenstände
+  legendary: Legendär
   materials: Materialien
   trading-post: Handelsposten
-  legendary: Legendär
+network_error: Netzwerkfehler
 no_audio: >-
   Sie haben Benachrichtigungen eingerichtet, aber Ihr Browser verhindert
   Auto-Playing Audio ohne Benutzerinteraktion. Bitte schließen Sie diese
   Nachricht, um Sound zu aktivieren.
-missing_scopes: 'Ihr Token hat keine der folgenden Berechtigungen:'
 no_token: Keine API-Schlüssel vorhanden
 paste_your_api_key_here: Fügen Sie Ihre API-Schlüssel hier ein
+retry: Erneut versuchen
+share_copy: In Zwischenablage kopieren
+share_email: Per E-Mail senden
+share_facebook: Über Facebook senden
+share_headline_label: Mit Text teilen
+share_headline_placeholder: Schau dir meine GW2 Helper Seite an
+share_instagram: Über Instagram senden
+share_instagram_hint: Link kopiert. Füge ihn in deiner Instagram-Nachricht/deinem Post ein.
+share_link_copied: Freigabelink wurde in die Zwischenablage kopiert.
+share_link_failed: Freigabelink konnte nicht erstellt werden.
+share_link_missing_key: Bitte zuerst API-Schlüssel angeben.
+share_page_prompt: Diese Seite teilen
+share_page_warning: >-
+  Warnung: Dieser Link enthält Ihren API-Schlüssel. Teilen Sie ihn nur mit
+  vertrauenswürdigen Personen.
+share_this_page: Diese Seite teilen
+share_whatsapp: Über WhatsApp senden
+share_x: Über X senden
+token_error: Token-Fehler
 token_ok: Erfolgreich geladener Schlüssel "{token}".
 waypoint_to_top: Teleportieren nach oben
 your_api_key: 'Ihre API-Schlüssel:'

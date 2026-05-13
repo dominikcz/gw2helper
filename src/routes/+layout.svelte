@@ -24,6 +24,7 @@
 	import Clock from '$lib/services/clock.svelte';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/ui/localeSwitch.svelte';
+	import SharePageMenu from '$lib/components/ui/sharePageMenu.svelte';
 
 	interface LayoutData {
 		apiKey: string;
@@ -289,7 +290,11 @@
 			<a href={resolve('/')}><img src={asset('/assets/heart.png')} alt="logo" /></a>
 			<div class="line">
 				<a href={resolve('/')} title={$_('layout.nav.home')}><h1>GW2 Helper</h1></a>
-				<small>v{data.version} <LocaleSwitch {languages} bind:value={$locale} keysOnly={true} /></small>
+				<small class="header-actions">
+					<span>v{data.version}</span>
+					<LocaleSwitch {languages} bind:value={$locale} keysOnly={true} />
+					<SharePageMenu {apiKey} />
+				</small>
 			</div>
 		</header>
 		<Navigation items={navigation} {active} />
@@ -362,6 +367,12 @@
 		flex-flow: row nowrap;
 		column-gap: 1em;
 		align-items: baseline;
+	}
+	.header-actions {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		position: relative;
 	}
 	:global(#api-key) {
 		margin: 0.4em 0;

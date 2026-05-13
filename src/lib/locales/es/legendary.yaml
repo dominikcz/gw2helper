@@ -1,14 +1,30 @@
-legendary: Legendario
 armor: Armadura
-armor_type:
-  light: Armadura ligera
-  medium: Armadura media
-  heavy: Armadura pesada
+armor_pieces:
+  accessory: Accesorio
+  amulet: Amuleto
+  aquatic: Casco acuático
+  back_item: Objeto de espalda
+  boots: Botas
+  coat: Abrigo
+  gloves: Guantes
+  helm: Yelmo
+  leggings: Perneras
+  ring: Anillo
+  shoulders: Hombreras
 armor_set:
   pve: Conjunto de armadura PvE
-  raid: Conjunto de armadura de incursión
   pvp: Conjunto de armadura PvP
+  raid: Conjunto de armadura de incursión
   wvw: Conjunto de armadura WvW
+armor_type:
+  heavy: Armadura pesada
+  light: Armadura ligera
+  medium: Armadura media
+armor_type_short:
+  heavy: Pesada
+  light: Ligera
+  medium: Media
+legendary: Legendario
 trinkets: Baratijas
 upgrades: Mejoras
 weapons: Armas

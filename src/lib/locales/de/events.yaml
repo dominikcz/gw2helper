@@ -11,6 +11,10 @@ show_categories: Kategorien anzeigen
 show_chat_links: Chat-Links anzeigen
 show_event_times: Eventzeiten anzeigen
 show_headings: Überschriften anzeigen
+sort_by:
+  name: Ereignisname
+  sort: Sortieren nach
+  time: Ereigniszeit
 tts: |-
   Es ist {time}. {plural, select,
     true {

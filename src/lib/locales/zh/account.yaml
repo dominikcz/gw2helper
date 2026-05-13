@@ -8,6 +8,9 @@ end_of_dragons: End Of Dragons
 fractals: 分形
 heart_of_thorns: Heart Of Thorns
 hours_played: 播放小时
+info:
+  hint: 提示
+  hint-content: 如果你想查看更多内容，请确保你的令牌具有 <strong>progression</strong> 权限
 janthir_wilds: Janthir Wilds
 last_change: '上次更改 :'
 levels: 职等

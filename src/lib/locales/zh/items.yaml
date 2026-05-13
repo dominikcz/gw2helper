@@ -1,16 +1,24 @@
+bags:
+  details: |-
+    {count} {count, plural,
+      one {背包栏位}
+      other {背包栏位}
+    }。已装备背包大小：{sizes}。总计 {capacity} 个栏位
+  summary: |-
+    {name} - 空位：{available}/{capacity}
 bank: 银行
 characters_items: 字符的项目
+cleanup:
+  all_characters: '--- 全部 ---'
+  filter_by_character: '仅显示该角色的物品:'
+  get_rid_description: 下方是建议你考虑处理的物品。若不值得出售，可使用、出售或丢弃。这样最多可节省 {slots} 个栏位。
+  get_rid_summary: '建议处理掉的物品。可节省栏位: {slots}'
+  slots_to_save: '可节省栏位: {slots}'
+  stackable_description: 下方是可压缩/堆叠以减少占用空间的物品。这样最多可节省 {slots} 个栏位。
+  stackable_summary: '可堆叠物品。可节省栏位: {slots}'
+  summary: '库存整理建议: 可节省 {slots} 个栏位'
 common_items: 共同项目
 guild_items: 相关项目
 items: 项目
 search_in_flags: 在物品标记中搜索
 shared_inventory: 共享库存
-cleanup:
-  all_characters: '--- 全部 ---'
-  slots_to_save: '可节省栏位: {slots}'
-  summary: '库存整理建议: 可节省 {slots} 个栏位'
-  filter_by_character: '仅显示该角色的物品:'
-  stackable_summary: '可堆叠物品。可节省栏位: {slots}'
-  stackable_description: '下方是可压缩/堆叠以减少占用空间的物品。这样最多可节省 {slots} 个栏位。'
-  get_rid_summary: '建议处理掉的物品。可节省栏位: {slots}'
-  get_rid_description: '下方是建议你考虑处理的物品。若不值得出售，可使用、出售或丢弃。这样最多可节省 {slots} 个栏位。'

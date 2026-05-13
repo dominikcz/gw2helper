@@ -11,6 +11,10 @@ show_categories: 显示类别
 show_chat_links: 显示聊天链接
 show_event_times: 显示事件时间
 show_headings: 显示标题
+sort_by:
+  name: 事件名称
+  sort: 排序方式
+  time: 事件时间
 tts: |-
   是时候了{time}. {plural, select,
     true {

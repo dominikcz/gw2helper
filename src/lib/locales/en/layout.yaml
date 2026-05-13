@@ -20,6 +20,7 @@ legal:
     Inc. All rights reserved. All other trademarks are the property of their
     respective owners. This site uses also images and data from <a
     href="https://wiki.guildwars2.com/">Guild Wars 2 Wiki</a>
+missing_scopes: 'Your token is missing the following scopes:'
 nav:
   account: Account
   achievements: Achievements
@@ -29,17 +30,31 @@ nav:
   guilds: Guilds
   home: Home
   items: Items
+  legendary: Legendary
   materials: Materials
   trading-post: Trading post
-  legendary: Legendary
 network_error: Network error
 no_audio: >-
   You've got notifications set up but your browser prevents auto-playing audio
   without user interaction. Please close this message to enable sound.
-missing_scopes: 'Your token is missing the following scopes:'
 no_token: No API key provided
 paste_your_api_key_here: Paste your API key here
 retry: Retry
+share_copy: Copy to clipboard
+share_email: Send by e-mail
+share_facebook: Send via Facebook
+share_headline_label: Share with message
+share_headline_placeholder: Check my GW2 Helper page
+share_instagram: Send via Instagram
+share_instagram_hint: Link copied. Paste it in your Instagram message/post.
+share_link_copied: Share link copied to clipboard.
+share_link_failed: Could not prepare share link.
+share_link_missing_key: Provide API key first.
+share_page_prompt: Share this page
+share_page_warning: 'Warning: this link includes your API key. Share only with people you trust.'
+share_this_page: Share this page
+share_whatsapp: Send via WhatsApp
+share_x: Send via X
 token_error: Token error
 token_ok: Successfully loaded key "{token}".
 waypoint_to_top: waypoint to top
