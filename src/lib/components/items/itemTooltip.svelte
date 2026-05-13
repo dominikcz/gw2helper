@@ -50,8 +50,8 @@
 			<button class="autotooltip-link wiki-btn" type="button" onclick={openWiki}>{$_('common.click_for_wiki')}</button>
 		</p>
 		{#if typeof item.detailsHref === 'string' && item.detailsHref}
-			<p class="details-link">
-				<a class="autotooltip-link" href={resolve(item.detailsHref)}>{$_('legendary.details')}</a>
+			<p class="wiki-link">
+				<a class="autotooltip-link wiki-btn" href={resolve(item.detailsHref)}>{$_('legendary.details')}</a>
 			</p>
 		{/if}
 	</div>
@@ -81,9 +81,6 @@
         }
 		.wiki-link {
 			margin-top: 0.5em;
-		}
-		.details-link {
-			margin-top: 0.2em;
 		}
 		.wiki-btn {
 			padding: 0;

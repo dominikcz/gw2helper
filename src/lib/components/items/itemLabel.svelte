@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	interface Props {
 		id?: number;
 		name?: string;
@@ -6,6 +8,7 @@
 		rarity?: string;
 		count?: number;
 		showCount?: boolean;
+		countOnIcon?: boolean;
 		showId?: boolean;
 		iconSize?: string;
 		href?: string;
@@ -20,6 +23,7 @@
 		rarity,
 		count = 0,
 		showCount = false,
+		countOnIcon = false,
 		showId = false,
 		iconSize = '3.75em',
 		href,
@@ -30,12 +34,13 @@
 	const rarityClass = $derived(rarity ? `rarity-${rarity.toLowerCase()}` : '');
 	const label = $derived(name || (id != null ? `#${id}` : '?'));
 	const finalHref = $derived(href);
+	const resolvedHref = $derived(finalHref ? (finalHref.startsWith('http') ? finalHref : resolve(finalHref)) : undefined);
 </script>
 
 <span class="item-label {className}">
 	<span class="icon-frame rarity {rarityClass}" style={`--item-icon-size: ${iconSize};`}>
-		{#if finalHref}
-			<a class="item-link" href={finalHref} target="_blank" rel="noopener noreferrer">
+		{#if resolvedHref}
+			<a class="item-link" href={resolvedHref} target="_blank" rel="noopener noreferrer">
 				{#if icon}
 					<img src={icon} alt={label} loading="lazy" decoding="async" fetchpriority="low" />
 				{:else}
@@ -49,9 +54,12 @@
 				<span class="icon-placeholder"></span>
 			{/if}
 		{/if}
+		{#if showCount && count > 1 && countOnIcon}
+			<span class="count-badge" aria-label={`count ${count}`}>{count}</span>
+		{/if}
 	</span>
 	<span class="caption {rarityClass}" class:crossed>
-		{#if showCount && count > 1}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
+		{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
 	</span>
 </span>
 
@@ -77,6 +85,17 @@
 		outline-style: solid;
 		position: relative;
 		flex: 0 0 auto;
+	}
+
+	.count-badge {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 0 0.2em;
+		font-size: 80%;
+		line-height: 1.2;
+		color: #fff;
+		background: rgba(0, 0, 0, 0.65);
 	}
 
 	img,
