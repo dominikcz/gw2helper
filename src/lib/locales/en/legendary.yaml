@@ -18,7 +18,11 @@ upgrades: Upgrade components
 weapons: Weapons
 details: Details
 back_to_legendary: Back to legendary list
-recipe_tree: Recipe tree
+recipe_tree: Recipe
+expand_all: Expand all
+collapse_all: Collapse all
+progress_owned_required: owned {owned} / required {required}
+cycle: Cycle
 ingredients: Ingredients
 ingredient: Ingredient
 required: Required
@@ -26,6 +30,7 @@ owned: Owned
 missing: Missing
 unit_price: Unit price
 missing_cost: Missing cost
+total_cost: Total cost
 price_mode: Price mode
 buy_price: Buy
 sell_price: Sell

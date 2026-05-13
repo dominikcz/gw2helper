@@ -30,7 +30,11 @@ upgrades: Ulepszenia
 weapons: Bronie
 details: Szczegóły
 back_to_legendary: Powrót do listy legendarnych
-recipe_tree: Drzewo receptur
+recipe_tree: Receptura
+expand_all: Rozwiń wszystko
+collapse_all: Zwiń wszystko
+progress_owned_required: posiadasz {owned} / wymagane {required}
+cycle: Cykl
 ingredients: Składniki
 ingredient: Składnik
 required: Wymagane
@@ -38,13 +42,14 @@ owned: Posiadasz
 missing: Brakuje
 unit_price: Cena za sztukę
 missing_cost: Koszt braków
-price_mode: Tryb ceny
-buy_price: Kupno
-sell_price: Sprzedaż
+total_cost: Łączny koszt
+price_mode: Sposób kalkulacji kosztów
+buy_price: Po cenach zakupu
+sell_price: Po cenach sprzedaży
 total_missing_cost: Łączny koszt braków
 missing_ingredients_count: Brakujące składniki
 tp_status: Status TP
-tp_status_ok: Handlowalne
+tp_status_ok: Handlowy
 tp_status_bound: Związane z kontem/postacią
 tp_status_no_listing: Brak oferty TP (vendor/związane/inne)
 recipe_unavailable: Dane receptury craftingu dla tej legendarnej pozycji nie są dostępne w GW2 API.

@@ -1,0 +1,1641 @@
+{
+  "version": 1,
+  "createdAt": "2026-05-13T03:17:31.470Z",
+  "updatedAt": "2026-05-13T03:19:54.462Z",
+  "requestDelayMs": 400,
+  "recipesByOutputId": {
+    "12128": {
+      "source": "terminal",
+      "output_item_id": 12128,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Omnomberry",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:45.609Z"
+    },
+    "19622": {
+      "source": "api",
+      "output_item_id": 19622,
+      "recipe_id": 5114,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19712,
+          "count": 250,
+          "name": null
+        },
+        {
+          "item_id": 19709,
+          "count": 250,
+          "name": null
+        },
+        {
+          "item_id": 19711,
+          "count": 250,
+          "name": null
+        },
+        {
+          "item_id": 19714,
+          "count": 250,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        5114
+      ],
+      "fetched_at": "2026-05-13T03:17:43.383Z"
+    },
+    "19626": {
+      "source": "terminal",
+      "output_item_id": 19626,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Gift of Fortune",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:40.055Z"
+    },
+    "19627": {
+      "source": "api",
+      "output_item_id": 19627,
+      "recipe_id": 1712,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 12128,
+          "count": 250,
+          "name": null
+        },
+        {
+          "item_id": 19712,
+          "count": 250,
+          "name": null
+        },
+        {
+          "item_id": 19667,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 19737,
+          "count": 250,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        1712
+      ],
+      "fetched_at": "2026-05-13T03:17:43.383Z"
+    },
+    "19644": {
+      "source": "wiki",
+      "output_item_id": 19644,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Gift of Kudzu",
+      "ingredients": [
+        {
+          "item_id": 19622,
+          "count": 1,
+          "name": "Gift of Wood"
+        },
+        {
+          "item_id": 19627,
+          "count": 1,
+          "name": "Gift of Nature"
+        },
+        {
+          "item_id": 19676,
+          "count": 100,
+          "name": "Icy Runestone"
+        },
+        {
+          "item_id": 24865,
+          "count": 1,
+          "name": "Superior Sigil of Celerity"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:17:38.949Z"
+    },
+    "19663": {
+      "source": "terminal",
+      "output_item_id": 19663,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Bottle of Elonian Wine",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:35.317Z"
+    },
+    "19667": {
+      "source": "terminal",
+      "output_item_id": 19667,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Gift of Thorns",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:46.723Z"
+    },
+    "19674": {
+      "source": "terminal",
+      "output_item_id": 19674,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Gift of Mastery",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:41.175Z"
+    },
+    "19676": {
+      "source": "terminal",
+      "output_item_id": 19676,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Icy Runestone",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19681": {
+      "source": "api",
+      "output_item_id": 19681,
+      "recipe_id": 22,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19924,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 19702,
+          "count": 2,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        22
+      ],
+      "fetched_at": "2026-05-13T03:18:10.730Z"
+    },
+    "19683": {
+      "source": "api",
+      "output_item_id": 19683,
+      "recipe_id": 19,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19699,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        19
+      ],
+      "fetched_at": "2026-05-13T03:18:10.730Z"
+    },
+    "19684": {
+      "source": "api",
+      "output_item_id": 19684,
+      "recipe_id": 18,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19700,
+          "count": 2,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        18
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19688": {
+      "source": "api",
+      "output_item_id": 19688,
+      "recipe_id": 20,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19699,
+          "count": 3,
+          "name": null
+        },
+        {
+          "item_id": 19750,
+          "count": 1,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        20
+      ],
+      "fetched_at": "2026-05-13T03:18:10.730Z"
+    },
+    "19697": {
+      "source": "terminal",
+      "output_item_id": 19697,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Copper Ore",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:35.696Z"
+    },
+    "19698": {
+      "source": "wiki",
+      "output_item_id": 19698,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Gold Ore",
+      "ingredients": [
+        {
+          "item_id": 19703,
+          "count": 250,
+          "name": "Silver Ore"
+        },
+        {
+          "item_id": 19698,
+          "count": 1,
+          "name": "Gold Ore"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 2,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:34.588Z"
+    },
+    "19699": {
+      "source": "wiki",
+      "output_item_id": 19699,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Iron Ore",
+      "ingredients": [
+        {
+          "item_id": 19697,
+          "count": 250,
+          "name": "Copper Ore"
+        },
+        {
+          "item_id": 19699,
+          "count": 1,
+          "name": "Iron Ore"
+        },
+        {
+          "item_id": 24273,
+          "count": 5,
+          "name": "Pile of Shimmering Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 1,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:04.797Z"
+    },
+    "19700": {
+      "source": "wiki",
+      "output_item_id": 19700,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Mithril Ore",
+      "ingredients": [
+        {
+          "item_id": 19702,
+          "count": 250,
+          "name": "Platinum Ore"
+        },
+        {
+          "item_id": 19700,
+          "count": 1,
+          "name": "Mithril Ore"
+        },
+        {
+          "item_id": 24276,
+          "count": 5,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 4,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:10.730Z"
+    },
+    "19702": {
+      "source": "wiki",
+      "output_item_id": 19702,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Platinum Ore",
+      "ingredients": [
+        {
+          "item_id": 19699,
+          "count": 250,
+          "name": "Iron Ore"
+        },
+        {
+          "item_id": 19702,
+          "count": 1,
+          "name": "Platinum Ore"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 2,
+          "name": "Philosopher's Stone"
+        },
+        {
+          "item_id": 19698,
+          "count": 250,
+          "name": "Gold Ore"
+        },
+        {
+          "item_id": 19702,
+          "count": 1,
+          "name": "Platinum Ore"
+        },
+        {
+          "item_id": 24275,
+          "count": 5,
+          "name": "Pile of Luminous Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 4,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:00.777Z"
+    },
+    "19703": {
+      "source": "terminal",
+      "output_item_id": 19703,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Silver Ore",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:48.240Z"
+    },
+    "19709": {
+      "source": "api",
+      "output_item_id": 19709,
+      "recipe_id": 5,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19722,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        5
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19711": {
+      "source": "api",
+      "output_item_id": 19711,
+      "recipe_id": 4,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19724,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        4
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19712": {
+      "source": "api",
+      "output_item_id": 19712,
+      "recipe_id": 2,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19725,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        2
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19713": {
+      "source": "api",
+      "output_item_id": 19713,
+      "recipe_id": 1,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19726,
+          "count": 2,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        1
+      ],
+      "fetched_at": "2026-05-13T03:17:58.682Z"
+    },
+    "19714": {
+      "source": "api",
+      "output_item_id": 19714,
+      "recipe_id": 6,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19727,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        6
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19719": {
+      "source": "terminal",
+      "output_item_id": 19719,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Rawhide Leather Section",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:54.462Z"
+    },
+    "19721": {
+      "source": "terminal",
+      "output_item_id": 19721,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Glob of Ectoplasm",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:54.664Z"
+    },
+    "19722": {
+      "source": "wiki",
+      "output_item_id": 19722,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Elder Wood Log",
+      "ingredients": [
+        {
+          "item_id": 19724,
+          "count": 250,
+          "name": "Hard Wood Log"
+        },
+        {
+          "item_id": 19722,
+          "count": 1,
+          "name": "Elder Wood Log"
+        },
+        {
+          "item_id": 24276,
+          "count": 5,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 4,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:06.706Z"
+    },
+    "19723": {
+      "source": "terminal",
+      "output_item_id": 19723,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Green Wood Log",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:22.522Z"
+    },
+    "19724": {
+      "source": "wiki",
+      "output_item_id": 19724,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Hard Wood Log",
+      "ingredients": [
+        {
+          "item_id": 19727,
+          "count": 250,
+          "name": "Seasoned Wood Log"
+        },
+        {
+          "item_id": 19724,
+          "count": 1,
+          "name": "Hard Wood Log"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 3,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:18.749Z"
+    },
+    "19725": {
+      "source": "wiki",
+      "output_item_id": 19725,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Ancient Wood Log",
+      "ingredients": [
+        {
+          "item_id": 19722,
+          "count": 250,
+          "name": "Elder Wood Log"
+        },
+        {
+          "item_id": 19725,
+          "count": 1,
+          "name": "Ancient Wood Log"
+        },
+        {
+          "item_id": 24277,
+          "count": 5,
+          "name": "Pile of Crystalline Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 5,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:02.704Z"
+    },
+    "19726": {
+      "source": "wiki",
+      "output_item_id": 19726,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Soft Wood Log",
+      "ingredients": [
+        {
+          "item_id": 19723,
+          "count": 250,
+          "name": "Green Wood Log"
+        },
+        {
+          "item_id": 19726,
+          "count": 1,
+          "name": "Soft Wood Log"
+        },
+        {
+          "item_id": 24273,
+          "count": 5,
+          "name": "Pile of Shimmering Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 1,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:49.321Z"
+    },
+    "19727": {
+      "source": "wiki",
+      "output_item_id": 19727,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Seasoned Wood Log",
+      "ingredients": [
+        {
+          "item_id": 19726,
+          "count": 250,
+          "name": "Soft Wood Log"
+        },
+        {
+          "item_id": 19727,
+          "count": 1,
+          "name": "Seasoned Wood Log"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 2,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:22.753Z"
+    },
+    "19728": {
+      "source": "wiki",
+      "output_item_id": 19728,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Thin Leather Section",
+      "ingredients": [
+        {
+          "item_id": 19719,
+          "count": 250,
+          "name": "Rawhide Leather Section"
+        },
+        {
+          "item_id": 19728,
+          "count": 1,
+          "name": "Thin Leather Section"
+        },
+        {
+          "item_id": 24273,
+          "count": 5,
+          "name": "Pile of Shimmering Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 1,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:52.255Z"
+    },
+    "19729": {
+      "source": "wiki",
+      "output_item_id": 19729,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Thick Leather Section",
+      "ingredients": [
+        {
+          "item_id": 19731,
+          "count": 250,
+          "name": "Rugged Leather Section"
+        },
+        {
+          "item_id": 19729,
+          "count": 1,
+          "name": "Thick Leather Section"
+        },
+        {
+          "item_id": 24276,
+          "count": 5,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 4,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:14.730Z"
+    },
+    "19730": {
+      "source": "wiki",
+      "output_item_id": 19730,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Coarse Leather Section",
+      "ingredients": [
+        {
+          "item_id": 19728,
+          "count": 250,
+          "name": "Thin Leather Section"
+        },
+        {
+          "item_id": 19730,
+          "count": 1,
+          "name": "Coarse Leather Section"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 2,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:39.710Z"
+    },
+    "19731": {
+      "source": "wiki",
+      "output_item_id": 19731,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Rugged Leather Section",
+      "ingredients": [
+        {
+          "item_id": 19730,
+          "count": 250,
+          "name": "Coarse Leather Section"
+        },
+        {
+          "item_id": 19731,
+          "count": 1,
+          "name": "Rugged Leather Section"
+        },
+        {
+          "item_id": 24274,
+          "count": 5,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 3,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:11.032Z"
+    },
+    "19732": {
+      "source": "wiki",
+      "output_item_id": 19732,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Hardened Leather Section",
+      "ingredients": [
+        {
+          "item_id": 19729,
+          "count": 250,
+          "name": "Thick Leather Section"
+        },
+        {
+          "item_id": 19732,
+          "count": 1,
+          "name": "Hardened Leather Section"
+        },
+        {
+          "item_id": 24277,
+          "count": 5,
+          "name": "Pile of Crystalline Dust"
+        },
+        {
+          "item_id": 20796,
+          "count": 5,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:26.790Z"
+    },
+    "19735": {
+      "source": "api",
+      "output_item_id": 19735,
+      "recipe_id": 27,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19729,
+          "count": 4,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        27
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "19737": {
+      "source": "api",
+      "output_item_id": 19737,
+      "recipe_id": 28,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19732,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        28
+      ],
+      "fetched_at": "2026-05-13T03:17:46.723Z"
+    },
+    "19750": {
+      "source": "terminal",
+      "output_item_id": 19750,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Lump of Coal",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:05.911Z"
+    },
+    "19924": {
+      "source": "terminal",
+      "output_item_id": 19924,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Lump of Primordium",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:07.018Z"
+    },
+    "20796": {
+      "source": "terminal",
+      "output_item_id": 20796,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Philosopher's Stone",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:45.317Z"
+    },
+    "20799": {
+      "source": "terminal",
+      "output_item_id": 20799,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Mystic Crystal",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:40.472Z"
+    },
+    "24272": {
+      "source": "terminal",
+      "output_item_id": 24272,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Glittering Dust",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:47.132Z"
+    },
+    "24273": {
+      "source": "wiki",
+      "output_item_id": 24273,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Shimmering Dust",
+      "ingredients": [
+        {
+          "item_id": 24272,
+          "count": 250,
+          "name": "Pile of Glittering Dust"
+        },
+        {
+          "item_id": 24273,
+          "count": 1,
+          "name": "Pile of Shimmering Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 20796,
+          "count": 1,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:26.550Z"
+    },
+    "24274": {
+      "source": "wiki",
+      "output_item_id": 24274,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Radiant Dust",
+      "ingredients": [
+        {
+          "item_id": 24273,
+          "count": 250,
+          "name": "Pile of Shimmering Dust"
+        },
+        {
+          "item_id": 24274,
+          "count": 1,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 2,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 20796,
+          "count": 2,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:15.075Z"
+    },
+    "24275": {
+      "source": "wiki",
+      "output_item_id": 24275,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Luminous Dust",
+      "ingredients": [
+        {
+          "item_id": 24274,
+          "count": 250,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 24275,
+          "count": 1,
+          "name": "Pile of Luminous Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 3,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 20796,
+          "count": 3,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:30.593Z"
+    },
+    "24276": {
+      "source": "wiki",
+      "output_item_id": 24276,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Incandescent Dust",
+      "ingredients": [
+        {
+          "item_id": 24275,
+          "count": 250,
+          "name": "Pile of Luminous Dust"
+        },
+        {
+          "item_id": 24276,
+          "count": 1,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 4,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 20796,
+          "count": 4,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:54.495Z"
+    },
+    "24277": {
+      "source": "wiki",
+      "output_item_id": 24277,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Crystalline Dust",
+      "ingredients": [
+        {
+          "item_id": 24276,
+          "count": 250,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 24277,
+          "count": 1,
+          "name": "Pile of Crystalline Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 5,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 20796,
+          "count": 5,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:39.345Z"
+    },
+    "24331": {
+      "source": "terminal",
+      "output_item_id": 24331,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Soiled Essence",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:19:53.354Z"
+    },
+    "24332": {
+      "source": "wiki",
+      "output_item_id": 24332,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Foul Essence",
+      "ingredients": [
+        {
+          "item_id": 24331,
+          "count": 2,
+          "name": "Pile of Soiled Essence"
+        },
+        {
+          "item_id": 19663,
+          "count": 1,
+          "name": "Bottle of Elonian Wine"
+        },
+        {
+          "item_id": 24274,
+          "count": 1,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 24331,
+          "count": 8,
+          "name": "Pile of Soiled Essence"
+        },
+        {
+          "item_id": 39125,
+          "count": 1,
+          "name": "Mystic Binding Agent"
+        },
+        {
+          "item_id": 24274,
+          "count": 1,
+          "name": "Pile of Radiant Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:45.986Z"
+    },
+    "24333": {
+      "source": "wiki",
+      "output_item_id": 24333,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Filthy Essence",
+      "ingredients": [
+        {
+          "item_id": 24332,
+          "count": 2,
+          "name": "Pile of Foul Essence"
+        },
+        {
+          "item_id": 19663,
+          "count": 1,
+          "name": "Bottle of Elonian Wine"
+        },
+        {
+          "item_id": 24275,
+          "count": 1,
+          "name": "Pile of Luminous Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 24332,
+          "count": 6,
+          "name": "Pile of Foul Essence"
+        },
+        {
+          "item_id": 39125,
+          "count": 1,
+          "name": "Mystic Binding Agent"
+        },
+        {
+          "item_id": 24275,
+          "count": 1,
+          "name": "Pile of Luminous Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:19:21.407Z"
+    },
+    "24334": {
+      "source": "wiki",
+      "output_item_id": 24334,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Vile Essence",
+      "ingredients": [
+        {
+          "item_id": 24333,
+          "count": 2,
+          "name": "Pile of Filthy Essence"
+        },
+        {
+          "item_id": 19663,
+          "count": 1,
+          "name": "Bottle of Elonian Wine"
+        },
+        {
+          "item_id": 24276,
+          "count": 1,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 24333,
+          "count": 4,
+          "name": "Pile of Filthy Essence"
+        },
+        {
+          "item_id": 39125,
+          "count": 1,
+          "name": "Mystic Binding Agent"
+        },
+        {
+          "item_id": 24276,
+          "count": 1,
+          "name": "Pile of Incandescent Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:18:34.209Z"
+    },
+    "24335": {
+      "source": "wiki",
+      "output_item_id": 24335,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Pile of Putrid Essence",
+      "ingredients": [
+        {
+          "item_id": 24334,
+          "count": 2,
+          "name": "Pile of Vile Essence"
+        },
+        {
+          "item_id": 19663,
+          "count": 1,
+          "name": "Bottle of Elonian Wine"
+        },
+        {
+          "item_id": 24277,
+          "count": 1,
+          "name": "Pile of Crystalline Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        },
+        {
+          "item_id": 24334,
+          "count": 2,
+          "name": "Pile of Vile Essence"
+        },
+        {
+          "item_id": 39125,
+          "count": 1,
+          "name": "Mystic Binding Agent"
+        },
+        {
+          "item_id": 24277,
+          "count": 1,
+          "name": "Pile of Crystalline Dust"
+        },
+        {
+          "item_id": 20799,
+          "count": 1,
+          "name": "Mystic Crystal"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:17:52.979Z"
+    },
+    "24865": {
+      "source": "api",
+      "output_item_id": 24865,
+      "recipe_id": 5320,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 89271,
+          "count": 5,
+          "name": null
+        },
+        {
+          "item_id": 24335,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 19721,
+          "count": 10,
+          "name": null
+        },
+        {
+          "item_id": 89098,
+          "count": 3,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        5320
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "29172": {
+      "source": "api",
+      "output_item_id": 29172,
+      "recipe_id": 9937,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 76405,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 76249,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 73966,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 72849,
+          "count": 1,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        9937
+      ],
+      "fetched_at": "2026-05-13T03:17:34.947Z"
+    },
+    "30685": {
+      "source": "wiki",
+      "output_item_id": 30685,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Kudzu",
+      "ingredients": [
+        {
+          "item_id": 29172,
+          "count": 1,
+          "name": "Leaf of Kudzu"
+        },
+        {
+          "item_id": 19644,
+          "count": 1,
+          "name": "Gift of Kudzu"
+        },
+        {
+          "item_id": 19626,
+          "count": 1,
+          "name": "Gift of Fortune"
+        },
+        {
+          "item_id": 19674,
+          "count": 1,
+          "name": "Gift of Mastery"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:17:34.947Z"
+    },
+    "39125": {
+      "source": "terminal",
+      "output_item_id": 39125,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Mystic Binding Agent",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:44.210Z"
+    },
+    "46736": {
+      "source": "api",
+      "output_item_id": 46736,
+      "recipe_id": 7312,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19713,
+          "count": 20,
+          "name": null
+        },
+        {
+          "item_id": 19714,
+          "count": 10,
+          "name": null
+        },
+        {
+          "item_id": 19711,
+          "count": 20,
+          "name": null
+        },
+        {
+          "item_id": 46744,
+          "count": 1,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        7312
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "46738": {
+      "source": "api",
+      "output_item_id": 46738,
+      "recipe_id": 7313,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19683,
+          "count": 20,
+          "name": null
+        },
+        {
+          "item_id": 19688,
+          "count": 10,
+          "name": null
+        },
+        {
+          "item_id": 19681,
+          "count": 20,
+          "name": null
+        },
+        {
+          "item_id": 46742,
+          "count": 1,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        7313
+      ],
+      "fetched_at": "2026-05-13T03:17:44.496Z"
+    },
+    "46742": {
+      "source": "api",
+      "output_item_id": 46742,
+      "recipe_id": 7319,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19684,
+          "count": 50,
+          "name": null
+        },
+        {
+          "item_id": 19721,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 46747,
+          "count": 10,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        7319,
+        12053
+      ],
+      "fetched_at": "2026-05-13T03:18:10.730Z"
+    },
+    "46744": {
+      "source": "api",
+      "output_item_id": 46744,
+      "recipe_id": 7320,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 19709,
+          "count": 50,
+          "name": null
+        },
+        {
+          "item_id": 19721,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 46747,
+          "count": 10,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        7320
+      ],
+      "fetched_at": "2026-05-13T03:17:58.682Z"
+    },
+    "46747": {
+      "source": "terminal",
+      "output_item_id": 46747,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Thermocatalytic Reagent",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:50.462Z"
+    },
+    "72849": {
+      "source": "api",
+      "output_item_id": 72849,
+      "recipe_id": 10019,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 46738,
+          "count": 5,
+          "name": null
+        },
+        {
+          "item_id": 46736,
+          "count": 1,
+          "name": null
+        },
+        {
+          "item_id": 19684,
+          "count": 100,
+          "name": null
+        },
+        {
+          "item_id": 19735,
+          "count": 50,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        10019
+      ],
+      "fetched_at": "2026-05-13T03:17:43.383Z"
+    },
+    "73966": {
+      "source": "api",
+      "output_item_id": 73966,
+      "recipe_id": 10501,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 46736,
+          "count": 3,
+          "name": null
+        },
+        {
+          "item_id": 19712,
+          "count": 50,
+          "name": null
+        },
+        {
+          "item_id": 19709,
+          "count": 100,
+          "name": null
+        },
+        {
+          "item_id": 19684,
+          "count": 50,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        10501
+      ],
+      "fetched_at": "2026-05-13T03:17:43.383Z"
+    },
+    "76249": {
+      "source": "terminal",
+      "output_item_id": 76249,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Spirit of the Perfected Longbow",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:43.383Z"
+    },
+    "76405": {
+      "source": "terminal",
+      "output_item_id": 76405,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Essence of the Garden",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:17:42.282Z"
+    },
+    "89098": {
+      "source": "wiki",
+      "output_item_id": 89098,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Symbol of Control",
+      "ingredients": [
+        {
+          "item_id": null,
+          "count": 1,
+          "name": "Symbol (ingredient)"
+        },
+        {
+          "item_id": null,
+          "count": 1,
+          "name": "Symbol (ingredient)"
+        },
+        {
+          "item_id": null,
+          "count": 1,
+          "name": "Symbol (ingredient)"
+        },
+        {
+          "item_id": 20796,
+          "count": 1,
+          "name": "Philosopher's Stone"
+        }
+      ],
+      "fetched_at": "2026-05-13T03:17:58.682Z"
+    },
+    "89140": {
+      "source": "terminal",
+      "output_item_id": 89140,
+      "recipe_id": null,
+      "output_item_count": 1,
+      "wiki_page": "Lucent Mote",
+      "ingredients": [],
+      "terminal_reason": "wiki-recipe-missing",
+      "fetched_at": "2026-05-13T03:18:27.904Z"
+    },
+    "89271": {
+      "source": "api",
+      "output_item_id": 89271,
+      "recipe_id": 12915,
+      "output_item_count": 1,
+      "ingredients": [
+        {
+          "item_id": 89140,
+          "count": 10,
+          "name": null
+        }
+      ],
+      "all_recipe_ids": [
+        12915
+      ],
+      "fetched_at": "2026-05-13T03:17:46.723Z"
+    }
+  },
+  "unresolved": [],
+  "stats": {
+    "created": 70,
+    "skipped": 0,
+    "wikiResolved": 26,
+    "processed": 70,
+    "cachedOutputs": 70
+  }
+}

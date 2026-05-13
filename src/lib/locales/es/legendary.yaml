@@ -30,7 +30,11 @@ upgrades: Mejoras
 weapons: Armas
 details: Detalles
 back_to_legendary: Volver a la lista legendaria
-recipe_tree: Arbol de recetas
+recipe_tree: Receta
+expand_all: Expandir todo
+collapse_all: Colapsar todo
+progress_owned_required: tienes {owned} / requerido {required}
+cycle: Ciclo
 ingredients: Ingredientes
 ingredient: Ingrediente
 required: Requerido
@@ -38,6 +42,7 @@ owned: Tienes
 missing: Falta
 unit_price: Precio unitario
 missing_cost: Coste faltante
+total_cost: Coste total
 price_mode: Modo de precio
 buy_price: Compra
 sell_price: Venta

@@ -48,10 +48,10 @@
 	</div>
 {/snippet}
 
-{#snippet unlockGroup(caption: string, weightData: ArmorGroup)}
+{#snippet unlockGroup(armorTypeKey: 'light' | 'medium' | 'heavy', weightData: ArmorGroup)}
 	{@const progressArmor = completionArmor(weightData)}
 	<CollapsibleSection
-		summary={$_('legendary.armor_type.' + caption.toLowerCase())}
+		summary={$_('legendary.armor_type.' + armorTypeKey)}
 		className=""
 		tooltip={true}
 		stickyTooltip={true}
@@ -78,9 +78,9 @@
 	{#snippet children(result: LegendariesData)}
 		{@const progressTrinkets = completionTrinkets(result)}
 		{@const progressUpgrades = completionUpgrades(result)}
-		{@render unlockGroup($_('legendary.armor_type_short.light'), result.armor.Light)}
-		{@render unlockGroup($_('legendary.armor_type_short.medium'), result.armor.Medium)}
-		{@render unlockGroup($_('legendary.armor_type_short.heavy'), result.armor.Heavy)}
+		{@render unlockGroup('light', result.armor.Light)}
+		{@render unlockGroup('medium', result.armor.Medium)}
+		{@render unlockGroup('heavy', result.armor.Heavy)}
 
 		<CollapsibleSection summary={$_('legendary.trinkets')} tooltip={true} stickyTooltip={true} tooltipOptions={tooltipOptions}>
 			{#snippet summaryExtra()}

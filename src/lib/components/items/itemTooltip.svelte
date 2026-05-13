@@ -86,6 +86,19 @@
 			padding: 0;
 			border: 0;
 			background: transparent;
+			color: skyblue;
+			font-size: smaller;
+			text-decoration: none;
+			cursor: help;
+		}
+		a.wiki-btn:visited {
+			color: skyblue;
+		}
+		a.wiki-btn:hover,
+		a.wiki-btn:focus-visible,
+		button.wiki-btn:hover,
+		button.wiki-btn:focus-visible {
+			text-decoration: underline;
 		}
         .flags{
             font-size: 80%;

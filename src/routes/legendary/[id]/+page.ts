@@ -45,6 +45,7 @@ type CacheRecipe = {
 	output_item_id: number;
 	recipe_id: number | null;
 	output_item_count?: number;
+	wiki_page?: string;
 	ingredients: CacheIngredient[];
 };
 
@@ -68,6 +69,62 @@ const CACHE_URLS = [
 	`${base}/legendary_recipes_cache.kudzu.v3.json`,
 	`${base}/legendary_recipes_cache.kudzu.json`,
 ];
+
+// Fallbacks for known Mystic Forge gifts when cache is missing wiki recipe parsing.
+const STATIC_RECIPE_FALLBACKS: Record<number, CacheRecipe> = {
+	19672: {
+		source: 'wiki',
+		output_item_id: 19672,
+		recipe_id: null,
+		output_item_count: 1,
+		wiki_page: 'Gift of Might',
+		ingredients: [
+			{ item_id: 24357, count: 250, name: 'Vicious Fang' },
+			{ item_id: 24289, count: 250, name: 'Armored Scale' },
+			{ item_id: 24351, count: 250, name: 'Vicious Claw' },
+			{ item_id: 24358, count: 250, name: 'Ancient Bone' },
+		],
+	},
+	19673: {
+		source: 'wiki',
+		output_item_id: 19673,
+		recipe_id: null,
+		output_item_count: 1,
+		wiki_page: 'Gift of Magic',
+		ingredients: [
+			{ item_id: 24295, count: 250, name: 'Vial of Powerful Blood' },
+			{ item_id: 24283, count: 250, name: 'Powerful Venom Sac' },
+			{ item_id: 24300, count: 250, name: 'Elaborate Totem' },
+			{ item_id: 24277, count: 250, name: 'Pile of Crystalline Dust' },
+		],
+	},
+	19674: {
+		source: 'wiki',
+		output_item_id: 19674,
+		recipe_id: null,
+		output_item_count: 1,
+		wiki_page: 'Gift of Mastery',
+		ingredients: [
+			{ item_id: 20797, count: 1, name: 'Bloodstone Shard' },
+			{ item_id: 19925, count: 250, name: 'Obsidian Shard' },
+			{ item_id: 19677, count: 1, name: 'Gift of Exploration' },
+			{ item_id: 19678, count: 1, name: 'Gift of Battle' },
+		],
+	},
+	19626: {
+		source: 'wiki',
+		output_item_id: 19626,
+		recipe_id: null,
+		output_item_count: 1,
+		wiki_page: 'Gift of Fortune',
+		ingredients: [
+			{ item_id: 19672, count: 1, name: 'Gift of Might' },
+			{ item_id: 19673, count: 1, name: 'Gift of Magic' },
+			{ item_id: 19675, count: 77, name: 'Mystic Clover' },
+			{ item_id: 19721, count: 250, name: 'Glob of Ectoplasm' },
+		],
+	},
+};
 
 const inBatches = <T>(input: T[], size = BATCH_SIZE): T[][] => {
 	const copy = [...input];
@@ -167,12 +224,20 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	const recipeCache = await loadRecipeCache();
 	const recipesByOutputId = recipeCache?.recipesByOutputId || {};
 
+	const recipeForItem = (itemId: number): CacheRecipe | undefined => {
+		const cached = recipesByOutputId[String(itemId)];
+		if (cached && !(cached.source === 'terminal' && (!Array.isArray(cached.ingredients) || cached.ingredients.length === 0))) {
+			return cached;
+		}
+		return STATIC_RECIPE_FALLBACKS[itemId] || cached;
+	};
+
 	const buildTreeFromCache = (itemId: number, neededCount: number, stack: Set<number>): RecipeTreeNode => {
 		if (stack.has(itemId)) {
 			return { id: itemId, count: neededCount, cycle: true, children: [] };
 		}
 
-		const recipe = recipesByOutputId[String(itemId)];
+		const recipe = recipeForItem(itemId);
 		if (!recipe || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0 || recipe.source === 'terminal') {
 			return { id: itemId, count: neededCount, source: recipe?.source, children: [] };
 		}
@@ -249,7 +314,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const remaining = neededCount - consumed;
 			if (remaining <= 0) return;
 
-			const recipe = recipesByOutputId[String(itemId)];
+			const recipe = recipeForItem(itemId);
 			const validIngredients = (recipe?.ingredients || []).filter((ingredient) => {
 				const ingId = Number(ingredient.item_id);
 				const ingCount = Number(ingredient.count || 0);
@@ -265,6 +330,11 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			}
 
 			if (!hasRecipe) {
+				requiredByItem.set(itemId, (requiredByItem.get(itemId) || 0) + remaining);
+				return;
+			}
+
+			if (!recipe) {
 				requiredByItem.set(itemId, (requiredByItem.get(itemId) || 0) + remaining);
 				return;
 			}
@@ -300,16 +370,21 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 
 	const ingredients: IngredientRow[] = [...requiredByItem.entries()]
 		.map(([id, required]) => {
+			// `requiredByItem` is already net demand after consuming owned items,
+			// so this list represents what still needs to be obtained.
+			const needed = Math.max(0, required);
+			if (needed <= 0) return null;
 			const owned = ownedByItem.get(id) || 0;
-			const missing = Math.max(0, required - owned);
+			const missing = needed;
 			const item = itemsById[id];
 			const price = priceById.get(id);
 			const tpEligible = isTradingPostEligible(item);
 			const buyUnit = price?.buys?.unit_price ?? null;
 			const sellUnit = price?.sells?.unit_price ?? null;
 			const tpReason: IngredientRow['tpReason'] = !tpEligible ? 'bound' : (buyUnit == null && sellUnit == null ? 'no-listing' : 'ok');
-			return { id, required, owned, missing, buyUnit, sellUnit, tpEligible, tpReason };
+			return { id, required: needed, owned, missing, buyUnit, sellUnit, tpEligible, tpReason };
 		})
+		.filter((row): row is IngredientRow => row !== null)
 		.sort((a, b) => b.missing - a.missing || a.id - b.id);
 
 	const details: LegendaryDetailsData = {

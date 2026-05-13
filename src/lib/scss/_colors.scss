@@ -72,6 +72,8 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--gw2helper-tooltip-text: #f0f0f0;
 
 	--gw2helper-link-color: blue;
+	--gw2helper-external-link-color: #dfdec8;
+	--gw2helper-external-link-hover: #cec7a5;
 	--gw2helper-info: #bae8a2;
 	--gw2helper-error: #cc6363;
 	--gw2helper-highlight-background: rgb(230, 230, 28);
@@ -126,10 +128,13 @@ body {
 		--gw2helper-error: #cc2626;
 
 		--gw2helper-link-color: #fff;
+		--gw2helper-external-link-color: #dfdec8;
+		--gw2helper-external-link-hover: #cec7a5;
 
 		--nav-active: #e8e6e3;
 		
 		--rarity-basic: rgba(232, 230, 227, 0.4);
+		--rarity-legendary: #bc92ff;
 		--toastBarBackground: #18500c;
 		--gw2helper-unlocked: rgba(0, 66, 0, 0.8);
 		--gw2helper-locked: #00000050;

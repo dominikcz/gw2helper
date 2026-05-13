@@ -12,6 +12,8 @@
 		showId?: boolean;
 		iconSize?: string;
 		href?: string;
+		linkTitle?: string;
+		linkCaption?: boolean;
 		crossed?: boolean;
 		class?: string;
 	}
@@ -27,6 +29,8 @@
 		showId = false,
 		iconSize = '3.75em',
 		href,
+		linkTitle,
+		linkCaption = false,
 		crossed = false,
 		class: className = ''
 	}: Props = $props();
@@ -40,7 +44,7 @@
 <span class="item-label {className}">
 	<span class="icon-frame rarity {rarityClass}" style={`--item-icon-size: ${iconSize};`}>
 		{#if resolvedHref}
-			<a class="item-link" href={resolvedHref} target="_blank" rel="noopener noreferrer">
+			<a class="item-link" href={resolvedHref} target="_blank" rel="noopener noreferrer" title={linkTitle}>
 				{#if icon}
 					<img src={icon} alt={label} loading="lazy" decoding="async" fetchpriority="low" />
 				{:else}
@@ -58,9 +62,17 @@
 			<span class="count-badge" aria-label={`count ${count}`}>{count}</span>
 		{/if}
 	</span>
-	<span class="caption {rarityClass}" class:crossed>
-		{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
-	</span>
+	{#if resolvedHref && linkCaption}
+		<a class="caption-link" href={resolvedHref} target="_blank" rel="noopener noreferrer" title={linkTitle}>
+			<span class="caption {rarityClass}" class:crossed>
+				{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
+			</span>
+		</a>
+	{:else}
+		<span class="caption {rarityClass}" class:crossed>
+			{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
+		</span>
+	{/if}
 </span>
 
 <style lang="scss">
@@ -76,6 +88,16 @@
 		align-items: center;
 		width: var(--item-icon-size);
 		height: var(--item-icon-size);
+	}
+
+	.caption-link {
+		color: inherit;
+		text-decoration: none;
+		min-width: 0;
+	}
+
+	.caption-link:hover {
+		text-decoration: underline;
 	}
 
 	.icon-frame {

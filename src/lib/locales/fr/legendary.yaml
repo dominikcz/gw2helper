@@ -30,7 +30,11 @@ upgrades: Composant d'amelioration
 weapons: Armes
 details: Details
 back_to_legendary: Retour a la liste legendaire
-recipe_tree: Arbre des recettes
+recipe_tree: Recette
+expand_all: Tout développer
+collapse_all: Tout réduire
+progress_owned_required: possede {owned} / requis {required}
+cycle: Cycle
 ingredients: Ingredients
 ingredient: Ingredient
 required: Requis
@@ -38,6 +42,7 @@ owned: Possede
 missing: Manquant
 unit_price: Prix unitaire
 missing_cost: Cout manquant
+total_cost: Cout total
 price_mode: Mode de prix
 buy_price: Achat
 sell_price: Vente
