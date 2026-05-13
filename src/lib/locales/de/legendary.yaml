@@ -1,9 +1,9 @@
-armor: Rüstung
+armor: Ruestung
 armor_pieces:
   accessory: Accessoire
   amulet: Amulett
   aquatic: Aquatische Kopfbedeckung
-  back_item: Rücken-Gegenstand
+  back_item: Ruecken-Gegenstand
   boots: Stiefel
   coat: Mantel
   gloves: Handschuhe
@@ -12,19 +12,39 @@ armor_pieces:
   ring: Ring
   shoulders: Schultern
 armor_set:
-  pve: PvE-Rüstungsset
-  pvp: PvP-Rüstungsset
-  raid: Raid-Rüstungsset
-  wvw: WvW-Rüstungsset
+  pve: PvE-Ruestungsset
+  pvp: PvP-Ruestungsset
+  raid: Raid-Ruestungsset
+  wvw: WvW-Ruestungsset
 armor_type:
-  heavy: Schwere Rüstung
-  light: Leichte Rüstung
-  medium: Mittlere Rüstung
+  heavy: Schwere Ruestung
+  light: Leichte Ruestung
+  medium: Mittlere Ruestung
 armor_type_short:
   heavy: Schwer
   light: Leicht
   medium: Mittel
-legendary: Legendär
-trinkets: Schmuckstücke
+legendary: Legendaer
+trinkets: Schmuckstuecke
 upgrades: Upgrades
 weapons: Waffen
+details: Details
+back_to_legendary: Zurueck zur legendaeren Liste
+recipe_tree: Rezeptbaum
+ingredients: Zutaten
+ingredient: Zutat
+required: Benoetigt
+owned: Vorhanden
+missing: Fehlend
+unit_price: Stueckpreis
+missing_cost: Fehlkosten
+price_mode: Preis-Modus
+buy_price: Kauf
+sell_price: Verkauf
+total_missing_cost: Gesamtkosten der fehlenden Teile
+missing_ingredients_count: Fehlende Zutaten
+tp_status: Handelsposten-Status
+tp_status_ok: Handelbar
+tp_status_bound: Konto-/Charaktergebunden
+tp_status_no_listing: Kein HP-Angebot (Haendler/gebunden/sonstiges)
+recipe_unavailable: Fuer diesen legendären Gegenstand sind in der GW2-API keine Herstellungsrezeptdaten verfuegbar.

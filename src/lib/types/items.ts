@@ -16,4 +16,5 @@ export interface ItemTooltipData extends ItemBaseData {
 
 export interface ItemRendererParams {
     count?: number;
+    detailsHref?: string;
 }

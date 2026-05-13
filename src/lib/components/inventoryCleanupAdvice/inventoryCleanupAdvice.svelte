@@ -5,7 +5,6 @@
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { itemTooltipRenderer } from '../items/itemTooltipRenderer';
 	import { t as _ } from '$lib/services/i18n';
-	import Item from '../items/item.svelte';
 	import { sum } from '$lib/utils';
 	import SearchInput from '$lib/components/search/searchInput.svelte';
 
@@ -244,7 +243,11 @@
 
 {#snippet itemAdvice(adv: ItemAdvice, idx: number)}
 	<div class="item-cleanup" class:odd={idx % 2}>
-		<Item item={{ ...adv.item, count: sum(adv.usage, 'count') }} />
+		<figure class={`cleanup-item rarity rarity-${adv.item.rarity.toLowerCase()}`}>
+			<span data-autotooltip-renderer="img.item" data-autotooltip-id={adv.item.id} data-autotooltip-params={JSON.stringify({ count: sum(adv.usage, 'count') })}>
+				<img alt={adv.item.name} src={adv.item.icon} loading="lazy" decoding="async" fetchpriority="low" />
+			</span>
+		</figure>
 		<ul>
 			{#each adv.usage as usage}
 				<li class:highlight={usage.source == char}>{usage.count} - {sourceLabel(usage.source)}</li>
@@ -263,7 +266,7 @@
 					<!-- <img src={asset('/assets/150px-construction.png')} title={$_('common.under_construction')} width="150px" alt={$_('common.under_construction')} /> -->
 					<p>
 						{$_('items.cleanup.filter_by_character')}
-						<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} />
+						<SearchInput name="char" id="char" bind:value={char} options={getCharacters(result.itemsToStack)} selectOnly={true} />
 					</p>
 
 					<details class="info" use:grungeBorder>
@@ -298,15 +301,35 @@
 		justify-content: flex-start;
 		align-items: center;
 		gap: 1rem;
+		min-width: 0;
+	}
+
+	.cleanup-item {
+		width: 3.75em;
+		height: 3.75em;
+		outline-width: 0.1875em;
+		outline-style: solid;
+		margin: 0;
+		padding: 0;
+		flex: 0 0 auto;
+
+		img {
+			width: 3.75em;
+			height: 3.75em;
+			cursor: pointer;
+			display: block;
+		}
 	}
 
 	ul {
 		width: 16rem;
+		min-width: 0;
 		padding-left: 0;
 		/* list-style-position: inside; */
 		list-style: none;
 		padding-inline-start: 0;
 		margin: 0.2rem 0;
+		overflow-wrap: anywhere;
 	}
 
 	li{
@@ -327,5 +350,25 @@
 	.highlight {
 		background-color: var(--gw2helper-highlight-background);
 		color: var(--gw2helper-highlight-text);
+	}
+
+	@media (max-width: 48em) {
+		.item-cleanup {
+			align-items: flex-start;
+			gap: 0.65rem;
+			padding: 0.4rem;
+			min-height: 0;
+		}
+
+		ul {
+			width: auto;
+			flex: 1 1 auto;
+		}
+
+		.savings {
+			margin-left: auto;
+			max-width: 7.5rem;
+			text-align: right;
+		}
 	}
 </style>

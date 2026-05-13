@@ -99,5 +99,8 @@
 		display: flex;
 		flex-flow: row wrap;
 		gap: 0.5em;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
 	}
 </style>

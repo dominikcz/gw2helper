@@ -293,7 +293,9 @@
 				<small class="header-actions">
 					<span>v{data.version}</span>
 					<LocaleSwitch {languages} bind:value={$locale} keysOnly={true} />
-					<SharePageMenu {apiKey} />
+					{#if String(apiKey || '').trim()}
+						<SharePageMenu {apiKey} />
+					{/if}
 				</small>
 			</div>
 		</header>

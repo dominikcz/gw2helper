@@ -40,21 +40,24 @@ no_audio: >-
 no_token: No API key provided
 paste_your_api_key_here: Paste your API key here
 retry: Retry
-share_copy: Copy to clipboard
-share_email: Send by e-mail
-share_facebook: Send via Facebook
-share_headline_label: Share with message
-share_headline_placeholder: Check my GW2 Helper page
-share_instagram: Send via Instagram
-share_instagram_hint: Link copied. Paste it in your Instagram message/post.
-share_link_copied: Share link copied to clipboard.
-share_link_failed: Could not prepare share link.
-share_link_missing_key: Provide API key first.
-share_page_prompt: Share this page
-share_page_warning: 'Warning: this link includes your API key. Share only with people you trust.'
-share_this_page: Share this page
-share_whatsapp: Send via WhatsApp
-share_x: Send via X
+share:
+  copy: Copy to clipboard
+  email: Send by e-mail
+  facebook: Send via Facebook
+  headline:
+    label: Share
+    placeholder: 'Check my GW2 Helper page:'
+  instagram: Send via Instagram
+  instagram_hint: Link copied. Paste it in your Instagram message/post.
+  link:
+    copied: Share link copied to clipboard.
+    failed: Could not prepare share link.
+    missing_key: Provide API key first.
+  page:
+    prompt: Share this page
+    this_page: Share this page
+  whatsapp: Send via WhatsApp
+  x: Send via X
 token_error: Token error
 token_ok: Successfully loaded key "{token}".
 waypoint_to_top: waypoint to top

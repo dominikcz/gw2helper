@@ -28,3 +28,23 @@ legendary: 传奇
 trinkets: 饰品
 upgrades: 升级
 weapons: 武器
+details: 详情
+back_to_legendary: 返回传奇列表
+recipe_tree: 配方树
+ingredients: 材料
+ingredient: 材料
+required: 需求
+owned: 已拥有
+missing: 缺少
+unit_price: 单价
+missing_cost: 缺失成本
+price_mode: 价格模式
+buy_price: 买单
+sell_price: 卖单
+total_missing_cost: 总缺失成本
+missing_ingredients_count: 缺少的材料
+tp_status: 交易所状态
+tp_status_ok: 可交易
+tp_status_bound: 账号/角色绑定
+tp_status_no_listing: 无交易所挂单（商人/绑定/其他）
+recipe_unavailable: 该传奇物品的制作配方数据在 GW2 API 中不可用。

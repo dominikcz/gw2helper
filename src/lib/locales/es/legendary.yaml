@@ -2,7 +2,7 @@ armor: Armadura
 armor_pieces:
   accessory: Accesorio
   amulet: Amuleto
-  aquatic: Casco acuático
+  aquatic: Casco acuatico
   back_item: Objeto de espalda
   boots: Botas
   coat: Abrigo
@@ -14,7 +14,7 @@ armor_pieces:
 armor_set:
   pve: Conjunto de armadura PvE
   pvp: Conjunto de armadura PvP
-  raid: Conjunto de armadura de incursión
+  raid: Conjunto de armadura de incursion
   wvw: Conjunto de armadura WvW
 armor_type:
   heavy: Armadura pesada
@@ -28,3 +28,23 @@ legendary: Legendario
 trinkets: Baratijas
 upgrades: Mejoras
 weapons: Armas
+details: Detalles
+back_to_legendary: Volver a la lista legendaria
+recipe_tree: Arbol de recetas
+ingredients: Ingredientes
+ingredient: Ingrediente
+required: Requerido
+owned: Tienes
+missing: Falta
+unit_price: Precio unitario
+missing_cost: Coste faltante
+price_mode: Modo de precio
+buy_price: Compra
+sell_price: Venta
+total_missing_cost: Coste total faltante
+missing_ingredients_count: Ingredientes faltantes
+tp_status: Estado de la Casa de Subastas
+tp_status_ok: Comercializable
+tp_status_bound: Vinculado a cuenta/personaje
+tp_status_no_listing: Sin oferta en TP (vendedor/vinculado/otro)
+recipe_unavailable: Los datos de receta de fabricacion no estan disponibles en la API de GW2 para este objeto legendario.

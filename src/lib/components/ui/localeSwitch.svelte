@@ -20,6 +20,8 @@
         background-color: #222;
         color: inherit;
         margin-left: 1em;
+		-webkit-user-select: none;
+		-moz-user-select: none;
         user-select: none;
     }
 </style>

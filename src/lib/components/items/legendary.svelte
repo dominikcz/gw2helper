@@ -11,12 +11,20 @@
 	}
 
 	let { item }: Props = $props();
+
+	function openWiki() {
+		window.open(helperUtils.wikiLink(item.name), '_blank', 'noopener,noreferrer');
+	}
 </script>
 
-<figure data-autotooltip-renderer="img.item" data-autotooltip-id={item.id}>
-	<a href={helperUtils.wikiLink(item.name)} target="_blank">
+<figure
+	data-autotooltip-renderer="img.item"
+	data-autotooltip-id={item.id}
+	data-autotooltip-params={JSON.stringify({ detailsHref: `/legendary/${item.id}/` })}
+>
+	<button type="button" onclick={openWiki}>
 		<img alt={item.name} src={item.icon} class:locked={!item.count} />
-	</a>
+	</button>
 	{#if item.count && item.max_count > 1}<figcaption>{item.count}/{item.max_count}</figcaption>{/if}
 </figure>
 
@@ -47,6 +55,12 @@
 			background: rgba(0, 0, 0, 0.7);
 			font-size: 80%;
 			padding: 0 0 0 0.2em;
+		}
+		button {
+			border: 0;
+			padding: 0;
+			background: transparent;
+			display: block;
 		}
 	}
 </style>

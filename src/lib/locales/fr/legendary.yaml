@@ -8,9 +8,9 @@ armor_pieces:
   coat: Manteau
   gloves: Gants
   helm: Heaume
-  leggings: Jambières
+  leggings: Jambieres
   ring: Anneau
-  shoulders: Épaulières
+  shoulders: Epaulieres
 armor_set:
   pve: Ensemble d'armure PvE
   pvp: Ensemble d'armure PvP
@@ -18,13 +18,33 @@ armor_set:
   wvw: Ensemble d'armure WvW
 armor_type:
   heavy: Armure lourde
-  light: Armure légère
+  light: Armure legere
   medium: Armure moyenne
 armor_type_short:
   heavy: Lourde
-  light: Légère
+  light: Legere
   medium: Moyenne
-legendary: Légendaire
+legendary: Legendaire
 trinkets: Les colifichets
-upgrades: Composant d'amélioration
+upgrades: Composant d'amelioration
 weapons: Armes
+details: Details
+back_to_legendary: Retour a la liste legendaire
+recipe_tree: Arbre des recettes
+ingredients: Ingredients
+ingredient: Ingredient
+required: Requis
+owned: Possede
+missing: Manquant
+unit_price: Prix unitaire
+missing_cost: Cout manquant
+price_mode: Mode de prix
+buy_price: Achat
+sell_price: Vente
+total_missing_cost: Cout total manquant
+missing_ingredients_count: Ingredients manquants
+tp_status: Statut du Comptoir
+tp_status_ok: Negociable
+tp_status_bound: Lie au compte/personnage
+tp_status_no_listing: Pas d'offre TP (marchand/lie/autre)
+recipe_unavailable: Les donnees de recette d'artisanat ne sont pas disponibles dans l'API GW2 pour cet objet legendaire.

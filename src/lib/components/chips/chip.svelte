@@ -38,6 +38,8 @@
 		color: var(--gw2helper-module-text);
 		width: 5em;
 		text-align: right;
+		-webkit-user-select: none;
+		-moz-user-select: none;
 		user-select: none;
 		cursor: pointer;
 		&.selected {

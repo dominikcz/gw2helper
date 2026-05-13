@@ -42,23 +42,24 @@ no_audio: >-
 no_token: Keine API-Schlüssel vorhanden
 paste_your_api_key_here: Fügen Sie Ihre API-Schlüssel hier ein
 retry: Erneut versuchen
-share_copy: In Zwischenablage kopieren
-share_email: Per E-Mail senden
-share_facebook: Über Facebook senden
-share_headline_label: Mit Text teilen
-share_headline_placeholder: Schau dir meine GW2 Helper Seite an
-share_instagram: Über Instagram senden
-share_instagram_hint: Link kopiert. Füge ihn in deiner Instagram-Nachricht/deinem Post ein.
-share_link_copied: Freigabelink wurde in die Zwischenablage kopiert.
-share_link_failed: Freigabelink konnte nicht erstellt werden.
-share_link_missing_key: Bitte zuerst API-Schlüssel angeben.
-share_page_prompt: Diese Seite teilen
-share_page_warning: >-
-  Warnung: Dieser Link enthält Ihren API-Schlüssel. Teilen Sie ihn nur mit
-  vertrauenswürdigen Personen.
-share_this_page: Diese Seite teilen
-share_whatsapp: Über WhatsApp senden
-share_x: Über X senden
+share:
+  copy: In Zwischenablage kopieren
+  email: Per E-Mail senden
+  facebook: Über Facebook senden
+  headline:
+    label: Teilen
+    placeholder: 'Teilen:'
+  instagram: Über Instagram senden
+  instagram_hint: Link kopiert. Füge ihn in deiner Instagram-Nachricht/deinem Post ein.
+  link:
+    copied: Freigabelink wurde in die Zwischenablage kopiert.
+    failed: Freigabelink konnte nicht erstellt werden.
+    missing_key: Bitte zuerst API-Schlüssel angeben.
+  page:
+    prompt: Diese Seite teilen
+    this_page: Diese Seite teilen
+  whatsapp: Über WhatsApp senden
+  x: Über X senden
 token_error: Token-Fehler
 token_ok: Erfolgreich geladener Schlüssel "{token}".
 waypoint_to_top: Teleportieren nach oben

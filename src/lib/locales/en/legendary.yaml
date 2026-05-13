@@ -16,6 +16,29 @@ armor_set:
 trinkets: Trinkets
 upgrades: Upgrade components
 weapons: Weapons
+details: Details
+back_to_legendary: Back to legendary list
+recipe_tree: Recipe tree
+ingredients: Ingredients
+ingredient: Ingredient
+required: Required
+owned: Owned
+missing: Missing
+unit_price: Unit price
+missing_cost: Missing cost
+price_mode: Price mode
+buy_price: Buy
+sell_price: Sell
+total_missing_cost: Total missing cost
+missing_ingredients_count: Missing ingredients
+tp_status: Trading Post status
+tp_status_ok: Tradable
+tp_status_bound: Account/character bound
+tp_status_no_listing: No TP listing (vendor/account-bound/other)
+recipe_unavailable: Crafting recipe data is not available in the GW2 API for this legendary item.
+recipe_source_wiki: "Recipe source: GW2 Wiki fallback (GW2 API has no direct recipe entry)."
+full_material_list: Full material list
+ingredients_unavailable_wiki: Ingredient ownership and TP pricing are unavailable in wiki fallback mode.
 armor_pieces:
   helm: Helm
   shoulders: Shoulders

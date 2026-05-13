@@ -7,6 +7,7 @@
 		value?: string;
 		id?: string;
 		options?: string[];
+		selectOnly?: boolean;
 		children?: import('svelte').Snippet<[ { key: string }? ]>;
 		[key: string]: unknown;
 	}
@@ -16,6 +17,7 @@
 		value = $bindable(''),
 		id = helperUtils.generateId(20),
 		options = [],
+		selectOnly = false,
 		children,
 		...rest
 	}: Props = $props();
@@ -40,12 +42,29 @@
 			showDropdown = false;
 		}
 	};
+
+	const preventTextSelection = (ev: Event) => {
+		if (!selectOnly) return;
+		ev.preventDefault();
+		showDropdown = true;
+	};
 </script>
 
 <svelte:window onclick={hndClick} />
 
-<div bind:this={ref}>
-	<input type="search" {id} {value} bind:this={inputRef} oninput={debounceFilter} {...rest} />
+<div bind:this={ref} class:select-like={selectOnly}>
+	<input
+		type="search"
+		{id}
+		{value}
+		bind:this={inputRef}
+		readonly={selectOnly}
+		aria-readonly={selectOnly}
+		oninput={debounceFilter}
+		onmousedown={preventTextSelection}
+		onselectstart={preventTextSelection}
+		{...rest}
+	/>
 	{#if options.length}
 		<button class="inside" onclick={stopPropagation(toggleDropdown)} aria-label="list">
 			<svg width="100%" height="100%" viewBox="0 0 20 20" focusable="false" aria-hidden="true" class="svelte-qbd276">
@@ -64,7 +83,7 @@
 
 	{#if showDropdown}
 		<ul class="search-input-list" role="listbox" id="{id}-items">
-			{#each options as key}
+			{#each options as key (key)}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<li
 					role="option"
@@ -75,7 +94,7 @@
 					}}
 				>
 					{#if children}{@render children({ key })}{:else}
-						{@html key}
+						{key}
 					{/if}
 				</li>
 			{/each}
@@ -94,6 +113,15 @@
 		button {
 			font-size: 1em;
 		}
+	}
+
+	.select-like,
+	.select-like button,
+	.select-like ul,
+	.select-like li,
+	.select-like input {
+		user-select: none;
+		-webkit-user-select: none;
 	}
 
 	input {

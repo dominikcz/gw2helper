@@ -6,19 +6,16 @@
 	}
 
 	interface Props {
-		headline: string;
 		headlineLabel: string;
-		headlinePlaceholder: string;
 		options: ShareMenuOption[];
 	}
 
-	let { headline = $bindable(), headlineLabel, headlinePlaceholder, options }: Props = $props();
+	let { headlineLabel, options }: Props = $props();
 </script>
 
 <div class="share-menu-shell" role="dialog" aria-label={headlineLabel}>
 	<div class="share-menu grunge-border">
-		<label for="share-headline">{headlineLabel}</label>
-		<input id="share-headline" type="text" bind:value={headline} placeholder={headlinePlaceholder} />
+		<p class="share-headline">{headlineLabel}</p>
 		<div class="share-list">
 			{#each options as option (option.id)}
 				<button type="button" onclick={option.onClick}>{option.label}</button>
@@ -47,16 +44,15 @@
 		border-radius: 0.5em;
 		background: var(--gw2helper-module);
 		color: var(--gw2helper-module-text);
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
 
-		label {
+		.share-headline {
+			margin: 0;
 			font-size: 1em;
 			font-weight: 600;
 			color: var(--gw2helper-module-text);
-		}
-
-		input {
-			width: 100%;
-			box-sizing: border-box;
 		}
 	}
 
@@ -82,6 +78,9 @@
 			box-shadow: none;
 			font-weight: 600;
 			line-height: 1;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
 
 			&:hover {
 				background: var(--button-focused-bg);

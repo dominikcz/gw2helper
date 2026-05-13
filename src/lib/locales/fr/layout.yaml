@@ -42,23 +42,24 @@ no_audio: >-
 no_token: Aucune clé API fournie
 paste_your_api_key_here: Collez votre clé API ici
 retry: Réessayer
-share_copy: Copier dans le presse-papiers
-share_email: Envoyer par e-mail
-share_facebook: Envoyer via Facebook
-share_headline_label: Partager avec texte
-share_headline_placeholder: Regarde ma page GW2 Helper
-share_instagram: Envoyer via Instagram
-share_instagram_hint: Lien copié. Collez-le dans votre message/publication Instagram.
-share_link_copied: Lien de partage copié dans le presse-papiers.
-share_link_failed: Impossible de préparer le lien de partage.
-share_link_missing_key: Veuillez d'abord fournir une clé API.
-share_page_prompt: Partager cette page
-share_page_warning: >-
-  Attention : ce lien contient votre clé API. Partagez-le uniquement avec des
-  personnes de confiance.
-share_this_page: Partager cette page
-share_whatsapp: Envoyer via WhatsApp
-share_x: Envoyer via X
+share:
+  copy: Copier dans le presse-papiers
+  email: Envoyer par e-mail
+  facebook: Envoyer via Facebook
+  headline:
+    label: Partager
+    placeholder: 'Partager:'
+  instagram: Envoyer via Instagram
+  instagram_hint: Lien copié. Collez-le dans votre message/publication Instagram.
+  link:
+    copied: Lien de partage copié dans le presse-papiers.
+    failed: Impossible de préparer le lien de partage.
+    missing_key: Veuillez d'abord fournir une clé API.
+  page:
+    prompt: Partager cette page
+    this_page: Partager cette page
+  whatsapp: Envoyer via WhatsApp
+  x: Envoyer via X
 token_error: Erreur de jeton
 token_ok: Clef chargé avec succès « {token} ».
 waypoint_to_top: point de départ vers le haut

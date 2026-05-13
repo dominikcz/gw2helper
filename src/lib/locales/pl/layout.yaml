@@ -41,23 +41,24 @@ no_audio: >-
 no_token: Brak klucza API
 paste_your_api_key_here: Wklej tutaj swój klucz API
 retry: Spróbuj ponownie
-share_copy: Skopiuj do schowka
-share_email: Wyślij e-mailem
-share_facebook: Wyślij przez Facebook
-share_headline_label: Udostępnij z treścią
-share_headline_placeholder: Sprawdź moją stronę GW2 Helper
-share_instagram: Wyślij przez Instagram
-share_instagram_hint: Link skopiowany. Wklej go w wiadomości/poście na Instagramie.
-share_link_copied: Link do udostępnienia skopiowany do schowka.
-share_link_failed: Nie udało się przygotować linku do udostępnienia.
-share_link_missing_key: Najpierw podaj klucz API.
-share_page_prompt: Udostępnij tę stronę
-share_page_warning: >-
-  Uwaga: ten link zawiera Twój klucz API. Udostępniaj go tylko osobom, którym
-  ufasz.
-share_this_page: Udostępnij tę stronę
-share_whatsapp: Wyślij przez WhatsApp
-share_x: Wyślij przez X
+share:
+  copy: Skopiuj do schowka
+  email: Wyślij e-mailem
+  facebook: Wyślij przez Facebook
+  headline:
+    label: Udostępnij
+    placeholder: 'Udostępnij:'
+  instagram: Wyślij przez Instagram
+  instagram_hint: Link skopiowany. Wklej go w wiadomości/poście na Instagramie.
+  link:
+    copied: Link do udostępnienia skopiowany do schowka.
+    failed: Nie udało się przygotować linku do udostępnienia.
+    missing_key: Najpierw podaj klucz API.
+  page:
+    prompt: Udostępnij tę stronę
+    this_page: Udostępnij tę stronę
+  whatsapp: Wyślij przez WhatsApp
+  x: Wyślij przez X
 token_error: Błąd tokenu
 token_ok: Udane wczytanie klucza "{token}".
 waypoint_to_top: Teleportuj do góry

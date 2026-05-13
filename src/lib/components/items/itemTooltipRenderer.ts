@@ -10,9 +10,12 @@ type ApiServiceLike = {
 const api = apiService as unknown as ApiServiceLike;
 
 function toRendererParams(params: unknown): ItemRendererParams {
-    if (params && typeof params === 'object' && 'count' in params) {
-        const count = (params as { count?: unknown }).count;
-        return { count: typeof count === 'number' ? count : undefined };
+    if (params && typeof params === 'object') {
+        const raw = params as { count?: unknown; detailsHref?: unknown };
+        return {
+            count: typeof raw.count === 'number' ? raw.count : undefined,
+            detailsHref: typeof raw.detailsHref === 'string' ? raw.detailsHref : undefined,
+        };
     }
     return {};
 }
@@ -26,7 +29,11 @@ export function itemTooltipRenderer(node: HTMLElement, id: string | number | nul
     const item = api.itemsCache(itemId);
     if (!item) return false;
     const rendererParams = toRendererParams(params);
-    const tooltipItem = { ...item, count: rendererParams.count ?? item.count };
+    const tooltipItem = {
+        ...item,
+        count: rendererParams.count ?? item.count,
+        detailsHref: rendererParams.detailsHref,
+    };
     const component = mount(ItemTooltip as never, {
             props: { item: tooltipItem },
             target: node,

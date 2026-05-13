@@ -12,8 +12,7 @@
 	let { apiKey }: Props = $props();
 
 	let showShareMenu = $state(false);
-	let shareHeadline = $state('');
-	let autoShareHeadline = '';
+	const shareHeadline = $derived($_('layout.share.headline.placeholder'));
 	let shareMenuWrapRef: HTMLElement | null = $state(null);
 
 	function getShareUrl() {
@@ -32,7 +31,7 @@
 		event.stopPropagation();
 		const keyToShare = String(apiKey || '').trim();
 		if (!keyToShare) {
-			toast.push($_('layout.share_link_missing_key'));
+			toast.push($_('layout.share.link.missing_key'));
 			return;
 		}
 		showShareMenu = !showShareMenu;
@@ -45,7 +44,7 @@
 	async function copyShareLink() {
 		const keyToShare = String(apiKey || '').trim();
 		if (!keyToShare) {
-			toast.push($_('layout.share_link_missing_key'));
+			toast.push($_('layout.share.link.missing_key'));
 			return;
 		}
 		const shareUrl = getShareUrl();
@@ -53,18 +52,18 @@
 		try {
 			if (navigator.clipboard?.writeText) {
 				await navigator.clipboard.writeText(getShareText());
-				toast.push($_('layout.share_link_copied'));
+				toast.push($_('layout.share.link.copied'));
 				showShareMenu = false;
 				return;
 			}
 
-			window.prompt($_('layout.share_page_prompt'), `${shareHeadline}\n${shareUrl}`);
+			window.prompt($_('layout.share.page.prompt'), `${shareHeadline}\n${shareUrl}`);
 			showShareMenu = false;
 		} catch (error) {
 			if ((error as { name?: string })?.name === 'AbortError') {
 				return;
 			}
-			toast.push($_('layout.share_link_failed'));
+			toast.push($_('layout.share.link.failed'));
 		}
 	}
 
@@ -86,33 +85,25 @@
 	async function shareInstagram() {
 		await copyShareLink();
 		window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
-		toast.push($_('layout.share_instagram_hint'));
+		toast.push($_('layout.share.instagram_hint'));
 	}
 
 	let shareOptions = $derived([
-		{ id: 'copy', label: $_('layout.share_copy'), onClick: copyShareLink },
-		{ id: 'mail', label: $_('layout.share_email'), onClick: () => openShareTarget(shareHref('mail')) },
+		{ id: 'copy', label: $_('layout.share.copy'), onClick: copyShareLink },
+		{ id: 'mail', label: $_('layout.share.email'), onClick: () => openShareTarget(shareHref('mail')) },
 		{
 			id: 'whatsapp',
-			label: $_('layout.share_whatsapp'),
+			label: $_('layout.share.whatsapp'),
 			onClick: () => openShareTarget(shareHref('whatsapp')),
 		},
-		{ id: 'instagram', label: $_('layout.share_instagram'), onClick: shareInstagram },
-		{ id: 'x', label: $_('layout.share_x'), onClick: () => openShareTarget(shareHref('x')) },
+		{ id: 'instagram', label: $_('layout.share.instagram'), onClick: shareInstagram },
+		{ id: 'x', label: $_('layout.share.x'), onClick: () => openShareTarget(shareHref('x')) },
 		{
 			id: 'facebook',
-			label: $_('layout.share_facebook'),
+			label: $_('layout.share.facebook'),
 			onClick: () => openShareTarget(shareHref('facebook')),
 		},
 	]);
-
-	$effect(() => {
-		const localizedDefaultHeadline = $_('layout.share_headline_placeholder');
-		if (!shareHeadline || shareHeadline === autoShareHeadline) {
-			shareHeadline = localizedDefaultHeadline;
-		}
-		autoShareHeadline = localizedDefaultHeadline;
-	});
 
 	onMount(() => {
 		const onOutsideClick = (event: Event) => {
@@ -133,16 +124,14 @@
 		type="button"
 		class="share-page"
 		onclick={toggleShareMenu}
-		aria-label={$_('layout.share_this_page')}
-		title={$_('layout.share_page_prompt')}
+		aria-label={$_('layout.share.page.this_page')}
+		title={$_('layout.share.page.prompt')}
 	>
 		<span class="share-icon" aria-hidden="true" style={`--share-sprite: url(${asset('/assets/mail-sprite.png')})`}></span>
 	</button>
 	{#if showShareMenu}
 		<ShareMenu
-			bind:headline={shareHeadline}
-			headlineLabel={$_('layout.share_headline_label')}
-			headlinePlaceholder={$_('layout.share_headline_placeholder')}
+			headlineLabel={$_('layout.share.headline.label')}
 			options={shareOptions}
 		/>
 	{/if}

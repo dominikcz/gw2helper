@@ -28,3 +28,26 @@ legendary: Legendarne
 trinkets: Biżuteria
 upgrades: Ulepszenia
 weapons: Bronie
+details: Szczegóły
+back_to_legendary: Powrót do listy legendarnych
+recipe_tree: Drzewo receptur
+ingredients: Składniki
+ingredient: Składnik
+required: Wymagane
+owned: Posiadasz
+missing: Brakuje
+unit_price: Cena za sztukę
+missing_cost: Koszt braków
+price_mode: Tryb ceny
+buy_price: Kupno
+sell_price: Sprzedaż
+total_missing_cost: Łączny koszt braków
+missing_ingredients_count: Brakujące składniki
+tp_status: Status TP
+tp_status_ok: Handlowalne
+tp_status_bound: Związane z kontem/postacią
+tp_status_no_listing: Brak oferty TP (vendor/związane/inne)
+recipe_unavailable: Dane receptury craftingu dla tej legendarnej pozycji nie są dostępne w GW2 API.
+recipe_source_wiki: "Źródło receptury: fallback z GW2 Wiki (w GW2 API brak wpisu direct recipe)."
+full_material_list: Pełna lista materiałów
+ingredients_unavailable_wiki: Stan składników i wycena TP nie są dostępne w trybie fallback Wiki.
