@@ -28,7 +28,7 @@
 	let vertical = $state(false);
 	let under = $state(false);
 	let sticky = $state(true);
-	let lastTappedTooltipLink: HTMLAnchorElement | null = null;
+	let lastTappedTooltipHref: string | null = null;
 	let lastTappedTooltipTime = 0;
 
 	let touchMode = 'ontouchstart' in window;
@@ -150,6 +150,11 @@
 			// console.log('touchended', event);
 
 			const target = event.target as HTMLElement | null;
+			if (target && ref && ref.contains(target)) {
+				touchEventIsTap = false;
+				touchInProgress = false;
+				return;
+			}
 			if (target?.closest?.('._toastContainer')) {
 				visible = false;
 			} else if (findTitle(target)) {
@@ -190,11 +195,12 @@
 		}
 
 		const now = Date.now();
-		const sameLink = anchor === lastTappedTooltipLink;
+		const href = anchor.href || anchor.getAttribute('href') || null;
+		const sameLink = Boolean(href && href === lastTappedTooltipHref);
 		const secondTap = sameLink && now - lastTappedTooltipTime < 1500;
 
 		if (secondTap) {
-			lastTappedTooltipLink = null;
+			lastTappedTooltipHref = null;
 			lastTappedTooltipTime = 0;
 			return;
 		}
@@ -202,7 +208,7 @@
 		event.preventDefault();
 		event.stopPropagation();
 		updateXY(event);
-		lastTappedTooltipLink = anchor;
+		lastTappedTooltipHref = href;
 		lastTappedTooltipTime = now;
 	}
 
@@ -213,6 +219,32 @@
 			event.preventDefault();
 			// title = '';
 		}
+	}
+
+	function tooltipClickCapture(event: MouseEvent) {
+		if (!touchMode) return;
+		const target = event.target as HTMLElement | null;
+		if (!target) return;
+
+		const anchor = target.closest?.('a[href]') as HTMLAnchorElement | null;
+		if (!anchor) {
+			event.stopPropagation();
+			event.preventDefault();
+			return;
+		}
+
+		event.stopPropagation();
+		event.preventDefault();
+
+		const href = anchor.href || anchor.getAttribute('href');
+		if (!href) return;
+
+		if (anchor.target === '_blank') {
+			window.open(href, '_blank', 'noopener,noreferrer');
+			return;
+		}
+
+		window.location.assign(href);
 	}
 
 	//#endregion
@@ -434,7 +466,7 @@
 />
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions, a11y_no_static_element_interactions-->
-<div bind:this={ref} ontouchstart={tooltipTouchStart} class:visible class:left class:above class:vertical class:under class:sticky class={autotooltipClass}>
+<div bind:this={ref} ontouchstart={tooltipTouchStart} onclickcapture={tooltipClickCapture} class:visible class:left class:above class:vertical class:under class:sticky class={autotooltipClass}>
 </div>
 
 <style lang="scss">
