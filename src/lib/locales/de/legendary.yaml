@@ -40,6 +40,7 @@ ingredient: Zutat
 required: Benoetigt
 owned: Vorhanden
 missing: Fehlend
+missing_inline: (fehlt {count})
 unit_price: Stueckpreis
 missing_cost: Fehlkosten
 total_cost: Gesamtkosten
@@ -50,6 +51,7 @@ total_missing_cost: Gesamtkosten der fehlenden Teile
 missing_ingredients_count: Fehlende Zutaten
 tp_status: Handelsposten-Status
 tp_status_ok: Handelbar
+tp_status_crafted: Hergestellt (geschaetzt)
 tp_status_bound: Konto-/Charaktergebunden
 tp_status_no_listing: Kein HP-Angebot (Haendler/gebunden/sonstiges)
 recipe_unavailable: Fuer diesen legendären Gegenstand sind in der GW2-API keine Herstellungsrezeptdaten verfuegbar.

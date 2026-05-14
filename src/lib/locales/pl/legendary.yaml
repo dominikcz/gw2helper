@@ -40,6 +40,7 @@ ingredient: Składnik
 required: Wymagane
 owned: Posiadasz
 missing: Brakuje
+missing_inline: (brakuje {count})
 unit_price: Cena za sztukę
 missing_cost: Koszt braków
 total_cost: Łączny koszt
@@ -50,6 +51,7 @@ total_missing_cost: Łączny koszt braków
 missing_ingredients_count: Brakujące składniki
 tp_status: Status TP
 tp_status_ok: Handlowy
+tp_status_crafted: Wytwarzane (szac.)
 tp_status_bound: Związane z kontem/postacią
 tp_status_no_listing: Brak oferty TP (vendor/związane/inne)
 recipe_unavailable: Dane receptury craftingu dla tej legendarnej pozycji nie są dostępne w GW2 API.

@@ -40,6 +40,7 @@ ingredient: Ingredient
 required: Requis
 owned: Possede
 missing: Manquant
+missing_inline: (manque {count})
 unit_price: Prix unitaire
 missing_cost: Cout manquant
 total_cost: Cout total
@@ -50,6 +51,7 @@ total_missing_cost: Cout total manquant
 missing_ingredients_count: Ingredients manquants
 tp_status: Statut du Comptoir
 tp_status_ok: Negociable
+tp_status_crafted: Fabrique (estime)
 tp_status_bound: Lie au compte/personnage
 tp_status_no_listing: Pas d'offre TP (marchand/lie/autre)
 recipe_unavailable: Les donnees de recette d'artisanat ne sont pas disponibles dans l'API GW2 pour cet objet legendaire.

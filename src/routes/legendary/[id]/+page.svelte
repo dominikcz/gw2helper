@@ -20,8 +20,8 @@
 	const rows = $derived(data.details?.ingredients || []);
 	const totalMissingCost = $derived(
 		rows.reduce((sum, row) => {
-			if (!row.missing || row.tpReason !== 'ok') return sum;
-			const unit = priceMode === 'buy' ? row.buyUnit : row.sellUnit;
+			if (!row.missing) return sum;
+			const unit = rowUnit(row);
 			if (unit == null) return sum;
 			const lineCost = unit * row.missing;
 			if (!Number.isFinite(lineCost) || lineCost < 0) return sum;
@@ -35,10 +35,17 @@
 		return data.details?.itemsById?.[id];
 	}
 
-	function tpReasonLabel(reason: 'ok' | 'bound' | 'no-listing') {
+	function tpReasonLabel(reason: 'ok' | 'bound' | 'no-listing' | 'crafted') {
+		if (reason === 'crafted') return $_('legendary.tp_status_crafted');
 		if (reason === 'bound') return $_('legendary.tp_status_bound');
 		if (reason === 'no-listing') return $_('legendary.tp_status_no_listing');
 		return $_('legendary.tp_status_ok');
+	}
+
+	function rowUnit(row: (typeof rows)[number]) {
+		if (row.tpReason === 'ok') return priceMode === 'buy' ? row.buyUnit : row.sellUnit;
+		if (row.tpReason === 'crafted') return row.estimatedUnit;
+		return null;
 	}
 
 	function ownedCount(id: number) {
@@ -73,8 +80,8 @@
 
 	function nodeDirectMissingCost(id: number, required: number) {
 		const row = rowById.get(id);
-		if (!row || row.tpReason !== 'ok') return null;
-		const unit = priceMode === 'buy' ? row.buyUnit : row.sellUnit;
+		if (!row) return null;
+		const unit = rowUnit(row);
 		if (unit == null) return null;
 		const missing = nodeMissing(id, required);
 		if (missing <= 0) return 0;
@@ -197,6 +204,7 @@
 			</div>
 			{#snippet recipeNode(node: RecipeNode, path: string)}
 			{@const missingCost = nodeMissingCost(node)}
+			{@const missingCount = nodeMissing(node.id, node.count)}
 			<li>
 				<div
 					class="node-row"
@@ -225,6 +233,9 @@
 						href={wikiHref(node.id)}
 						linkTitle={$_('common.click_for_wiki')}
 					/>
+					{#if missingCount > 0}
+						<span class="node-missing-inline">{$_('legendary.missing_inline', { count: missingCount })}</span>
+					{/if}
 					<span
 						class="node-progress"
 						title={$_('legendary.progress_owned_required', { owned: ownedCount(node.id), required: node.count })}
@@ -274,8 +285,8 @@
 					{#each rows as row (row.id)}
 						{@const info = itemInfo(row.id)}
 						{@const wiki = wikiHref(row.id)}
-						{@const unit = priceMode === 'buy' ? row.buyUnit : row.sellUnit}
-						{@const rowCost = row.missing > 0 && unit != null && row.tpReason === 'ok' ? unit * row.missing : null}
+						{@const unit = rowUnit(row)}
+						{@const rowCost = row.missing > 0 && unit != null ? unit * row.missing : null}
 						<tr class:done={row.missing === 0}>
 							<td class="num-col">{row.missing}</td>
 							<td class="ingredient-cell">
@@ -289,9 +300,12 @@
 									linkCaption={true}
 									iconSize="1.2rem"
 								/>
+								{#if row.tpReason === 'crafted'}
+									<span class="chip crafted" title={tpReasonLabel(row.tpReason)}>{$_('legendary.tp_status_crafted')}</span>
+								{/if}
 							</td>
 							<td class="num-col">
-								{#if unit != null && row.tpReason === 'ok'}
+								{#if unit != null}
 									<Price value={unit} />
 								{:else}
 									-
@@ -469,6 +483,11 @@
 		justify-content: flex-end;
 	}
 
+	.node-missing-inline {
+		opacity: 0.85;
+		font-size: 0.9em;
+	}
+
 	.warning {
 		color: #fba6a6;
 	}
@@ -517,6 +536,12 @@
 
 	.ingredient-cell{
 		padding-right: 3em;
+	}
+
+	.ingredient-cell .chip.crafted {
+		margin-left: 0.45rem;
+		font-size: 0.72rem;
+		opacity: 0.9;
 	}
 	
 	.ingredient-cell :global(.item-label) {

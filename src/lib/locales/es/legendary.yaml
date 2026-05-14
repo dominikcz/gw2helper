@@ -40,6 +40,7 @@ ingredient: Ingrediente
 required: Requerido
 owned: Tienes
 missing: Falta
+missing_inline: (faltan {count})
 unit_price: Precio unitario
 missing_cost: Coste faltante
 total_cost: Coste total
@@ -50,6 +51,7 @@ total_missing_cost: Coste total faltante
 missing_ingredients_count: Ingredientes faltantes
 tp_status: Estado de la Casa de Subastas
 tp_status_ok: Comercializable
+tp_status_crafted: Fabricado (estimado)
 tp_status_bound: Vinculado a cuenta/personaje
 tp_status_no_listing: Sin oferta en TP (vendedor/vinculado/otro)
 recipe_unavailable: Los datos de receta de fabricacion no estan disponibles en la API de GW2 para este objeto legendario.

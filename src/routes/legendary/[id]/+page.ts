@@ -30,8 +30,9 @@ type IngredientRow = {
 	missing: number;
 	buyUnit: number | null;
 	sellUnit: number | null;
+	estimatedUnit: number | null;
 	tpEligible: boolean;
-	tpReason: 'ok' | 'bound' | 'no-listing';
+	tpReason: 'ok' | 'bound' | 'no-listing' | 'crafted';
 };
 
 type CacheIngredient = {
@@ -66,9 +67,76 @@ type LegendaryDetailsData = {
 const BATCH_SIZE = 200;
 const CACHE_URLS = [
 	`${base}/legendary_recipes_cache.json`,
+	`${base}/static/legendary_recipes_cache.kudzu.v3.json`,
 	`${base}/legendary_recipes_cache.kudzu.v3.json`,
+	`${base}/legendary_recipes_cache.kudzu.v2.json`,
 	`${base}/legendary_recipes_cache.kudzu.json`,
 ];
+
+const recipeSourceRank: Record<CacheRecipe['source'], number> = {
+	api: 3,
+	wiki: 2,
+	terminal: 1,
+};
+
+const isFinitePositiveInt = (value: unknown): value is number => {
+	const n = Number(value);
+	return Number.isFinite(n) && Number.isInteger(n) && n > 0;
+};
+
+const isFinitePositiveNumber = (value: unknown): value is number => {
+	const n = Number(value);
+	return Number.isFinite(n) && n > 0;
+};
+
+const normalizeCacheRecipe = (entry: unknown): CacheRecipe | null => {
+	if (!entry || typeof entry !== 'object') return null;
+	const raw = entry as Partial<CacheRecipe>;
+	if (!isFinitePositiveInt(raw.output_item_id)) return null;
+	if (raw.source !== 'api' && raw.source !== 'wiki' && raw.source !== 'terminal') return null;
+
+	const ingredients = Array.isArray(raw.ingredients)
+		? raw.ingredients
+				.map((ingredient) => {
+					if (!ingredient || typeof ingredient !== 'object') return null;
+					const item_id = Number((ingredient as CacheIngredient).item_id);
+					const count = Number((ingredient as CacheIngredient).count);
+					if (!Number.isFinite(item_id) || item_id <= 0) return null;
+					if (!Number.isFinite(count) || count <= 0) return null;
+					return { item_id, count, name: (ingredient as CacheIngredient).name ?? null };
+				})
+				.filter((ingredient): ingredient is { item_id: number; count: number; name: string | null } => ingredient !== null)
+		: [];
+
+	return {
+		source: raw.source,
+		output_item_id: raw.output_item_id,
+		recipe_id: raw.recipe_id ?? null,
+		output_item_count: isFinitePositiveNumber(raw.output_item_count) ? Number(raw.output_item_count) : 1,
+		wiki_page: raw.wiki_page,
+		ingredients,
+	};
+};
+
+const pickBetterRecipe = (current: CacheRecipe | undefined, next: CacheRecipe): CacheRecipe => {
+	if (!current) return next;
+
+	const currentRank = recipeSourceRank[current.source] || 0;
+	const nextRank = recipeSourceRank[next.source] || 0;
+	if (nextRank !== currentRank) return nextRank > currentRank ? next : current;
+
+	const currentIngredientCount = current.ingredients.length;
+	const nextIngredientCount = next.ingredients.length;
+	if (nextIngredientCount !== currentIngredientCount) {
+		return nextIngredientCount > currentIngredientCount ? next : current;
+	}
+
+	const currentOutputCount = Number(current.output_item_count || 1);
+	const nextOutputCount = Number(next.output_item_count || 1);
+	if (nextOutputCount !== currentOutputCount) return nextOutputCount > currentOutputCount ? next : current;
+
+	return current;
+};
 
 // Fallbacks for known Mystic Forge gifts when cache is missing wiki recipe parsing.
 const STATIC_RECIPE_FALLBACKS: Record<number, CacheRecipe> = {
@@ -122,6 +190,19 @@ const STATIC_RECIPE_FALLBACKS: Record<number, CacheRecipe> = {
 			{ item_id: 19673, count: 1, name: 'Gift of Magic' },
 			{ item_id: 19675, count: 77, name: 'Mystic Clover' },
 			{ item_id: 19721, count: 250, name: 'Glob of Ectoplasm' },
+		],
+	},
+	// Expected-value approximation from Mystic Forge clover recipe.
+	19675: {
+		source: 'wiki',
+		output_item_id: 19675,
+		recipe_id: null,
+		output_item_count: 3.2,
+		wiki_page: 'Mystic Clover',
+		ingredients: [
+			{ item_id: 19721, count: 10, name: 'Glob of Ectoplasm' },
+			{ item_id: 19976, count: 10, name: 'Mystic Coin' },
+			{ item_id: 19925, count: 10, name: 'Obsidian Shard' },
 		],
 	},
 };
@@ -210,15 +291,32 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	};
 
 	const loadRecipeCache = async (): Promise<RecipeCache | null> => {
+		const merged = new Map<number, CacheRecipe>();
+
 		for (const url of CACHE_URLS) {
 			const response = await fetch(url).catch(() => null);
 			if (!response?.ok) continue;
-			const json = (await response.json()) as RecipeCache;
-			if (json && json.recipesByOutputId && typeof json.recipesByOutputId === 'object') {
-				return json;
+
+			const json = (await response.json()) as Partial<RecipeCache>;
+			if (!json?.recipesByOutputId || typeof json.recipesByOutputId !== 'object') continue;
+
+			for (const [key, value] of Object.entries(json.recipesByOutputId)) {
+				const outputId = Number(key);
+				if (!Number.isFinite(outputId) || outputId <= 0) continue;
+				const normalized = normalizeCacheRecipe(value);
+				if (!normalized) continue;
+				merged.set(outputId, pickBetterRecipe(merged.get(outputId), normalized));
 			}
 		}
-		return null;
+
+		if (!merged.size) return null;
+
+		const recipesByOutputId: Record<string, CacheRecipe> = {};
+		for (const [outputId, recipe] of merged.entries()) {
+			recipesByOutputId[String(outputId)] = recipe;
+		}
+
+		return { recipesByOutputId };
 	};
 
 	const recipeCache = await loadRecipeCache();
@@ -232,18 +330,36 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		return STATIC_RECIPE_FALLBACKS[itemId] || cached;
 	};
 
-	const buildTreeFromCache = (itemId: number, neededCount: number, stack: Set<number>): RecipeTreeNode => {
+	const buildTreeFromCache = (
+		itemId: number,
+		neededCount: number,
+		stack: Set<number>,
+		ownedPool: Map<number, number>
+	): RecipeTreeNode => {
 		if (stack.has(itemId)) {
 			return { id: itemId, count: neededCount, cycle: true, children: [] };
 		}
 
+		const available = ownedPool.get(itemId) || 0;
+		const consumed = Math.min(available, neededCount);
+		if (consumed > 0) {
+			ownedPool.set(itemId, available - consumed);
+		}
+		const remainingToCraft = Math.max(0, neededCount - consumed);
+
 		const recipe = recipeForItem(itemId);
-		if (!recipe || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0 || recipe.source === 'terminal') {
+		if (
+			remainingToCraft <= 0 ||
+			!recipe ||
+			!Array.isArray(recipe.ingredients) ||
+			recipe.ingredients.length === 0 ||
+			recipe.source === 'terminal'
+		) {
 			return { id: itemId, count: neededCount, source: recipe?.source, children: [] };
 		}
 
-		const outputCount = Math.max(1, Number(recipe.output_item_count || 1));
-		const craftsNeeded = Math.ceil(neededCount / outputCount);
+		const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
+		const craftsNeeded = Math.ceil(remainingToCraft / outputCount);
 		const nextStack = new Set(stack);
 		nextStack.add(itemId);
 
@@ -253,7 +369,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const ingCount = Number(ingredient.count || 0);
 			if (!Number.isFinite(ingId) || ingId <= 0 || !Number.isFinite(ingCount) || ingCount <= 0) continue;
 			if (ingId === itemId) continue;
-			children.push(buildTreeFromCache(ingId, craftsNeeded * ingCount, nextStack));
+			children.push(buildTreeFromCache(ingId, craftsNeeded * ingCount, nextStack, ownedPool));
 		}
 
 		if (!children.length) {
@@ -270,8 +386,6 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	};
 
 	const targetItem = ((await apiService.items(String(targetItemId))) || [])[0] || null;
-	const recipeTree = buildTreeFromCache(targetItemId, 1, new Set<number>());
-	const recipeAvailable = recipeTree.children.length > 0;
 
 	const [materials, bank, sharedInventory, characterItems] = await Promise.all([
 		apiService.materials(),
@@ -287,6 +401,9 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	for (const character of characterItems) {
 		appendItems(ownedByItem, character._items || []);
 	}
+
+	const recipeTree = buildTreeFromCache(targetItemId, 1, new Set<number>(), new Map(ownedByItem));
+	const recipeAvailable = recipeTree.children.length > 0;
 
 	const treeIds = new Set<number>();
 	collectTreeIds(recipeTree, treeIds);
@@ -353,7 +470,28 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		accumulateRequired(targetItemId, 1, true, new Set<number>());
 	}
 
-	const priceIds = [...requiredByItem.keys()];
+	const priceIdsSet = new Set<number>(requiredByItem.keys());
+	const collectRecipeDependencyIds = (itemId: number, stack: Set<number>) => {
+		if (stack.has(itemId)) return;
+		const recipe = recipeForItem(itemId);
+		if (!recipe || recipe.source === 'terminal' || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) return;
+
+		const nextStack = new Set(stack);
+		nextStack.add(itemId);
+		for (const ingredient of recipe.ingredients) {
+			const ingId = Number(ingredient.item_id);
+			const ingCount = Number(ingredient.count || 0);
+			if (!Number.isFinite(ingId) || ingId <= 0 || !Number.isFinite(ingCount) || ingCount <= 0) continue;
+			priceIdsSet.add(ingId);
+			collectRecipeDependencyIds(ingId, nextStack);
+		}
+	};
+
+	for (const itemId of requiredByItem.keys()) {
+		collectRecipeDependencyIds(itemId, new Set<number>());
+	}
+
+	const priceIds = [...priceIdsSet];
 	const prices = (
 		await Promise.all(
 			inBatches(priceIds).map((batch) =>
@@ -368,6 +506,43 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		priceById.set(price.id, price);
 	}
 
+	const estimateCraftUnitCost = (
+		itemId: number,
+		mode: 'buy' | 'sell',
+		stack: Set<number> = new Set<number>()
+	): number | null => {
+		if (stack.has(itemId)) return null;
+		const recipe = recipeForItem(itemId);
+		if (!recipe || recipe.source === 'terminal' || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) return null;
+
+		const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
+		const nextStack = new Set(stack);
+		nextStack.add(itemId);
+
+		let totalCost = 0;
+		for (const ingredient of recipe.ingredients) {
+			const ingId = Number(ingredient.item_id);
+			const ingCount = Number(ingredient.count || 0);
+			if (!Number.isFinite(ingId) || ingId <= 0 || !Number.isFinite(ingCount) || ingCount <= 0) continue;
+
+			const ingItem = itemsById[ingId];
+			const ingPrice = priceById.get(ingId);
+			const tpUnit = mode === 'buy' ? ingPrice?.buys?.unit_price ?? null : ingPrice?.sells?.unit_price ?? null;
+
+			let unit = tpUnit;
+			if (!(isTradingPostEligible(ingItem) && unit != null)) {
+				unit = estimateCraftUnitCost(ingId, mode, nextStack);
+			}
+
+			if (unit == null || !Number.isFinite(unit) || unit < 0) return null;
+			totalCost += unit * ingCount;
+		}
+
+		const perUnit = totalCost / outputCount;
+		if (!Number.isFinite(perUnit) || perUnit < 0) return null;
+		return perUnit;
+	};
+
 	const ingredients: IngredientRow[] = [...requiredByItem.entries()]
 		.map(([id, required]) => {
 			// `requiredByItem` is already net demand after consuming owned items,
@@ -381,8 +556,22 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const tpEligible = isTradingPostEligible(item);
 			const buyUnit = price?.buys?.unit_price ?? null;
 			const sellUnit = price?.sells?.unit_price ?? null;
-			const tpReason: IngredientRow['tpReason'] = !tpEligible ? 'bound' : (buyUnit == null && sellUnit == null ? 'no-listing' : 'ok');
-			return { id, required: needed, owned, missing, buyUnit, sellUnit, tpEligible, tpReason };
+			const estimatedBuyUnit = estimateCraftUnitCost(id, 'buy');
+			const estimatedSellUnit = estimateCraftUnitCost(id, 'sell');
+			const estimatedUnit = estimatedBuyUnit ?? estimatedSellUnit;
+
+			let tpReason: IngredientRow['tpReason'];
+			if (tpEligible && (buyUnit != null || sellUnit != null)) {
+				tpReason = 'ok';
+			} else if (estimatedUnit != null) {
+				tpReason = 'crafted';
+			} else if (!tpEligible) {
+				tpReason = 'bound';
+			} else {
+				tpReason = 'no-listing';
+			}
+
+			return { id, required: needed, owned, missing, buyUnit, sellUnit, estimatedUnit, tpEligible, tpReason };
 		})
 		.filter((row): row is IngredientRow => row !== null)
 		.sort((a, b) => b.missing - a.missing || a.id - b.id);

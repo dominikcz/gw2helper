@@ -28,6 +28,7 @@ ingredient: Ingredient
 required: Required
 owned: Owned
 missing: Missing
+missing_inline: (missing {count})
 unit_price: Unit price
 missing_cost: Missing cost
 total_cost: Total cost
@@ -38,6 +39,7 @@ total_missing_cost: Total missing cost
 missing_ingredients_count: Missing ingredients
 tp_status: Trading Post status
 tp_status_ok: Tradable
+tp_status_crafted: Crafted (estimated)
 tp_status_bound: Account/character bound
 tp_status_no_listing: No TP listing (vendor/account-bound/other)
 recipe_unavailable: Crafting recipe data is not available in the GW2 API for this legendary item.
