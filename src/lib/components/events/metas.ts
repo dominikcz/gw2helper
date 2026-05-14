@@ -1,7 +1,7 @@
 
 // extracted from https://wiki.guildwars2.com/wiki/Event_timers
 // https://wiki.guildwars2.com/index.php?title=Widget:Event_timer/data.json&action=raw
-// last update: 2026-05-11
+// last update: 2026-05-15
 // ------------------------------------------------------------
 
 // Event names, schedules, colours
@@ -2653,6 +2653,47 @@ export const wikiData = {
                 {
                     "r": 0,
                     "d": 85
+                }
+            ]
+        }
+    },
+    "voe-eg": {
+        "category": "Visions of Eternity",
+        "name": "Eternity's Garden",
+        "segments": {
+            "0": {
+                "name": "",
+                "bg": [
+                    250,
+                    160,
+                    125
+                ]
+            },
+            "1": {
+                "name": "Shackles of the Ancients",
+                "chatlink": "[\u0026BPwPAAA=]",
+                "bg": [
+                    242,
+                    126,
+                    84
+                ]
+            }
+        },
+        "sequences": {
+            "partial": [
+                {
+                    "r": 0,
+                    "d": 70
+                }
+            ],
+            "pattern": [
+                {
+                    "r": 1,
+                    "d": 25
+                },
+                {
+                    "r": 0,
+                    "d": 95
                 }
             ]
         }
