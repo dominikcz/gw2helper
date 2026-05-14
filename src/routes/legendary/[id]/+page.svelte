@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import Price from '$lib/components/currencies/price.svelte';
 	import ItemLabel from '$lib/components/items/itemLabel.svelte';
 	import Progress from '$lib/components/progress/progress.svelte';
@@ -13,17 +14,46 @@
 	}
 
 	let { data }: Props = $props();
+	type LegendaryDetails = NonNullable<Awaited<PageData['details']>>;
 	let priceMode = $state<'buy' | 'sell'>('buy');
-	type RecipeNode = NonNullable<NonNullable<PageData['details']>['recipeTree']>;
+	type RecipeNode = NonNullable<LegendaryDetails['recipeTree']>;
 	const expandedNodes = new SvelteSet<string>(['root']);
 	const decisionOverrides = new SvelteMap<string, 'tp' | 'craft'>();
+	let resolvedDetails = $state<LegendaryDetails | null>(null);
 
-	const rows = $derived(data.details?.ingredients || []);
+	const detailsPromise = $derived(data.details as Promise<LegendaryDetails> | LegendaryDetails | null);
+
+	$effect(() => {
+		const current = data.details as Promise<LegendaryDetails> | LegendaryDetails | null;
+		if (!current) {
+			resolvedDetails = null;
+			return;
+		}
+
+		if (typeof (current as Promise<LegendaryDetails>).then === 'function') {
+			let active = true;
+			(current as Promise<LegendaryDetails>)
+				.then((next) => {
+					if (active) resolvedDetails = next;
+				})
+				.catch(() => {
+					if (active) resolvedDetails = null;
+				});
+
+			return () => {
+				active = false;
+			};
+		}
+
+		resolvedDetails = current as LegendaryDetails;
+	});
+
+	const rows = $derived(resolvedDetails?.ingredients || []);
 	const pageTitle = $derived(
-		data.details?.targetItem?.name
-			? `GW2 Helper - ${data.details.targetItem.name}`
-			: data.details?.targetItemId
-				? `GW2 Helper - Legendary #${data.details.targetItemId}`
+		resolvedDetails?.targetItem?.name
+			? `GW2 Helper - ${resolvedDetails.targetItem.name}`
+			: data.targetItemId
+				? `GW2 Helper - Legendary #${data.targetItemId}`
 				: 'GW2 Helper - Legendary'
 	);
 	const totalMissingCost = $derived(
@@ -41,11 +71,11 @@
 	type PathMetric = { missing: number; cost: number | null };
 	const treeMetricsByPath = $derived.by(() => {
 		const out = new SvelteMap<string, PathMetric>();
-		const root = data.details?.recipeTree as RecipeNode | null | undefined;
+		const root = resolvedDetails?.recipeTree as RecipeNode | null | undefined;
 		if (!root) return out;
 
 		const ownedPool = new SvelteMap<number, number>();
-		for (const [id, count] of Object.entries(data.details?.ownedById || {})) {
+		for (const [id, count] of Object.entries(resolvedDetails?.ownedById || {})) {
 			const numId = Number(id);
 			const numCount = Number(count || 0);
 			if (!Number.isFinite(numId) || numId <= 0 || !Number.isFinite(numCount) || numCount <= 0) continue;
@@ -109,7 +139,7 @@
 	});
 
 	function itemInfo(id: number) {
-		return data.details?.itemsById?.[id];
+		return resolvedDetails?.itemsById?.[id];
 	}
 
 	function decisionLabel(decision: 'tp' | 'craft' | 'none') {
@@ -167,7 +197,7 @@
 	}
 
 	function ownedCount(id: number) {
-		return data.details?.ownedById?.[id] || 0;
+		return resolvedDetails?.ownedById?.[id] || 0;
 	}
 
 	function wikiHref(id: number) {
@@ -243,9 +273,9 @@
 	}
 
 	function expandAll() {
-		if (!data.details?.recipeTree) return;
+		if (!resolvedDetails?.recipeTree) return;
 		const next = new Set<string>();
-		collectPaths(data.details.recipeTree as RecipeNode, 'root', next);
+		collectPaths(resolvedDetails.recipeTree as RecipeNode, 'root', next);
 		expandedNodes.clear();
 		next.forEach((path) => expandedNodes.add(path));
 	}
@@ -275,10 +305,10 @@
 		<img class="hero-art" src={asset('/assets/550px-Legendary_unlock_book.png')} alt="" aria-hidden="true" />
 		<ItemLabel
 			class="neutral-label hero-item"
-			id={data.details.targetItemId}
-			name={data.details.targetItem?.name || `${$_('legendary.legendary')} #${data.details.targetItemId}`}
-			icon={data.details.targetItem?.icon}
-			href={wikiHref(data.details.targetItemId)}
+			id={resolvedDetails?.targetItemId || data.targetItemId}
+			name={resolvedDetails?.targetItem?.name || `${$_('legendary.legendary')} #${data.targetItemId}`}
+			icon={resolvedDetails?.targetItem?.icon}
+			href={wikiHref(resolvedDetails?.targetItemId || data.targetItemId)}
 			linkTitle={$_('common.click_for_wiki')}
 			linkCaption={true}
 			iconSize="3.1rem"
@@ -295,9 +325,11 @@
 
 	<section>
 		<h2>{$_('legendary.recipe_tree')}</h2>
-		{#if !data.details.recipeAvailable}
-			<p>{$_('legendary.recipe_unavailable')}</p>
-		{:else}
+		<Awaiter promise={detailsPromise as Promise<LegendaryDetails> | LegendaryDetails}>
+			{#snippet children(details)}
+				{#if !details.recipeAvailable}
+					<p>{$_('legendary.recipe_unavailable')}</p>
+				{:else}
 			<div class="tree-controls">
 				<button type="button" onclick={expandAll}>{$_('legendary.expand_all')}</button>
 				<button type="button" onclick={collapseAll}>{$_('legendary.collapse_all')}</button>
@@ -353,10 +385,10 @@
 										<label class="strategy-line">
 											<input
 												type="radio"
-												name={`acq-${priceMode}-${nodeRow.id}`}
+														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
 												disabled={!rowHasMultipleSources(nodeRow)}
 												checked={effectiveDecision(nodeRow) === 'tp'}
-												onchange={() => setDecision(nodeRow.id, 'tp')}
+														onclick={() => setDecision(nodeRow.id, 'tp')}
 											/>
 											<span class="strategy-name">TP</span>
 											<span class="strategy-price"><Price value={(rowTpUnit(nodeRow) as number) * missingCount} compact={false} /></span>
@@ -366,10 +398,10 @@
 										<label class="strategy-line">
 											<input
 												type="radio"
-												name={`acq-${priceMode}-${nodeRow.id}`}
+														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
 												disabled={!rowHasMultipleSources(nodeRow)}
 												checked={effectiveDecision(nodeRow) === 'craft'}
-												onchange={() => setDecision(nodeRow.id, 'craft')}
+														onclick={() => setDecision(nodeRow.id, 'craft')}
 											/>
 											<span class="strategy-name">CRAFT</span>
 											<span class="strategy-price"><Price value={(rowCraftUnit(nodeRow) as number) * missingCount} compact={false} /></span>
@@ -398,22 +430,26 @@
 			</li>
 			{/snippet}
 			<ul class="tree-root">
-				{#each ((data.details.recipeTree as RecipeNode).children || []) as child, idx (`root.${child.id}-${idx}`)}
+				{#each ((details.recipeTree as RecipeNode).children || []) as child, idx (`root.${child.id}-${idx}`)}
 					{@render recipeNode(child, `root.${child.id}-${idx}`)}
 				{/each}
 			</ul>
-		{/if}
+				{/if}
+			{/snippet}
+		</Awaiter>
 	</section>
 
 	<section>
 		<h2>{$_('legendary.missing_ingredients_count')}</h2>
-		{#if data.details.recipeAvailable}
+		<Awaiter promise={detailsPromise as Promise<LegendaryDetails> | LegendaryDetails}>
+			{#snippet children(details)}
+				{#if details.recipeAvailable}
 			<table>
 				<thead>
 					<tr>
 						<th colspan="2">{$_('legendary.ingredient')}</th>
-						<th class="num-col">{$_('legendary.unit_price')}</th>
-						<th class="num-col">{$_('legendary.total_cost')}</th>
+						<th class="num-col unit-col">{$_('legendary.unit_price')}</th>
+						<th class="num-col total-col">{$_('legendary.total_cost')}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -425,27 +461,69 @@
 						<tr class:done={row.missing === 0}>
 							<td class="num-col">{row.missing}</td>
 							<td class="ingredient-cell">
-								<ItemLabel
-									class="neutral-label"
-									id={row.id}
-									name={info?.name || `#${row.id}`}
-									icon={info?.icon}
-									href={wiki}
-									linkTitle={$_('common.click_for_wiki')}
-									linkCaption={true}
-									iconSize="1.2rem"
-								/>
+								<div class="ingredient-main-line">
+									<ItemLabel
+										class="neutral-label"
+										id={row.id}
+										name={info?.name || `#${row.id}`}
+										icon={info?.icon}
+										href={wiki}
+										linkTitle={$_('common.click_for_wiki')}
+										linkCaption={true}
+										iconSize="1.2rem"
+									/>
+									<span class="mobile-inline-total">
+										{#if rowCost != null}
+											<Price value={rowCost} />
+										{:else}
+											-
+										{/if}
+									</span>
+								</div>
+								<div class="mobile-pricing" aria-label="Mobile pricing details">
+									<div class="mobile-pricing-row">
+										<span class="mobile-pricing-label">{$_('legendary.unit_price')}</span>
+										<div class="price-options">
+											{#if rowHasSource(row, 'tp')}
+												<label class="strategy-line">
+													<input
+														type="radio"
+														name={`acq-mobile-${priceMode}-${row.id}`}
+														disabled={!rowHasMultipleSources(row)}
+														checked={effectiveDecision(row) === 'tp'}
+														onclick={() => setDecision(row.id, 'tp')}
+													/>
+													<span class="strategy-name">TP</span>
+													<span class="strategy-price"><Price value={rowTpUnit(row) as number} compact={false} /></span>
+												</label>
+											{/if}
+											{#if rowHasSource(row, 'craft')}
+												<label class="strategy-line">
+													<input
+														type="radio"
+														name={`acq-mobile-${priceMode}-${row.id}`}
+														disabled={!rowHasMultipleSources(row)}
+														checked={effectiveDecision(row) === 'craft'}
+														onclick={() => setDecision(row.id, 'craft')}
+													/>
+													<span class="strategy-name">CRAFT</span>
+													<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
+												</label>
+											{/if}
+										</div>
+									</div>
+								</div>
 							</td>
-							<td class="num-col">
+							<td class="num-col unit-col">
 								<div class="price-options">
 									{#if rowHasSource(row, 'tp')}
 										<label class="strategy-line">
 											<input
 												type="radio"
-												name={`acq-${priceMode}-${row.id}`}
+														name={`acq-table-${priceMode}-${row.id}`}
 												disabled={!rowHasMultipleSources(row)}
 												checked={effectiveDecision(row) === 'tp'}
-												onchange={() => setDecision(row.id, 'tp')}
+														onclick={() => setDecision(row.id, 'tp')}
 											/>
 											<span class="strategy-name">TP</span>
 											<span class="strategy-price"><Price value={rowTpUnit(row) as number} compact={false} /></span>
@@ -455,10 +533,10 @@
 										<label class="strategy-line">
 											<input
 												type="radio"
-												name={`acq-${priceMode}-${row.id}`}
+														name={`acq-table-${priceMode}-${row.id}`}
 												disabled={!rowHasMultipleSources(row)}
 												checked={effectiveDecision(row) === 'craft'}
-												onchange={() => setDecision(row.id, 'craft')}
+														onclick={() => setDecision(row.id, 'craft')}
 											/>
 											<span class="strategy-name">CRAFT</span>
 											<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
@@ -466,7 +544,7 @@
 									{/if}
 								</div>
 							</td>
-							<td class="num-col">
+							<td class="num-col total-col">
 								{#if rowCost != null}
 									<Price value={rowCost} />
 								{:else}
@@ -483,9 +561,11 @@
 					</tr>
 				</tfoot>
 			</table>
-		{:else}
-			<p>{$_('legendary.recipe_unavailable')}</p>
-		{/if}
+				{:else}
+					<p>{$_('legendary.recipe_unavailable')}</p>
+				{/if}
+			{/snippet}
+		</Awaiter>
 	</section>
 {/if}
 
@@ -678,6 +758,49 @@
 		min-width: 14rem;
 	}
 
+	.mobile-pricing {
+		display: none;
+		margin-top: 0.45rem;
+		padding-top: 0.35rem;
+		border-top: 1px dashed rgba(255, 255, 255, 0.16);
+	}
+
+	.mobile-pricing-row {
+		display: grid;
+		grid-template-columns: minmax(6.5rem, auto) minmax(0, 1fr);
+		align-items: start;
+		column-gap: 0.6rem;
+		margin-top: 0.25rem;
+	}
+
+	.mobile-pricing-label {
+		font-size: 0.8rem;
+		opacity: 0.8;
+		padding-top: 0.2rem;
+	}
+
+	.mobile-pricing .price-options {
+		display: flex;
+		min-width: 0;
+		width: 100%;
+	}
+
+	.mobile-pricing .strategy-line {
+		grid-template-columns: auto 3.2rem minmax(0, 1fr);
+	}
+
+	.mobile-pricing .strategy-price {
+		overflow-wrap: anywhere;
+	}
+
+	.ingredient-main-line {
+		display: block;
+	}
+
+	.mobile-inline-total {
+		display: none;
+	}
+
 	:global(.decision) {
 		font-weight: 700;
 	}
@@ -787,8 +910,121 @@
 			max-width: 100%;
 		}
 
+		.tree-root,
+		.tree-root ul {
+			padding-left: 0.75rem;
+		}
+
+		.tree-root {
+			padding-right: 0.25rem;
+		}
+
+		.node-row {
+			display: grid;
+			grid-template-columns: 1.1rem minmax(0, 1fr);
+			align-items: start;
+			column-gap: 0.45rem;
+			row-gap: 0.35rem;
+			padding-right: 0.45rem;
+		}
+
+		.node-row :global(.item-label) {
+			min-width: 0;
+		}
+
+		.node-missing-inline {
+			grid-column: 2;
+		}
+
+		.node-progress {
+			grid-column: 2;
+			margin-left: 0;
+			width: 100%;
+			display: inline-flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			gap: 0.3rem;
+		}
+
+		.node-cost {
+			min-width: 0;
+			justify-content: flex-start;
+		}
+
+		.node-strategy {
+			width: 100%;
+			font-size: 0.78em;
+		}
+
+		.node-strategy .strategy-line {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			column-gap: 0.35rem;
+			row-gap: 0.15rem;
+		}
+
+		.node-strategy .strategy-price {
+			margin-left: auto;
+			overflow-wrap: anywhere;
+		}
+
 		table {
+			width: 100%;
 			font-size: 0.85rem;
+		}
+
+		.unit-col,
+		.total-col {
+			display: none;
+		}
+
+		.mobile-pricing {
+			display: block;
+		}
+
+		.ingredient-main-line {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+			min-width: 0;
+		}
+
+		.ingredient-main-line :global(.item-label) {
+			min-width: 0;
+			flex: 1 1 auto;
+		}
+
+		.mobile-inline-total {
+			display: inline-flex;
+			justify-content: flex-end;
+			white-space: nowrap;
+			font-weight: 600;
+		}
+
+		.ingredient-cell {
+			padding-right: 0.35rem;
+		}
+
+		.ingredient-cell :global(.caption) {
+			max-width: 100%;
+		}
+
+		tfoot .summary-row td {
+			padding-top: 0.6rem;
+		}
+
+		tfoot .summary-row td:first-child,
+		tfoot .summary-row td:nth-child(2),
+		tfoot .summary-row td:nth-child(3) {
+			display: none;
+		}
+
+		tfoot .summary-row td:last-child {
+			display: table-cell;
+			text-align: right;
 		}
 	}
 </style>

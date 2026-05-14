@@ -248,8 +248,10 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	const key = apiService.getApiKey();
 	const targetItemId = Number(params.id);
 	if (!key || !Number.isFinite(targetItemId) || targetItemId <= 0) {
-		return { details: null };
+		return { targetItemId, details: null };
 	}
+
+	const detailsPromise = (async (): Promise<LegendaryDetailsData> => {
 
 	const fetchGw2 = async <T>(path: string, query: Record<string, string | number> = {}): Promise<T> => {
 		const search = new URLSearchParams();
@@ -589,5 +591,8 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		ownedById: mapToObj(ownedByItem),
 	};
 
-	return { details };
+	return details;
+	})();
+
+	return { targetItemId, details: detailsPromise };
 };
