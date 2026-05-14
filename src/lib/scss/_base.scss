@@ -54,3 +54,16 @@ section {
 html{
 	color-scheme: dark light;
 }
+
+main a:not(.item-link):not(.autotooltip):not(.share-page):not(.no-external-link-icon) {
+	color: var(--gw2helper-link-color);
+}
+
+main a:not(.item-link):not(.autotooltip):not(.share-page):not(.no-external-link-icon):visited {
+	color: var(--gw2helper-link-visited);
+}
+
+main a:not(.item-link):not(.autotooltip):not(.share-page):not(.no-external-link-icon):hover,
+main a:not(.item-link):not(.autotooltip):not(.share-page):not(.no-external-link-icon):focus-visible {
+	color: var(--gw2helper-link-hover);
+}

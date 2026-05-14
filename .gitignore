@@ -10,3 +10,8 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vscode
 test-results/
+
+# Generated helper artifacts (temporary)
+legendaries_all.json
+recipies_all.json
+reports/

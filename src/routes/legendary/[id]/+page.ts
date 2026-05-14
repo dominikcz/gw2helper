@@ -30,9 +30,13 @@ type IngredientRow = {
 	missing: number;
 	buyUnit: number | null;
 	sellUnit: number | null;
-	estimatedUnit: number | null;
+	craftBuyUnit: number | null;
+	craftSellUnit: number | null;
+	bestBuyUnit: number | null;
+	bestSellUnit: number | null;
+	bestBuySource: 'tp' | 'craft' | 'none';
+	bestSellSource: 'tp' | 'craft' | 'none';
 	tpEligible: boolean;
-	tpReason: 'ok' | 'bound' | 'no-listing' | 'crafted';
 };
 
 type CacheIngredient = {
@@ -67,10 +71,6 @@ type LegendaryDetailsData = {
 const BATCH_SIZE = 200;
 const CACHE_URLS = [
 	`${base}/legendary_recipes_cache.json`,
-	`${base}/static/legendary_recipes_cache.kudzu.v3.json`,
-	`${base}/legendary_recipes_cache.kudzu.v3.json`,
-	`${base}/legendary_recipes_cache.kudzu.v2.json`,
-	`${base}/legendary_recipes_cache.kudzu.json`,
 ];
 
 const recipeSourceRank: Record<CacheRecipe['source'], number> = {
@@ -108,13 +108,56 @@ const normalizeCacheRecipe = (entry: unknown): CacheRecipe | null => {
 				.filter((ingredient): ingredient is { item_id: number; count: number; name: string | null } => ingredient !== null)
 		: [];
 
+	const normalizedIngredients = (() => {
+		if (raw.source !== 'wiki' || !ingredients.length) return ingredients;
+
+		const blocks: typeof ingredients[] = [];
+		let block: typeof ingredients = [];
+		let blockStartId: number | null = null;
+
+		for (const ingredient of ingredients) {
+			if (!block.length) {
+				block = [ingredient];
+				blockStartId = ingredient.item_id;
+				continue;
+			}
+
+			const looksLikeAltRestart = blockStartId != null && block.length > 1 && ingredient.item_id === blockStartId;
+			if (looksLikeAltRestart) {
+				blocks.push(block);
+				block = [ingredient];
+				blockStartId = ingredient.item_id;
+				continue;
+			}
+
+			block.push(ingredient);
+		}
+
+		if (block.length) blocks.push(block);
+		if (blocks.length <= 1) return ingredients;
+
+		const score = (recipeBlock: typeof ingredients) =>
+			recipeBlock.reduce((sum, ingredient) => sum + Math.max(0, Number(ingredient.count || 0)), 0);
+
+		const best = [...blocks].sort((a, b) => {
+			const scoreDiff = score(b) - score(a);
+			if (scoreDiff !== 0) return scoreDiff;
+			if (a.length !== b.length) return a.length - b.length;
+			return 0;
+		})[0];
+
+		// Some wiki pages include multiple alternative recipes in one section.
+		// Keep the strongest single block instead of concatenating all alternatives.
+		return best;
+	})();
+
 	return {
 		source: raw.source,
 		output_item_id: raw.output_item_id,
 		recipe_id: raw.recipe_id ?? null,
 		output_item_count: isFinitePositiveNumber(raw.output_item_count) ? Number(raw.output_item_count) : 1,
 		wiki_page: raw.wiki_page,
-		ingredients,
+		ingredients: normalizedIngredients,
 	};
 };
 
@@ -128,7 +171,7 @@ const pickBetterRecipe = (current: CacheRecipe | undefined, next: CacheRecipe): 
 	const currentIngredientCount = current.ingredients.length;
 	const nextIngredientCount = next.ingredients.length;
 	if (nextIngredientCount !== currentIngredientCount) {
-		return nextIngredientCount > currentIngredientCount ? next : current;
+		return nextIngredientCount < currentIngredientCount ? next : current;
 	}
 
 	const currentOutputCount = Number(current.output_item_count || 1);
@@ -136,75 +179,6 @@ const pickBetterRecipe = (current: CacheRecipe | undefined, next: CacheRecipe): 
 	if (nextOutputCount !== currentOutputCount) return nextOutputCount > currentOutputCount ? next : current;
 
 	return current;
-};
-
-// Fallbacks for known Mystic Forge gifts when cache is missing wiki recipe parsing.
-const STATIC_RECIPE_FALLBACKS: Record<number, CacheRecipe> = {
-	19672: {
-		source: 'wiki',
-		output_item_id: 19672,
-		recipe_id: null,
-		output_item_count: 1,
-		wiki_page: 'Gift of Might',
-		ingredients: [
-			{ item_id: 24357, count: 250, name: 'Vicious Fang' },
-			{ item_id: 24289, count: 250, name: 'Armored Scale' },
-			{ item_id: 24351, count: 250, name: 'Vicious Claw' },
-			{ item_id: 24358, count: 250, name: 'Ancient Bone' },
-		],
-	},
-	19673: {
-		source: 'wiki',
-		output_item_id: 19673,
-		recipe_id: null,
-		output_item_count: 1,
-		wiki_page: 'Gift of Magic',
-		ingredients: [
-			{ item_id: 24295, count: 250, name: 'Vial of Powerful Blood' },
-			{ item_id: 24283, count: 250, name: 'Powerful Venom Sac' },
-			{ item_id: 24300, count: 250, name: 'Elaborate Totem' },
-			{ item_id: 24277, count: 250, name: 'Pile of Crystalline Dust' },
-		],
-	},
-	19674: {
-		source: 'wiki',
-		output_item_id: 19674,
-		recipe_id: null,
-		output_item_count: 1,
-		wiki_page: 'Gift of Mastery',
-		ingredients: [
-			{ item_id: 20797, count: 1, name: 'Bloodstone Shard' },
-			{ item_id: 19925, count: 250, name: 'Obsidian Shard' },
-			{ item_id: 19677, count: 1, name: 'Gift of Exploration' },
-			{ item_id: 19678, count: 1, name: 'Gift of Battle' },
-		],
-	},
-	19626: {
-		source: 'wiki',
-		output_item_id: 19626,
-		recipe_id: null,
-		output_item_count: 1,
-		wiki_page: 'Gift of Fortune',
-		ingredients: [
-			{ item_id: 19672, count: 1, name: 'Gift of Might' },
-			{ item_id: 19673, count: 1, name: 'Gift of Magic' },
-			{ item_id: 19675, count: 77, name: 'Mystic Clover' },
-			{ item_id: 19721, count: 250, name: 'Glob of Ectoplasm' },
-		],
-	},
-	// Expected-value approximation from Mystic Forge clover recipe.
-	19675: {
-		source: 'wiki',
-		output_item_id: 19675,
-		recipe_id: null,
-		output_item_count: 3.2,
-		wiki_page: 'Mystic Clover',
-		ingredients: [
-			{ item_id: 19721, count: 10, name: 'Glob of Ectoplasm' },
-			{ item_id: 19976, count: 10, name: 'Mystic Coin' },
-			{ item_id: 19925, count: 10, name: 'Obsidian Shard' },
-		],
-	},
 };
 
 const inBatches = <T>(input: T[], size = BATCH_SIZE): T[][] => {
@@ -327,7 +301,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		if (cached && !(cached.source === 'terminal' && (!Array.isArray(cached.ingredients) || cached.ingredients.length === 0))) {
 			return cached;
 		}
-		return STATIC_RECIPE_FALLBACKS[itemId] || cached;
+		return cached;
 	};
 
 	const buildTreeFromCache = (
@@ -439,9 +413,8 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			});
 			const hasRecipe = Boolean(recipe && recipe.source !== 'terminal' && validIngredients.length);
 			const item = itemsById[itemId];
-			const isMysticForgeComposite = Boolean(item?.name && /^gift of\s+/i.test(item.name));
 
-			if (!isRootNode && (!hasRecipe || (isTradingPostEligible(item) && !isMysticForgeComposite))) {
+			if (!isRootNode && (!hasRecipe || isTradingPostEligible(item))) {
 				requiredByItem.set(itemId, (requiredByItem.get(itemId) || 0) + remaining);
 				return;
 			}
@@ -456,7 +429,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 				return;
 			}
 
-			const outputCount = Math.max(1, Number(recipe.output_item_count || 1));
+			const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
 			const craftsNeeded = Math.ceil(remaining / outputCount);
 			const nextStack = new Set(stack);
 			nextStack.add(itemId);
@@ -515,11 +488,19 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		const recipe = recipeForItem(itemId);
 		if (!recipe || recipe.source === 'terminal' || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) return null;
 
+		const currentItem = itemsById[itemId];
+		if (isTradingPostEligible(currentItem) && recipe.source === 'wiki') {
+			// Do not model Mystic Forge conversions for tradeable materials.
+			// For market items we prefer direct TP valuation over probabilistic/inefficient transmutation chains.
+			return null;
+		}
+
 		const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
 		const nextStack = new Set(stack);
 		nextStack.add(itemId);
 
 		let totalCost = 0;
+		let hasKnownCost = false;
 		for (const ingredient of recipe.ingredients) {
 			const ingId = Number(ingredient.item_id);
 			const ingCount = Number(ingredient.count || 0);
@@ -529,18 +510,36 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const ingPrice = priceById.get(ingId);
 			const tpUnit = mode === 'buy' ? ingPrice?.buys?.unit_price ?? null : ingPrice?.sells?.unit_price ?? null;
 
-			let unit = tpUnit;
-			if (!(isTradingPostEligible(ingItem) && unit != null)) {
-				unit = estimateCraftUnitCost(ingId, mode, nextStack);
+			let unit: number | null = null;
+			if (isTradingPostEligible(ingItem)) {
+				// Opportunity cost: if the ingredient is tradeable, value it at TP instead of chaining more crafting.
+				unit = tpUnit;
+			} else {
+				unit = estimateCraftUnitCost(ingId, mode, nextStack) ?? tpUnit;
 			}
 
-			if (unit == null || !Number.isFinite(unit) || unit < 0) return null;
+			if (unit == null || !Number.isFinite(unit) || unit < 0) continue;
 			totalCost += unit * ingCount;
+			hasKnownCost = true;
 		}
+
+		if (!hasKnownCost) return null;
 
 		const perUnit = totalCost / outputCount;
 		if (!Number.isFinite(perUnit) || perUnit < 0) return null;
 		return perUnit;
+	};
+
+	const pickBestUnit = (
+		tpUnit: number | null,
+		craftUnit: number | null
+	): { unit: number | null; source: 'tp' | 'craft' | 'none' } => {
+		if (tpUnit != null && craftUnit != null) {
+			return tpUnit <= craftUnit ? { unit: tpUnit, source: 'tp' } : { unit: craftUnit, source: 'craft' };
+		}
+		if (tpUnit != null) return { unit: tpUnit, source: 'tp' };
+		if (craftUnit != null) return { unit: craftUnit, source: 'craft' };
+		return { unit: null, source: 'none' };
 	};
 
 	const ingredients: IngredientRow[] = [...requiredByItem.entries()]
@@ -556,22 +555,26 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const tpEligible = isTradingPostEligible(item);
 			const buyUnit = price?.buys?.unit_price ?? null;
 			const sellUnit = price?.sells?.unit_price ?? null;
-			const estimatedBuyUnit = estimateCraftUnitCost(id, 'buy');
-			const estimatedSellUnit = estimateCraftUnitCost(id, 'sell');
-			const estimatedUnit = estimatedBuyUnit ?? estimatedSellUnit;
+			const craftBuyUnit = estimateCraftUnitCost(id, 'buy');
+			const craftSellUnit = estimateCraftUnitCost(id, 'sell');
+			const bestBuy = pickBestUnit(tpEligible ? buyUnit : null, craftBuyUnit);
+			const bestSell = pickBestUnit(tpEligible ? sellUnit : null, craftSellUnit);
 
-			let tpReason: IngredientRow['tpReason'];
-			if (tpEligible && (buyUnit != null || sellUnit != null)) {
-				tpReason = 'ok';
-			} else if (estimatedUnit != null) {
-				tpReason = 'crafted';
-			} else if (!tpEligible) {
-				tpReason = 'bound';
-			} else {
-				tpReason = 'no-listing';
-			}
-
-			return { id, required: needed, owned, missing, buyUnit, sellUnit, estimatedUnit, tpEligible, tpReason };
+			return {
+				id,
+				required: needed,
+				owned,
+				missing,
+				buyUnit,
+				sellUnit,
+				craftBuyUnit,
+				craftSellUnit,
+				bestBuyUnit: bestBuy.unit,
+				bestSellUnit: bestSell.unit,
+				bestBuySource: bestBuy.source,
+				bestSellSource: bestSell.source,
+				tpEligible,
+			};
 		})
 		.filter((row): row is IngredientRow => row !== null)
 		.sort((a, b) => b.missing - a.missing || a.id - b.id);

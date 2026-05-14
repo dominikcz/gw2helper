@@ -71,7 +71,9 @@ $box-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	--gw2helper-tooltip-background: #222;
 	--gw2helper-tooltip-text: #f0f0f0;
 
-	--gw2helper-link-color: blue;
+	--gw2helper-link-color: #0b57b7;
+	--gw2helper-link-visited: #5b2a87;
+	--gw2helper-link-hover: #003f8f;
 	--gw2helper-external-link-color: #dfdec8;
 	--gw2helper-external-link-hover: #cec7a5;
 	--gw2helper-info: #bae8a2;
@@ -127,7 +129,9 @@ body {
 		--gw2helper-info: #47703e;
 		--gw2helper-error: #cc2626;
 
-		--gw2helper-link-color: #fff;
+		--gw2helper-link-color: #d7e8ff;
+		--gw2helper-link-visited: #f2dbff;
+		--gw2helper-link-hover: #ffffff;
 		--gw2helper-external-link-color: #dfdec8;
 		--gw2helper-external-link-hover: #cec7a5;
 

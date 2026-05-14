@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
-	import { SvelteSet } from 'svelte/reactivity';
+	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import Price from '$lib/components/currencies/price.svelte';
 	import ItemLabel from '$lib/components/items/itemLabel.svelte';
 	import Progress from '$lib/components/progress/progress.svelte';
@@ -16,8 +16,16 @@
 	let priceMode = $state<'buy' | 'sell'>('buy');
 	type RecipeNode = NonNullable<NonNullable<PageData['details']>['recipeTree']>;
 	const expandedNodes = new SvelteSet<string>(['root']);
+	const decisionOverrides = new SvelteMap<string, 'tp' | 'craft'>();
 
 	const rows = $derived(data.details?.ingredients || []);
+	const pageTitle = $derived(
+		data.details?.targetItem?.name
+			? `GW2 Helper - ${data.details.targetItem.name}`
+			: data.details?.targetItemId
+				? `GW2 Helper - Legendary #${data.details.targetItemId}`
+				: 'GW2 Helper - Legendary'
+	);
 	const totalMissingCost = $derived(
 		rows.reduce((sum, row) => {
 			if (!row.missing) return sum;
@@ -29,22 +37,132 @@
 		}, 0)
 	);
 
-	const rowById = $derived(new Map(rows.map((row) => [row.id, row] as const)));
+	const rowById = $derived(new SvelteMap(rows.map((row) => [row.id, row] as const)));
+	type PathMetric = { missing: number; cost: number | null };
+	const treeMetricsByPath = $derived.by(() => {
+		const out = new SvelteMap<string, PathMetric>();
+		const root = data.details?.recipeTree as RecipeNode | null | undefined;
+		if (!root) return out;
+
+		const ownedPool = new SvelteMap<number, number>();
+		for (const [id, count] of Object.entries(data.details?.ownedById || {})) {
+			const numId = Number(id);
+			const numCount = Number(count || 0);
+			if (!Number.isFinite(numId) || numId <= 0 || !Number.isFinite(numCount) || numCount <= 0) continue;
+			ownedPool.set(numId, numCount);
+		}
+
+		const visit = (node: RecipeNode, path: string): PathMetric => {
+			if (node.cycle) {
+				const metric = { missing: node.count, cost: null };
+				out.set(path, metric);
+				return metric;
+			}
+
+			const available = ownedPool.get(node.id) || 0;
+			const consumed = Math.min(available, node.count);
+			if (consumed > 0) {
+				ownedPool.set(node.id, available - consumed);
+			}
+
+			const missing = Math.max(0, node.count - consumed);
+			if (missing <= 0) {
+				const metric = { missing: 0, cost: 0 };
+				out.set(path, metric);
+				return metric;
+			}
+
+			const row = rowById.get(node.id);
+			const unit = row ? rowUnit(row) : null;
+			const directCost = unit != null ? unit * missing : null;
+
+			// If this node has an explicit acquisition strategy row, stop here.
+			// This prevents deep expansion of market-material conversion chains.
+			if (row) {
+				const metric = { missing, cost: directCost };
+				out.set(path, metric);
+				return metric;
+			}
+
+			if (!node.children.length) {
+				const metric = { missing, cost: directCost };
+				out.set(path, metric);
+				return metric;
+			}
+
+			let childrenTotal = 0;
+			let hasChildrenCost = false;
+			node.children.forEach((child, idx) => {
+				const childMetric = visit(child, `${path}.${child.id}-${idx}`);
+				if (childMetric.cost == null) return;
+				hasChildrenCost = true;
+				childrenTotal += childMetric.cost;
+			});
+
+			const metric = { missing, cost: hasChildrenCost ? childrenTotal : directCost };
+			out.set(path, metric);
+			return metric;
+		};
+
+		visit(root, 'root');
+		return out;
+	});
 
 	function itemInfo(id: number) {
 		return data.details?.itemsById?.[id];
 	}
 
-	function tpReasonLabel(reason: 'ok' | 'bound' | 'no-listing' | 'crafted') {
-		if (reason === 'crafted') return $_('legendary.tp_status_crafted');
-		if (reason === 'bound') return $_('legendary.tp_status_bound');
-		if (reason === 'no-listing') return $_('legendary.tp_status_no_listing');
-		return $_('legendary.tp_status_ok');
+	function decisionLabel(decision: 'tp' | 'craft' | 'none') {
+		if (decision === 'tp') return 'TP';
+		if (decision === 'craft') return 'CRAFT';
+		return '-';
+	}
+
+	function decisionKey(id: number) {
+		return `${priceMode}:${id}`;
+	}
+
+	function setDecision(id: number, decision: 'tp' | 'craft') {
+		decisionOverrides.set(decisionKey(id), decision);
+	}
+
+	function rowTpUnit(row: (typeof rows)[number]) {
+		return priceMode === 'buy' ? row.buyUnit : row.sellUnit;
+	}
+
+	function rowCraftUnit(row: (typeof rows)[number]) {
+		return priceMode === 'buy' ? row.craftBuyUnit : row.craftSellUnit;
+	}
+
+	function rowDecision(row: (typeof rows)[number]) {
+		return priceMode === 'buy' ? row.bestBuySource : row.bestSellSource;
+	}
+
+	function rowHasSource(row: (typeof rows)[number], source: 'tp' | 'craft') {
+		const unit = source === 'tp' ? rowTpUnit(row) : rowCraftUnit(row);
+		return unit != null && Number.isFinite(unit) && unit >= 0;
+	}
+
+	function rowHasMultipleSources(row: (typeof rows)[number]) {
+		return rowHasSource(row, 'tp') && rowHasSource(row, 'craft');
+	}
+
+	function effectiveDecision(row: (typeof rows)[number]): 'tp' | 'craft' | 'none' {
+		const override = decisionOverrides.get(decisionKey(row.id));
+		if (override && rowHasSource(row, override)) return override;
+
+		const auto = rowDecision(row);
+		if ((auto === 'tp' || auto === 'craft') && rowHasSource(row, auto)) return auto;
+
+		if (rowHasSource(row, 'tp')) return 'tp';
+		if (rowHasSource(row, 'craft')) return 'craft';
+		return 'none';
 	}
 
 	function rowUnit(row: (typeof rows)[number]) {
-		if (row.tpReason === 'ok') return priceMode === 'buy' ? row.buyUnit : row.sellUnit;
-		if (row.tpReason === 'crafted') return row.estimatedUnit;
+		const decision = effectiveDecision(row);
+		if (decision === 'tp') return rowTpUnit(row);
+		if (decision === 'craft') return rowCraftUnit(row);
 		return null;
 	}
 
@@ -61,53 +179,31 @@
 		return Math.max(1, required);
 	}
 
-	function nodeProgressValue(id: number, required: number) {
-		return Math.min(nodeProgressMax(required), ownedCount(id));
-	}
-
-	function nodeProgressLabel(id: number, required: number) {
-		const owned = Math.min(nodeProgressMax(required), ownedCount(id));
-		return `${owned}/${required}`;
-	}
-
-	function nodeEnough(id: number, required: number) {
-		return ownedCount(id) >= required;
-	}
-
 	function nodeMissing(id: number, required: number) {
 		return Math.max(0, required - ownedCount(id));
 	}
 
-	function nodeDirectMissingCost(id: number, required: number) {
-		const row = rowById.get(id);
-		if (!row) return null;
-		const unit = rowUnit(row);
-		if (unit == null) return null;
-		const missing = nodeMissing(id, required);
-		if (missing <= 0) return 0;
-		return unit * missing;
+	function nodeMissingAtPath(node: RecipeNode, path: string) {
+		const metric = treeMetricsByPath.get(path);
+		if (metric) return metric.missing;
+		return nodeMissing(node.id, node.count);
 	}
 
-	function nodeMissingCost(node: RecipeNode): number | null {
-		if (node.cycle) return null;
-		const directCost = nodeDirectMissingCost(node.id, node.count);
-		if (!node.children.length) return directCost;
-
-		let total = 0;
-		let hasChildCost = false;
-		for (const child of node.children) {
-			const childCost = nodeMissingCost(child);
-			if (childCost == null) continue;
-			hasChildCost = true;
-			total += childCost;
-		}
-
-		if (hasChildCost) return total;
-		return directCost;
+	function nodeProgressValueAtPath(node: RecipeNode, path: string) {
+		const missing = nodeMissingAtPath(node, path);
+		const fulfilled = Math.max(0, node.count - missing);
+		return Math.min(nodeProgressMax(node.count), fulfilled);
 	}
 
-	function canExpandNode(node: RecipeNode) {
-		return node.children.length > 0 && !nodeEnough(node.id, node.count);
+	function nodeProgressLabelAtPath(node: RecipeNode, path: string) {
+		const missing = nodeMissingAtPath(node, path);
+		const fulfilled = Math.max(0, node.count - missing);
+		return `${fulfilled}/${node.count}`;
+	}
+
+	function canExpandNode(node: RecipeNode, path: string) {
+		if (rowById.has(node.id)) return false;
+		return node.children.length > 0 && nodeMissingAtPath(node, path) > 0;
 	}
 
 	function isInteractiveTarget(target: EventTarget | null) {
@@ -116,13 +212,13 @@
 	}
 
 	function onNodeRowClick(event: MouseEvent, node: RecipeNode, path: string) {
-		if (!canExpandNode(node)) return;
+		if (!canExpandNode(node, path)) return;
 		if (isInteractiveTarget(event.target)) return;
 		toggleNode(path);
 	}
 
 	function onNodeRowKeydown(event: KeyboardEvent, node: RecipeNode, path: string) {
-		if (!canExpandNode(node)) return;
+		if (!canExpandNode(node, path)) return;
 		if (event.key !== 'Enter' && event.key !== ' ') return;
 		event.preventDefault();
 		toggleNode(path);
@@ -142,7 +238,7 @@
 
 	function collectPaths(node: RecipeNode, path: string, out: Set<string>) {
 		out.add(path);
-		if (!canExpandNode(node)) return;
+		if (!canExpandNode(node, path)) return;
 		node.children.forEach((child, idx) => collectPaths(child, `${path}.${child.id}-${idx}`, out));
 	}
 
@@ -159,6 +255,10 @@
 		expandedNodes.add('root');
 	}
 </script>
+
+<svelte:head>
+	<title>{pageTitle}</title>
+</svelte:head>
 
 {#if !data.details}
 	<h1>{$_('legendary.legendary')}</h1>
@@ -203,20 +303,21 @@
 				<button type="button" onclick={collapseAll}>{$_('legendary.collapse_all')}</button>
 			</div>
 			{#snippet recipeNode(node: RecipeNode, path: string)}
-			{@const missingCost = nodeMissingCost(node)}
-			{@const missingCount = nodeMissing(node.id, node.count)}
+			{@const pathMetric = treeMetricsByPath.get(path)}
+			{@const missingCost = pathMetric?.cost ?? null}
+			{@const missingCount = pathMetric?.missing ?? nodeMissing(node.id, node.count)}
 			<li>
 				<div
 					class="node-row"
-					class:owned={nodeEnough(node.id, node.count)}
-					class:not-owned={!nodeEnough(node.id, node.count)}
+					class:owned={missingCount <= 0}
+					class:not-owned={missingCount > 0}
 					onclick={(event) => onNodeRowClick(event, node, path)}
 					onkeydown={(event) => onNodeRowKeydown(event, node, path)}
 					role="button"
 					tabindex="0"
-					aria-expanded={canExpandNode(node) ? isExpanded(path) : undefined}
+					aria-expanded={canExpandNode(node, path) ? isExpanded(path) : undefined}
 				>
-					{#if canExpandNode(node)}
+					{#if canExpandNode(node, path)}
 						<span class="tree-toggle" class:expanded={isExpanded(path)} aria-hidden="true">►</span>
 					{:else}
 						<span class="tree-leaf" aria-hidden="true"></span>
@@ -233,27 +334,61 @@
 						href={wikiHref(node.id)}
 						linkTitle={$_('common.click_for_wiki')}
 					/>
-					{#if missingCount > 0}
+					{#if missingCount > 1}
 						<span class="node-missing-inline">{$_('legendary.missing_inline', { count: missingCount })}</span>
 					{/if}
 					<span
 						class="node-progress"
-						title={$_('legendary.progress_owned_required', { owned: ownedCount(node.id), required: node.count })}
+						title={$_('legendary.progress_owned_required', {
+							owned: nodeProgressValueAtPath(node, path),
+							required: node.count,
+						})}
 					>
-						{#if missingCost != null}
+						{#if missingCost != null && missingCost > 0}
 							<span class="node-cost"><Price value={missingCost} /></span>
+							{@const nodeRow = rowById.get(node.id)}
+							{#if nodeRow && missingCount > 0}
+								<span class="node-strategy" title="Optimal acquisition">
+									{#if rowHasSource(nodeRow, 'tp')}
+										<label class="strategy-line">
+											<input
+												type="radio"
+												name={`acq-${priceMode}-${nodeRow.id}`}
+												disabled={!rowHasMultipleSources(nodeRow)}
+												checked={effectiveDecision(nodeRow) === 'tp'}
+												onchange={() => setDecision(nodeRow.id, 'tp')}
+											/>
+											<span class="strategy-name">TP</span>
+											<span class="strategy-price"><Price value={(rowTpUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+										</label>
+									{/if}
+									{#if rowHasSource(nodeRow, 'craft')}
+										<label class="strategy-line">
+											<input
+												type="radio"
+												name={`acq-${priceMode}-${nodeRow.id}`}
+												disabled={!rowHasMultipleSources(nodeRow)}
+												checked={effectiveDecision(nodeRow) === 'craft'}
+												onchange={() => setDecision(nodeRow.id, 'craft')}
+											/>
+											<span class="strategy-name">CRAFT</span>
+											<span class="strategy-price"><Price value={(rowCraftUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+										</label>
+									{/if}
+								</span>
+							{/if}
 						{/if}
 						<Progress
 							max={nodeProgressMax(node.count)}
-							value={nodeProgressValue(node.id, node.count)}
-							label={nodeProgressLabel(node.id, node.count)}
+							value={nodeProgressValueAtPath(node, path)}
+							label={nodeProgressLabelAtPath(node, path)}
 						/>
 					</span>
 					{#if node.cycle}
 						<span class="chip warning">{$_('legendary.cycle')}</span>
 					{/if}
 				</div>
-				{#if canExpandNode(node) && isExpanded(path)}
+				{#if canExpandNode(node, path) && isExpanded(path)}
 					<ul>
 						{#each node.children as child, idx (`${path}.${child.id}-${idx}`)}
 							{@render recipeNode(child, `${path}.${child.id}-${idx}`)}
@@ -300,16 +435,36 @@
 									linkCaption={true}
 									iconSize="1.2rem"
 								/>
-								{#if row.tpReason === 'crafted'}
-									<span class="chip crafted" title={tpReasonLabel(row.tpReason)}>{$_('legendary.tp_status_crafted')}</span>
-								{/if}
 							</td>
 							<td class="num-col">
-								{#if unit != null}
-									<Price value={unit} />
-								{:else}
-									-
-								{/if}
+								<div class="price-options">
+									{#if rowHasSource(row, 'tp')}
+										<label class="strategy-line">
+											<input
+												type="radio"
+												name={`acq-${priceMode}-${row.id}`}
+												disabled={!rowHasMultipleSources(row)}
+												checked={effectiveDecision(row) === 'tp'}
+												onchange={() => setDecision(row.id, 'tp')}
+											/>
+											<span class="strategy-name">TP</span>
+											<span class="strategy-price"><Price value={rowTpUnit(row) as number} compact={false} /></span>
+										</label>
+									{/if}
+									{#if rowHasSource(row, 'craft')}
+										<label class="strategy-line">
+											<input
+												type="radio"
+												name={`acq-${priceMode}-${row.id}`}
+												disabled={!rowHasMultipleSources(row)}
+												checked={effectiveDecision(row) === 'craft'}
+												onchange={() => setDecision(row.id, 'craft')}
+											/>
+											<span class="strategy-name">CRAFT</span>
+											<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
+										</label>
+									{/if}
+								</div>
 							</td>
 							<td class="num-col">
 								{#if rowCost != null}
@@ -483,9 +638,79 @@
 		justify-content: flex-end;
 	}
 
+	.node-strategy {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.2rem;
+		font-size: 0.82em;
+		opacity: 0.95;
+	}
+
+	.strategy-line {
+		display: grid;
+		grid-template-columns: auto 3.7rem minmax(7.5rem, 1fr);
+		align-items: center;
+		column-gap: 0.3rem;
+		width: 100%;
+	}
+
+	.strategy-line input[type='radio'] {
+		margin: 0;
+	}
+
+	.strategy-name {
+		font-weight: 700;
+		text-align: left;
+	}
+
+	.strategy-price {
+		justify-self: end;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.price-options {
+		display: inline-flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		align-items: stretch;
+		min-width: 14rem;
+	}
+
+	:global(.decision) {
+		font-weight: 700;
+	}
+
 	.node-missing-inline {
 		opacity: 0.85;
 		font-size: 0.9em;
+	}
+
+	.ingredient-cell :global(.caption-link) {
+		color: var(--gw2helper-link-color);
+	}
+
+	.ingredient-cell :global(.caption-link .caption) {
+		color: var(--gw2helper-link-color);
+	}
+
+	.ingredient-cell :global(.caption-link:visited) {
+		color: var(--gw2helper-link-visited);
+	}
+
+	.ingredient-cell :global(.caption-link:visited .caption) {
+		color: var(--gw2helper-link-visited);
+	}
+
+	.ingredient-cell :global(.caption-link:hover),
+	.ingredient-cell :global(.caption-link:focus-visible) {
+		color: var(--gw2helper-link-hover);
+	}
+
+	.ingredient-cell :global(.caption-link:hover .caption),
+	.ingredient-cell :global(.caption-link:focus-visible .caption) {
+		color: var(--gw2helper-link-hover);
 	}
 
 	.warning {
@@ -538,12 +763,6 @@
 		padding-right: 3em;
 	}
 
-	.ingredient-cell .chip.crafted {
-		margin-left: 0.45rem;
-		font-size: 0.72rem;
-		opacity: 0.9;
-	}
-	
 	.ingredient-cell :global(.item-label) {
 		display: inline-flex;
 		align-items: center;
