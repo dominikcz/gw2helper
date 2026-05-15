@@ -10,6 +10,10 @@ type RecipeTreeNode = {
 	recipeId?: number;
 	source?: 'api' | 'wiki' | 'terminal';
 	cycle?: boolean;
+	name?: string | null;
+	icon_url?: string;
+	gold_cost?: number;
+	acquisition?: ItemAcquisition | null;
 	children: RecipeTreeNode[];
 };
 
@@ -37,12 +41,29 @@ type IngredientRow = {
 	bestBuySource: 'tp' | 'craft' | 'none';
 	bestSellSource: 'tp' | 'craft' | 'none';
 	tpEligible: boolean;
+	acquisition: ItemAcquisition | null;
 };
 
 type CacheIngredient = {
 	item_id: number | null;
 	count: number;
 	name?: string | null;
+};
+
+type VendorCost = {
+	amount: number;
+	item_name: string;
+	icon_url?: string;
+};
+
+type VendorAcquisition = {
+	name: string;
+	cost: VendorCost[];
+	gold_cost?: number;
+};
+
+type ItemAcquisition = {
+	vendors: VendorAcquisition[];
 };
 
 type CacheRecipe = {
@@ -52,6 +73,7 @@ type CacheRecipe = {
 	output_item_count?: number;
 	wiki_page?: string;
 	ingredients: CacheIngredient[];
+	acquisition?: ItemAcquisition | null;
 };
 
 type RecipeCache = {
@@ -151,6 +173,38 @@ const normalizeCacheRecipe = (entry: unknown): CacheRecipe | null => {
 		return best;
 	})();
 
+	const rawAcq = (raw as Record<string, unknown>).acquisition;
+	const acquisition: ItemAcquisition | null = (() => {
+		if (!rawAcq || typeof rawAcq !== 'object') return null;
+		const acqObj = rawAcq as Record<string, unknown>;
+		if (!Array.isArray(acqObj.vendors)) return null;
+		const vendors: VendorAcquisition[] = acqObj.vendors
+			.map((v: unknown) => {
+				if (!v || typeof v !== 'object') return null;
+				const vo = v as Record<string, unknown>;
+				const name = typeof vo.name === 'string' ? vo.name.trim() : '';
+				if (!name) return null;
+				const cost: VendorCost[] = Array.isArray(vo.cost)
+					? vo.cost
+							.map((c: unknown) => {
+								if (!c || typeof c !== 'object') return null;
+								const co = c as Record<string, unknown>;
+								const amount = Number(co.amount);
+								const item_name = typeof co.item_name === 'string' ? co.item_name.trim() : '';
+								if (!Number.isFinite(amount) || amount <= 0 || !item_name) return null;
+									const icon_url = typeof co.icon_url === 'string' && co.icon_url ? co.icon_url : undefined;
+									return icon_url ? { amount, item_name, icon_url } : { amount, item_name };
+							})
+							.filter((c): c is VendorCost => c !== null)
+					: [];
+				const gold_cost = typeof vo.gold_cost === 'number' && vo.gold_cost > 0 ? vo.gold_cost : undefined;
+				if (!cost.length && !gold_cost) return null;
+				return { name, cost, ...(gold_cost !== undefined ? { gold_cost } : {}) };
+			})
+			.filter((v): v is VendorAcquisition => v !== null);
+		return vendors.length ? { vendors } : null;
+	})();
+
 	return {
 		source: raw.source,
 		output_item_id: raw.output_item_id,
@@ -158,6 +212,7 @@ const normalizeCacheRecipe = (entry: unknown): CacheRecipe | null => {
 		output_item_count: isFinitePositiveNumber(raw.output_item_count) ? Number(raw.output_item_count) : 1,
 		wiki_page: raw.wiki_page,
 		ingredients: normalizedIngredients,
+		acquisition,
 	};
 };
 
@@ -201,7 +256,7 @@ const appendItems = (map: Map<number, number>, items: Array<{ id: number; count?
 
 const collectTreeIds = (node: RecipeTreeNode | null, out: Set<number>) => {
 	if (!node) return;
-	out.add(node.id);
+	if (node.id > 0) out.add(node.id);
 	for (const child of node.children) {
 		collectTreeIds(child, out);
 	}
@@ -306,19 +361,25 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		return cached;
 	};
 
+	const isSelfReferentialRecipe = (itemId: number, recipe: CacheRecipe | undefined): boolean => {
+		if (!recipe || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) return false;
+		return recipe.ingredients.some((ingredient) => Number(ingredient.item_id) === itemId);
+	};
+
 	const buildTreeFromCache = (
 		itemId: number,
 		neededCount: number,
 		stack: Set<number>,
-		ownedPool: Map<number, number>
+		ownedPool: Map<number, number>,
+		isRootNode = false
 	): RecipeTreeNode => {
 		if (stack.has(itemId)) {
 			return { id: itemId, count: neededCount, cycle: true, children: [] };
 		}
 
-		const available = ownedPool.get(itemId) || 0;
-		const consumed = Math.min(available, neededCount);
-		if (consumed > 0) {
+		const available = isRootNode ? 0 : (ownedPool.get(itemId) || 0);
+		const consumed = isRootNode ? 0 : Math.min(available, neededCount);
+		if (!isRootNode && consumed > 0) {
 			ownedPool.set(itemId, available - consumed);
 		}
 		const remainingToCraft = Math.max(0, neededCount - consumed);
@@ -329,9 +390,41 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			!recipe ||
 			!Array.isArray(recipe.ingredients) ||
 			recipe.ingredients.length === 0 ||
-			recipe.source === 'terminal'
+			recipe.source === 'terminal' ||
+			isSelfReferentialRecipe(itemId, recipe)
 		) {
-			return { id: itemId, count: neededCount, source: recipe?.source, children: [] };
+			const isTerminal = recipe?.source === 'terminal';
+			const leafAcquisition = isTerminal ? (recipe!.acquisition ?? null) : undefined;
+			let acqChildren: RecipeTreeNode[] = [];
+			let acqGoldCost: number | undefined;
+			if (isTerminal && remainingToCraft > 0 && leafAcquisition?.vendors?.length) {
+				const seen = new Set<string>();
+				for (const vendor of leafAcquisition.vendors) {
+					for (const c of vendor.cost) {
+						if (!seen.has(c.item_name)) {
+							seen.add(c.item_name);
+							acqChildren.push({
+								id: 0,
+								count: c.amount * neededCount,
+								name: c.item_name,
+								...(c.icon_url ? { icon_url: c.icon_url } : {}),
+								children: [],
+							});
+						}
+					}
+					if (acqGoldCost === undefined && vendor.gold_cost) {
+						acqGoldCost = vendor.gold_cost;
+					}
+				}
+			}
+			return {
+				id: itemId,
+				count: neededCount,
+				source: recipe?.source,
+				...(leafAcquisition !== undefined ? { acquisition: leafAcquisition } : {}),
+				...(acqGoldCost !== undefined ? { gold_cost: acqGoldCost } : {}),
+				children: acqChildren,
+			};
 		}
 
 		const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
@@ -343,9 +436,21 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		for (const ingredient of recipe.ingredients) {
 			const ingId = Number(ingredient.item_id);
 			const ingCount = Number(ingredient.count || 0);
-			if (!Number.isFinite(ingId) || ingId <= 0 || !Number.isFinite(ingCount) || ingCount <= 0) continue;
+			if (!Number.isFinite(ingCount) || ingCount <= 0) continue;
+			if (!Number.isFinite(ingId) || ingId <= 0) {
+				// Unresolved ingredient (e.g. generic currency/slot) — show as leaf with name
+				if (ingredient.name) {
+					children.push({
+						id: 0,
+						count: craftsNeeded * ingCount,
+						name: ingredient.name,
+						children: [],
+					});
+				}
+				continue;
+			}
 			if (ingId === itemId) continue;
-			children.push(buildTreeFromCache(ingId, craftsNeeded * ingCount, nextStack, ownedPool));
+			children.push(buildTreeFromCache(ingId, craftsNeeded * ingCount, nextStack, ownedPool, false));
 		}
 
 		if (!children.length) {
@@ -378,7 +483,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		appendItems(ownedByItem, character._items || []);
 	}
 
-	const recipeTree = buildTreeFromCache(targetItemId, 1, new Set<number>(), new Map(ownedByItem));
+	const recipeTree = buildTreeFromCache(targetItemId, 1, new Set<number>(), new Map(ownedByItem), true);
 	const recipeAvailable = recipeTree.children.length > 0;
 
 	const treeIds = new Set<number>();
@@ -399,21 +504,22 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			if (!Number.isFinite(neededCount) || neededCount <= 0) return;
 			if (stack.has(itemId)) return;
 
-			const available = ownedPool.get(itemId) || 0;
-			const consumed = Math.min(available, neededCount);
-			if (consumed > 0) {
+			const available = isRootNode ? 0 : (ownedPool.get(itemId) || 0);
+			const consumed = isRootNode ? 0 : Math.min(available, neededCount);
+			if (!isRootNode && consumed > 0) {
 				ownedPool.set(itemId, available - consumed);
 			}
 			const remaining = neededCount - consumed;
 			if (remaining <= 0) return;
 
 			const recipe = recipeForItem(itemId);
+			const malformedSelfRecipe = isSelfReferentialRecipe(itemId, recipe);
 			const validIngredients = (recipe?.ingredients || []).filter((ingredient) => {
 				const ingId = Number(ingredient.item_id);
 				const ingCount = Number(ingredient.count || 0);
 				return Number.isFinite(ingId) && ingId > 0 && Number.isFinite(ingCount) && ingCount > 0 && ingId !== itemId;
 			});
-			const hasRecipe = Boolean(recipe && recipe.source !== 'terminal' && validIngredients.length);
+			const hasRecipe = Boolean(recipe && recipe.source !== 'terminal' && !malformedSelfRecipe && validIngredients.length);
 			const item = itemsById[itemId];
 
 			if (!isRootNode && (!hasRecipe || isTradingPostEligible(item))) {
@@ -488,7 +594,14 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	): number | null => {
 		if (stack.has(itemId)) return null;
 		const recipe = recipeForItem(itemId);
-		if (!recipe || recipe.source === 'terminal' || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) return null;
+		if (
+			!recipe ||
+			recipe.source === 'terminal' ||
+			!Array.isArray(recipe.ingredients) ||
+			recipe.ingredients.length === 0 ||
+			isSelfReferentialRecipe(itemId, recipe)
+		)
+			return null;
 
 		const currentItem = itemsById[itemId];
 		if (isTradingPostEligible(currentItem) && recipe.source === 'wiki') {
@@ -561,6 +674,8 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const craftSellUnit = estimateCraftUnitCost(id, 'sell');
 			const bestBuy = pickBestUnit(tpEligible ? buyUnit : null, craftBuyUnit);
 			const bestSell = pickBestUnit(tpEligible ? sellUnit : null, craftSellUnit);
+			const cachedEntry = recipesByOutputId[String(id)];
+			const acquisition = cachedEntry?.source === 'terminal' ? (cachedEntry?.acquisition ?? null) : null;
 
 			return {
 				id,
@@ -576,6 +691,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 				bestBuySource: bestBuy.source,
 				bestSellSource: bestSell.source,
 				tpEligible,
+				acquisition,
 			};
 		})
 		.filter((row): row is IngredientRow => row !== null)

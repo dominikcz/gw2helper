@@ -1,0 +1,1 @@
+[{"id":9805,"type":"Consumable","output_item_id":67367,"output_item_count":5,"time_to_craft_ms":1000,"disciplines":["Artificer"],"min_rating":400,"flags":["LearnedFromItem"],"ingredients":[{"item_id":24277,"count":1},{"item_id":36041,"count":75},{"item_id":36060,"count":35},{"item_id":24283,"count":1}],"chat_link":"[&CU0mAAA=]","guild_ingredients":[]}]

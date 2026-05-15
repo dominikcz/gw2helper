@@ -1,0 +1,1 @@
+[{"id":9719,"type":"Meal","output_item_id":66523,"output_item_count":1,"time_to_craft_ms":1000,"disciplines":["Chef"],"min_rating":400,"flags":["LearnedFromItem"],"ingredients":[{"item_id":66522,"count":5},{"item_id":36793,"count":1},{"item_id":12258,"count":15},{"item_id":12155,"count":5}],"chat_link":"[&CfclAAA=]","guild_ingredients":[]}]

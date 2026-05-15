@@ -232,8 +232,10 @@
 	}
 
 	function canExpandNode(node: RecipeNode, path: string) {
-		if (rowById.has(node.id)) return false;
-		return node.children.length > 0 && nodeMissingAtPath(node, path) > 0;
+		if (!node.children.length || nodeMissingAtPath(node, path) <= 0) return false;
+		// Items in the ingredients table are leaves, unless they have acquisition (currency) children
+		if (rowById.has(node.id) && !node.children.some(c => c.id === 0)) return false;
+		return true;
 	}
 
 	function isInteractiveTarget(target: EventTarget | null) {
@@ -283,6 +285,22 @@
 	function collapseAll() {
 		expandedNodes.clear();
 		expandedNodes.add('root');
+	}
+
+	type ItemAcquisition = NonNullable<(typeof rows)[number]['acquisition']>;
+	function uniqueCosts(acq: ItemAcquisition) {
+		const seen = new Set<string>();
+		const result: { amount: number; item_name: string; icon_url?: string }[] = [];
+		for (const vendor of acq.vendors) {
+			for (const c of vendor.cost) {
+				const key = `${c.amount}:${c.item_name}`;
+				if (!seen.has(key)) {
+					seen.add(key);
+					result.push(c);
+				}
+			}
+		}
+		return result;
 	}
 </script>
 
@@ -354,6 +372,7 @@
 					{:else}
 						<span class="tree-leaf" aria-hidden="true"></span>
 					{/if}
+					{#if node.id > 0}
 					<ItemLabel
 						class="neutral-label"
 						id={node.id}
@@ -366,56 +385,68 @@
 						href={wikiHref(node.id)}
 						linkTitle={$_('common.click_for_wiki')}
 					/>
-					{#if missingCount > 1}
-						<span class="node-missing-inline">{$_('legendary.missing_inline', { count: missingCount })}</span>
+					{:else if node.icon_url}
+						<span class="currency-leaf">
+							<img src={node.icon_url} alt={node.name || ''} title={node.name || ''} class="currency-icon currency-leaf-icon" />
+							<span class="currency-leaf-label">{node.count}× {node.name}</span>
+						</span>
+					{:else}
+						<span class="unresolved-ingredient">{node.count}× {node.name || '???'}</span>
 					{/if}
-					<span
-						class="node-progress"
-						title={$_('legendary.progress_owned_required', {
-							owned: nodeProgressValueAtPath(node, path),
-							required: node.count,
-						})}
-					>
-						{#if missingCost != null && missingCost > 0}
-							<span class="node-cost"><Price value={missingCost} /></span>
-							{@const nodeRow = rowById.get(node.id)}
-							{#if nodeRow && missingCount > 0}
-								<span class="node-strategy" title="Optimal acquisition">
-									{#if rowHasSource(nodeRow, 'tp')}
-										<label class="strategy-line">
-											<input
-												type="radio"
-														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-												disabled={!rowHasMultipleSources(nodeRow)}
-												checked={effectiveDecision(nodeRow) === 'tp'}
-														onclick={() => setDecision(nodeRow.id, 'tp')}
-											/>
-											<span class="strategy-name">TP</span>
-											<span class="strategy-price"><Price value={(rowTpUnit(nodeRow) as number) * missingCount} compact={false} /></span>
-										</label>
-									{/if}
-									{#if rowHasSource(nodeRow, 'craft')}
-										<label class="strategy-line">
-											<input
-												type="radio"
-														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-												disabled={!rowHasMultipleSources(nodeRow)}
-												checked={effectiveDecision(nodeRow) === 'craft'}
-														onclick={() => setDecision(nodeRow.id, 'craft')}
-											/>
-											<span class="strategy-name">CRAFT</span>
-											<span class="strategy-price"><Price value={(rowCraftUnit(nodeRow) as number) * missingCount} compact={false} /></span>
-										</label>
-									{/if}
-								</span>
-							{/if}
+					{#if node.id > 0}
+						{#if missingCount > 1}
+							<span class="node-missing-inline">{$_('legendary.missing_inline', { count: missingCount })}</span>
 						{/if}
-						<Progress
-							max={nodeProgressMax(node.count)}
-							value={nodeProgressValueAtPath(node, path)}
-							label={nodeProgressLabelAtPath(node, path)}
-						/>
-					</span>
+						<span
+							class="node-progress"
+							title={$_('legendary.progress_owned_required', {
+								owned: nodeProgressValueAtPath(node, path),
+								required: node.count,
+							})}
+						>
+							{#if missingCost != null && missingCost > 0}
+								<span class="node-cost"><Price value={missingCost} /></span>
+								{@const nodeRow = rowById.get(node.id)}
+								{#if nodeRow && missingCount > 0}
+									<span class="node-strategy" title="Optimal acquisition">
+										{#if rowHasSource(nodeRow, 'tp')}
+											<label class="strategy-line">
+												<input
+													type="radio"
+															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
+													disabled={!rowHasMultipleSources(nodeRow)}
+													checked={effectiveDecision(nodeRow) === 'tp'}
+															onclick={() => setDecision(nodeRow.id, 'tp')}
+												/>
+												<span class="strategy-name">TP</span>
+												<span class="strategy-price"><Price value={(rowTpUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+											</label>
+										{/if}
+										{#if rowHasSource(nodeRow, 'craft')}
+											<label class="strategy-line">
+												<input
+													type="radio"
+															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
+													disabled={!rowHasMultipleSources(nodeRow)}
+													checked={effectiveDecision(nodeRow) === 'craft'}
+															onclick={() => setDecision(nodeRow.id, 'craft')}
+												/>
+												<span class="strategy-name">CRAFT</span>
+												<span class="strategy-price"><Price value={(rowCraftUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+											</label>
+										{/if}
+									</span>
+								{/if}
+							{:else if node.gold_cost && missingCount > 0}
+								<span class="node-cost"><Price value={node.gold_cost * missingCount} /></span>
+							{/if}
+							<Progress
+								max={nodeProgressMax(node.count)}
+								value={nodeProgressValueAtPath(node, path)}
+								label={nodeProgressLabelAtPath(node, path)}
+							/>
+						</span>
+					{/if}
 					{#if node.cycle}
 						<span class="chip warning">{$_('legendary.cycle')}</span>
 					{/if}
@@ -542,6 +573,21 @@
 											<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
 										</label>
 									{/if}
+									{#if !rowHasSource(row, 'tp') && !rowHasSource(row, 'craft') && row.acquisition?.vendors?.length}
+										<div class="vendor-acquisition">
+											{#each uniqueCosts(row.acquisition) as c, ci}
+												{#if ci > 0}<span class="acq-sep"> + </span>{/if}
+												<span class="acq-cost-entry">
+													<span class="acq-amount">{c.amount}×</span>
+													{#if c.icon_url}
+														<img src={c.icon_url} alt={c.item_name} title={c.item_name} class="currency-icon" />
+													{:else}
+														<span class="acq-item-name">{c.item_name}</span>
+													{/if}
+												</span>
+											{/each}
+										</div>
+									{/if}
 								</div>
 							</td>
 							<td class="num-col total-col">
@@ -601,6 +647,7 @@
 
 	.legendary-hero :global(.item-label) {
 		gap: 2em;
+		max-width: 80%;
 	}
 
 	.legendary-hero.grunge-border {
@@ -625,7 +672,9 @@
 	:global(.hero-item .caption) {
 		font-size: 2em;
 		font-weight: 700;
-		max-width: 11.5rem;
+		white-space: normal;
+		overflow: visible;
+		text-overflow: unset;
 	}
 
 	h1 {
@@ -673,6 +722,71 @@
 		box-sizing: border-box;
 		padding: 0.6em 0.6em 0.6em 0.3em;
 		border-radius: 0.35rem;
+	}
+
+	.currency-leaf {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	.currency-leaf-icon {
+		width: 1.6rem;
+		height: 1.6rem;
+		object-fit: contain;
+	}
+
+	.currency-leaf-label {
+		font-size: 0.95rem;
+	}
+
+	.unresolved-ingredient {
+		font-style: italic;
+		opacity: 0.85;
+	}
+
+	.vendor-acquisition {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: 0.85rem;
+		color: var(--gw2helper-muted, #aaa);
+	}
+
+	.acq-inline {
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.2rem;
+		font-size: 0.8rem;
+		color: var(--gw2helper-muted, #aaa);
+	}
+
+	.acq-cost-entry {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		white-space: nowrap;
+	}
+
+	.acq-amount {
+		font-weight: 600;
+	}
+
+	.acq-sep {
+		opacity: 0.6;
+	}
+
+	.acq-item-name {
+		font-style: italic;
+	}
+
+	.currency-icon {
+		width: 1.2rem;
+		height: 1.2rem;
+		object-fit: contain;
+		vertical-align: middle;
 	}
 
 	.node-row.owned {

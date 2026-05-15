@@ -1,0 +1,47 @@
+[
+  {
+    "id": 0,
+    "type": "Inscription",
+    "output_item_id": 71008,
+    "output_item_count": 1,
+    "time_to_craft_ms": 1000,
+    "disciplines": [],
+    "min_rating": 0,
+    "flags": [],
+    "ingredients": [],
+    "acquisition": {
+      "vendors": [
+        {
+          "name": "Miyani",
+          "cost": [
+            {
+              "amount": 250,
+              "item_name": "Memory of Battle",
+              "icon_url": "https://render.guildwars2.com/file/E4D0455D2EFDB0DFC008F4564B38D6545901A05B/1206833.png"
+            }
+          ]
+        },
+        {
+          "name": "Mystic Forge Attendant",
+          "cost": [
+            {
+              "amount": 250,
+              "item_name": "Memory of Battle",
+              "icon_url": "https://render.guildwars2.com/file/E4D0455D2EFDB0DFC008F4564B38D6545901A05B/1206833.png"
+            }
+          ]
+        },
+        {
+          "name": "Mystic Forge Keeper",
+          "cost": [
+            {
+              "amount": 250,
+              "item_name": "Memory of Battle",
+              "icon_url": "https://render.guildwars2.com/file/E4D0455D2EFDB0DFC008F4564B38D6545901A05B/1206833.png"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

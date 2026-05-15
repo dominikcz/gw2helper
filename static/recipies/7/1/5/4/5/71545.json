@@ -1,0 +1,1 @@
+[{"id":11159,"type":"GuildConsumable","output_item_id":71545,"output_item_count":1,"time_to_craft_ms":1000,"disciplines":["Scribe"],"min_rating":50,"flags":["AutoLearned"],"ingredients":[{"item_id":19710,"count":10},{"item_id":19720,"count":10},{"item_id":72579,"count":5},{"item_id":76518,"count":1}],"output_upgrade_id":74,"chat_link":"[&CZcrAAA=]","guild_ingredients":[]}]

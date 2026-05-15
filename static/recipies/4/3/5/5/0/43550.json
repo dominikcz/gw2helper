@@ -1,0 +1,1 @@
+[{"id":7234,"type":"Dessert","output_item_id":43550,"output_item_count":2,"time_to_craft_ms":1000,"disciplines":["Chef"],"min_rating":400,"flags":["LearnedFromItem"],"ingredients":[{"item_id":12224,"count":2},{"item_id":12547,"count":50},{"item_id":43319,"count":40},{"item_id":24277,"count":1}],"chat_link":"[&CUIcAAA=]","guild_ingredients":[]}]
