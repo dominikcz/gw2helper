@@ -92,6 +92,18 @@ function enrichAcquisitionIcons(acquisition) {
 	}
 }
 
+/** Add item_id to vendor cost entries so the UI can look up TP prices */
+function enrichVendorCostItemIds(acquisition) {
+	if (!acquisition?.vendors) return;
+	for (const vendor of acquisition.vendors) {
+		for (const cost of vendor.cost ?? []) {
+			if (!cost.item_name || cost.item_id) continue;
+			const item = itemsByName.get(cost.item_name.toLowerCase());
+			if (item?.id) cost.item_id = item.id;
+		}
+	}
+}
+
 // ─── Recipe file helpers ──────────────────────────────────────────────────────
 
 function recipePath(itemId) {
@@ -232,6 +244,7 @@ async function processItem(itemId, depth, rootProgress = null) {
 
 	// Enrich vendor icon_urls with GW2 API icons
 	if (acquisition) enrichAcquisitionIcons(acquisition);
+	if (acquisition) enrichVendorCostItemIds(acquisition);
 
 	// Build custom recipe entry (id=0 = wiki/custom)
 	const customEntry = {

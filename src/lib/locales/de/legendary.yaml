@@ -55,3 +55,4 @@ tp_status_crafted: Hergestellt (geschaetzt)
 tp_status_bound: Konto-/Charaktergebunden
 tp_status_no_listing: Kein HP-Angebot (Haendler/gebunden/sonstiges)
 recipe_unavailable: Fuer diesen legendären Gegenstand sind in der GW2-API keine Herstellungsrezeptdaten verfuegbar.
+legend_free_units: "— Menge außerhalb des Handelspostens erhältlich (eigene Materialien, Händler, Karma usw.)"

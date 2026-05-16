@@ -89,6 +89,10 @@ export async function fetchWikiAcquisition(pageTitle) {
 	if (!html) return null;
 
 	const vendors = parseVendorTableHtml(html);
+
+	// Fallback: parse plain-text "Vendor — price per N" format (e.g. Thermocatalytic Reagent)
+	if (vendors.length === 0) vendors.push(...parseVendorListHtml(html));
+
 	const salvaged = parseSalvagedFromHtml(html);
 
 	// "Contained in" items are acquisition sources just like vendors:
@@ -104,6 +108,35 @@ export async function fetchWikiAcquisition(pageTitle) {
 
 	if (vendors.length === 0) return null;
 	return { vendors };
+}
+
+/**
+ * Parses plain-text vendor list format used on pages like Thermocatalytic Reagent:
+ *   <ul><li><a>Vendor Name</a> — <span class="price" data-sort-value="1496">...</span> per 10</li></ul>
+ * Returns an array of vendor objects with gold_cost set as per-unit copper cost.
+ */
+export function parseVendorListHtml(html) {
+	const vendors = [];
+	const liRx = /<li>((?!<table)[\s\S]*?)<\/li>/gi;
+	let liMatch;
+	while ((liMatch = liRx.exec(html)) !== null) {
+		const content = liMatch[1];
+		// Must have a vendor link AND a price span with data-sort-value
+		const vendorMatch = content.match(/title="([^"]+)"[^>]*>(?:[^<]*)<\/a>/);
+		const priceMatch = content.match(/data-sort-value="(\d+)"/);
+		if (!vendorMatch || !priceMatch) continue;
+		// Skip if it looks like a recipe ingredient list (has many sub-items or is a recipe table row)
+		if ((content.match(/<li>/g) || []).length > 2) continue;
+		const vendorName = vendorMatch[1].replace(/&#160;|&nbsp;/g, ' ').trim();
+		const totalCopper = parseInt(priceMatch[1], 10);
+		if (!vendorName || !Number.isFinite(totalCopper) || totalCopper <= 0) continue;
+		// Extract "per N" quantity (e.g. "per 10")
+		const perMatch = content.match(/per\s+(\d+)/i);
+		const qty = perMatch ? parseInt(perMatch[1], 10) : 1;
+		const goldCostPerUnit = Math.ceil(totalCopper / qty);
+		vendors.push({ name: vendorName, cost: [], gold_cost: goldCostPerUnit });
+	}
+	return vendors;
 }
 
 /**
@@ -223,15 +256,15 @@ export function parseVendorTableHtml(html) {
 		vendors.push({ name: vendorName, cost, ...(goldCopper > 0 ? { gold_cost: goldCopper } : {}) });
 	}
 
-	// Keep only vendors with gold_cost if any such vendor exists; otherwise keep all
-	const goldVendors = vendors.filter(v => v.gold_cost > 0);
-	const result = goldVendors.length ? goldVendors : vendors;
-
-	// Deduplicate by name (keep first occurrence)
+	// Deduplicate by content (name + costs + gold_cost).
+	// Do NOT filter to gold-only: some vendors offer items as currency (e.g. Elder Wood Log),
+	// and we want all cost tiers preserved so the UI can pick the cheapest one.
 	const seen = new Set();
-	return result.filter(v => {
-		if (seen.has(v.name)) return false;
-		seen.add(v.name);
+	return vendors.filter(v => {
+		const costKey = (v.cost ?? []).map(c => `${c.item_name ?? ''}:${c.amount ?? 0}`).sort().join('|');
+		const key = `${v.name}\x00${v.gold_cost ?? 0}\x00${costKey}`;
+		if (seen.has(key)) return false;
+		seen.add(key);
 		return true;
 	});
 }
@@ -279,6 +312,7 @@ export function parseSingleBlock(lines) {
 	const disciplines = [];
 	let outputCount = 1;
 	let outputItemId = null;
+	let baseIngredientsCalculation = false;
 
 	for (const rawLine of lines) {
 		const line = (typeof rawLine === 'string' ? rawLine : '').trim();
@@ -289,11 +323,20 @@ export function parseSingleBlock(lines) {
 			continue;
 		}
 
+		// quantity / output quantity / output_count — supports decimals (e.g. 0.31 for probabilistic recipes)
 		const outputQtyMatch = line.match(
-			/^\|\s*(?:output\s*quantity|output\s*qty|output_count|output-count)\s*=\s*(\d+)/i
+			/^\|\s*(?:quantity|output\s*quantity|output\s*qty|output_count|output-count)\s*=\s*([\d.]+)/i
 		);
 		if (outputQtyMatch) {
-			outputCount = Number(outputQtyMatch[1]) || 1;
+			const parsed = parseFloat(outputQtyMatch[1]);
+			if (parsed > 0) outputCount = parsed;
+			continue;
+		}
+
+		// base ingredients calculation = y/n — marks this block as the "expected average" recipe
+		const baseCalcMatch = line.match(/^\|\s*base\s*ingredients?\s*calculation\s*=\s*(\S+)/i);
+		if (baseCalcMatch) {
+			baseIngredientsCalculation = /^y(es)?$/i.test(baseCalcMatch[1].trim());
 			continue;
 		}
 
@@ -322,7 +365,7 @@ export function parseSingleBlock(lines) {
 		}
 	}
 
-	return { ingredients, outputCount, outputItemId, disciplines };
+	return { ingredients, outputCount, outputItemId, disciplines, baseIngredientsCalculation };
 }
 
 /**
@@ -523,17 +566,24 @@ export function selectRecipeBlock(blocks, expectedItemId) {
 	if (!blocks.length) return null;
 
 	const id = Number(expectedItemId);
-	if (id > 0) {
-		const exact = blocks.find((b) => Number(b.outputItemId) === id);
-		if (exact) return exact;
 
-		const allHaveDifferentId = blocks.every(
-			(b) => b.outputItemId != null && Number(b.outputItemId) !== id
-		);
-		if (allHaveDifferentId) return null;
+	// Among blocks with matching (or unspecified) output item id, prefer
+	// the one marked with | base ingredients calculation = y, as it represents
+	// the true expected cost (e.g. probabilistic Mystic Forge recipes).
+	const candidates = id > 0
+		? blocks.filter((b) => b.outputItemId == null || Number(b.outputItemId) === id)
+		: blocks;
+
+	if (id > 0 && candidates.length === 0) {
+		// All blocks have a different explicit id — no match
+		if (blocks.every((b) => b.outputItemId != null && Number(b.outputItemId) !== id)) return null;
+		return blocks.sort((a, b) => b.ingredients.length - a.ingredients.length)[0];
 	}
 
-	if (blocks.length === 1) return blocks[0];
+	const preferred = candidates.find((b) => b.baseIngredientsCalculation);
+	if (preferred) return preferred;
 
-	return blocks.sort((a, b) => b.ingredients.length - a.ingredients.length)[0];
+	if (candidates.length === 1) return candidates[0];
+
+	return candidates.sort((a, b) => b.ingredients.length - a.ingredients.length)[0];
 }

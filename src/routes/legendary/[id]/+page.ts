@@ -36,10 +36,13 @@ type IngredientRow = {
 	sellUnit: number | null;
 	craftBuyUnit: number | null;
 	craftSellUnit: number | null;
+	vendorBuyUnit: number | null;
+	vendorSellUnit: number | null;
+	vendorFreeUnits: number;
 	bestBuyUnit: number | null;
 	bestSellUnit: number | null;
-	bestBuySource: 'tp' | 'craft' | 'none';
-	bestSellSource: 'tp' | 'craft' | 'none';
+	bestBuySource: 'tp' | 'craft' | 'vendor' | 'none';
+	bestSellSource: 'tp' | 'craft' | 'vendor' | 'none';
 	tpEligible: boolean;
 	acquisition: ItemAcquisition | null;
 };
@@ -54,6 +57,7 @@ type VendorCost = {
 	amount: number;
 	item_name: string;
 	icon_url?: string;
+	item_id?: number;
 };
 
 type VendorAcquisition = {
@@ -121,7 +125,8 @@ function normalizeAcquisition(rawAcq: unknown): ItemAcquisition | null {
 							const item_name = typeof co.item_name === 'string' ? co.item_name.trim() : '';
 							if (!Number.isFinite(amount) || amount <= 0 || !item_name) return null;
 							const icon_url = typeof co.icon_url === 'string' && co.icon_url ? co.icon_url : undefined;
-							return icon_url ? { amount, item_name, icon_url } : { amount, item_name };
+					const item_id = isFinitePositiveInt(co.item_id) ? Number(co.item_id) : undefined;
+					return { amount, item_name, ...(icon_url ? { icon_url } : {}), ...(item_id ? { item_id } : {}) };
 						})
 						.filter((c): c is VendorCost => c !== null)
 				: [];
@@ -345,7 +350,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 				const firstVendor = leafAcquisition.vendors[0];
 				for (const c of firstVendor.cost) {
 					acqChildren.push({
-						id: 0,
+						id: c.item_id ?? 0,
 						count: c.amount * neededCount,
 						name: c.item_name,
 						...(c.icon_url ? { icon_url: c.icon_url } : {}),
@@ -511,6 +516,20 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		collectRecipeDependencyIds(itemId, new Set<number>());
 	}
 
+	// Also add vendor cost item IDs from terminal recipes so computeVendorGoldUnit can price them.
+	// Only include TP-eligible items — non-tradeable items (Ancient Coin, Karma tokens etc.)
+	// are treated as free, so fetching their TP price would only produce 404 noise.
+	for (const recipe of recipeCache.values()) {
+		if (recipe.source !== 'terminal') continue;
+		for (const vendor of recipe.acquisition?.vendors ?? []) {
+			for (const cost of vendor.cost ?? []) {
+				if (cost.item_id && cost.item_id > 0 && isTradingPostEligible(itemsById[cost.item_id])) {
+					priceIdsSet.add(cost.item_id);
+				}
+			}
+		}
+	}
+
 	const priceIds = [...priceIdsSet];
 	const prices = (
 		await Promise.all(
@@ -541,13 +560,6 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			isSelfReferentialRecipe(itemId, recipe)
 		)
 			return null;
-
-		const currentItem = itemsById[itemId];
-		if (isTradingPostEligible(currentItem) && recipe.source === 'wiki') {
-			// Do not model Mystic Forge conversions for tradeable materials.
-			// For market items we prefer direct TP valuation over probabilistic/inefficient transmutation chains.
-			return null;
-		}
 
 		const outputCount = Math.max(0.000001, Number(recipe.output_item_count || 1));
 		const nextStack = new Set(stack);
@@ -586,14 +598,15 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 
 	const pickBestUnit = (
 		tpUnit: number | null,
-		craftUnit: number | null
-	): { unit: number | null; source: 'tp' | 'craft' | 'none' } => {
-		if (tpUnit != null && craftUnit != null) {
-			return tpUnit <= craftUnit ? { unit: tpUnit, source: 'tp' } : { unit: craftUnit, source: 'craft' };
-		}
-		if (tpUnit != null) return { unit: tpUnit, source: 'tp' };
-		if (craftUnit != null) return { unit: craftUnit, source: 'craft' };
-		return { unit: null, source: 'none' };
+		craftUnit: number | null,
+		vendorUnit: number | null = null
+	): { unit: number | null; source: 'tp' | 'craft' | 'vendor' | 'none' } => {
+		const candidates: Array<{ unit: number; source: 'tp' | 'craft' | 'vendor' }> = [];
+		if (tpUnit != null) candidates.push({ unit: tpUnit, source: 'tp' });
+		if (craftUnit != null) candidates.push({ unit: craftUnit, source: 'craft' });
+		if (vendorUnit != null) candidates.push({ unit: vendorUnit, source: 'vendor' });
+		if (!candidates.length) return { unit: null, source: 'none' };
+		return candidates.reduce((best, c) => c.unit < best.unit ? c : best);
 	};
 
 	const ingredients: IngredientRow[] = [...requiredByItem.entries()]
@@ -609,12 +622,105 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const tpEligible = isTradingPostEligible(item);
 			const buyUnit = price?.buys?.unit_price ?? null;
 			const sellUnit = price?.sells?.unit_price ?? null;
-			const craftBuyUnit = estimateCraftUnitCost(id, 'buy');
-			const craftSellUnit = estimateCraftUnitCost(id, 'sell');
-			const bestBuy = pickBestUnit(tpEligible ? buyUnit : null, craftBuyUnit);
-			const bestSell = pickBestUnit(tpEligible ? sellUnit : null, craftSellUnit);
-const cachedEntry = recipeCache.get(id);
+			let craftBuyUnit = estimateCraftUnitCost(id, 'buy');
+			let craftSellUnit = estimateCraftUnitCost(id, 'sell');
+
+			// If all recipe ingredients are already in the player's inventory for the
+			// required number of crafts, the effective craft cost is 0 (nothing to buy).
+			const craftRecipe = recipeCache.get(id);
+			if (craftBuyUnit != null && craftRecipe && craftRecipe.source !== 'terminal' && craftRecipe.ingredients?.length) {
+				const outputCount = Math.max(0.000001, Number(craftRecipe.output_item_count || 1));
+				const craftsNeeded = Math.ceil(missing / outputCount);
+				const allIngredientsOwned = craftRecipe.ingredients.every((ing) => {
+					const ingId = Number(ing.item_id);
+					const ingCount = Number(ing.count || 0);
+					if (!ingId || ingId <= 0 || ingCount <= 0) return true;
+					return (ownedByItem.get(ingId) || 0) >= craftsNeeded * ingCount;
+				});
+				if (allIngredientsOwned) {
+					craftBuyUnit = 0;
+					craftSellUnit = 0;
+				}
+			}
+
+			const cachedEntry = recipeCache.get(id);
 			const acquisition = cachedEntry?.source === 'terminal' ? (cachedEntry?.acquisition ?? null) : null;
+
+			// Compute vendor gold cost: for each vendor, sum TP prices of TP-eligible cost items.
+			// Use the cheapest vendor option (including any explicit gold_cost).
+			// AccountBound/unpriced components are excluded from the estimate
+			// (treated as "free" / obtained through gameplay).
+			const computeVendorGoldUnit = (mode: 'buy' | 'sell'): number | null => {
+				if (!acquisition?.vendors?.length) return null;
+				let minVendorCostPerUnit: number | null = null;
+				for (const vendor of acquisition.vendors) {
+					// Start with total cost = fixed gold/karma per unit × missing units
+					let totalCost = (vendor.gold_cost ?? 0) * missing;
+					let hasPricedComponent = (vendor.gold_cost ?? 0) > 0;
+					let vendorResolvable = true;
+					for (const c of vendor.cost ?? []) {
+						if (!c.item_id) continue;
+						const costItemInfo = itemsById[c.item_id];
+						if (!costItemInfo) {
+							// Item info not in cache — this vendor option uses an unknown item
+							// (e.g. a one-time reward loot item like "Discounted Shard").
+							// Can't determine gold equivalent, so skip this entire vendor option.
+							vendorResolvable = false;
+							break;
+						}
+						if (!isTradingPostEligible(costItemInfo)) {
+							// Known non-TP item (e.g. Ancient Coin): earned through gameplay,
+							// not purchasable with gold. Treat as free for gold-cost purposes.
+							hasPricedComponent = true;
+							continue;
+						}
+						const costItemPrice = priceById.get(c.item_id);
+						const unitPrice = mode === 'buy' ? costItemPrice?.buys?.unit_price : costItemPrice?.sells?.unit_price;
+						if (unitPrice == null) continue;
+						// Only price items that still need to be bought (subtract owned inventory)
+						const totalNeeded = missing * c.amount;
+						const alreadyOwned = ownedByItem.get(c.item_id) || 0;
+						const toBuy = Math.max(0, totalNeeded - alreadyOwned);
+						totalCost += toBuy * unitPrice;
+						hasPricedComponent = true;
+					}
+					if (!vendorResolvable || !hasPricedComponent) continue;
+					// Convert total back to effective per-unit cost
+					const perUnit = totalCost / missing;
+					if (minVendorCostPerUnit === null || perUnit < minVendorCostPerUnit) minVendorCostPerUnit = perUnit;
+				}
+				return minVendorCostPerUnit;
+			};
+
+			const vendorBuyUnit = computeVendorGoldUnit('buy');
+			const vendorSellUnit = computeVendorGoldUnit('sell');
+
+			// Calculate how many units can be obtained for free via vendor using only owned items.
+			// Used to optimize mixed strategies: free vendor units reduce TP/craft cost.
+			const computeVendorFreeUnits = (): number => {
+				if (!acquisition?.vendors?.length || missing <= 0) return 0;
+				let maxFreeUnits = 0;
+				for (const vendor of acquisition.vendors) {
+					let freeFromVendor = missing;
+					let vendorResolvable = true;
+					for (const c of vendor.cost ?? []) {
+						if (!c.item_id) continue; // no item_id (Karma etc.) — treat as unlimited free
+						const costItemInfo = itemsById[c.item_id];
+						if (!costItemInfo) { vendorResolvable = false; break; }
+						if (!isTradingPostEligible(costItemInfo)) continue; // non-TP item — treat as unlimited free
+						// TP-eligible item: how many units can we make with what we own?
+						const owned = ownedByItem.get(c.item_id) || 0;
+						freeFromVendor = Math.min(freeFromVendor, Math.floor(owned / c.amount));
+					}
+					if (!vendorResolvable) continue;
+					maxFreeUnits = Math.max(maxFreeUnits, Math.min(missing, Math.max(0, freeFromVendor)));
+				}
+				return maxFreeUnits;
+			};
+			const vendorFreeUnits = computeVendorFreeUnits();
+
+			const bestBuy = pickBestUnit(tpEligible ? buyUnit : null, craftBuyUnit, vendorBuyUnit);
+			const bestSell = pickBestUnit(tpEligible ? sellUnit : null, craftSellUnit, vendorSellUnit);
 
 			return {
 				id,
@@ -625,6 +731,9 @@ const cachedEntry = recipeCache.get(id);
 				sellUnit,
 				craftBuyUnit,
 				craftSellUnit,
+				vendorBuyUnit,
+				vendorSellUnit,
+				vendorFreeUnits,
 				bestBuyUnit: bestBuy.unit,
 				bestSellUnit: bestSell.unit,
 				bestBuySource: bestBuy.source,

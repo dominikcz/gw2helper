@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
@@ -18,7 +18,7 @@
 	let priceMode = $state<'buy' | 'sell'>('buy');
 	type RecipeNode = NonNullable<LegendaryDetails['recipeTree']>;
 	const expandedNodes = new SvelteSet<string>(['root']);
-	const decisionOverrides = new SvelteMap<string, 'tp' | 'craft'>();
+	const decisionOverrides = new SvelteMap<string, 'tp' | 'craft' | 'vendor'>();
 	let resolvedDetails = $state<LegendaryDetails | null>(null);
 
 	const detailsPromise = $derived(data.details as Promise<LegendaryDetails> | LegendaryDetails | null);
@@ -59,10 +59,8 @@
 	const totalMissingCost = $derived(
 		rows.reduce((sum, row) => {
 			if (!row.missing) return sum;
-			const unit = rowUnit(row);
-			if (unit == null) return sum;
-			const lineCost = unit * row.missing;
-			if (!Number.isFinite(lineCost) || lineCost < 0) return sum;
+			const lineCost = rowEffectiveCost(row);
+			if (lineCost == null || !Number.isFinite(lineCost) || lineCost < 0) return sum;
 			return sum + lineCost;
 		}, 0)
 	);
@@ -104,7 +102,16 @@
 
 			const row = rowById.get(node.id);
 			const unit = row ? rowUnit(row) : null;
-			const directCost = unit != null ? unit * missing : null;
+			let directCost: number | null = null;
+			if (unit != null) {
+				const dec = row ? effectiveDecision(row) : 'none';
+				if (row && dec !== 'vendor' && row.vendorFreeUnits > 0) {
+					const paidUnits = Math.max(0, missing - Math.min(missing, row.vendorFreeUnits));
+					directCost = paidUnits * unit;
+				} else {
+					directCost = unit * missing;
+				}
+			}
 
 			// If this node has an explicit acquisition strategy row, stop here.
 			// This prevents deep expansion of market-material conversion chains.
@@ -142,9 +149,10 @@
 		return resolvedDetails?.itemsById?.[id];
 	}
 
-	function decisionLabel(decision: 'tp' | 'craft' | 'none') {
+	function decisionLabel(decision: 'tp' | 'craft' | 'vendor' | 'none') {
 		if (decision === 'tp') return 'TP';
 		if (decision === 'craft') return 'CRAFT';
+		if (decision === 'vendor') return 'VENDOR';
 		return '-';
 	}
 
@@ -152,7 +160,7 @@
 		return `${priceMode}:${id}`;
 	}
 
-	function setDecision(id: number, decision: 'tp' | 'craft') {
+	function setDecision(id: number, decision: 'tp' | 'craft' | 'vendor') {
 		decisionOverrides.set(decisionKey(id), decision);
 	}
 
@@ -164,28 +172,33 @@
 		return priceMode === 'buy' ? row.craftBuyUnit : row.craftSellUnit;
 	}
 
+	function rowVendorUnit(row: (typeof rows)[number]) {
+		return priceMode === 'buy' ? row.vendorBuyUnit : row.vendorSellUnit;
+	}
+
 	function rowDecision(row: (typeof rows)[number]) {
 		return priceMode === 'buy' ? row.bestBuySource : row.bestSellSource;
 	}
 
-	function rowHasSource(row: (typeof rows)[number], source: 'tp' | 'craft') {
-		const unit = source === 'tp' ? rowTpUnit(row) : rowCraftUnit(row);
+	function rowHasSource(row: (typeof rows)[number], source: 'tp' | 'craft' | 'vendor') {
+		const unit = source === 'tp' ? rowTpUnit(row) : source === 'craft' ? rowCraftUnit(row) : rowVendorUnit(row);
 		return unit != null && Number.isFinite(unit) && unit >= 0;
 	}
 
 	function rowHasMultipleSources(row: (typeof rows)[number]) {
-		return rowHasSource(row, 'tp') && rowHasSource(row, 'craft');
+		return [rowHasSource(row, 'tp'), rowHasSource(row, 'craft'), rowHasSource(row, 'vendor')].filter(Boolean).length > 1;
 	}
 
-	function effectiveDecision(row: (typeof rows)[number]): 'tp' | 'craft' | 'none' {
+	function effectiveDecision(row: (typeof rows)[number]): 'tp' | 'craft' | 'vendor' | 'none' {
 		const override = decisionOverrides.get(decisionKey(row.id));
 		if (override && rowHasSource(row, override)) return override;
 
 		const auto = rowDecision(row);
-		if ((auto === 'tp' || auto === 'craft') && rowHasSource(row, auto)) return auto;
+		if ((auto === 'tp' || auto === 'craft' || auto === 'vendor') && rowHasSource(row, auto)) return auto;
 
 		if (rowHasSource(row, 'tp')) return 'tp';
 		if (rowHasSource(row, 'craft')) return 'craft';
+		if (rowHasSource(row, 'vendor')) return 'vendor';
 		return 'none';
 	}
 
@@ -193,7 +206,22 @@
 		const decision = effectiveDecision(row);
 		if (decision === 'tp') return rowTpUnit(row);
 		if (decision === 'craft') return rowCraftUnit(row);
+		if (decision === 'vendor') return rowVendorUnit(row);
 		return null;
+	}
+
+	// When TP/craft is chosen but vendor can cover some units for free (owned materials),
+	// a mixed strategy (free vendor + paid TP/craft for the rest) lowers the total cost.
+	function rowEffectiveCost(row: (typeof rows)[number]): number | null {
+		if (row.missing <= 0) return 0;
+		const unit = rowUnit(row);
+		if (unit == null) return null;
+		const decision = effectiveDecision(row);
+		if (decision !== 'vendor' && row.vendorFreeUnits > 0) {
+			const paidUnits = Math.max(0, row.missing - row.vendorFreeUnits);
+			return paidUnits * unit;
+		}
+		return unit * row.missing;
 	}
 
 	function ownedCount(id: number) {
@@ -416,7 +444,7 @@
 								required: node.count,
 							})}
 						>
-							{#if missingCost != null && missingCost > 0}
+							{#if missingCost != null && missingCost >= 0 && missingCount > 0}
 								<span class="node-cost"><Price value={missingCost} /></span>
 								{@const nodeRow = rowById.get(node.id)}
 								{#if nodeRow && missingCount > 0}
@@ -445,6 +473,19 @@
 												/>
 												<span class="strategy-name">CRAFT</span>
 												<span class="strategy-price"><Price value={rowCraftUnit(nodeRow) as number} compact={false} /></span>
+											</label>
+										{/if}
+										{#if rowHasSource(nodeRow, 'vendor')}
+											<label class="strategy-line">
+												<input
+													type="radio"
+														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
+													disabled={!rowHasMultipleSources(nodeRow)}
+													checked={effectiveDecision(nodeRow) === 'vendor'}
+														onclick={() => setDecision(nodeRow.id, 'vendor')}
+												/>
+												<span class="strategy-name">VENDOR</span>
+												<span class="strategy-price"><Price value={rowVendorUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
 									</span>
@@ -487,6 +528,10 @@
 		<Awaiter promise={detailsPromise as Promise<LegendaryDetails> | LegendaryDetails}>
 			{#snippet children(details)}
 				{#if details.recipeAvailable}
+			<p class="table-legend">
+				<span class="legend-free-sample">+N</span>
+				{$_('legendary.legend_free_units')}
+			</p>
 			<table>
 				<thead>
 					<tr>
@@ -500,9 +545,18 @@
 						{@const info = itemInfo(row.id)}
 						{@const wiki = wikiHref(row.id)}
 						{@const unit = rowUnit(row)}
-						{@const rowCost = row.missing > 0 && unit != null ? unit * row.missing : null}
+						{@const rowCost = rowEffectiveCost(row)}
+						{@const rowFreeUnits = effectiveDecision(row) !== 'vendor' ? row.vendorFreeUnits : 0}
+						{@const rowPaidMissing = row.missing > 0 ? Math.max(0, row.missing - rowFreeUnits) : 0}
 						<tr class:done={row.missing === 0}>
-							<td class="num-col">{row.missing}</td>
+							<td class="num-col">
+								{#if rowFreeUnits > 0 && row.missing > 0}
+									<span class="missing-paid">{rowPaidMissing}</span>
+									<span class="missing-free" title="vendor (free)">+{rowFreeUnits}</span>
+								{:else}
+									{row.missing}
+								{/if}
+							</td>
 							<td class="ingredient-cell">
 								<div class="ingredient-main-line">
 									<ItemLabel
@@ -553,6 +607,19 @@
 													<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
 												</label>
 											{/if}
+										{#if rowHasSource(row, 'vendor')}
+											<label class="strategy-line">
+												<input
+													type="radio"
+													name={`acq-mobile-${priceMode}-${row.id}`}
+													disabled={!rowHasMultipleSources(row)}
+													checked={effectiveDecision(row) === 'vendor'}
+													onclick={() => setDecision(row.id, 'vendor')}
+												/>
+												<span class="strategy-name">VENDOR</span>
+												<span class="strategy-price"><Price value={rowVendorUnit(row) as number} compact={false} /></span>
+											</label>
+										{/if}
 										</div>
 									</div>
 								</div>
@@ -585,7 +652,20 @@
 											<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
 										</label>
 									{/if}
-									{#if !rowHasSource(row, 'tp') && !rowHasSource(row, 'craft') && row.acquisition?.vendors?.length}
+									{#if rowHasSource(row, 'vendor')}
+										<label class="strategy-line">
+											<input
+												type="radio"
+													name={`acq-table-${priceMode}-${row.id}`}
+												disabled={!rowHasMultipleSources(row)}
+												checked={effectiveDecision(row) === 'vendor'}
+													onclick={() => setDecision(row.id, 'vendor')}
+											/>
+											<span class="strategy-name">VENDOR</span>
+											<span class="strategy-price"><Price value={rowVendorUnit(row) as number} compact={false} /></span>
+										</label>
+									{/if}
+									{#if !rowHasSource(row, 'tp') && !rowHasSource(row, 'craft') && !rowHasSource(row, 'vendor') && row.acquisition?.vendors?.length}
 										<div class="vendor-acquisition">
 											{#each uniqueCosts(row.acquisition) as c, ci}
 												{#if ci > 0}<span class="acq-sep"> + </span>{/if}
@@ -984,6 +1064,32 @@
 	td.num-col {
 		text-align: right;
 		white-space: nowrap;
+	}
+
+	.missing-paid {
+		display: block;
+	}
+
+	.missing-free {
+		display: block;
+		font-size: 0.78em;
+		opacity: 0.65;
+		color: var(--color-success, #7fc97f);
+	}
+
+	.table-legend {
+		margin: 0.4rem 0 0;
+		font-size: 0.8em;
+		opacity: 0.7;
+		display: flex;
+		align-items: center;
+		gap: 0.35em;
+	}
+
+	.legend-free-sample {
+		font-size: 0.78em;
+		color: var(--color-success, #7fc97f);
+		font-weight: 600;
 	}
 
 	thead tr {
