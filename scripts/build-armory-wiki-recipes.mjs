@@ -11,7 +11,7 @@
  *  3. Resolve ingredient names → item IDs via local items cache (name lookup)
  *     and wiki SMW as fallback
  *  4. Replace wiki thumbnail icon_urls with GW2 API render URLs from items cache
- *  5. Merge into static/recipies/<d1>/<d2>/.../id.json  (append id=0 entry)
+ *  5. Merge into static/data/recipies/<d1>/<d2>/.../id.json  (append id=0 entry)
  *
  * Usage:
  *   node scripts/build-armory-wiki-recipes.mjs           # all armory items, 3 levels
@@ -36,7 +36,7 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'recipies');
+const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'data', 'recipies');
 const ITEMS_CACHE = path.join(ROOT_DIR, 'scripts', '.cache', 'gw2_all_items.json');
 const GW2_API = 'https://api.guildwars2.com';
 const MAX_DEPTH = Number(process.env.GW2W_MAX_DEPTH ?? 3);

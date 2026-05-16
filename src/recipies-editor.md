@@ -9,7 +9,7 @@ Przygotuj mi nową stronę /recipies, która będzie służyłą za edytor recep
 3. Potrzebuję zobaczyć listę wszystkich dostepnych przedmiotów wraz z obrazkami, nazwą itd. na podstawie danych z api - standardowa prezentacja za pomocą ItemLabel
 4. Przedmiotów będzie kilkadziesiąt tysięcy wiec nie ładuj wszystkiego do pamięci, pokazuj max pierwszych 1000 pozycji pasujacych do filtra
 5. Interfejs powinien dawać możliwość wyszukiwania po fragmencie nazwy i opcjonalnie rarity
-6. dla każdej pozycji powinien pokazywać czy ma już recepturę w folderze /static/recipies
+6. dla każdej pozycji powinien pokazywać czy ma już recepturę w folderze /static/data/recipies
 7. jeśli nie ma to przycisk do tworzenia nowej, a jeśli ma to do edycji
 8. edycja/tworzenie nowej:
    1. przycisk do próby automatycznego pobrania danych z wiki (tylko 1 poziom)

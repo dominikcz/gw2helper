@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'recipies');
+const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'data', 'recipies');
 const FIXTURES_DIR = path.join(ROOT_DIR, 'src', 'lib', 'legendary', '__fixtures__');
 const GW2_API = 'https://api.guildwars2.com';
 const API_BATCH_SIZE = 200;

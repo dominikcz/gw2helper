@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.join(__dirname, '../../../../../../');
-const RECIPES_DIR = path.join(PROJECT_ROOT, 'static/recipies');
+const RECIPES_DIR = path.join(PROJECT_ROOT, 'static/data/recipies');
 
 function getRecipePath(id: number, baseDir: string): string {
 	const digits = String(id).split('');

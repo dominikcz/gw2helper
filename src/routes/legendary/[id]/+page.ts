@@ -1,6 +1,6 @@
 ﻿export const ssr = false;
 
-import { base } from '$app/paths';
+import { asset } from '$app/paths';
 import type { PageLoad } from './$types';
 import type { CharacterWithItems, ExpandedItem } from '$lib/types/gw2-api';
 import {
@@ -31,7 +31,7 @@ type LegendaryDetailsData = {
 };
 
 function recipeFileUrl(itemId: number): string {
-	return `${base}/recipies/${String(itemId).split('').join('/')}/${itemId}.json`;
+	return asset(`/data/recipies/${String(itemId).split('').join('/')}/${itemId}.json`);
 }
 
 async function prefetchRecipeTree(
