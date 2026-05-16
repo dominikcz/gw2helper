@@ -55,3 +55,4 @@ tp_status_crafted: Fabricado (estimado)
 tp_status_bound: Vinculado a cuenta/personaje
 tp_status_no_listing: Sin oferta en TP (vendedor/vinculado/otro)
 recipe_unavailable: Los datos de receta de fabricacion no estan disponibles en la API de GW2 para este objeto legendario.
+legend_free_units: "— cantidad obtenible fuera del Puesto de Comercio (materiales propios, vendedor, karma, etc.)"

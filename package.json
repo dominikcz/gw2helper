@@ -1,6 +1,6 @@
 {
   "name": "gw2helper",
-  "version": "0.9.155",
+  "version": "0.9.157",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,8 +10,10 @@
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:yaml": "node scripts/check-yaml.cjs",
-    "check:legendary-cache": "node scripts/check-legendary-cache.cjs",
-    "cache:legendary:build": "node scripts/build-legendary-recipe-cache.cjs",
+    "cache:armory:wiki": "node scripts/build-armory-wiki-recipes.mjs",
+    "cache:armory:wiki:force": "node scripts/build-armory-wiki-recipes.mjs --force",
+    "cache:legendary:pack": "node scripts/build-legendary-recipes-pack.mjs",
+    "fixtures:legendary": "node scripts/dump-legendary-fixtures.mjs",
     "report:legendary:blockers": "node scripts/report-legendary-expansion-blockers.cjs",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",

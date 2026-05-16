@@ -43,6 +43,7 @@ tp_status_crafted: Crafted (estimated)
 tp_status_bound: Account/character bound
 tp_status_no_listing: No TP listing (vendor/account-bound/other)
 recipe_unavailable: Crafting recipe data is not available in the GW2 API for this legendary item.
+legend_free_units: "— quantity obtainable outside the Trading Post (own materials, vendor, karma, etc.)"
 recipe_source_wiki: "Recipe source: GW2 Wiki fallback (GW2 API has no direct recipe entry)."
 full_material_list: Full material list
 ingredients_unavailable_wiki: Ingredient ownership and TP pricing are unavailable in wiki fallback mode.
