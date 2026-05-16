@@ -40,7 +40,7 @@ const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'recipies');
 const ITEMS_CACHE = path.join(ROOT_DIR, 'scripts', '.cache', 'gw2_all_items.json');
 const GW2_API = 'https://api.guildwars2.com';
 const MAX_DEPTH = Number(process.env.GW2W_MAX_DEPTH ?? 3);
-const FORCE = process.env.GW2W_FORCE === '1';
+const FORCE = process.env.GW2W_FORCE === '1' || process.argv.includes('--force');
 const API_BATCH_SIZE = 200;
 
 // ─── Items cache ─────────────────────────────────────────────────────────────

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import helperUtils from '$lib/utils/helper-utils';
+
 	interface Props {
 		item: {
 			id: number;
@@ -17,7 +19,9 @@
 	data-autotooltip-id={item.id}
 	data-autotooltip-params={JSON.stringify({ detailsHref: `/legendary/${item.id}/` })}
 >
-	<img alt={item.name} src={item.icon} class:locked={!item.count} loading="lazy" decoding="async" fetchpriority="low" />
+	<a href={helperUtils.wikiLink(item.name)} target="_blank">
+		<img alt={item.name} src={item.icon} class:locked={!item.count} loading="lazy" decoding="async" fetchpriority="low" />
+	</a>
 	{#if item.count && item.max_count > 1}<figcaption>{item.count}/{item.max_count}</figcaption>{/if}
 </figure>
 

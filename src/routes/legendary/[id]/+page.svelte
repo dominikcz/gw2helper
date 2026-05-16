@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
@@ -8,6 +8,12 @@
 	import { t as _ } from '$lib/services/i18n';
 	import helperUtils from '$lib/utils/helper-utils';
 	import type { PageData } from './$types';
+	import {
+		rowTpUnit, rowCraftUnit, rowVendorUnit,
+		rowHasSource, rowHasMultipleSources,
+		effectiveDecision, rowUnit, rowEffectiveCost,
+		computeTreeMetrics,
+	} from '$lib/legendary/display';
 
 	interface Props {
 		data: PageData;
@@ -59,7 +65,7 @@
 	const totalMissingCost = $derived(
 		rows.reduce((sum, row) => {
 			if (!row.missing) return sum;
-			const lineCost = rowEffectiveCost(row);
+			const lineCost = _rowEffectiveCost(row);
 			if (lineCost == null || !Number.isFinite(lineCost) || lineCost < 0) return sum;
 			return sum + lineCost;
 		}, 0)
@@ -68,81 +74,10 @@
 	const rowById = $derived(new SvelteMap(rows.map((row) => [row.id, row] as const)));
 	type PathMetric = { missing: number; cost: number | null };
 	const treeMetricsByPath = $derived.by(() => {
-		const out = new SvelteMap<string, PathMetric>();
 		const root = resolvedDetails?.recipeTree as RecipeNode | null | undefined;
-		if (!root) return out;
-
-		const ownedPool = new SvelteMap<number, number>();
-		for (const [id, count] of Object.entries(resolvedDetails?.ownedById || {})) {
-			const numId = Number(id);
-			const numCount = Number(count || 0);
-			if (!Number.isFinite(numId) || numId <= 0 || !Number.isFinite(numCount) || numCount <= 0) continue;
-			ownedPool.set(numId, numCount);
-		}
-
-		const visit = (node: RecipeNode, path: string): PathMetric => {
-			if (node.cycle) {
-				const metric = { missing: node.count, cost: null };
-				out.set(path, metric);
-				return metric;
-			}
-
-			const available = ownedPool.get(node.id) || 0;
-			const consumed = Math.min(available, node.count);
-			if (consumed > 0) {
-				ownedPool.set(node.id, available - consumed);
-			}
-
-			const missing = Math.max(0, node.count - consumed);
-			if (missing <= 0) {
-				const metric = { missing: 0, cost: 0 };
-				out.set(path, metric);
-				return metric;
-			}
-
-			const row = rowById.get(node.id);
-			const unit = row ? rowUnit(row) : null;
-			let directCost: number | null = null;
-			if (unit != null) {
-				const dec = row ? effectiveDecision(row) : 'none';
-				if (row && dec !== 'vendor' && row.vendorFreeUnits > 0) {
-					const paidUnits = Math.max(0, missing - Math.min(missing, row.vendorFreeUnits));
-					directCost = paidUnits * unit;
-				} else {
-					directCost = unit * missing;
-				}
-			}
-
-			// If this node has an explicit acquisition strategy row, stop here.
-			// This prevents deep expansion of market-material conversion chains.
-			if (row) {
-				const metric = { missing, cost: directCost };
-				out.set(path, metric);
-				return metric;
-			}
-
-			if (!node.children.length) {
-				const metric = { missing, cost: directCost };
-				out.set(path, metric);
-				return metric;
-			}
-
-			let childrenTotal = 0;
-			let hasChildrenCost = false;
-			node.children.forEach((child, idx) => {
-				const childMetric = visit(child, `${path}.${child.id}-${idx}`);
-				if (childMetric.cost == null) return;
-				hasChildrenCost = true;
-				childrenTotal += childMetric.cost;
-			});
-
-			const metric = { missing, cost: hasChildrenCost ? childrenTotal : directCost };
-			out.set(path, metric);
-			return metric;
-		};
-
-		visit(root, 'root');
-		return out;
+		if (!root) return new SvelteMap<string, PathMetric>();
+		const metrics = computeTreeMetrics(root, rowById, resolvedDetails?.ownedById || {}, priceMode, decisionOverrides);
+		return new SvelteMap(metrics);
 	});
 
 	function itemInfo(id: number) {
@@ -164,64 +99,22 @@
 		decisionOverrides.set(decisionKey(id), decision);
 	}
 
-	function rowTpUnit(row: (typeof rows)[number]) {
-		return priceMode === 'buy' ? row.buyUnit : row.sellUnit;
+	// Wrappers that bind the current Svelte state to the pure display functions.
+	function _rowTpUnit(row: (typeof rows)[number]) { return rowTpUnit(row, priceMode); }
+	function _rowCraftUnit(row: (typeof rows)[number]) { return rowCraftUnit(row, priceMode); }
+	function _rowVendorUnit(row: (typeof rows)[number]) { return rowVendorUnit(row, priceMode); }
+	function _rowHasSource(row: (typeof rows)[number], source: 'tp' | 'craft' | 'vendor') {
+		return rowHasSource(row, priceMode, source);
 	}
-
-	function rowCraftUnit(row: (typeof rows)[number]) {
-		return priceMode === 'buy' ? row.craftBuyUnit : row.craftSellUnit;
+	function _rowHasMultipleSources(row: (typeof rows)[number]) { return rowHasMultipleSources(row, priceMode); }
+	function _effectiveDecision(row: (typeof rows)[number]) {
+		return effectiveDecision(row, priceMode, decisionOverrides.get(decisionKey(row.id)));
 	}
-
-	function rowVendorUnit(row: (typeof rows)[number]) {
-		return priceMode === 'buy' ? row.vendorBuyUnit : row.vendorSellUnit;
+	function _rowUnit(row: (typeof rows)[number]) {
+		return rowUnit(row, priceMode, decisionOverrides.get(decisionKey(row.id)));
 	}
-
-	function rowDecision(row: (typeof rows)[number]) {
-		return priceMode === 'buy' ? row.bestBuySource : row.bestSellSource;
-	}
-
-	function rowHasSource(row: (typeof rows)[number], source: 'tp' | 'craft' | 'vendor') {
-		const unit = source === 'tp' ? rowTpUnit(row) : source === 'craft' ? rowCraftUnit(row) : rowVendorUnit(row);
-		return unit != null && Number.isFinite(unit) && unit >= 0;
-	}
-
-	function rowHasMultipleSources(row: (typeof rows)[number]) {
-		return [rowHasSource(row, 'tp'), rowHasSource(row, 'craft'), rowHasSource(row, 'vendor')].filter(Boolean).length > 1;
-	}
-
-	function effectiveDecision(row: (typeof rows)[number]): 'tp' | 'craft' | 'vendor' | 'none' {
-		const override = decisionOverrides.get(decisionKey(row.id));
-		if (override && rowHasSource(row, override)) return override;
-
-		const auto = rowDecision(row);
-		if ((auto === 'tp' || auto === 'craft' || auto === 'vendor') && rowHasSource(row, auto)) return auto;
-
-		if (rowHasSource(row, 'tp')) return 'tp';
-		if (rowHasSource(row, 'craft')) return 'craft';
-		if (rowHasSource(row, 'vendor')) return 'vendor';
-		return 'none';
-	}
-
-	function rowUnit(row: (typeof rows)[number]) {
-		const decision = effectiveDecision(row);
-		if (decision === 'tp') return rowTpUnit(row);
-		if (decision === 'craft') return rowCraftUnit(row);
-		if (decision === 'vendor') return rowVendorUnit(row);
-		return null;
-	}
-
-	// When TP/craft is chosen but vendor can cover some units for free (owned materials),
-	// a mixed strategy (free vendor + paid TP/craft for the rest) lowers the total cost.
-	function rowEffectiveCost(row: (typeof rows)[number]): number | null {
-		if (row.missing <= 0) return 0;
-		const unit = rowUnit(row);
-		if (unit == null) return null;
-		const decision = effectiveDecision(row);
-		if (decision !== 'vendor' && row.vendorFreeUnits > 0) {
-			const paidUnits = Math.max(0, row.missing - row.vendorFreeUnits);
-			return paidUnits * unit;
-		}
-		return unit * row.missing;
+	function _rowEffectiveCost(row: (typeof rows)[number]) {
+		return rowEffectiveCost(row, priceMode, decisionOverrides.get(decisionKey(row.id)));
 	}
 
 	function ownedCount(id: number) {
@@ -267,11 +160,11 @@
 		// - any of their children has a craft source or own children (drill deeper)
 		if (rowById.has(node.id) && !node.children.some(c => c.id === 0)) {
 			const row = rowById.get(node.id)!;
-			if (rowHasSource(row, 'craft')) return true;
+			if (_rowHasSource(row, 'craft')) return true;
 			const anyChildExpandable = node.children.some(c => {
 				if (c.children.length > 0) return true;
 				const childRow = rowById.get(c.id);
-				return childRow ? rowHasSource(childRow, 'craft') : false;
+				return childRow ? _rowHasSource(childRow, 'craft') : false;
 			});
 			if (!anyChildExpandable) return false;
 		}
@@ -449,12 +342,12 @@
 								{@const nodeRow = rowById.get(node.id)}
 								{#if nodeRow && missingCount > 0}
 									<span class="node-strategy" title="Optimal acquisition">
-										{#if rowHasSource(nodeRow, 'tp')}
+										{#if __rowHasSource(nodeRow, 'tp')}
 											<label class="strategy-line">
 												<input
 													type="radio"
 															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!rowHasMultipleSources(nodeRow)}
+													disabled={!_rowHasMultipleSources(nodeRow)}
 													checked={effectiveDecision(nodeRow) === 'tp'}
 															onclick={() => setDecision(nodeRow.id, 'tp')}
 												/>
@@ -462,12 +355,12 @@
 												<span class="strategy-price"><Price value={rowTpUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
-										{#if rowHasSource(nodeRow, 'craft')}
+										{#if __rowHasSource(nodeRow, 'craft')}
 											<label class="strategy-line">
 												<input
 													type="radio"
 															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!rowHasMultipleSources(nodeRow)}
+													disabled={!_rowHasMultipleSources(nodeRow)}
 													checked={effectiveDecision(nodeRow) === 'craft'}
 															onclick={() => setDecision(nodeRow.id, 'craft')}
 												/>
@@ -475,12 +368,12 @@
 												<span class="strategy-price"><Price value={rowCraftUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
-										{#if rowHasSource(nodeRow, 'vendor')}
+										{#if __rowHasSource(nodeRow, 'vendor')}
 											<label class="strategy-line">
 												<input
 													type="radio"
 														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!rowHasMultipleSources(nodeRow)}
+													disabled={!_rowHasMultipleSources(nodeRow)}
 													checked={effectiveDecision(nodeRow) === 'vendor'}
 														onclick={() => setDecision(nodeRow.id, 'vendor')}
 												/>
@@ -544,9 +437,9 @@
 					{#each rows as row (row.id)}
 						{@const info = itemInfo(row.id)}
 						{@const wiki = wikiHref(row.id)}
-						{@const unit = rowUnit(row)}
-						{@const rowCost = rowEffectiveCost(row)}
-						{@const rowFreeUnits = effectiveDecision(row) !== 'vendor' ? row.vendorFreeUnits : 0}
+						{@const unit = _rowUnit(row)}
+						{@const rowCost = _rowEffectiveCost(row)}
+						{@const rowFreeUnits = _effectiveDecision(row) !== 'vendor' ? row.vendorFreeUnits : 0}
 						{@const rowPaidMissing = row.missing > 0 ? Math.max(0, row.missing - rowFreeUnits) : 0}
 						<tr class:done={row.missing === 0}>
 							<td class="num-col">
@@ -581,43 +474,43 @@
 									<div class="mobile-pricing-row">
 										<span class="mobile-pricing-label">{$_('legendary.unit_price')}</span>
 										<div class="price-options">
-											{#if rowHasSource(row, 'tp')}
+											{#if _rowHasSource(row, 'tp')}
 												<label class="strategy-line">
 													<input
 														type="radio"
 														name={`acq-mobile-${priceMode}-${row.id}`}
-														disabled={!rowHasMultipleSources(row)}
-														checked={effectiveDecision(row) === 'tp'}
+														disabled={!_rowHasMultipleSources(row)}
+														checked={_effectiveDecision(row) === 'tp'}
 														onclick={() => setDecision(row.id, 'tp')}
 													/>
 													<span class="strategy-name">TP</span>
-													<span class="strategy-price"><Price value={rowTpUnit(row) as number} compact={false} /></span>
+													<span class="strategy-price"><Price value={_rowTpUnit(row) as number} compact={false} /></span>
 												</label>
 											{/if}
-											{#if rowHasSource(row, 'craft')}
+											{#if _rowHasSource(row, 'craft')}
 												<label class="strategy-line">
 													<input
 														type="radio"
 														name={`acq-mobile-${priceMode}-${row.id}`}
-														disabled={!rowHasMultipleSources(row)}
-														checked={effectiveDecision(row) === 'craft'}
+														disabled={!_rowHasMultipleSources(row)}
+														checked={_effectiveDecision(row) === 'craft'}
 														onclick={() => setDecision(row.id, 'craft')}
 													/>
 													<span class="strategy-name">CRAFT</span>
-													<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
+													<span class="strategy-price"><Price value={_rowCraftUnit(row) as number} compact={false} /></span>
 												</label>
 											{/if}
-										{#if rowHasSource(row, 'vendor')}
+										{#if _rowHasSource(row, 'vendor')}
 											<label class="strategy-line">
 												<input
 													type="radio"
 													name={`acq-mobile-${priceMode}-${row.id}`}
-													disabled={!rowHasMultipleSources(row)}
-													checked={effectiveDecision(row) === 'vendor'}
+													disabled={!_rowHasMultipleSources(row)}
+													checked={_effectiveDecision(row) === 'vendor'}
 													onclick={() => setDecision(row.id, 'vendor')}
 												/>
 												<span class="strategy-name">VENDOR</span>
-												<span class="strategy-price"><Price value={rowVendorUnit(row) as number} compact={false} /></span>
+												<span class="strategy-price"><Price value={_rowVendorUnit(row) as number} compact={false} /></span>
 											</label>
 										{/if}
 										</div>
@@ -626,46 +519,46 @@
 							</td>
 							<td class="num-col unit-col">
 								<div class="price-options">
-									{#if rowHasSource(row, 'tp')}
+									{#if _rowHasSource(row, 'tp')}
 										<label class="strategy-line">
 											<input
 												type="radio"
 														name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!rowHasMultipleSources(row)}
-												checked={effectiveDecision(row) === 'tp'}
+												disabled={!_rowHasMultipleSources(row)}
+												checked={_effectiveDecision(row) === 'tp'}
 														onclick={() => setDecision(row.id, 'tp')}
 											/>
 											<span class="strategy-name">TP</span>
-											<span class="strategy-price"><Price value={rowTpUnit(row) as number} compact={false} /></span>
+											<span class="strategy-price"><Price value={_rowTpUnit(row) as number} compact={false} /></span>
 										</label>
 									{/if}
-									{#if rowHasSource(row, 'craft')}
+									{#if _rowHasSource(row, 'craft')}
 										<label class="strategy-line">
 											<input
 												type="radio"
 														name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!rowHasMultipleSources(row)}
-												checked={effectiveDecision(row) === 'craft'}
+												disabled={!_rowHasMultipleSources(row)}
+												checked={_effectiveDecision(row) === 'craft'}
 														onclick={() => setDecision(row.id, 'craft')}
 											/>
 											<span class="strategy-name">CRAFT</span>
-											<span class="strategy-price"><Price value={rowCraftUnit(row) as number} compact={false} /></span>
+											<span class="strategy-price"><Price value={_rowCraftUnit(row) as number} compact={false} /></span>
 										</label>
 									{/if}
-									{#if rowHasSource(row, 'vendor')}
+									{#if _rowHasSource(row, 'vendor')}
 										<label class="strategy-line">
 											<input
 												type="radio"
 													name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!rowHasMultipleSources(row)}
-												checked={effectiveDecision(row) === 'vendor'}
+												disabled={!_rowHasMultipleSources(row)}
+												checked={_effectiveDecision(row) === 'vendor'}
 													onclick={() => setDecision(row.id, 'vendor')}
 											/>
 											<span class="strategy-name">VENDOR</span>
-											<span class="strategy-price"><Price value={rowVendorUnit(row) as number} compact={false} /></span>
+											<span class="strategy-price"><Price value={_rowVendorUnit(row) as number} compact={false} /></span>
 										</label>
 									{/if}
-									{#if !rowHasSource(row, 'tp') && !rowHasSource(row, 'craft') && !rowHasSource(row, 'vendor') && row.acquisition?.vendors?.length}
+									{#if !_rowHasSource(row, 'tp') && !_rowHasSource(row, 'craft') && !_rowHasSource(row, 'vendor') && row.acquisition?.vendors?.length}
 										<div class="vendor-acquisition">
 											{#each uniqueCosts(row.acquisition) as c, ci}
 												{#if ci > 0}<span class="acq-sep"> + </span>{/if}
