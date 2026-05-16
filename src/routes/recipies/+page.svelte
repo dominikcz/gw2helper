@@ -152,16 +152,20 @@
 	<div class="items-grid">
 		{#each items as item (item.id)}
 			<div class="item-row">
-				<ItemLabel id={item.id} name={item.name} icon={item.icon ?? undefined} rarity={item.rarity} iconSize="2.5em" />
-				<span class="item-type">{item.type}</span>
+				<div class="col-label">
+					<ItemLabel id={item.id} name={item.name} icon={item.icon ?? undefined} rarity={item.rarity} iconSize="2.5em" />
+				</div>
+				<span class="col-type">{item.type}</span>
 				<a href={`https://wiki.guildwars2.com/wiki/Special:Search/${encodeURIComponent(getWikiSearchName(item.name, item.rarity))}`} target="_blank" rel="noopener noreferrer" class="btn btn-wiki" title="Search on GW2 Wiki">Wiki</a>
+				<a href={`https://api.guildwars2.com/v2/items/${item.id}`} target="_blank" rel="noopener noreferrer" class="btn btn-api" title="GW2 API">API</a>
 				{#if item.hasRecipe}
 					<span class="badge has-recipe">Has Recipe</span>
-					<a href={resolve(`/recipies/${item.id}`) + ($page.url.search ? `?back=${encodeURIComponent($page.url.search)}` : '')} class="btn btn-edit">Edit</a>
 				{:else}
-					<a href={resolve(`/recipies/${item.id}`) + ($page.url.search ? `?back=${encodeURIComponent($page.url.search)}` : '')} class="btn btn-create">Create</a>
+					<span class="badge-placeholder" aria-hidden="true"></span>
 				{/if}
+				<a href={resolve(`/recipies/${item.id}`) + ($page.url.search ? `?back=${encodeURIComponent($page.url.search)}` : '')} class="btn" class:btn-edit={item.hasRecipe} class:btn-create={!item.hasRecipe}>{item.hasRecipe ? 'Edit' : 'Create'}</a>
 			</div>
+			<span class="row-sep"></span>
 		{/each}
 	</div>
 </div>
@@ -172,12 +176,50 @@
 	.filters input { flex: 1; padding: 0.5rem; font-size: 1rem; }
 	.filters select { padding: 0.5rem; font-size: 1rem; }
 	.items-count { color: #888; margin-bottom: 0.5rem; font-size: 0.85rem; }
-	.item-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0; border-bottom: 1px solid #2a2a2a; }
-	.item-row :global(.item-label) { flex: 1; min-width: 0; }
-	.item-type { color: #888; font-size: 0.8rem; white-space: nowrap; }
-	.badge.has-recipe { background: #2d5a27; color: #8cff80; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.75rem; }
-	.btn { padding: 0.25rem 0.6rem; border-radius: 3px; text-decoration: none; font-size: 0.85rem; white-space: nowrap; }
-	.btn-edit { background: #1a4a7a; color: #80c4ff; }
-	.btn-create { background: #3a2a0a; color: #ffcc80; }
-	.btn-wiki { background: #1a3a1a; color: #80ff80; }
+	.items-grid {
+		display: grid;
+		grid-template-columns: 1fr auto auto auto auto auto;
+		align-items: center;
+		row-gap: 0;
+		column-gap: 0.6rem;
+	}
+	.item-row {
+		display: contents;
+	}
+	.item-row > * {
+		padding: 0.4rem 0;
+		align-self: center;
+	}
+	.row-sep {
+		grid-column: 1 / -1;
+		height: 0;
+		border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+		padding: 0;
+	}
+	.col-label { min-width: 0; padding-left: 0.25em; }
+	.col-label :global(.item-label) { display: flex; align-items: center; gap: 0.4rem; }
+	.col-label :global(.caption) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+	.col-type { color: #888; font-size: 0.8rem; white-space: nowrap; }
+	.badge.has-recipe { background: #2d5a27; color: #8cff80; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.75rem; white-space: nowrap; }
+	.badge-placeholder { display: inline-block; min-width: 5.5rem; }
+	.btn {
+		padding: 0.25rem 0.6rem;
+		border-radius: 3px;
+		text-decoration: none;
+		font-size: 0.85rem;
+		white-space: nowrap;
+		text-align: center;
+		border: 1px solid transparent;
+	}
+	/* light mode — solid backgrounds, dark text */
+	.btn-wiki   { background: #c8e6c9; color: #1b5e20; border-color: #81c784; }
+	.btn-api    { background: #bbdefb; color: #0d47a1; border-color: #64b5f6; }
+	.btn-edit   { background: #bbdefb; color: #0d47a1; border-color: #64b5f6; min-width: 3.6rem; }
+	.btn-create { background: #ffe0b2; color: #bf360c; border-color: #ffb74d; min-width: 3.6rem; }
+	@media (prefers-color-scheme: dark) {
+		.btn-wiki   { background: #1a3a1a; color: #80ff80; border-color: #4a8a4a; }
+		.btn-api    { background: #1a1a3a; color: #80c0ff; border-color: #4a6ab0; }
+		.btn-edit   { background: #1a3a6a; color: #80c4ff; border-color: #4a7ab0; }
+		.btn-create { background: #3a2a0a; color: #ffcc80; border-color: #8a6a30; }
+	}
 </style>

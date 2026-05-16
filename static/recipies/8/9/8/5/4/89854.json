@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "type": "Inscription",
+    "output_item_id": 89854,
+    "output_item_count": 1,
+    "time_to_craft_ms": 1000,
+    "disciplines": [
+      "Mystic Forge"
+    ],
+    "min_rating": 0,
+    "flags": [],
+    "ingredients": [
+      {
+        "item_id": 89886,
+        "count": 1
+      },
+      {
+        "item_id": 89445,
+        "count": 1
+      },
+      {
+        "item_id": 71820,
+        "count": 1
+      },
+      {
+        "item_id": 73239,
+        "count": 1
+      }
+    ],
+    "acquisition": {
+      "vendors": []
+    }
+  }
+]

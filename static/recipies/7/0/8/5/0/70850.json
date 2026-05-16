@@ -1,0 +1,25 @@
+[
+  {
+    "id": 0,
+    "type": "Trophy",
+    "output_item_id": 70850,
+    "output_item_count": 1,
+    "time_to_craft_ms": 1000,
+    "disciplines": [
+      "Salvage"
+    ],
+    "min_rating": 0,
+    "flags": [],
+    "ingredients": [
+      {
+        "item_id": 76235,
+        "count": 1
+      }
+    ],
+    "acquisition": {
+      "salvaged_from": [
+        "Tricks and Tips for Advanced Pistol Crafting"
+      ]
+    }
+  }
+]

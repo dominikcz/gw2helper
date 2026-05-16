@@ -1,0 +1,25 @@
+[
+  {
+    "id": 0,
+    "type": "Inscription",
+    "output_item_id": 73396,
+    "output_item_count": 1,
+    "time_to_craft_ms": 1000,
+    "disciplines": [
+      "Salvage"
+    ],
+    "min_rating": 0,
+    "flags": [],
+    "ingredients": [
+      {
+        "item_id": 73023,
+        "count": 1
+      }
+    ],
+    "acquisition": {
+      "salvaged_from": [
+        "Perfected Pistol"
+      ]
+    }
+  }
+]

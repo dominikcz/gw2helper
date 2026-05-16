@@ -1,0 +1,66 @@
+[
+  {
+    "id": 0,
+    "type": "Trophy",
+    "output_item_id": 76427,
+    "output_item_count": 1,
+    "time_to_craft_ms": 1000,
+    "disciplines": [
+      "Mystic Forge"
+    ],
+    "min_rating": 0,
+    "flags": [],
+    "ingredients": [
+      {
+        "item_id": 19678,
+        "count": 1
+      },
+      {
+        "item_id": 70528,
+        "count": 1
+      },
+      {
+        "item_id": 71008,
+        "count": 1
+      },
+      {
+        "item_id": 73137,
+        "count": 1
+      }
+    ],
+    "acquisition": {
+      "vendors": [
+        {
+          "name": "Ward Crafter Lucirae",
+          "cost": [
+            {
+              "amount": 1,
+              "item_name": "Cube of Stabilized Dark Energy",
+              "icon_url": "https://wiki.guildwars2.com/images/thumb/7/76/Cube_of_Stabilized_Dark_Energy.png/20px-Cube_of_Stabilized_Dark_Energy.png"
+            },
+            {
+              "amount": 1,
+              "item_name": "Gift of Battle",
+              "icon_url": "https://wiki.guildwars2.com/images/thumb/2/25/Gift_of_Battle.png/20px-Gift_of_Battle.png"
+            },
+            {
+              "amount": 1,
+              "item_name": "Gift of Glory",
+              "icon_url": "https://wiki.guildwars2.com/images/thumb/0/0b/Gift_of_Glory.png/20px-Gift_of_Glory.png"
+            },
+            {
+              "amount": 7,
+              "item_name": "Gift of War",
+              "icon_url": "https://wiki.guildwars2.com/images/thumb/7/7e/Gift_of_War.png/20px-Gift_of_War.png"
+            },
+            {
+              "amount": 9,
+              "item_name": "Glob of Ectoplasm",
+              "icon_url": "https://wiki.guildwars2.com/images/thumb/9/9b/Glob_of_Ectoplasm.png/20px-Glob_of_Ectoplasm.png"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

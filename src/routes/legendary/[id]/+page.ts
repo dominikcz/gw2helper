@@ -76,10 +76,6 @@ type CacheRecipe = {
 	acquisition?: ItemAcquisition | null;
 };
 
-type RecipeCache = {
-	recipesByOutputId: Record<string, CacheRecipe>;
-};
-
 type LegendaryDetailsData = {
 	targetItemId: number;
 	targetItem: ItemSummary | null;
@@ -91,15 +87,10 @@ type LegendaryDetailsData = {
 };
 
 const BATCH_SIZE = 200;
-const CACHE_URLS = [
-	`${base}/legendary_recipes_cache.json`,
-];
 
-const recipeSourceRank: Record<CacheRecipe['source'], number> = {
-	api: 3,
-	wiki: 2,
-	terminal: 1,
-};
+function recipeFileUrl(itemId: number): string {
+	return `${base}/recipies/${String(itemId).split('').join('/')}/${itemId}.json`;
+}
 
 const isFinitePositiveInt = (value: unknown): value is number => {
 	const n = Number(value);
@@ -111,130 +102,115 @@ const isFinitePositiveNumber = (value: unknown): value is number => {
 	return Number.isFinite(n) && n > 0;
 };
 
-const normalizeCacheRecipe = (entry: unknown): CacheRecipe | null => {
-	if (!entry || typeof entry !== 'object') return null;
-	const raw = entry as Partial<CacheRecipe>;
-	if (!isFinitePositiveInt(raw.output_item_id)) return null;
-	if (raw.source !== 'api' && raw.source !== 'wiki' && raw.source !== 'terminal') return null;
+function normalizeAcquisition(rawAcq: unknown): ItemAcquisition | null {
+	if (!rawAcq || typeof rawAcq !== 'object') return null;
+	const acqObj = rawAcq as Record<string, unknown>;
+	if (!Array.isArray(acqObj.vendors)) return null;
+	const vendors: VendorAcquisition[] = acqObj.vendors
+		.map((v: unknown) => {
+			if (!v || typeof v !== 'object') return null;
+			const vo = v as Record<string, unknown>;
+			const name = typeof vo.name === 'string' ? vo.name.trim() : '';
+			if (!name) return null;
+			const cost: VendorCost[] = Array.isArray(vo.cost)
+				? vo.cost
+						.map((c: unknown) => {
+							if (!c || typeof c !== 'object') return null;
+							const co = c as Record<string, unknown>;
+							const amount = Number(co.amount);
+							const item_name = typeof co.item_name === 'string' ? co.item_name.trim() : '';
+							if (!Number.isFinite(amount) || amount <= 0 || !item_name) return null;
+							const icon_url = typeof co.icon_url === 'string' && co.icon_url ? co.icon_url : undefined;
+							return icon_url ? { amount, item_name, icon_url } : { amount, item_name };
+						})
+						.filter((c): c is VendorCost => c !== null)
+				: [];
+			const gold_cost = typeof vo.gold_cost === 'number' && vo.gold_cost > 0 ? vo.gold_cost : undefined;
+			if (!cost.length && !gold_cost) return null;
+			return { name, cost, ...(gold_cost !== undefined ? { gold_cost } : {}) };
+		})
+		.filter((v): v is VendorAcquisition => v !== null);
+	return vendors.length ? { vendors } : null;
+}
 
-	const ingredients = Array.isArray(raw.ingredients)
+function normalizeRecipeEntry(entry: unknown): CacheRecipe | null {
+	if (!entry || typeof entry !== 'object') return null;
+	const raw = entry as Record<string, unknown>;
+	const outputId = Number(raw.output_item_id);
+	if (!isFinitePositiveInt(outputId)) return null;
+
+	const ingredients: CacheIngredient[] = Array.isArray(raw.ingredients)
 		? raw.ingredients
-				.map((ingredient) => {
-					if (!ingredient || typeof ingredient !== 'object') return null;
-					const item_id = Number((ingredient as CacheIngredient).item_id);
-					const count = Number((ingredient as CacheIngredient).count);
-					if (!Number.isFinite(item_id) || item_id <= 0) return null;
+				.map((ing: unknown) => {
+					if (!ing || typeof ing !== 'object') return null;
+					const i = ing as Record<string, unknown>;
+					const item_id = Number(i.item_id);
+					const count = Number(i.count);
+					if (!isFinitePositiveInt(item_id)) return null;
 					if (!Number.isFinite(count) || count <= 0) return null;
-					return { item_id, count, name: (ingredient as CacheIngredient).name ?? null };
+					return { item_id, count, name: null };
 				})
-				.filter((ingredient): ingredient is { item_id: number; count: number; name: string | null } => ingredient !== null)
+				.filter((i): i is CacheIngredient => i !== null)
 		: [];
 
-	const normalizedIngredients = (() => {
-		if (raw.source !== 'wiki' || !ingredients.length) return ingredients;
-
-		const blocks: typeof ingredients[] = [];
-		let block: typeof ingredients = [];
-		let blockStartId: number | null = null;
-
-		for (const ingredient of ingredients) {
-			if (!block.length) {
-				block = [ingredient];
-				blockStartId = ingredient.item_id;
-				continue;
-			}
-
-			const looksLikeAltRestart = blockStartId != null && block.length > 1 && ingredient.item_id === blockStartId;
-			if (looksLikeAltRestart) {
-				blocks.push(block);
-				block = [ingredient];
-				blockStartId = ingredient.item_id;
-				continue;
-			}
-
-			block.push(ingredient);
-		}
-
-		if (block.length) blocks.push(block);
-		if (blocks.length <= 1) return ingredients;
-
-		const score = (recipeBlock: typeof ingredients) =>
-			recipeBlock.reduce((sum, ingredient) => sum + Math.max(0, Number(ingredient.count || 0)), 0);
-
-		const best = [...blocks].sort((a, b) => {
-			const scoreDiff = score(b) - score(a);
-			if (scoreDiff !== 0) return scoreDiff;
-			if (a.length !== b.length) return a.length - b.length;
-			return 0;
-		})[0];
-
-		// Some wiki pages include multiple alternative recipes in one section.
-		// Keep the strongest single block instead of concatenating all alternatives.
-		return best;
-	})();
-
-	const rawAcq = (raw as Record<string, unknown>).acquisition;
-	const acquisition: ItemAcquisition | null = (() => {
-		if (!rawAcq || typeof rawAcq !== 'object') return null;
-		const acqObj = rawAcq as Record<string, unknown>;
-		if (!Array.isArray(acqObj.vendors)) return null;
-		const vendors: VendorAcquisition[] = acqObj.vendors
-			.map((v: unknown) => {
-				if (!v || typeof v !== 'object') return null;
-				const vo = v as Record<string, unknown>;
-				const name = typeof vo.name === 'string' ? vo.name.trim() : '';
-				if (!name) return null;
-				const cost: VendorCost[] = Array.isArray(vo.cost)
-					? vo.cost
-							.map((c: unknown) => {
-								if (!c || typeof c !== 'object') return null;
-								const co = c as Record<string, unknown>;
-								const amount = Number(co.amount);
-								const item_name = typeof co.item_name === 'string' ? co.item_name.trim() : '';
-								if (!Number.isFinite(amount) || amount <= 0 || !item_name) return null;
-									const icon_url = typeof co.icon_url === 'string' && co.icon_url ? co.icon_url : undefined;
-									return icon_url ? { amount, item_name, icon_url } : { amount, item_name };
-							})
-							.filter((c): c is VendorCost => c !== null)
-					: [];
-				const gold_cost = typeof vo.gold_cost === 'number' && vo.gold_cost > 0 ? vo.gold_cost : undefined;
-				if (!cost.length && !gold_cost) return null;
-				return { name, cost, ...(gold_cost !== undefined ? { gold_cost } : {}) };
-			})
-			.filter((v): v is VendorAcquisition => v !== null);
-		return vendors.length ? { vendors } : null;
-	})();
+	const acquisition = normalizeAcquisition(raw.acquisition);
+	// id=0 = custom/wiki, id>0 = GW2 API; no ingredients = terminal (vendor/acquisition only)
+	const entryId = Number(raw.id ?? -1);
+	const source: CacheRecipe['source'] = ingredients.length === 0 ? 'terminal' : (entryId === 0 ? 'wiki' : 'api');
 
 	return {
-		source: raw.source,
-		output_item_id: raw.output_item_id,
-		recipe_id: raw.recipe_id ?? null,
+		source,
+		output_item_id: outputId,
+		recipe_id: entryId > 0 ? entryId : null,
 		output_item_count: isFinitePositiveNumber(raw.output_item_count) ? Number(raw.output_item_count) : 1,
-		wiki_page: raw.wiki_page,
-		ingredients: normalizedIngredients,
+		ingredients,
 		acquisition,
 	};
-};
+}
 
-const pickBetterRecipe = (current: CacheRecipe | undefined, next: CacheRecipe): CacheRecipe => {
-	if (!current) return next;
+async function prefetchRecipeTree(
+	fetchFn: (input: string) => Promise<Response>,
+	rootId: number,
+	maxDepth = 8
+): Promise<Map<number, CacheRecipe>> {
+	const cache = new Map<number, CacheRecipe>();
+	const visited = new Set<number>([rootId]);
+	let frontier = [rootId];
 
-	const currentRank = recipeSourceRank[current.source] || 0;
-	const nextRank = recipeSourceRank[next.source] || 0;
-	if (nextRank !== currentRank) return nextRank > currentRank ? next : current;
+	for (let depth = 0; depth <= maxDepth && frontier.length > 0; depth++) {
+		const results = await Promise.all(
+			frontier.map(async (id): Promise<[number, CacheRecipe | null]> => {
+				const res = await fetchFn(recipeFileUrl(id)).catch(() => null);
+				if (!res?.ok) return [id, null];
+				const entries: unknown = await res.json().catch(() => null);
+				if (!Array.isArray(entries) || !entries.length) return [id, null];
+				// Prefer custom entry (id=0), fallback to first API entry (id>0)
+				const custom = entries.find((e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) === 0);
+				const api = entries.find((e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) > 0);
+				const best = custom ?? api ?? null;
+				return [id, best ? normalizeRecipeEntry(best) : null];
+			})
+		);
 
-	const currentIngredientCount = current.ingredients.length;
-	const nextIngredientCount = next.ingredients.length;
-	if (nextIngredientCount !== currentIngredientCount) {
-		return nextIngredientCount < currentIngredientCount ? next : current;
+		const nextFrontier = new Set<number>();
+		for (const [id, recipe] of results) {
+			if (!recipe) continue;
+			cache.set(id, recipe);
+			if (depth < maxDepth) {
+				for (const ing of recipe.ingredients) {
+					const ingId = Number(ing.item_id);
+					if (ingId > 0 && !visited.has(ingId)) {
+						visited.add(ingId);
+						nextFrontier.add(ingId);
+					}
+				}
+			}
+		}
+		frontier = [...nextFrontier];
 	}
 
-	const currentOutputCount = Number(current.output_item_count || 1);
-	const nextOutputCount = Number(next.output_item_count || 1);
-	if (nextOutputCount !== currentOutputCount) return nextOutputCount > currentOutputCount ? next : current;
-
-	return current;
-};
+	return cache;
+}
 
 const inBatches = <T>(input: T[], size = BATCH_SIZE): T[][] => {
 	const copy = [...input];
@@ -321,44 +297,10 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		return (await response.json()) as T;
 	};
 
-	const loadRecipeCache = async (): Promise<RecipeCache | null> => {
-		const merged = new Map<number, CacheRecipe>();
-
-		for (const url of CACHE_URLS) {
-			const response = await fetch(url).catch(() => null);
-			if (!response?.ok) continue;
-
-			const json = (await response.json()) as Partial<RecipeCache>;
-			if (!json?.recipesByOutputId || typeof json.recipesByOutputId !== 'object') continue;
-
-			for (const [key, value] of Object.entries(json.recipesByOutputId)) {
-				const outputId = Number(key);
-				if (!Number.isFinite(outputId) || outputId <= 0) continue;
-				const normalized = normalizeCacheRecipe(value);
-				if (!normalized) continue;
-				merged.set(outputId, pickBetterRecipe(merged.get(outputId), normalized));
-			}
-		}
-
-		if (!merged.size) return null;
-
-		const recipesByOutputId: Record<string, CacheRecipe> = {};
-		for (const [outputId, recipe] of merged.entries()) {
-			recipesByOutputId[String(outputId)] = recipe;
-		}
-
-		return { recipesByOutputId };
-	};
-
-	const recipeCache = await loadRecipeCache();
-	const recipesByOutputId = recipeCache?.recipesByOutputId || {};
+	const recipeCache = await prefetchRecipeTree(fetch, targetItemId);
 
 	const recipeForItem = (itemId: number): CacheRecipe | undefined => {
-		const cached = recipesByOutputId[String(itemId)];
-		if (cached && !(cached.source === 'terminal' && (!Array.isArray(cached.ingredients) || cached.ingredients.length === 0))) {
-			return cached;
-		}
-		return cached;
+		return recipeCache.get(itemId);
 	};
 
 	const isSelfReferentialRecipe = (itemId: number, recipe: CacheRecipe | undefined): boolean => {
@@ -398,23 +340,20 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			let acqChildren: RecipeTreeNode[] = [];
 			let acqGoldCost: number | undefined;
 			if (isTerminal && remainingToCraft > 0 && leafAcquisition?.vendors?.length) {
-				const seen = new Set<string>();
-				for (const vendor of leafAcquisition.vendors) {
-					for (const c of vendor.cost) {
-						if (!seen.has(c.item_name)) {
-							seen.add(c.item_name);
-							acqChildren.push({
-								id: 0,
-								count: c.amount * neededCount,
-								name: c.item_name,
-								...(c.icon_url ? { icon_url: c.icon_url } : {}),
-								children: [],
-							});
-						}
-					}
-					if (acqGoldCost === undefined && vendor.gold_cost) {
-						acqGoldCost = vendor.gold_cost;
-					}
+				// Vendors are OR alternatives — show only the first vendor's cost in the tree.
+				// The full list of options is visible in the ingredients table.
+				const firstVendor = leafAcquisition.vendors[0];
+				for (const c of firstVendor.cost) {
+					acqChildren.push({
+						id: 0,
+						count: c.amount * neededCount,
+						name: c.item_name,
+						...(c.icon_url ? { icon_url: c.icon_url } : {}),
+						children: [],
+					});
+				}
+				if (firstVendor.gold_cost) {
+					acqGoldCost = firstVendor.gold_cost;
 				}
 			}
 			return {
@@ -674,7 +613,7 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			const craftSellUnit = estimateCraftUnitCost(id, 'sell');
 			const bestBuy = pickBestUnit(tpEligible ? buyUnit : null, craftBuyUnit);
 			const bestSell = pickBestUnit(tpEligible ? sellUnit : null, craftSellUnit);
-			const cachedEntry = recipesByOutputId[String(id)];
+const cachedEntry = recipeCache.get(id);
 			const acquisition = cachedEntry?.source === 'terminal' ? (cachedEntry?.acquisition ?? null) : null;
 
 			return {

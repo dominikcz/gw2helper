@@ -233,8 +233,20 @@
 
 	function canExpandNode(node: RecipeNode, path: string) {
 		if (!node.children.length || nodeMissingAtPath(node, path) <= 0) return false;
-		// Items in the ingredients table are leaves, unless they have acquisition (currency) children
-		if (rowById.has(node.id) && !node.children.some(c => c.id === 0)) return false;
+		// Items in the ingredients table are leaves, unless:
+		// - they have acquisition (currency) children with id=0, OR
+		// - they have a craft source themselves (compare craft vs buy), OR
+		// - any of their children has a craft source or own children (drill deeper)
+		if (rowById.has(node.id) && !node.children.some(c => c.id === 0)) {
+			const row = rowById.get(node.id)!;
+			if (rowHasSource(row, 'craft')) return true;
+			const anyChildExpandable = node.children.some(c => {
+				if (c.children.length > 0) return true;
+				const childRow = rowById.get(c.id);
+				return childRow ? rowHasSource(childRow, 'craft') : false;
+			});
+			if (!anyChildExpandable) return false;
+		}
 		return true;
 	}
 
@@ -419,7 +431,7 @@
 															onclick={() => setDecision(nodeRow.id, 'tp')}
 												/>
 												<span class="strategy-name">TP</span>
-												<span class="strategy-price"><Price value={(rowTpUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+												<span class="strategy-price"><Price value={rowTpUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
 										{#if rowHasSource(nodeRow, 'craft')}
@@ -432,7 +444,7 @@
 															onclick={() => setDecision(nodeRow.id, 'craft')}
 												/>
 												<span class="strategy-name">CRAFT</span>
-												<span class="strategy-price"><Price value={(rowCraftUnit(nodeRow) as number) * missingCount} compact={false} /></span>
+												<span class="strategy-price"><Price value={rowCraftUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
 									</span>
@@ -811,6 +823,8 @@
 		transition: transform 0.2s;
 		transform-origin: center;
 		color: inherit;
+		cursor: pointer;
+		user-select: none;
 	}
 
 	.tree-toggle.expanded {
@@ -982,6 +996,10 @@
 
 	tbody td {
 		vertical-align: top;
+	}
+
+	tbody td.total-col {
+		vertical-align: middle;
 	}
 
 	tfoot .summary-row {

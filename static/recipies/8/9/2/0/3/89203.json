@@ -1,0 +1,1 @@
+[{"id":12883,"type":"Consumable","output_item_id":89203,"output_item_count":5,"time_to_craft_ms":1000,"disciplines":["Huntsman"],"min_rating":400,"flags":["LearnedFromItem"],"ingredients":[{"item_id":89271,"count":5},{"item_id":12156,"count":20},{"item_id":89258,"count":1},{"item_id":24277,"count":3}],"chat_link":"[&CVMyAAA=]","guild_ingredients":[]}]
