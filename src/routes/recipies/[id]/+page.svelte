@@ -62,7 +62,7 @@
 	}
 
 	let form = $state<RecipeForm>(initForm());
-	let editMode = $state(!isApiOnly);
+	let editMode = $state(false);
 	let isDirty = $state(false);
 
 	// Per-ingredient resolved item info
@@ -438,16 +438,17 @@
 								value={search?.query ?? ''}
 								oninput={(e) => searchItems(i, e.currentTarget.value)}
 								onblur={() => setTimeout(() => { if (ingSearches[i]) ingSearches[i].results = []; }, 200)}
-								autofocus
 							/>
 							{#if search?.loading}<span class="ing-searching">…</span>{/if}
 							{#if search?.results.length}
 								<ul class="ing-dropdown">
 									{#each search.results as item (item.id)}
-										<li onmousedown={() => selectIngredientItem(i, item)}>
-											{#if item.icon}<img src={item.icon} alt="" class="ing-icon-sm" />{/if}
-									<span class={item.rarity ? `rarity-${item.rarity.toLowerCase()}` : ''}>{item.name}</span>
-											<span class="ing-id-hint">#{item.id}</span>
+										<li>
+											<button type="button" class="ing-dropdown-item" onmousedown={() => selectIngredientItem(i, item)}>
+												{#if item.icon}<img src={item.icon} alt="" class="ing-icon-sm" />{/if}
+												<span class={item.rarity ? `rarity-${item.rarity.toLowerCase()}` : ''}>{item.name}</span>
+												<span class="ing-id-hint">#{item.id}</span>
+											</button>
 										</li>
 									{/each}
 								</ul>
@@ -568,8 +569,9 @@
 	.ing-search-input { width: 100%; padding: 0.3rem; background: #1a1a1a; border: 1px solid #555; color: #fff; border-radius: 3px; }
 	.ing-searching { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); color: #888; }
 	.ing-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: #1e1e1e; border: 1px solid #555; border-radius: 3px; margin: 0; padding: 0; list-style: none; max-height: 220px; overflow-y: auto; }
-	.ing-dropdown li { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem; cursor: pointer; }
-	.ing-dropdown li:hover { background: #2a2a2a; }
+	.ing-dropdown li { padding: 0; }
+	.ing-dropdown-item { width: 100%; display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem; background: transparent; border: 0; color: inherit; cursor: pointer; text-align: left; }
+	.ing-dropdown-item:hover { background: #2a2a2a; }
 	.ing-icon-sm { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
 	.ing-id-hint { color: #666; font-size: 0.75rem; margin-left: auto; }
 	.ing-resolved { display: flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0; }

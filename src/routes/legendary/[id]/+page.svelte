@@ -739,15 +739,6 @@
 		color: var(--gw2helper-muted, #aaa);
 	}
 
-	.acq-inline {
-		display: inline-flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.2rem;
-		font-size: 0.8rem;
-		color: var(--gw2helper-muted, #aaa);
-	}
-
 	.acq-cost-entry {
 		display: inline-flex;
 		align-items: center;
