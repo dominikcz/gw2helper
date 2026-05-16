@@ -342,7 +342,7 @@
 								{@const nodeRow = rowById.get(node.id)}
 								{#if nodeRow && missingCount > 0}
 									<span class="node-strategy" title="Optimal acquisition">
-										{#if __rowHasSource(nodeRow, 'tp')}
+										{#if _rowHasSource(nodeRow, 'tp')}
 											<label class="strategy-line">
 												<input
 													type="radio"
@@ -355,7 +355,7 @@
 												<span class="strategy-price"><Price value={rowTpUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
-										{#if __rowHasSource(nodeRow, 'craft')}
+										{#if _rowHasSource(nodeRow, 'craft')}
 											<label class="strategy-line">
 												<input
 													type="radio"
@@ -368,7 +368,7 @@
 												<span class="strategy-price"><Price value={rowCraftUnit(nodeRow) as number} compact={false} /></span>
 											</label>
 										{/if}
-										{#if __rowHasSource(nodeRow, 'vendor')}
+										{#if _rowHasSource(nodeRow, 'vendor')}
 											<label class="strategy-line">
 												<input
 													type="radio"

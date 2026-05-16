@@ -7,6 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.join(__dirname, '../../../../../');
 const CACHE_PATH = path.join(PROJECT_ROOT, 'scripts/.cache/gw2_all_items.json');
 const RECIPES_DIR = path.join(PROJECT_ROOT, 'static/data/recipies');
+const RECIPES_BUCKETS_DIR = path.join(RECIPES_DIR, 'buckets');
+const BUCKET_SIZE = 2000;
 
 interface CachedItem {
 	id: number;
@@ -18,9 +20,49 @@ interface CachedItem {
 	isRecipeScroll?: boolean;
 }
 
-function getRecipePath(id: number, baseDir: string): string {
-	const digits = String(id).split('');
-	return path.join(baseDir, ...digits, `${id}.json`);
+type RecipeBucket = {
+	recipesByItemId?: Record<string, unknown[]>;
+};
+
+function getBucketStart(id: number): number {
+	return Math.floor(id / BUCKET_SIZE) * BUCKET_SIZE;
+}
+
+function getBucketPath(bucketStart: number): string {
+	return path.join(RECIPES_BUCKETS_DIR, `${bucketStart}.json`);
+}
+
+function readBucketRecipesByItemId(bucketStart: number): Record<string, unknown[]> {
+	const bucketPath = getBucketPath(bucketStart);
+	if (!existsSync(bucketPath)) return {};
+
+	try {
+		const parsed = JSON.parse(readFileSync(bucketPath, 'utf-8')) as RecipeBucket;
+		if (!parsed || typeof parsed !== 'object' || !parsed.recipesByItemId) return {};
+		return parsed.recipesByItemId;
+	} catch {
+		return {};
+	}
+}
+
+function buildHasRecipeLookup(ids: number[]): Map<number, boolean> {
+	const byBucket = new Map<number, number[]>();
+	for (const id of ids) {
+		const bucketStart = getBucketStart(id);
+		const arr = byBucket.get(bucketStart);
+		if (arr) arr.push(id);
+		else byBucket.set(bucketStart, [id]);
+	}
+
+	const hasRecipeById = new Map<number, boolean>();
+	for (const [bucketStart, bucketIds] of byBucket.entries()) {
+		const recipesByItemId = readBucketRecipesByItemId(bucketStart);
+		for (const id of bucketIds) {
+			hasRecipeById.set(id, Array.isArray(recipesByItemId[String(id)]));
+		}
+	}
+
+	return hasRecipeById;
 }
 
 // IDs that must never be returned — duplicates, wrong-version items, etc.
@@ -53,6 +95,7 @@ export function GET({ url }: { url: URL }) {
 	// ID lookup mode – return specific items by ID regardless of filters
 	if (idsParam) {
 		const ids = new Set(idsParam.split(',').map(Number).filter(n => n > 0));
+		const hasRecipeById = buildHasRecipeLookup([...ids]);
 		const items = allItems
 			.filter(item => ids.has(item.id) && !BLOCKED_IDS.has(item.id))
 			.map(item => ({
@@ -61,7 +104,7 @@ export function GET({ url }: { url: URL }) {
 				icon: item.icon,
 				rarity: item.rarity,
 				type: item.type,
-				hasRecipe: existsSync(getRecipePath(item.id, RECIPES_DIR)),
+				hasRecipe: hasRecipeById.get(item.id) ?? false,
 			}));
 		return json({ items });
 	}
@@ -79,6 +122,7 @@ export function GET({ url }: { url: URL }) {
 		if (type && item.type !== type) return false;
 		return true;
 	});
+	const hasRecipeById = buildHasRecipeLookup(filtered.map((item) => item.id));
 
 	const items = filtered.map((item) => ({
 		id: item.id,
@@ -86,7 +130,7 @@ export function GET({ url }: { url: URL }) {
 		icon: item.icon,
 		rarity: item.rarity,
 		type: item.type,
-		hasRecipe: existsSync(getRecipePath(item.id, RECIPES_DIR)),
+		hasRecipe: hasRecipeById.get(item.id) ?? false,
 	})).sort((a, b) => {
 		// Alphabetically by name
 		const nameCmp = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });

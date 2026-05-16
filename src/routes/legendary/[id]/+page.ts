@@ -30,12 +30,54 @@ type LegendaryDetailsData = {
 	ownedById: Record<number, number>;
 };
 
-function recipeFileUrl(itemId: number): string {
-	return asset(`/data/recipies/${String(itemId).split('').join('/')}/${itemId}.json`);
+type LegendaryRecipePack = {
+	version?: number;
+	recipesByItemId?: Record<string, unknown>;
+};
+
+function pickBestRecipeEntry(entries: unknown): unknown | null {
+	if (!Array.isArray(entries) || entries.length === 0) return null;
+	const custom = entries.find(
+		(e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) === 0
+	);
+	if (custom) return custom;
+	return (
+		entries.find(
+			(e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) > 0
+		) ?? null
+	);
+}
+
+async function loadLegendaryRecipePack(
+	fetchFn: (input: string) => Promise<Response>
+): Promise<Map<number, CacheRecipe>> {
+	const packUrl = asset('/data/recipies/legendary-pack.json');
+	const res = await fetchFn(packUrl).catch(() => null);
+	if (!res?.ok) return new Map<number, CacheRecipe>();
+
+	const rawPack: unknown = await res.json().catch(() => null);
+	if (!rawPack || typeof rawPack !== 'object') return new Map<number, CacheRecipe>();
+
+	const pack = rawPack as LegendaryRecipePack;
+	const byId = pack.recipesByItemId;
+	if (!byId || typeof byId !== 'object') return new Map<number, CacheRecipe>();
+
+	const map = new Map<number, CacheRecipe>();
+	for (const [id, entry] of Object.entries(byId)) {
+		const itemId = Number(id);
+		if (!Number.isInteger(itemId) || itemId <= 0 || !entry) continue;
+
+		const picked = pickBestRecipeEntry(entry);
+		const source = picked ?? entry;
+		const normalized = normalizeRecipeEntry(source);
+		if (normalized) map.set(itemId, normalized);
+	}
+
+	return map;
 }
 
 async function prefetchRecipeTree(
-	fetchFn: (input: string) => Promise<Response>,
+	packRecipesById: Map<number, CacheRecipe>,
 	rootId: number,
 	maxDepth = 8
 ): Promise<Map<number, CacheRecipe>> {
@@ -46,14 +88,7 @@ async function prefetchRecipeTree(
 	for (let depth = 0; depth <= maxDepth && frontier.length > 0; depth++) {
 		const results = await Promise.all(
 			frontier.map(async (id): Promise<[number, CacheRecipe | null]> => {
-				const res = await fetchFn(recipeFileUrl(id)).catch(() => null);
-				if (!res?.ok) return [id, null];
-				const entries: unknown = await res.json().catch(() => null);
-				if (!Array.isArray(entries) || !entries.length) return [id, null];
-				const custom = entries.find((e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) === 0);
-				const api = entries.find((e) => typeof e === 'object' && e !== null && Number((e as Record<string, unknown>).id) > 0);
-				const best = custom ?? api ?? null;
-				return [id, best ? normalizeRecipeEntry(best) : null];
+				return [id, packRecipesById.get(id) ?? null];
 			})
 		);
 
@@ -109,7 +144,8 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		return (await response.json()) as T;
 	};
 
-	const recipeCache = await prefetchRecipeTree(fetch, targetItemId);
+	const packRecipesById = await loadLegendaryRecipePack(fetch);
+	const recipeCache = await prefetchRecipeTree(packRecipesById, targetItemId);
 
 	const targetItem = ((await apiService.items(String(targetItemId))) || [])[0] || null;
 
