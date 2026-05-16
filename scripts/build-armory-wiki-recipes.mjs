@@ -11,7 +11,7 @@
  *  3. Resolve ingredient names → item IDs via local items cache (name lookup)
  *     and wiki SMW as fallback
  *  4. Replace wiki thumbnail icon_urls with GW2 API render URLs from items cache
- *  5. Merge into static/data/recipies/<d1>/<d2>/.../id.json  (append id=0 entry)
+ *  5. Merge into static/data/recipies/buckets/<bucketStart>.json (append id=0 entry)
  *
  * Usage:
  *   node scripts/build-armory-wiki-recipes.mjs           # all armory items, 3 levels
@@ -33,6 +33,7 @@ import {
 	wikiResolveGameIdByPage,
 	WIKI_DELAY_MS,
 } from './lib/wiki-utils.mjs';
+import { readRecipeEntries, writeRecipeEntries } from './lib/recipe-buckets.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -106,25 +107,12 @@ function enrichVendorCostItemIds(acquisition) {
 
 // ─── Recipe file helpers ──────────────────────────────────────────────────────
 
-function recipePath(itemId) {
-	const digits = String(itemId).split('');
-	return path.join(RECIPES_DIR, ...digits, `${itemId}.json`);
-}
-
 async function readRecipeFile(itemId) {
-	const p = recipePath(itemId);
-	if (!existsSync(p)) return [];
-	try {
-		return JSON.parse(await fs.readFile(p, 'utf-8'));
-	} catch {
-		return [];
-	}
+	return readRecipeEntries(RECIPES_DIR, itemId);
 }
 
 async function writeRecipeFile(itemId, recipes) {
-	const p = recipePath(itemId);
-	await fs.mkdir(path.dirname(p), { recursive: true });
-	await fs.writeFile(p, JSON.stringify(recipes), 'utf-8');
+	await writeRecipeEntries(RECIPES_DIR, itemId, recipes);
 }
 
 /** Returns true if the file already has a custom (id=0) wiki recipe */

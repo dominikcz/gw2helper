@@ -17,9 +17,9 @@
  */
 
 import fs from 'node:fs/promises';
-import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readRecipeEntries } from './lib/recipe-buckets.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -53,11 +53,6 @@ async function gw2Fetch(path, query = {}) {
 	return res.json();
 }
 
-function recipeFilePath(itemId) {
-	const digits = String(itemId).split('');
-	return path.join(RECIPES_DIR, ...digits, `${itemId}.json`);
-}
-
 function slugify(name) {
 	return name
 		.toLowerCase()
@@ -87,16 +82,9 @@ async function collectRecipeTree(rootId, maxDepth = 8) {
 	for (let depth = 0; depth <= maxDepth && frontier.length > 0; depth++) {
 		const results = await Promise.all(
 			frontier.map(async (id) => {
-				const filePath = recipeFilePath(id);
-				if (!existsSync(filePath)) return [id, null];
-				try {
-					const raw = await fs.readFile(filePath, 'utf8');
-					const entries = JSON.parse(raw);
-					if (!Array.isArray(entries) || !entries.length) return [id, null];
-					return [id, entries];
-				} catch {
-					return [id, null];
-				}
+				const entries = await readRecipeEntries(RECIPES_DIR, id);
+				if (!Array.isArray(entries) || !entries.length) return [id, null];
+				return [id, entries];
 			})
 		);
 
