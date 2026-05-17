@@ -7,6 +7,9 @@ import wxjs_types from "./wxjs_types";
 import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
 import { groupBy, mapFields } from "./utils/helper-utils";
 import wxdates from "./wxjs_dates";
+import { getScopes, createScopeError } from "$lib/services/api/layers/authorization";
+import { additionalMapping, toHtml } from "$lib/services/api/layers/mapping";
+import { buildEntityCacheName, buildRequestCacheName } from "$lib/services/api/layers/cache-keys";
 import type { AchievementBit } from "$lib/types/achievements";
 import type { ItemTooltipData } from "$lib/types/items";
 import type {
@@ -75,37 +78,6 @@ let _settings: GW2HelperSettings = {
 //         return self.indexOf(el) === i;
 //     });
 // };
-
-const REQUIRED_SCOPES: Record<string, string[]> = {
-    "/v2/account": ['account' /*, 'progression' */],
-    "/v2/account/achievements": ['account', 'progression'],
-    "/v2/account/bank": ['account', 'inventories'],
-    "/v2/account/inventory": ['account', 'inventories'],
-    "/v2/account/legendaryarmory": ['account', 'inventories', 'unlocks'],
-    "/v2/account/materials": ['account', 'inventories'],
-    "/v2/account/wallet": ['account', 'wallet'],
-    "/v2/account/wizardsvault/*": ['account', 'progression'],
-    "/v2/characters": ['account', 'characters'],
-    "/v2/commerce": ['account', 'tradingpost'],
-    "/v2/guild/*": ['account', 'guilds'],
-}
-
-function getScopes(req: string) {
-    if (REQUIRED_SCOPES[req]) return REQUIRED_SCOPES[req];
-    const rs = Object.keys(REQUIRED_SCOPES).find(x => req.startsWith(x.replace('*', '')));
-    return rs ? REQUIRED_SCOPES[rs] : [];
-}
-
-interface ScopeError extends Error {
-    missingScopes: string[]
-}
-
-function ScopeError(missingScopes: string[]) {
-    const error = new Error("Missing permissions: " + missingScopes.join(', ')) as ScopeError;
-    error.name = "ScopeError";
-    error.missingScopes = missingScopes
-    return error;
-}
 
 const SCHEMA_VERSION = '2019-12-19T00:00:00.000Z'; // or 'latest'?
 
@@ -245,17 +217,9 @@ let fetchOptions: ApiClientOptions = {
     debug: false,
 };
 
-const requestCacheName = (): string => {
-    return `${REQUESTS_CACHE}.${_apiKey}`;
-}
+const requestCacheName = (): string => buildRequestCacheName(REQUESTS_CACHE, _apiKey);
 
-const currentApiLang = (): string => {
-    return fetchOptions.apiLang || 'en';
-}
-
-const entityCacheName = (base: string): string => {
-    return `${base}.${currentApiLang()}`;
-}
+const entityCacheName = (base: string): string => buildEntityCacheName(base, fetchOptions.apiLang);
 
 // const notifyOnError = (req, error, options) => {
 //     if (fetchOptions.onError) {
@@ -355,7 +319,7 @@ const apiClient = async <T = unknown>(req: string | RequestInfo, query: string, 
     let missingScopes = getScopes(scopeReq).filter(x => !_tokenInfo.permissions.includes(x));
     if (missingScopes.length) {
         _tokenInfo.missingScopes.push(...missingScopes);
-        throw ScopeError(missingScopes)
+        throw createScopeError(missingScopes)
     }
     query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
     const origReq = req + query;
@@ -1140,86 +1104,6 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         categories,
         rewards_to_get,
     } as unknown;
-};
-
-const sanitizeApiHtml = (html: string): string => {
-    const stripDangerous = (input: string) => input
-        .replace(/<\/?(script|style|iframe|object|embed|meta|link)\b[^>]*>/gi, '')
-        .replace(/\son\w+\s*=\s*(["']).*?\1/gi, '')
-        .replace(/\son\w+\s*=\s*[^\s>]+/gi, '')
-        .replace(/\s(?:href|src)\s*=\s*(["'])\s*javascript:[\s\S]*?\1/gi, '');
-
-    if (typeof DOMParser === 'undefined') {
-        return stripDangerous(html);
-    }
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
-    const container = doc.body.firstElementChild as HTMLElement | null;
-    if (!container) return '';
-
-    const allowedTags = new Set(['a', 'b', 'br', 'div', 'em', 'i', 'li', 'ol', 'p', 'span', 'strong', 'u', 'ul']);
-    const allowedAttrs = new Set(['class', 'href', 'rel', 'target']);
-
-    const all = Array.from(container.querySelectorAll('*'));
-    for (const element of all) {
-        const tag = element.tagName.toLowerCase();
-        if (!allowedTags.has(tag)) {
-            const parent = element.parentNode;
-            if (!parent) continue;
-            while (element.firstChild) {
-                parent.insertBefore(element.firstChild, element);
-            }
-            parent.removeChild(element);
-            continue;
-        }
-
-        for (const attr of Array.from(element.attributes)) {
-            const name = attr.name.toLowerCase();
-            const value = attr.value;
-            if (name.startsWith('on') || !allowedAttrs.has(name)) {
-                element.removeAttribute(attr.name);
-                continue;
-            }
-            if ((name === 'href') && /^\s*javascript:/i.test(value)) {
-                element.removeAttribute(attr.name);
-            }
-        }
-
-        if (tag === 'a') {
-            element.setAttribute('rel', 'noreferrer noopener');
-            if (element.getAttribute('target') !== '_blank') {
-                element.removeAttribute('target');
-            }
-        }
-    }
-
-    return stripDangerous(container.innerHTML);
-}
-
-const toHtml = (text: string | null): string => {
-    let descr = text || '';
-    descr = descr.replace(/<c=@flavor>/gi, '<span class="flavor">');
-    descr = descr.replace(/<c=@warning>/gi, '<span class="warning">');
-    descr = descr.replace(/<\/c>/gi, '</span>');
-    return sanitizeApiHtml(descr);
-}
-
-const additionalMapping = <T extends { description?: string; details?: { type?: string; description?: string }; subtype?: string; subdescr?: string; charges?: number; count?: number }>(data: T[]) => {
-    data.forEach((element) => {
-        if (element.charges) {
-            element.count = element.charges;
-        }
-        element.description = toHtml(element.description ?? null);
-        if (element.details) {
-            if (element.details.type) {
-                element.subtype = element.details.type;
-            }
-            if (element.details.description) {
-                element.subdescr = toHtml(element.details.description);
-            }
-        }
-    });
 };
 
 const clearCache = async () => {
