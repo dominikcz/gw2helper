@@ -92,6 +92,7 @@
 	{#snippet children(result: AchievementsData)}
 		{@const typedResult = result as AchievementsView}
 		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, filters)}
+		{@const sortedCategories = sort([...( _result.categories as import('$lib/components/achievements/achievements').CategoryLike[] )], filters.sortBy)}
 		{@const myItems = expandToDoList(_result, todoList)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={typedResult.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
@@ -140,7 +141,7 @@
 
 					<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: typedResult.categories.length })}</span>
 					<div class="achiev-container" use:grungeBorder>
-						{#each sort(_result.categories as import('$lib/components/achievements/achievements').CategoryLike[], filters.sortBy) as category (category.id)}
+						{#each sortedCategories as category (category.id)}
 							<AchievGroup {category} {showApiLinks} sortBy={filters.sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 						{/each}
 					</div>

@@ -72,7 +72,6 @@ type Sortable = {
 export function sort(collection: AchievementLike[], sortBy: SortBy): AchievementLike[];
 export function sort(collection: CategoryLike[], sortBy: SortBy): CategoryLike[];
 export function sort<T extends Sortable>(collection: T[], sortBy: SortBy): T[] {
-    console.log('sorting...');
     switch (sortBy) {
         case 'ap': {
             collection.sort((a, b) => {
@@ -166,7 +165,6 @@ export function filteredAchievements(
 ): AchievementsData {
     // `params` is just for forcing Svelte to make it reactive to other params. Add extra variables there to opt-in to reactivity.
 
-    console.log('filtering...');
     // clone base properties, but no categories
     const _data: AchievementsData = {
         completed: data.completed,

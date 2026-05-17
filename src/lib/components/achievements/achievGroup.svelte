@@ -19,6 +19,7 @@
 	}
 
 	let { category, todoList = [], showApiLinks = false, sortBy = 'ap', onToggleTodo = () => {} }: Props = $props();
+	let sortedAchievements = $derived(sort([...(category.achievements || [])], sortBy));
 </script>
 
 <details class="achiev-group" use:autotooltip use:grungeBorder>
@@ -148,7 +149,7 @@
 		</div>
 	</summary>
 	{#if category.description}<p>{category.description}</p>{/if}
-	<AchievList items={sort(category.achievements, sortBy)} {todoList} {onToggleTodo} />
+	<AchievList items={sortedAchievements} {todoList} {onToggleTodo} />
 </details>
 
 <style lang="scss">

@@ -981,11 +981,22 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         // store updated achievs in localStorage for future
         await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
-        await expandItems(itemIds, itemIds.map((x: number) => ({ id: x })));
-        console.log('expanding minis from achieves...', miniIds);
-        await minis(miniIds);
-        console.log('expanding skins from achieves...', skinIds);
-        await skins(skinIds);
+
+        // Do not block initial achievements page render on reward entity hydration.
+        // Tooltip renderer can lazy-load these on demand.
+        const uniqueItemIds = [...new Set(itemIds)];
+        const uniqueMiniIds = [...new Set(miniIds)];
+        const uniqueSkinIds = [...new Set(skinIds)];
+
+        void Promise.all([
+            uniqueItemIds.length ? expandItems(uniqueItemIds, uniqueItemIds.map((x: number) => ({ id: x }))) : Promise.resolve([]),
+            uniqueMiniIds.length ? minis(uniqueMiniIds) : Promise.resolve(),
+            uniqueSkinIds.length ? skins(uniqueSkinIds) : Promise.resolve(),
+        ]).catch((error) => {
+            Logger.warn('background reward hydration failed', {
+                error: error instanceof Error ? error.message : String(error),
+            });
+        });
     }
 
     let _log = '';
