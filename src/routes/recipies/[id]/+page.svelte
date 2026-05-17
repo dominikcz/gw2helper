@@ -2,7 +2,12 @@
 	import type { PageData } from './$types';
 	import { resolve } from '$app/paths';
 	import { beforeNavigate } from '$app/navigation';
+	import { onDestroy } from 'svelte';
 	import Price from '$lib/components/currencies/price.svelte';
+	import { normalizeLookupName, pickBestSearchItem, uniqueLookupNames } from '$lib/utils/wikiImport';
+	import RecipeBreadcrumb from '$lib/components/recipies/recipeBreadcrumb.svelte';
+	import RecipeOutputHero from '$lib/components/recipies/recipeOutputHero.svelte';
+	import ApiRecipeSummary from '$lib/components/recipies/apiRecipeSummary.svelte';
 
 	interface Ingredient { item_id: number; count: number; }
 	interface VendorCost { amount: number; item_name: string; icon_url?: string; }
@@ -20,6 +25,7 @@
 	}
 	interface SearchItem { id: number; name: string; icon: string | null; rarity: string; }
 	interface IngSearch { searching: boolean; query: string; results: SearchItem[]; loading: boolean; }
+	type SearchByNameMap = Record<string, SearchItem | undefined>;
 
 	let { data }: { data: PageData } = $props();
 
@@ -64,6 +70,8 @@
 	let form = $state<RecipeForm>(initForm());
 	let editMode = $state(false);
 	let isDirty = $state(false);
+	let resolveIngredientNamesReq = 0;
+	let wikiLookupCache = $state<SearchByNameMap>({});
 
 	// Per-ingredient resolved item info
 	let resolvedItems = $state<Record<number, SearchItem>>({});
@@ -77,6 +85,7 @@
 		editMode = !isApiOnly;
 		resolvedItems = {};
 		ingSearches = [];
+		wikiLookupCache = {};
 		isDirty = false;
 	});
 
@@ -110,6 +119,7 @@
 
 	// Resolve names for all ingredient IDs (form + API recipes)
 	async function resolveIngredientNames() {
+		const reqId = ++resolveIngredientNamesReq;
 		const formIds = form.ingredients.map(i => i.item_id).filter(id => id > 0);
 		const apiIds = apiRecipes.flatMap((r: any) => (r.ingredients ?? []).map((ing: any) => ing.item_id ?? ing.id ?? 0)).filter((id: number) => id > 0);
 		const ids = [...new Set([...formIds, ...apiIds])];
@@ -120,6 +130,7 @@
 			const res = await fetch(resolve('/recipies/api/items') + '?ids=' + missing.join(','));
 			if (!res.ok) return;
 			const { items } = await res.json();
+			if (reqId !== resolveIngredientNamesReq) return;
 			const update: Record<number, SearchItem> = { ...resolvedItems };
 			for (const item of items) update[item.id] = item;
 			resolvedItems = update;
@@ -128,26 +139,49 @@
 
 	$effect(() => {
 		ensureSearchStates();
-		resolveIngredientNames();
+		void resolveIngredientNames();
 	});
 
 	let searchTimers: ReturnType<typeof setTimeout>[] = [];
+	let searchControllers: Array<AbortController | undefined> = [];
+	onDestroy(() => {
+		resolveIngredientNamesReq++;
+		searchTimers.forEach((timer) => clearTimeout(timer));
+		searchControllers.forEach((controller) => controller?.abort());
+		searchTimers = [];
+		searchControllers = [];
+	});
 
 	async function searchItems(idx: number, query: string) {
+		if (!ingSearches[idx]) return;
 		ingSearches[idx].query = query;
 		clearTimeout(searchTimers[idx]);
+		searchControllers[idx]?.abort();
 		if (!query.trim()) { ingSearches[idx].results = []; return; }
 		searchTimers[idx] = setTimeout(async () => {
+			if (!ingSearches[idx] || ingSearches[idx].query !== query) return;
+			const controller = new AbortController();
+			searchControllers[idx] = controller;
 			ingSearches[idx].loading = true;
 			try {
 				const params = new URLSearchParams({ q: query, limit: '20' });
-				const res = await fetch(resolve('/recipies/api/items') + '?' + params);
+				const res = await fetch(resolve('/recipies/api/items') + '?' + params, { signal: controller.signal });
 				if (res.ok) {
 					const { items } = await res.json();
+					if (!ingSearches[idx] || ingSearches[idx].query !== query) return;
 					ingSearches[idx].results = items;
 				}
+			} catch (error) {
+				if (!(error instanceof DOMException && error.name === 'AbortError')) {
+					throw error;
+				}
 			} finally {
-				ingSearches[idx].loading = false;
+				if (searchControllers[idx] === controller) {
+					searchControllers[idx] = undefined;
+				}
+				if (ingSearches[idx]) {
+					ingSearches[idx].loading = false;
+				}
 			}
 		}, 250);
 	}
@@ -176,14 +210,55 @@
 	}
 
 	function removeIngredient(i: number) {
+		clearTimeout(searchTimers[i]);
+		searchControllers[i]?.abort();
 		form.ingredients = form.ingredients.filter((_, j) => j !== i);
 		ingSearches = ingSearches.filter((_, j) => j !== i);
+		searchTimers = searchTimers.filter((_, j) => j !== i);
+		searchControllers = searchControllers.filter((_, j) => j !== i);
 		isDirty = true;
 	}
 
 	let wikiLoading = $state(false);
 	let wikiError = $state('');
 	let saveStatus = $state<'' | 'saving' | 'saved' | 'error'>('');
+
+	async function fetchBestItemsByName(names: string[], limit: number): Promise<SearchByNameMap> {
+		const uniqueNames = uniqueLookupNames(names);
+		if (!uniqueNames.length) return {};
+
+		const cachedMatches: SearchByNameMap = {};
+		const namesToFetch: string[] = [];
+		for (const name of uniqueNames) {
+			const key = normalizeLookupName(name);
+			if (Object.prototype.hasOwnProperty.call(wikiLookupCache, key)) {
+				cachedMatches[key] = wikiLookupCache[key];
+			} else {
+				namesToFetch.push(name);
+			}
+		}
+
+		if (!namesToFetch.length) return cachedMatches;
+
+		const entries = await Promise.all(
+			namesToFetch.map(async (name): Promise<[string, SearchItem | undefined]> => {
+				try {
+					const params = new URLSearchParams({ q: name, limit: String(limit) });
+					const itemRes = await fetch(resolve('/recipies/api/items') + '?' + params);
+					if (!itemRes.ok) return [normalizeLookupName(name), undefined];
+					const { items } = await itemRes.json();
+					const best = pickBestSearchItem((items as SearchItem[]) ?? [], name);
+					return [normalizeLookupName(name), best];
+				} catch {
+					return [normalizeLookupName(name), undefined];
+				}
+			})
+		);
+
+		const fetchedMatches = Object.fromEntries(entries) as SearchByNameMap;
+		wikiLookupCache = { ...wikiLookupCache, ...fetchedMatches };
+		return { ...cachedMatches, ...fetchedMatches };
+	}
 
 	async function fetchFromWiki() {
 		wikiLoading = true;
@@ -205,8 +280,17 @@
 			if (wikiData.recipe.recipeType && RECIPE_TYPES.includes(wikiData.recipe.recipeType)) {
 				form.type = wikiData.recipe.recipeType;
 			}
-				// Resolve each ingredient name → item_id via items API
-				const rawIngs: { name?: string; item_id?: number; count?: number }[] = wikiData.recipe.ingredients ?? [];
+			}
+
+			const rawIngs: { name?: string; item_id?: number; count?: number }[] = wikiData.recipe?.ingredients ?? [];
+			const allCosts = (wikiData.acquisition?.vendors ?? []).flatMap((v: Vendor) => v.cost).filter((c: VendorCost) => c.item_name);
+			const lookupByName = await fetchBestItemsByName([
+				...rawIngs.map((ing) => ing.name ?? ''),
+				...allCosts.map((cost) => cost.item_name ?? ''),
+			], 10);
+
+			if (wikiData.recipe) {
+				// Resolve each ingredient name → item_id via cached item lookups
 				const resolvedIngs: Ingredient[] = [];
 				const newResolved: Record<number, SearchItem> = { ...resolvedItems };
 
@@ -217,17 +301,11 @@
 						continue;
 					}
 					if (ing.name) {
-						const params = new URLSearchParams({ q: ing.name, limit: '10' });
-						const itemRes = await fetch(resolve('/recipies/api/items') + '?' + params).catch(() => null);
-						if (itemRes?.ok) {
-							const { items } = await itemRes.json();
-							const exact = (items as SearchItem[]).find(it => it.name.toLowerCase() === ing.name!.toLowerCase());
-							const best = exact ?? (items as SearchItem[])[0];
-							if (best) {
-								resolvedIngs.push({ item_id: best.id, count });
-								newResolved[best.id] = best;
-								continue;
-							}
+						const best = lookupByName[normalizeLookupName(ing.name)];
+						if (best) {
+							resolvedIngs.push({ item_id: best.id, count });
+							newResolved[best.id] = best;
+							continue;
 						}
 					}
 					resolvedIngs.push({ item_id: 0, count });
@@ -245,23 +323,12 @@
 			}
 			if (wikiData.acquisition) {
 				form.acquisition = wikiData.acquisition;
-				// Replace wiki thumbnail icon_urls with GW2 API icons from our items cache
-				const allCosts = (form.acquisition?.vendors ?? []).flatMap(v => v.cost).filter(c => c.item_name);
-				const uniqueNames = [...new Set(allCosts.map(c => c.item_name))];
-				for (const name of uniqueNames) {
-					try {
-						const params = new URLSearchParams({ q: name, limit: '5' });
-						const itemRes = await fetch(resolve('/recipies/api/items') + '?' + params);
-						if (itemRes.ok) {
-							const { items } = await itemRes.json();
-							const exact = (items as SearchItem[]).find(it => it.name.toLowerCase() === name.toLowerCase());
-							if (exact?.icon) {
-								for (const cost of allCosts) {
-									if (cost.item_name === name) cost.icon_url = exact.icon;
-								}
-							}
-						}
-					} catch {}
+				// Replace wiki thumbnail icon_urls with GW2 API icons from batched lookups
+				for (const cost of allCosts) {
+					const matched = lookupByName[normalizeLookupName(cost.item_name)];
+					if (matched?.icon) {
+						cost.icon_url = matched.icon;
+					}
 				}
 			}
 			isDirty = true;
@@ -314,76 +381,27 @@
 </script>
 
 <div class="recipe-editor">
-	{#if stackIds.length > 0}
-		<nav class="breadcrumb">
-			<a href={resolve('/recipies') + (data.back ?? '')}>All items</a>
-			{#each stackIds as parentId, i (parentId)}
-				<span>›</span>
-				<a href={resolve(`/recipies/${parentId}${i > 0 ? `?stack=${stackIds.slice(0, i).join(',')}` : ''}`)}>
-					{data.stackItems?.[parentId] ?? `#${parentId}`}
-				</a>
-			{/each}
-			<span>›</span>
-			<span>{data.outputItem?.name ?? `#${data.id}`}</span>
-		</nav>
-	{:else}
-		<nav class="breadcrumb">
-			<a href={resolve('/recipies') + (data.back ?? '')}>All items</a>
-			<span>›</span>
-			<span>{data.outputItem?.name ?? `#${data.id}`}</span>
-		</nav>
-	{/if}
+	<RecipeBreadcrumb
+		{stackIds}
+		back={data.back ?? ''}
+		stackItems={data.stackItems}
+		itemId={data.id}
+		outputName={data.outputItem?.name}
+	/>
 
 	<h1>Recipe #{data.id}</h1>
 
-	<!-- Output item hero -->
-	{#if data.outputItem}
-		<div class="output-hero">
-			{#if data.outputItem.icon}<img src={data.outputItem.icon} alt="" class="output-icon" />{/if}
-			<div class="output-info">
-				<span class="output-name {data.outputItem.rarity ? `rarity-${data.outputItem.rarity.toLowerCase()}` : ''}">
-					{data.outputItem.name}
-				</span>
-				<span class="output-rarity">{data.outputItem.rarity}{#if data.outputItem.type} · {data.outputItem.type}{/if}</span>
-			</div>
-			{#if form.output_item_count > 1}
-				<span class="output-count">×{form.output_item_count}</span>
-			{/if}
-		</div>
-	{/if}
+	<RecipeOutputHero outputItem={data.outputItem} outputCount={form.output_item_count} />
 
 	<!-- API-only: read-only summary + create custom button -->
 	{#if isApiOnly && !editMode}
-		<div class="api-notice">
-			<span class="api-badge">GW2 API</span>
-			<span>This recipe comes from the GW2 API and cannot be edited.</span>
-			<button class="btn-create-custom" onclick={() => { editMode = true; }}>+ Create custom override</button>
-		</div>
-
-		{#each apiRecipes as recipe (recipe.id)}
-			<div class="api-recipe-block">
-				<div class="api-recipe-meta">
-					<span class="meta-pill">Type: {recipe.type}</span>
-					<span class="meta-pill">Output: {recipe.output_item_count ?? 1}</span>
-					<span class="meta-pill">Rating: {recipe.min_rating ?? 0}</span>
-					{#if recipe.disciplines?.length}
-						<span class="meta-pill">{recipe.disciplines.join(', ')}</span>
-					{/if}
-				</div>
-				{#if recipe.ingredients?.length}
-					<div class="api-ings">
-						{#each recipe.ingredients as ing (ing.item_id ?? ing.id)}
-							{@const resolved = resolvedItems[ing.item_id ?? ing.id]}
-							<div class="api-ing-row">
-								<span class="ing-count-label">{ing.count}×</span>
-								{#if resolved?.icon}<img src={resolved.icon} alt="" class="ing-icon-sm" />{/if}
-							<span class={resolved?.rarity ? `rarity-${resolved.rarity.toLowerCase()}` : ''}>{resolved?.name ?? `#${ing.item_id ?? ing.id}`}</span>
-							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		{/each}
+		<ApiRecipeSummary
+			apiRecipes={apiRecipes}
+			{resolvedItems}
+			onCreateCustom={() => {
+				editMode = true;
+			}}
+		/>
 	{:else}
 	<!-- Editor -->
 	<div class="editor-columns">
@@ -535,24 +553,6 @@
 	.editor-left { min-width: 0; }
 	.editor-right { position: sticky; top: 1rem; height: calc(100vh - 2rem); }
 	.wiki-iframe { width: 100%; height: 100%; border: 1px solid #333; border-radius: 4px; background: #fff; }
-	.breadcrumb { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; }
-	.breadcrumb a { color: #80c4ff; text-decoration: none; }
-	.breadcrumb a:hover { text-decoration: underline; }
-	.output-hero { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; padding: 0.75rem 1rem; background: #1a1a2a; border: 1px solid #333; border-radius: 6px; }
-	.output-icon { width: 48px; height: 48px; object-fit: contain; }
-	.output-info { display: flex; flex-direction: column; }
-	.output-name { font-size: 1.15rem; font-weight: bold; }
-	.output-rarity { font-size: 0.8rem; color: #888; }
-	.output-count { font-size: 1.1rem; color: #ccc; margin-left: auto; }
-	.api-notice { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem; background: #1a1a1a; border: 1px solid #444; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem; color: #aaa; flex-wrap: wrap; }
-	.api-badge { background: #2a3a5a; color: #80aaff; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.75rem; font-weight: bold; }
-	.btn-create-custom { margin-left: auto; padding: 0.3rem 0.75rem; background: #1a3a1a; color: #80ff80; border: 1px solid #2a5a2a; border-radius: 3px; cursor: pointer; font-size: 0.85rem; }
-	.api-recipe-block { border: 1px solid #2a2a3a; border-radius: 4px; padding: 0.75rem; margin-bottom: 0.75rem; background: #111; }
-	.api-recipe-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
-	.meta-pill { background: #1e2a1e; color: #8ac; padding: 0.1rem 0.45rem; border-radius: 3px; font-size: 0.78rem; }
-	.api-ings { display: flex; flex-direction: column; gap: 0.25rem; }
-	.api-ing-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; }
-	.ing-count-label { color: #aaa; min-width: 2rem; text-align: right; }
 	.wiki-section { margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
 	.btn-wiki { padding: 0.4rem 1rem; background: #2a3a6a; color: #aac4ff; border: 1px solid #4a6aaa; border-radius: 4px; cursor: pointer; }
 	.field-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }

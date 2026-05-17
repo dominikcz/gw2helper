@@ -5,6 +5,7 @@
 	import Price from '$lib/components/currencies/price.svelte';
 	import ItemLabel from '$lib/components/items/itemLabel.svelte';
 	import Progress from '$lib/components/progress/progress.svelte';
+	import AcquisitionStrategyOptions from '$lib/components/legendary/acquisitionStrategyOptions.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import helperUtils from '$lib/utils/helper-utils';
 	import type { PageData } from './$types';
@@ -342,45 +343,18 @@
 								{@const nodeRow = rowById.get(node.id)}
 								{#if nodeRow && missingCount > 0}
 									<span class="node-strategy" title="Optimal acquisition">
-										{#if _rowHasSource(nodeRow, 'tp')}
-											<label class="strategy-line">
-												<input
-													type="radio"
-															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!_rowHasMultipleSources(nodeRow)}
-													checked={effectiveDecision(nodeRow) === 'tp'}
-															onclick={() => setDecision(nodeRow.id, 'tp')}
-												/>
-												<span class="strategy-name">TP</span>
-												<span class="strategy-price"><Price value={rowTpUnit(nodeRow) as number} compact={false} /></span>
-											</label>
-										{/if}
-										{#if _rowHasSource(nodeRow, 'craft')}
-											<label class="strategy-line">
-												<input
-													type="radio"
-															name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!_rowHasMultipleSources(nodeRow)}
-													checked={effectiveDecision(nodeRow) === 'craft'}
-															onclick={() => setDecision(nodeRow.id, 'craft')}
-												/>
-												<span class="strategy-name">CRAFT</span>
-												<span class="strategy-price"><Price value={rowCraftUnit(nodeRow) as number} compact={false} /></span>
-											</label>
-										{/if}
-										{#if _rowHasSource(nodeRow, 'vendor')}
-											<label class="strategy-line">
-												<input
-													type="radio"
-														name={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
-													disabled={!_rowHasMultipleSources(nodeRow)}
-													checked={effectiveDecision(nodeRow) === 'vendor'}
-														onclick={() => setDecision(nodeRow.id, 'vendor')}
-												/>
-												<span class="strategy-name">VENDOR</span>
-												<span class="strategy-price"><Price value={rowVendorUnit(nodeRow) as number} compact={false} /></span>
-											</label>
-										{/if}
+										<AcquisitionStrategyOptions
+											groupName={`acq-tree-${priceMode}-${nodeRow.id}-${path}`}
+											selected={_effectiveDecision(nodeRow)}
+											tpAvailable={_rowHasSource(nodeRow, 'tp')}
+											craftAvailable={_rowHasSource(nodeRow, 'craft')}
+											vendorAvailable={_rowHasSource(nodeRow, 'vendor')}
+											tpUnit={_rowTpUnit(nodeRow)}
+											craftUnit={_rowCraftUnit(nodeRow)}
+											vendorUnit={_rowVendorUnit(nodeRow)}
+											hasMultipleSources={_rowHasMultipleSources(nodeRow)}
+											onSelect={(source) => setDecision(nodeRow.id, source)}
+										/>
 									</span>
 								{/if}
 							{:else if node.gold_cost && missingCount > 0}
@@ -474,93 +448,39 @@
 									<div class="mobile-pricing-row">
 										<span class="mobile-pricing-label">{$_('legendary.unit_price')}</span>
 										<div class="price-options">
-											{#if _rowHasSource(row, 'tp')}
-												<label class="strategy-line">
-													<input
-														type="radio"
-														name={`acq-mobile-${priceMode}-${row.id}`}
-														disabled={!_rowHasMultipleSources(row)}
-														checked={_effectiveDecision(row) === 'tp'}
-														onclick={() => setDecision(row.id, 'tp')}
-													/>
-													<span class="strategy-name">TP</span>
-													<span class="strategy-price"><Price value={_rowTpUnit(row) as number} compact={false} /></span>
-												</label>
-											{/if}
-											{#if _rowHasSource(row, 'craft')}
-												<label class="strategy-line">
-													<input
-														type="radio"
-														name={`acq-mobile-${priceMode}-${row.id}`}
-														disabled={!_rowHasMultipleSources(row)}
-														checked={_effectiveDecision(row) === 'craft'}
-														onclick={() => setDecision(row.id, 'craft')}
-													/>
-													<span class="strategy-name">CRAFT</span>
-													<span class="strategy-price"><Price value={_rowCraftUnit(row) as number} compact={false} /></span>
-												</label>
-											{/if}
-										{#if _rowHasSource(row, 'vendor')}
-											<label class="strategy-line">
-												<input
-													type="radio"
-													name={`acq-mobile-${priceMode}-${row.id}`}
-													disabled={!_rowHasMultipleSources(row)}
-													checked={_effectiveDecision(row) === 'vendor'}
-													onclick={() => setDecision(row.id, 'vendor')}
-												/>
-												<span class="strategy-name">VENDOR</span>
-												<span class="strategy-price"><Price value={_rowVendorUnit(row) as number} compact={false} /></span>
-											</label>
-										{/if}
+											<AcquisitionStrategyOptions
+												groupName={`acq-mobile-${priceMode}-${row.id}`}
+												selected={_effectiveDecision(row)}
+												tpAvailable={_rowHasSource(row, 'tp')}
+												craftAvailable={_rowHasSource(row, 'craft')}
+												vendorAvailable={_rowHasSource(row, 'vendor')}
+												tpUnit={_rowTpUnit(row)}
+												craftUnit={_rowCraftUnit(row)}
+												vendorUnit={_rowVendorUnit(row)}
+												hasMultipleSources={_rowHasMultipleSources(row)}
+												onSelect={(source) => setDecision(row.id, source)}
+											/>
 										</div>
 									</div>
 								</div>
 							</td>
 							<td class="num-col unit-col">
 								<div class="price-options">
-									{#if _rowHasSource(row, 'tp')}
-										<label class="strategy-line">
-											<input
-												type="radio"
-														name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!_rowHasMultipleSources(row)}
-												checked={_effectiveDecision(row) === 'tp'}
-														onclick={() => setDecision(row.id, 'tp')}
-											/>
-											<span class="strategy-name">TP</span>
-											<span class="strategy-price"><Price value={_rowTpUnit(row) as number} compact={false} /></span>
-										</label>
-									{/if}
-									{#if _rowHasSource(row, 'craft')}
-										<label class="strategy-line">
-											<input
-												type="radio"
-														name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!_rowHasMultipleSources(row)}
-												checked={_effectiveDecision(row) === 'craft'}
-														onclick={() => setDecision(row.id, 'craft')}
-											/>
-											<span class="strategy-name">CRAFT</span>
-											<span class="strategy-price"><Price value={_rowCraftUnit(row) as number} compact={false} /></span>
-										</label>
-									{/if}
-									{#if _rowHasSource(row, 'vendor')}
-										<label class="strategy-line">
-											<input
-												type="radio"
-													name={`acq-table-${priceMode}-${row.id}`}
-												disabled={!_rowHasMultipleSources(row)}
-												checked={_effectiveDecision(row) === 'vendor'}
-													onclick={() => setDecision(row.id, 'vendor')}
-											/>
-											<span class="strategy-name">VENDOR</span>
-											<span class="strategy-price"><Price value={_rowVendorUnit(row) as number} compact={false} /></span>
-										</label>
-									{/if}
+									<AcquisitionStrategyOptions
+										groupName={`acq-table-${priceMode}-${row.id}`}
+										selected={_effectiveDecision(row)}
+										tpAvailable={_rowHasSource(row, 'tp')}
+										craftAvailable={_rowHasSource(row, 'craft')}
+										vendorAvailable={_rowHasSource(row, 'vendor')}
+										tpUnit={_rowTpUnit(row)}
+										craftUnit={_rowCraftUnit(row)}
+										vendorUnit={_rowVendorUnit(row)}
+										hasMultipleSources={_rowHasMultipleSources(row)}
+										onSelect={(source) => setDecision(row.id, source)}
+									/>
 									{#if !_rowHasSource(row, 'tp') && !_rowHasSource(row, 'craft') && !_rowHasSource(row, 'vendor') && row.acquisition?.vendors?.length}
 										<div class="vendor-acquisition">
-											{#each uniqueCosts(row.acquisition) as c, ci}
+											{#each uniqueCosts(row.acquisition) as c, ci (`${c.amount}:${c.item_name}:${ci}`)}
 												{#if ci > 0}<span class="acq-sep"> + </span>{/if}
 												<span class="acq-cost-entry">
 													<span class="acq-amount">{c.amount}×</span>
@@ -819,7 +739,7 @@
 		opacity: 0.95;
 	}
 
-	.strategy-line {
+	.price-options :global(.strategy-line) {
 		display: grid;
 		grid-template-columns: auto 3.7rem minmax(7.5rem, 1fr);
 		align-items: center;
@@ -827,16 +747,16 @@
 		width: 100%;
 	}
 
-	.strategy-line input[type='radio'] {
+	.price-options :global(.strategy-line input[type='radio']) {
 		margin: 0;
 	}
 
-	.strategy-name {
+	.price-options :global(.strategy-name) {
 		font-weight: 700;
 		text-align: left;
 	}
 
-	.strategy-price {
+	.price-options :global(.strategy-price) {
 		justify-self: end;
 		text-align: right;
 		white-space: nowrap;
@@ -877,11 +797,11 @@
 		width: 100%;
 	}
 
-	.mobile-pricing .strategy-line {
+	.mobile-pricing :global(.strategy-line) {
 		grid-template-columns: auto 3.2rem minmax(0, 1fr);
 	}
 
-	.mobile-pricing .strategy-price {
+	.mobile-pricing :global(.strategy-price) {
 		overflow-wrap: anywhere;
 	}
 
@@ -1079,7 +999,7 @@
 			font-size: 0.78em;
 		}
 
-		.node-strategy .strategy-line {
+		.node-strategy :global(.strategy-line) {
 			display: flex;
 			align-items: center;
 			flex-wrap: wrap;
@@ -1087,7 +1007,7 @@
 			row-gap: 0.15rem;
 		}
 
-		.node-strategy .strategy-price {
+		.node-strategy :global(.strategy-price) {
 			margin-left: auto;
 			overflow-wrap: anywhere;
 		}

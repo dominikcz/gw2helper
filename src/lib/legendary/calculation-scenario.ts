@@ -258,6 +258,18 @@ export class CalculationScenario {
 		return this;
 	}
 
+	/**
+	 * Asserts that `itemName` is NOT present in the ingredient list.
+	 * Useful to document behavior where fully-covered inventory items
+	 * are omitted from computed missing rows.
+	 * @param itemName - Partial, case-insensitive item name match.
+	 */
+	recipeDoesNotHave(itemName: string): this {
+		const row = findRow(this._result, this._fixture.itemsById, itemName);
+		expect(row, `"${itemName}" should not be present in ingredient rows`).toBeUndefined();
+		return this;
+	}
+
 	// ─── Acquisition source assertions ───────────────────────────────────────
 
 	/**
@@ -366,6 +378,49 @@ export class CalculationScenario {
 		const row = requireRow(this._result, this._fixture.itemsById, itemName, `row('${itemName}')`);
 		assertion(row);
 		return this;
+	}
+
+	/**
+	 * Runs a custom assertion for every ingredient row in the scenario result.
+	 * Useful for broad, row-level control checks.
+	 */
+	eachRow(assertion: (row: IngredientRow, itemName: string) => void): this {
+		for (const row of this._result.ingredients) {
+			const itemName = this._fixture.itemsById[row.id]?.name ?? `#${row.id}`;
+			assertion(row, itemName);
+		}
+		return this;
+	}
+
+	/**
+	 * Verifies baseline invariants for every row in the ingredient table.
+	 * This gives at least one control condition per computed row.
+	 */
+	rowsAreConsistent(): this {
+		const allowedSources = ['tp', 'craft', 'vendor', 'none'];
+		return this.eachRow((row, itemName) => {
+			expect(row.required, `[${itemName}] required`).toBeGreaterThan(0);
+			expect(row.owned, `[${itemName}] owned`).toBeGreaterThanOrEqual(0);
+			expect(row.missing, `[${itemName}] missing`).toBeGreaterThanOrEqual(0);
+			expect(row.missing, `[${itemName}] missing <= required`).toBeLessThanOrEqual(row.required);
+			expect(row.vendorFreeUnits, `[${itemName}] vendorFreeUnits >= 0`).toBeGreaterThanOrEqual(0);
+			expect(row.vendorFreeUnits, `[${itemName}] vendorFreeUnits <= missing`).toBeLessThanOrEqual(row.missing);
+
+			expect(allowedSources, `[${itemName}] bestBuySource`).toContain(row.bestBuySource);
+			expect(allowedSources, `[${itemName}] bestSellSource`).toContain(row.bestSellSource);
+
+			if (row.bestBuySource === 'none') {
+				expect(row.bestBuyUnit, `[${itemName}] bestBuyUnit`).toBeNull();
+			} else {
+				expect(row.bestBuyUnit, `[${itemName}] bestBuyUnit present`).not.toBeNull();
+			}
+
+			if (row.bestSellSource === 'none') {
+				expect(row.bestSellUnit, `[${itemName}] bestSellUnit`).toBeNull();
+			} else {
+				expect(row.bestSellUnit, `[${itemName}] bestSellUnit present`).not.toBeNull();
+			}
+		});
 	}
 }
 
