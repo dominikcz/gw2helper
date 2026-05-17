@@ -17,6 +17,7 @@
 	import { defaultFilters, applySettings } from '$lib/components/achievements/achievementFiltersUtils';
 	import { t as _ } from '$lib/services/i18n';
 	import { grungeBorder } from '$lib/actions/grungeBorder';
+	import todoList from '$lib/services/todoList.svelte';
 	import type { PageData } from './$types';
 	import type { AchievementSettings } from '$lib/utils';
 	import type { AchievementsData } from '$lib/components/achievements/achievements';
@@ -28,7 +29,6 @@
 	let filter = $state('');
 	let showApiLinks = $state(false);
 	let filters = $state({ ...defaultFilters });
-	let todoList = $state<number[]>([]);
 
 	type MasteryReward = { region: string };
 	type AchievementLike = {
@@ -51,7 +51,7 @@
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
 		const settings = await data.settings as AchievementSettings;
 		applySettings(filters, settings);
-		todoList = await data.toDoList;
+		await todoList.init(data.toDoList);
 	});
 
 	function achievFilterCallback(achiev: AchievementLike) {
@@ -93,7 +93,7 @@
 		{@const typedResult = result as AchievementsView}
 		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, filters)}
 		{@const sortedCategories = sort([...( _result.categories as import('$lib/components/achievements/achievements').CategoryLike[] )], filters.sortBy)}
-		{@const myItems = expandToDoList(_result, todoList)}
+		{@const myItems = expandToDoList(_result, todoList.todos)}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={typedResult.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
 			<WidgetInfo title={$_('achievements.daily_points')} value={typedResult.daily_ap} image={asset('/assets/rewards/AP.png')} />
@@ -142,14 +142,14 @@
 					<span>{$_('achievements.showing_out_of', { shown: _result.categories.length, total: typedResult.categories.length })}</span>
 					<div class="achiev-container" use:grungeBorder>
 						{#each sortedCategories as category (category.id)}
-							<AchievGroup {category} {showApiLinks} sortBy={filters.sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
+							<AchievGroup {category} {showApiLinks} sortBy={filters.sortBy} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)} />
 						{/each}
 					</div>
 				</TabPanel>
 
 				<TabPanel>
 					<h2>{$_('achievements.your_list')}</h2>
-					<AchievList items={myItems} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)}>
+					<AchievList items={myItems} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)}>
 						{@html $_('achievements.empty_list', { img_url: asset('/assets/rewards/map_heart_empty.png') })}
 					</AchievList>
 				</TabPanel>

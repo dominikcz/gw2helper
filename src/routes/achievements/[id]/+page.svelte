@@ -9,8 +9,8 @@
 	import Price from '$lib/components/currencies/price.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import helperUtils from '$lib/utils/helper-utils';
-	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
+	import todoList from '$lib/services/todoList.svelte';
 	import type { AchievementLike, CategoryLike } from '$lib/components/achievements/achievements';
 	import type { AchievementBit, MasteryReward, RewardsObj } from '$lib/types/achievements';
 	import type { ApiAchievementRewardDto } from '$lib/types/gw2-api';
@@ -21,6 +21,7 @@
 			achievement: AchievementWithBitsDone | null;
 			category: CategoryLike | null;
 			isTodo: boolean;
+			todoList: number[];
 			prerequisites: Array<{ id: number; name?: string; done?: boolean }>;
 			rewardItemIds: number[];
 			rewardTitleIds: number[];
@@ -31,17 +32,14 @@
 	}
 
 	let { data }: Props = $props();
-	let todoList = $state<number[]>([]);
 	let rewardItems = $state<Array<{ id: number; name?: string; icon?: string; rarity?: string }>>([]);
 	let rewardTitles = $state<Array<{ id: number; name?: string }>>([]);
 	let enrichmentLoadSeq = 0;
 
-	$effect(() => {
-		todoList = data.isTodo && data.achievement?.id ? [Number(data.achievement.id)] : [];
-	});
-
 	onMount(() => {
 		void (async () => {
+			await todoList.init(data.todoList || []);
+
 			const currentLoad = ++enrichmentLoadSeq;
 			rewardItems = data.rewardItems || [];
 			rewardTitles = data.rewardTitles || [];
@@ -83,7 +81,7 @@
 	});
 
 	function onToggleTodo(event: { id: number; todo: boolean }) {
-		utils.hndToggleTodo(event, todoList);
+		todoList.toggle(event);
 	}
 
 	function tierDone(current: number, count: number) {
@@ -188,7 +186,7 @@
 			current={achiev.current}
 			max={achiev.max}
 			flags={achiev.flags}
-			todo={todoList.includes(achiev.id ?? 0)}
+			todo={todoList.has(achiev.id ?? 0)}
 			rewardsObj={achiev.rewardsObj}
 			done={achiev.done}
 			{bits}

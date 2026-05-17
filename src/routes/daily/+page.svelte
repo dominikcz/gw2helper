@@ -13,6 +13,7 @@
 	import { expandToDoList } from '$lib/components/achievements/achievements';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { Period, getTimerTarget, currentDay, currentWeek } from '$lib/components/daily/dailyUtils';
+	import todoList from '$lib/services/todoList.svelte';
 	import type { PageData } from './$types';
 	import type { AchievementsData, CategoryLike } from '$lib/components/achievements/achievements';
 	import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } from '$lib/types/gw2-api';
@@ -25,10 +26,9 @@
 
 	let sortBy = 'ap';
 	let showApiLinks = false;
-	let todoList = $state<number[]>([]);
 
 	onMount(async () => {
-		todoList = (await data.toDoList) as number[];
+		await todoList.init(data.toDoList);
 	});
 
 	function astralAcclaimAvailable(wallet: WalletCurrency[]) {
@@ -90,22 +90,22 @@
 		{@const dailiesWeeklies = extractDailyAndWeekly(result)}
 		{@const sortedDailyCategories = sort([...(dailies.categories as CategoryLike[])], sortBy)}
 		{@const sortedWeeklyCategories = sort([...(weeklies.categories as CategoryLike[])], sortBy)}
-		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
+		{@const todos = expandToDoList(dailiesWeeklies, todoList.todos)}
 
-		<AchievList items={todos} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)}>
+		<AchievList items={todos} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)}>
 			{@html $_('achievements.empty_list', { img_url: asset('/assets/rewards/map_heart_empty.png') })}
 		</AchievList>
 
 		<h3>{$_('daily.daily')}</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sortedDailyCategories as category (category.id)}
-				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
+				<AchievGroup {category} {showApiLinks} {sortBy} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)} />
 			{/each}
 		</div>
 		<h3>{$_('daily.weekly')}</h3>
 		<div class="achiev-container" use:grungeBorder>
 			{#each sortedWeeklyCategories as category (category.id)}
-				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
+				<AchievGroup {category} {showApiLinks} {sortBy} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)} />
 			{/each}
 		</div>
 	{/snippet}
