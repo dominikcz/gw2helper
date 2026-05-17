@@ -214,24 +214,6 @@ export function runsDesktop(): boolean {
     return desktop;
 }
 
-type TodoToggleEvent = { id: number; todo: boolean };
-
-export async function hndToggleTodo(event: TodoToggleEvent, todoList: number[]): Promise<void> {
-    if (event.todo) {
-        if (!todoList.includes(event.id)) {
-            todoList.push(event.id);
-        }
-    } else {
-        let index = todoList.indexOf(event.id);
-        while (index >= 0) {
-            todoList.splice(index, 1);
-            index = todoList.indexOf(event.id);
-        }
-    }
-
-    await saveAchievementsToDo([...todoList]);
-}
-
 const utils = {
     readApiKey,
     saveApiKey,
@@ -261,8 +243,7 @@ const utils = {
     saveWalletOrder,
     getQueryString,
     getQueryStringFlag,
-    runsDesktop,
-    hndToggleTodo
+    runsDesktop
 };
 
 export default utils;

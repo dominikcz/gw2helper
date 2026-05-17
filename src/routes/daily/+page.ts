@@ -48,9 +48,6 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		returnObj.special = apiService.wizardsVaultSpecial();
 		returnObj.achievements = apiService.achievements();
 		returnObj.seasonEnd = apiService.wizardsVault().seasonEnd;
-	} else {
-		console.log('no api key :(');
-		
 	}
 	return returnObj;
 };

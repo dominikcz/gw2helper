@@ -27,7 +27,6 @@ type RewardTitleInfo = {
 type AchievementDetails = {
 	achievement: AchievementLike | null;
 	category: CategoryLike | null;
-	isTodo: boolean;
 	todoList: number[];
 	prerequisites: PrerequisiteInfo[];
 	rewardItemIds: number[];
@@ -55,7 +54,6 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		const empty: AchievementDetails = {
 			achievement: null,
 			category: null,
-			isTodo: false,
 			todoList: [],
 			prerequisites: [],
 			rewardItemIds: [],
@@ -124,7 +122,6 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 	const result: AchievementDetails = {
 		achievement: foundAchievement,
 		category: foundCategory,
-		isTodo: todo.includes(achievId),
 		todoList: todo,
 		prerequisites,
 		rewardItemIds,

@@ -20,7 +20,6 @@
 		data: {
 			achievement: AchievementWithBitsDone | null;
 			category: CategoryLike | null;
-			isTodo: boolean;
 			todoList: number[];
 			prerequisites: Array<{ id: number; name?: string; done?: boolean }>;
 			rewardItemIds: number[];
