@@ -1,0 +1,29 @@
+{
+  "105743": {
+    "id": 105743,
+    "name": "Selachimorpha Container",
+    "icon": "https://render.guildwars2.com/file/340AA29452C4AF96F8434AF323E3747AAE020B34/3710799.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "105921": {
+    "id": 105921,
+    "name": "Selachimorpha",
+    "icon": "https://render.guildwars2.com/file/340AA29452C4AF96F8434AF323E3747AAE020B34/3710799.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "105743": [
+    {
+      "id": 0,
+      "type": "Inscription",
+      "output_item_id": 105743,
+      "output_item_count": 1,
+      "time_to_craft_ms": 1000,
+      "disciplines": [
+        "Mystic Forge"
+      ],
+      "min_rating": 0,
+      "flags": [],
+      "ingredients": [
+        {
+          "item_id": 106712,
+          "count": 1
+        },
+        {
+          "item_id": 105804,
+          "count": 1
+        },
+        {
+          "item_id": 105649,
+          "count": 1
+        },
+        {
+          "item_id": 0,
+          "count": 1
+        }
+      ],
+      "acquisition": {
+        "vendors": []
+      }
+    }
+  ],
+  "105804": [
+    {
+      "id": 0,
+      "type": "",
+      "output_item_id": 105804,
+      "output_item_count": 1,
+      "time_to_craft_ms": 0,
+      "disciplines": [],
+      "min_rating": 0,
+      "flags": [
+        "wiki"
+      ],
+      "ingredients": [],
+      "acquisition": {
+        "vendors": [
+          {
+            "name": "Canach",
+            "cost": [
+              {
+                "amount": 1,
+                "item_name": "Gift of Starlit Weald Exploration",
+                "icon_url": "https://render.guildwars2.com/file/7236FF7200ADFA3F973E51B40A582FF00316F2AD/3708958.png",
+                "item_id": 106672
+              },
+              {
+                "amount": 1,
+                "item_name": "Patron of the Magical Arts Plaque",
+                "icon_url": "https://render.guildwars2.com/file/04BBDBF2746479F9F4DA2EE0ED5AE35CA602DEA8/3710055.png",
+                "item_id": 105933
+              },
+              {
+                "amount": 1,
+                "item_name": "Seer Wreath of Service",
+                "icon_url": "https://render.guildwars2.com/file/0D36C238C4EB0337FA32D6D507D8F3C925BE10F6/3710056.png",
+                "item_id": 106627
+              },
+              {
+                "amount": 500,
+                "item_name": "Antiquated Ducat",
+                "icon_url": "https://wiki.guildwars2.com/images/thumb/b/b2/Antiquated_Ducat.png/20px-Antiquated_Ducat.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "106712": [
+    {
+      "id": 0,
+      "type": "",
+      "output_item_id": 106712,
+      "output_item_count": 1,
+      "time_to_craft_ms": 0,
+      "disciplines": [],
+      "min_rating": 0,
+      "flags": [
+        "wiki"
+      ],
+      "ingredients": [],
+      "acquisition": {
+        "vendors": [
+          {
+            "name": "Castaway Agnes",
+            "cost": [
+              {
+                "amount": 1,
+                "item_name": "Concentrated Chromatic Sap",
+                "icon_url": "https://render.guildwars2.com/file/62B6A3561704ED626FE46046F041A3B1DA7ADB51/3710069.png",
+                "item_id": 105848
+              },
+              {
+                "amount": 1,
+                "item_name": "Gift of Shipwreck Strand Exploration",
+                "icon_url": "https://render.guildwars2.com/file/69490A215111E1BA0A7C307AC590316E560D2DB4/3708957.png",
+                "item_id": 106467
+              },
+              {
+                "amount": 1,
+                "item_name": "Survivor&#39;s Enchanted Compass",
+                "icon_url": "https://wiki.guildwars2.com/images/thumb/0/0c/Survivor%27s_Enchanted_Compass.png/20px-Survivor%27s_Enchanted_Compass.png"
+              },
+              {
+                "amount": 500,
+                "item_name": "Aether-Rich Sap",
+                "icon_url": "https://wiki.guildwars2.com/images/thumb/2/23/Aether-Rich_Sap.png/20px-Aether-Rich_Sap.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

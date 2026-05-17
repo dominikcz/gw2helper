@@ -2,7 +2,7 @@
  * Test helpers for legendary calculator unit tests.
  * Loads fixture data from __fixtures__/{slug}/ and builds a CalculatorContext.
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -17,6 +17,17 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURES_DIR = path.join(__dirname, '__fixtures__');
+
+function normalizedSlugPart(value: string): string {
+	return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function listFixtureDirs(): string[] {
+	if (!existsSync(FIXTURES_DIR)) return [];
+	return readdirSync(FIXTURES_DIR, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
+}
 
 type RawPriceEntry = {
 	buys?: { quantity?: number; unit_price?: number };
@@ -82,4 +93,63 @@ export function findRowByName(
 /** Returns true if the fixture directory exists on disk. */
 export function fixtureExists(slug: string): boolean {
 	return existsSync(path.join(FIXTURES_DIR, slug, 'recipes.json'));
+}
+
+/** Returns true if a fixture can be resolved by legendary item name. */
+export function fixtureExistsByItemName(name: string): boolean {
+	return resolveFixtureSlugByItemName(name) !== null;
+}
+
+/** Resolves fixture directory slug for an item name, or null when not found. */
+export function resolveFixtureSlugByItemName(name: string): string | null {
+	const lower = name.toLowerCase();
+	const slugQuery = normalizedSlugPart(name);
+	const dirs = listFixtureDirs();
+
+	for (const dir of dirs) {
+		const slugPart = dir.replace(/^\d+-/, '');
+		if (slugPart === slugQuery) {
+			return existsSync(path.join(FIXTURES_DIR, dir, 'recipes.json')) ? dir : null;
+		}
+	}
+
+	for (const dir of dirs) {
+		if (dir.toLowerCase().includes(slugQuery)) {
+			return existsSync(path.join(FIXTURES_DIR, dir, 'recipes.json')) ? dir : null;
+		}
+	}
+
+	for (const dir of dirs) {
+		const rootItemId = Number(dir.split('-')[0]);
+		if (!Number.isFinite(rootItemId) || rootItemId <= 0) continue;
+		try {
+			const itemsPath = path.join(FIXTURES_DIR, dir, 'items.json');
+			const items: Record<number, ItemSummary> = JSON.parse(readFileSync(itemsPath, 'utf8'));
+			const rootItem = items[rootItemId];
+			if (rootItem?.name?.toLowerCase().includes(lower)) {
+				return existsSync(path.join(FIXTURES_DIR, dir, 'recipes.json')) ? dir : null;
+			}
+		} catch {
+			// ignore malformed fixture directories
+		}
+	}
+
+	return null;
+}
+
+/** Loads fixture context by legendary item name, returning context and resolved metadata. */
+export function loadFixtureContextByItemName(
+	name: string,
+	inventory: Record<number, number> = {}
+): { slug: string; rootItemId: number; ctx: CalculatorContext } {
+	const slug = resolveFixtureSlugByItemName(name);
+	if (!slug) {
+		throw new Error(`Fixture not found for item name: "${name}"`);
+	}
+	const rootItemId = Number(slug.split('-')[0]);
+	return {
+		slug,
+		rootItemId,
+		ctx: loadFixtureContext(slug, inventory),
+	};
 }

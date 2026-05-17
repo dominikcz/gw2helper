@@ -1,0 +1,108 @@
+{
+  "105649": {
+    "id": 105649,
+    "name": "Gift of Castoran Mastery",
+    "icon": "https://render.guildwars2.com/file/C6C65B4E53FFADB18080A65A41EE67DB49AFDA58/3708955.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "105743": {
+    "id": 105743,
+    "name": "Selachimorpha Container",
+    "icon": "https://render.guildwars2.com/file/340AA29452C4AF96F8434AF323E3747AAE020B34/3710799.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "105804": {
+    "id": 105804,
+    "name": "Gift of the People",
+    "icon": "https://render.guildwars2.com/file/45B44097576D0F0A7D0C5E06985E18AB77D8F8F5/3708961.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "105848": {
+    "id": 105848,
+    "name": "Concentrated Chromatic Sap",
+    "icon": "https://render.guildwars2.com/file/62B6A3561704ED626FE46046F041A3B1DA7ADB51/3710069.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "105933": {
+    "id": 105933,
+    "name": "Patron of the Magical Arts Plaque",
+    "icon": "https://render.guildwars2.com/file/04BBDBF2746479F9F4DA2EE0ED5AE35CA602DEA8/3710055.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "106467": {
+    "id": 106467,
+    "name": "Gift of Shipwreck Strand Exploration",
+    "icon": "https://render.guildwars2.com/file/69490A215111E1BA0A7C307AC590316E560D2DB4/3708957.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "106627": {
+    "id": 106627,
+    "name": "Seer Wreath of Service",
+    "icon": "https://render.guildwars2.com/file/0D36C238C4EB0337FA32D6D507D8F3C925BE10F6/3710056.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "106672": {
+    "id": 106672,
+    "name": "Gift of Starlit Weald Exploration",
+    "icon": "https://render.guildwars2.com/file/7236FF7200ADFA3F973E51B40A582FF00316F2AD/3708958.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "106712": {
+    "id": 106712,
+    "name": "Gift of the Survivors",
+    "icon": "https://render.guildwars2.com/file/CAE0204429420B293DBD30C864E82C1A17EF7E1D/3708963.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  }
+}

@@ -1,6 +1,16 @@
 import { beforeAll, describe, it, expect } from 'vitest';
 import { CalculationFor } from './calculation-scenario';
-import { fixtureExists } from './test-helpers';
+import { fixtureExists, fixtureExistsByItemName, loadFixtureContextByItemName } from './test-helpers';
+import {
+    defineRepresentativeCoverage,
+    expectCommonEconomicTemplateL3,
+    expectCommonProwessTemplateL3,
+    expectRecipeIngredientsExactly,
+    expectVendorCostsContain,
+    ingredient,
+    recipeIngredientNames,
+    REPRESENTATIVE_LEGENDARIES,
+} from './calculator.test.helpers';
 
 // ─── Klobjarne Geirr (103815) ─────────────────────────────────────────────────
 describe('Klobjarne Geirr (103815)', () => {
@@ -314,5 +324,376 @@ describe('isTradingPostEligible', () => {
         const { isTradingPostEligible } = await import('./calculator');
 
         expect(isTradingPostEligible(undefined)).toBe(false);
+    });
+});
+
+// ─── Requested generation representatives coverage ────────────────────────────
+describe('Legendary generation representatives coverage', () => {
+    for (const spec of REPRESENTATIVE_LEGENDARIES) {
+        defineRepresentativeCoverage(spec);
+    }
+});
+
+describe('Legendary armor expected structure from wiki', () => {
+    describe('WvW: Sublime Mistforged Triumphant Hero\'s Raiment', () => {
+        const SKIP = !fixtureExistsByItemName("Sublime Mistforged Triumphant Hero's Raiment");
+
+        it.skipIf(SKIP)('has full L1/L2/L3 breakdown matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName("Sublime Mistforged Triumphant Hero's Raiment");
+
+            expectRecipeIngredientsExactly(ctx, "Sublime Mistforged Triumphant Hero's Raiment", [
+                ingredient("Sublime Mistforged Triumphant Hero's Raiment", 1),
+                ingredient('Gift of War Prosperity', 1),
+                ingredient('Gift of War Prowess', 1),
+                ingredient('Gift of War Dedication', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of War Prosperity', [
+                ingredient('Gift of Battle', 1),
+                ingredient('Mystic Clover', 15),
+                ingredient('Gift of Condensed Might', 1),
+                ingredient('Gift of Condensed Magic', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of War Prowess', [
+                ingredient('Legendary War Insight', 1),
+                ingredient('Eldritch Scroll', 1),
+                ingredient('Obsidian Shard', 50),
+                ingredient('Cube of Stabilized Dark Energy', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of War Dedication', [
+                ingredient('Certificate of Honor', 1),
+                ingredient('Certificate of Heroics', 1),
+                ingredient('Glob of Condensed Spirit Energy', 1),
+                ingredient('Memory of Battle', 250),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+            expectCommonProwessTemplateL3(ctx);
+        });
+    });
+
+    describe('PvP: Mistforged Glorious Hero\'s Raiment', () => {
+        const SKIP = !fixtureExistsByItemName("Mistforged Glorious Hero's Raiment");
+
+        it.skipIf(SKIP)('has full L1/L2/L3 breakdown matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName("Mistforged Glorious Hero's Raiment");
+
+            expectRecipeIngredientsExactly(ctx, "Mistforged Glorious Hero's Raiment", [
+                ingredient("Mistforged Glorious Hero's Raiment", 1),
+                ingredient('Gift of Competitive Prosperity', 1),
+                ingredient('Gift of Competitive Prowess', 1),
+                ingredient('Gift of Competitive Dedication', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Competitive Prosperity', [
+                ingredient('Mist Core Fragment', 1),
+                ingredient('Mystic Clover', 15),
+                ingredient('Gift of Condensed Might', 1),
+                ingredient('Gift of Condensed Magic', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Competitive Prowess', [
+                ingredient('Record of League Victories', 1),
+                ingredient('Eldritch Scroll', 1),
+                ingredient('Obsidian Shard', 50),
+                ingredient('Cube of Stabilized Dark Energy', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Competitive Dedication', [
+                ingredient('Record of League Participation', 1),
+                ingredient('Star of Glory', 1),
+                ingredient('Glob of Condensed Spirit Energy', 1),
+                ingredient('Jar of Distilled Glory', 1),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+            expectCommonProwessTemplateL3(ctx);
+        });
+    });
+
+    describe('Raid: Perfected Envoy Vestments', () => {
+        const SKIP = !fixtureExistsByItemName('Perfected Envoy Vestments');
+
+        it.skipIf(SKIP)('has full L1/L2/L3 breakdown matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName('Perfected Envoy Vestments');
+
+            expectRecipeIngredientsExactly(ctx, 'Perfected Envoy Vestments', [
+                ingredient('Refined Envoy Vestments', 1),
+                ingredient('Gift of Prosperity', 1),
+                ingredient('Gift of Prowess', 1),
+                ingredient('Gift of Dedication', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Prosperity', [
+                ingredient('Gift of Craftsmanship', 1),
+                ingredient('Mystic Clover', 15),
+                ingredient('Gift of Condensed Magic', 1),
+                ingredient('Gift of Condensed Might', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Prowess', [
+                ingredient('Legendary Insight', 25),
+                ingredient('Eldritch Scroll', 1),
+                ingredient('Obsidian Shard', 50),
+                ingredient('Cube of Stabilized Dark Energy', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Dedication', [
+                ingredient('Chak Egg', 5),
+                ingredient('Auric Ingot', 5),
+                ingredient('Reclaimed Metal Plate', 5),
+                ingredient('Gift of the Pact', 1),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+            expectCommonProwessTemplateL3(ctx);
+        });
+    });
+
+    describe('Open world: Obsidian Light Regalia', () => {
+        const SKIP = !fixtureExistsByItemName('Obsidian Light Regalia');
+
+        it.skipIf(SKIP)('has full L1/L2/L3 breakdown matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName('Obsidian Light Regalia');
+
+            expectRecipeIngredientsExactly(ctx, 'Obsidian Light Regalia', [
+                ingredient('Arcanum of Astral Heartbeat', 1),
+                ingredient('Gift of Expertise', 1),
+                ingredient('Gift of Stormy Skies', 1),
+                ingredient('Gift of Magical Prosperity', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Expertise', [
+                ingredient('Amalgamated Rift Essence', 12),
+                ingredient('Eldritch Scroll', 1),
+                ingredient('Obsidian Shard', 50),
+                ingredient('Cube of Stabilized Dark Energy', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Stormy Skies', [
+                ingredient('Gift of the Astral Ward', 1),
+                ingredient('Case of Captured Lightning', 5),
+                ingredient('Clot of Congealed Screams', 5),
+                ingredient('Pouch of Stardust', 5),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Magical Prosperity', [
+                ingredient('Gift of Craftsmanship', 1),
+                ingredient('Mystic Clover', 9),
+                ingredient('Gift of Condensed Magic', 1),
+                ingredient('Gift of Research', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of the Astral Ward', [
+                ingredient('Gift of Skywatch Archipelago', 1),
+                ingredient('Gift of Amnytas', 1),
+                ingredient('Gift of Inner Nayos', 1),
+                ingredient('Gift of Persistence', 1),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx, { includeCondensedMight: false, includeCondensedMagic: true });
+            expectCommonProwessTemplateL3(ctx);
+        });
+    });
+
+    describe('Open world: Selachimorpha (aquabreather)', () => {
+        const SKIP = !fixtureExistsByItemName('Selachimorpha');
+
+        it.skipIf(SKIP)('is represented as terminal acquisition (no crafted sub-levels)', () => {
+            const { ctx } = loadFixtureContextByItemName('Selachimorpha');
+            const directIngredients = recipeIngredientNames(ctx, 'Selachimorpha');
+            expect(directIngredients, 'Selachimorpha direct recipe ingredients').toEqual([]);
+        });
+    });
+
+    describe('Open world: Selachimorpha Container (wiki material table)', () => {
+        const SKIP = !fixtureExistsByItemName('Selachimorpha Container');
+
+        it.skipIf(SKIP)('matches the container-level wiki template blocks available in cache', () => {
+            const { ctx } = loadFixtureContextByItemName('Selachimorpha Container');
+
+            expectRecipeIngredientsExactly(ctx, 'Selachimorpha Container', [
+                ingredient('Gift of the Survivors', 1),
+                ingredient('Gift of the People', 1),
+                ingredient('Gift of Castoran Mastery', 1),
+            ]);
+
+            expectVendorCostsContain(ctx, 'Gift of the Survivors', [
+                'Concentrated Chromatic Sap',
+                'Gift of Shipwreck Strand Exploration',
+            ]);
+
+            expectVendorCostsContain(ctx, 'Gift of the People', [
+                'Gift of Starlit Weald Exploration',
+                'Patron of the Magical Arts Plaque',
+                'Seer Wreath of Service',
+            ]);
+        });
+    });
+});
+
+describe('Legendary weapon expected structure from wiki', () => {
+    describe('Generation 1: The Juggernaut', () => {
+        const SKIP = !fixtureExistsByItemName('The Juggernaut');
+
+        it.skipIf(SKIP)('has full L1/L2 breakdown matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName('The Juggernaut');
+
+            expectRecipeIngredientsExactly(ctx, 'The Juggernaut', [
+                ingredient('The Colossus', 1),
+                ingredient('Gift of The Juggernaut', 1),
+                ingredient('Gift of Fortune', 1),
+                ingredient('Gift of Mastery', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Fortune', [
+                ingredient('Mystic Clover', 77),
+                ingredient('Glob of Ectoplasm', 250),
+                ingredient('Gift of Magic', 1),
+                ingredient('Gift of Might', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Mastery', [
+                ingredient('Bloodstone Shard', 1),
+                ingredient('Obsidian Shard', 250),
+                ingredient('Gift of Exploration', 1),
+                ingredient('Gift of Battle', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of The Juggernaut', [
+                ingredient('Gift of Metal', 1),
+                ingredient('Vial of Quicksilver', 1),
+                ingredient('Icy Runestone', 100),
+                ingredient('Superior Sigil of Benevolence', 1),
+            ]);
+        });
+    });
+
+    describe('Generation 2: Sharur', () => {
+        const SKIP = !fixtureExistsByItemName('Sharur');
+
+        it.skipIf(SKIP)('has full L1/L2 breakdown and shared L3 economic block matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName('Sharur');
+
+            expectRecipeIngredientsExactly(ctx, 'Sharur', [
+                ingredient('Might of Arah', 1),
+                ingredient('Gift of Arah', 1),
+                ingredient('Mystic Tribute', 1),
+                ingredient('Gift of Maguuma Mastery', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Arah', [
+                ingredient('Gift of the Mists', 1),
+                ingredient('Mystic Runestone', 100),
+                ingredient('Shard of Arah', 100),
+                ingredient('Gift of Metal', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Mystic Tribute', [
+                ingredient('Gift of Condensed Magic', 2),
+                ingredient('Gift of Condensed Might', 2),
+                ingredient('Mystic Clover', 77),
+                ingredient('Mystic Coin', 250),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Maguuma Mastery', [
+                ingredient('Gift of Maguuma', 1),
+                ingredient('Gift of Insights', 1),
+                ingredient('Bloodstone Shard', 1),
+                ingredient('Crystalline Ingot', 250),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+        });
+    });
+
+    describe('Generation 3: Aurene\'s Weight', () => {
+        const SKIP = !fixtureExistsByItemName("Aurene's Weight");
+
+        it.skipIf(SKIP)('has full L1/L2 breakdown and shared L3 economic block matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName("Aurene's Weight");
+
+            expectRecipeIngredientsExactly(ctx, "Aurene's Weight", [
+                ingredient("Gift of Aurene's Weight", 1),
+                ingredient("Dragon's Weight", 1),
+                ingredient('Gift of Jade Mastery', 1),
+                ingredient('Draconic Tribute', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, "Gift of Aurene's Weight", [
+                ingredient('Poem on Hammers', 1),
+                ingredient('Mystic Runestone', 100),
+                ingredient('Gift of Research', 1),
+                ingredient('Gift of the Mists', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Jade Mastery', [
+                ingredient('Gift of the Dragon Empire', 1),
+                ingredient('Bloodstone Shard', 1),
+                ingredient('Gift of Cantha', 1),
+                ingredient('Antique Summoning Stone', 100),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Draconic Tribute', [
+                ingredient('Gift of Condensed Might', 1),
+                ingredient('Gift of Condensed Magic', 1),
+                ingredient('Mystic Clover', 38),
+                ingredient('Amalgamated Draconic Lodestone', 5),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+        });
+    });
+
+    describe('Standalone: Klobjarne Geirr', () => {
+        const SKIP = !fixtureExistsByItemName('Klobjarne Geirr');
+
+        it.skipIf(SKIP)('has full L1/L2 breakdown and shared L3 economic block matching wiki template', () => {
+            const { ctx } = loadFixtureContextByItemName('Klobjarne Geirr');
+
+            expectRecipeIngredientsExactly(ctx, 'Klobjarne Geirr', [
+                ingredient('Gift of Janthir Wilds', 1),
+                ingredient('Gift of the Homesteader', 1),
+                ingredient('Gift of Klobjarne Geirr', 1),
+                ingredient('Nyr Hrammr', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Janthir Wilds', [
+                ingredient('Gift of Gatherer of the Hunt', 1),
+                ingredient('Gift of Uncovered Grounds', 1),
+                ingredient('Gift of Expertise', 1),
+                ingredient('Bloodstone Shard', 1),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of the Homesteader', [
+                ingredient('Gift of Embracing Refuge', 1),
+                ingredient('Gift of Condensed Might', 1),
+                ingredient('Gift of Condensed Magic', 1),
+                ingredient('Mystic Clover', 38),
+            ]);
+
+            expectRecipeIngredientsExactly(ctx, 'Gift of Klobjarne Geirr', [
+                ingredient('Gift of Recollector of Memories', 1),
+                ingredient('Mystic Runestone', 100),
+                ingredient('Gift of the Mists', 1),
+                ingredient('Gift of Research', 1),
+            ]);
+
+            expectCommonEconomicTemplateL3(ctx);
+        });
+    });
+
+    describe('Standalone: Ancora Pax', () => {
+        const SKIP = !fixtureExistsByItemName('Ancora Pax');
+
+        it.skipIf(SKIP)('matches standalone wiki block available in cache', () => {
+            const { ctx } = loadFixtureContextByItemName('Ancora Pax');
+            const directIngredients = recipeIngredientNames(ctx, 'Ancora Pax');
+
+            expect(directIngredients, 'Ancora Pax direct recipe ingredients').toEqual([]);
+            expectVendorCostsContain(ctx, 'Ancora Pax', ['Aetheric Anchor']);
+        });
     });
 });

@@ -1,0 +1,27 @@
+{
+  "105497": {
+    "id": 105497,
+    "name": "Aetheric Anchor",
+    "icon": "https://render.guildwars2.com/file/80C0746F7E65C40119EBC2A26E4C6F0A6E7A6617/3708965.png",
+    "rarity": "Legendary",
+    "flags": [
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning"
+    ]
+  },
+  "105653": {
+    "id": 105653,
+    "name": "Ancora Pax",
+    "icon": "https://render.guildwars2.com/file/062138CC40DF0A2D4195C9DAA5FDD8BF0ECC27F9/3710038.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  }
+}

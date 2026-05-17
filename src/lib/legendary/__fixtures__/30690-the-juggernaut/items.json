@@ -1,0 +1,6585 @@
+{
+  "8915": {
+    "id": 8915,
+    "name": "Light Loot Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "8917": {
+    "id": 8917,
+    "name": "Loot Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "8918": {
+    "id": 8918,
+    "name": "Medium Loot Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "8920": {
+    "id": 8920,
+    "name": "Heavy Loot Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "8921": {
+    "id": 8921,
+    "name": "Fall Adventure Pouch",
+    "icon": "https://render.guildwars2.com/file/3BF274D1A323C002CDCFE80724912CDB7C78ABEE/62857.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9272": {
+    "id": 9272,
+    "name": "Light Ritual Bag",
+    "icon": "https://render.guildwars2.com/file/FAB5B9475F04A7D6AE63A2A6059C9D025E06EA1D/62078.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9273": {
+    "id": 9273,
+    "name": "Ritual Bag",
+    "icon": "https://render.guildwars2.com/file/FAB5B9475F04A7D6AE63A2A6059C9D025E06EA1D/62078.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9274": {
+    "id": 9274,
+    "name": "Ritual Sack",
+    "icon": "https://render.guildwars2.com/file/FAB5B9475F04A7D6AE63A2A6059C9D025E06EA1D/62078.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9275": {
+    "id": 9275,
+    "name": "Medium Ritual Bag",
+    "icon": "https://render.guildwars2.com/file/FAB5B9475F04A7D6AE63A2A6059C9D025E06EA1D/62078.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9277": {
+    "id": 9277,
+    "name": "Heavy Ritual Bag",
+    "icon": "https://render.guildwars2.com/file/FAB5B9475F04A7D6AE63A2A6059C9D025E06EA1D/62078.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9280": {
+    "id": 9280,
+    "name": "Light Supply Bag",
+    "icon": "https://render.guildwars2.com/file/42AAC1FDE6FB5F753D08B203EB7843163C76BAD2/63183.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9281": {
+    "id": 9281,
+    "name": "Supply Bag",
+    "icon": "https://render.guildwars2.com/file/42AAC1FDE6FB5F753D08B203EB7843163C76BAD2/63183.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9282": {
+    "id": 9282,
+    "name": "Supply Sack",
+    "icon": "https://render.guildwars2.com/file/42AAC1FDE6FB5F753D08B203EB7843163C76BAD2/63183.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9283": {
+    "id": 9283,
+    "name": "Medium Supply Bag",
+    "icon": "https://render.guildwars2.com/file/42AAC1FDE6FB5F753D08B203EB7843163C76BAD2/63183.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9288": {
+    "id": 9288,
+    "name": "Bag of Pilfered Goods",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9289": {
+    "id": 9289,
+    "name": "Bag of Purloined Goods",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9290": {
+    "id": 9290,
+    "name": "Bag of Snatched Goods",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9291": {
+    "id": 9291,
+    "name": "Bag of Swiped Goods",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9293": {
+    "id": 9293,
+    "name": "Bag of Stolen Goods",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9304": {
+    "id": 9304,
+    "name": "Light Stolen Supplies Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9305": {
+    "id": 9305,
+    "name": "Stolen Supplies Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9306": {
+    "id": 9306,
+    "name": "Stolen Supplies Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9307": {
+    "id": 9307,
+    "name": "Medium Stolen Supplies Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9309": {
+    "id": 9309,
+    "name": "Heavy Stolen Supplies Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9312": {
+    "id": 9312,
+    "name": "Light Bag of Trinkets",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9313": {
+    "id": 9313,
+    "name": "Bag of Trinkets",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9314": {
+    "id": 9314,
+    "name": "Sack of Trinkets",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9315": {
+    "id": 9315,
+    "name": "Medium Bag of Trinkets",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9317": {
+    "id": 9317,
+    "name": "Heavy Bag of Trinkets",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9320": {
+    "id": 9320,
+    "name": "Light Bag of Supplies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9321": {
+    "id": 9321,
+    "name": "Bag of Supplies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9323": {
+    "id": 9323,
+    "name": "Medium Bag of Supplies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9325": {
+    "id": 9325,
+    "name": "Heavy Bag of Supplies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9329": {
+    "id": 9329,
+    "name": "Bag of Laboratory Materials",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9330": {
+    "id": 9330,
+    "name": "Bag of Provisional Materials",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9331": {
+    "id": 9331,
+    "name": "Bag of Exploratory Materials",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9333": {
+    "id": 9333,
+    "name": "Bag of Alchemical Materials",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9344": {
+    "id": 9344,
+    "name": "Light Bag of Booty",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9345": {
+    "id": 9345,
+    "name": "Bag of Booty",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9346": {
+    "id": 9346,
+    "name": "Sack of Booty",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9347": {
+    "id": 9347,
+    "name": "Medium Bag of Booty",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9349": {
+    "id": 9349,
+    "name": "Heavy Bag of Booty",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9352": {
+    "id": 9352,
+    "name": "Light Bag of Skritt Shinies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9353": {
+    "id": 9353,
+    "name": "Bag of Skritt Shinies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9354": {
+    "id": 9354,
+    "name": "Sack of Skritt Shinies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9355": {
+    "id": 9355,
+    "name": "Medium Bag of Skritt Shinies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9357": {
+    "id": 9357,
+    "name": "Heavy Bag of Skritt Shinies",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9361": {
+    "id": 9361,
+    "name": "Icy Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9362": {
+    "id": 9362,
+    "name": "Icy Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9368": {
+    "id": 9368,
+    "name": "Light Moldy Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9369": {
+    "id": 9369,
+    "name": "Moldy Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9370": {
+    "id": 9370,
+    "name": "Moldy Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9371": {
+    "id": 9371,
+    "name": "Medium Moldy Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9373": {
+    "id": 9373,
+    "name": "Heavy Moldy Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9376": {
+    "id": 9376,
+    "name": "Light Treat Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9377": {
+    "id": 9377,
+    "name": "Treat Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9378": {
+    "id": 9378,
+    "name": "Treat Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "9381": {
+    "id": 9381,
+    "name": "Heavy Treat Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19621": {
+    "id": 19621,
+    "name": "Gift of Metal",
+    "icon": "https://render.guildwars2.com/file/FADDF94DAD6721344F300405E725AC2624330339/455802.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19626": {
+    "id": 19626,
+    "name": "Gift of Fortune",
+    "icon": "https://render.guildwars2.com/file/62A0F109C444E275E966B9A903D63FFE99540BAD/455807.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19633": {
+    "id": 19633,
+    "name": "Vial of Quicksilver",
+    "icon": "https://render.guildwars2.com/file/F32944C40CF6FC54B204CACDE5071BA0B69BEAFC/455814.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19649": {
+    "id": 19649,
+    "name": "Gift of The Juggernaut",
+    "icon": "https://render.guildwars2.com/file/A19029319070C374A6669539EB5C47E3E4E8AF44/455829.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19663": {
+    "id": 19663,
+    "name": "Bottle of Elonian Wine",
+    "icon": "https://render.guildwars2.com/file/CC720B5A5810A84FD97AB00FA43F1679C48074DE/455843.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19666": {
+    "id": 19666,
+    "name": "Gift of the Forgeman",
+    "icon": "https://render.guildwars2.com/file/074D017C2DC674DD5E58FA355C5A20E6FE07C57E/455846.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19672": {
+    "id": 19672,
+    "name": "Gift of Might",
+    "icon": "https://render.guildwars2.com/file/2F41032550D4024E184FAD6C1C0C14E53A09BCEA/455852.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19673": {
+    "id": 19673,
+    "name": "Gift of Magic",
+    "icon": "https://render.guildwars2.com/file/992EC43FA1317BED252DB9D09905C601160B0E01/455853.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19674": {
+    "id": 19674,
+    "name": "Gift of Mastery",
+    "icon": "https://render.guildwars2.com/file/D4E560D3197437F0010DB4B6B2DBEA7D58E9DC27/455854.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19675": {
+    "id": 19675,
+    "name": "Mystic Clover",
+    "icon": "https://render.guildwars2.com/file/FE9DC3E10D4B2AE16DADEB07CF28A058570E2EF3/455855.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19676": {
+    "id": 19676,
+    "name": "Icy Runestone",
+    "icon": "https://render.guildwars2.com/file/1AB22A149E9B807AA726CC6B1D7D0435A840A300/455856.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19677": {
+    "id": 19677,
+    "name": "Gift of Exploration",
+    "icon": "https://render.guildwars2.com/file/B0051EB5FF730C9EF7C2A3781D3F9B732D4D1A55/455857.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19678": {
+    "id": 19678,
+    "name": "Gift of Battle",
+    "icon": "https://render.guildwars2.com/file/EB593444A3ED065F7BE3EC71713CF80D145EABCB/455858.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19679": {
+    "id": 19679,
+    "name": "Bronze Ingot",
+    "icon": "https://render.guildwars2.com/file/E3D6CBCEACAE61041366A4C0021B6E6B40630A0F/65908.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19680": {
+    "id": 19680,
+    "name": "Copper Ingot",
+    "icon": "https://render.guildwars2.com/file/32D3BC4B5722155E15DC5A1DE5E9255C50F90609/65909.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19681": {
+    "id": 19681,
+    "name": "Darksteel Ingot",
+    "icon": "https://render.guildwars2.com/file/EDC02674C339C0D5B0B8C9370013394ED6270FA7/65910.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19682": {
+    "id": 19682,
+    "name": "Gold Ingot",
+    "icon": "https://render.guildwars2.com/file/80C845F5ED06036F7E041C7214C29FA3D562A480/65911.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19683": {
+    "id": 19683,
+    "name": "Iron Ingot",
+    "icon": "https://render.guildwars2.com/file/69722C33064097766ABC44B20F5D4B551E599E32/65912.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19684": {
+    "id": 19684,
+    "name": "Mithril Ingot",
+    "icon": "https://render.guildwars2.com/file/7B0701F4092237431EDC72340BC89AA126EA4EF0/65913.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19685": {
+    "id": 19685,
+    "name": "Orichalcum Ingot",
+    "icon": "https://render.guildwars2.com/file/D1941454313ACCB234906840E1FB401D49091B96/220460.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19686": {
+    "id": 19686,
+    "name": "Platinum Ingot",
+    "icon": "https://render.guildwars2.com/file/3F08D6044B2268BE57972DCB1F0424B5A60F2AEC/65914.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19687": {
+    "id": 19687,
+    "name": "Silver Ingot",
+    "icon": "https://render.guildwars2.com/file/33150406A468526276071A0D0AD678B9F1D6EDCA/65915.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19688": {
+    "id": 19688,
+    "name": "Steel Ingot",
+    "icon": "https://render.guildwars2.com/file/FCB6E507C84EDD01E2CE25665370FDE8423B58F9/65916.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19697": {
+    "id": 19697,
+    "name": "Copper Ore",
+    "icon": "https://render.guildwars2.com/file/6E17C5A65955239640743E48B30A3425FACA5D02/65925.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19702": {
+    "id": 19702,
+    "name": "Platinum Ore",
+    "icon": "https://render.guildwars2.com/file/413D7EE8CE04C0BC07C31A4B381EB6344150F849/65930.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19704": {
+    "id": 19704,
+    "name": "Lump of Tin",
+    "icon": "https://render.guildwars2.com/file/B2705275944046734E4079651E6BB0CC0EEB3943/65932.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19721": {
+    "id": 19721,
+    "name": "Glob of Ectoplasm",
+    "icon": "https://render.guildwars2.com/file/18CE5D78317265000CF3C23ED76AB3CEE86BA60E/65941.png",
+    "rarity": "Exotic",
+    "flags": []
+  },
+  "19924": {
+    "id": 19924,
+    "name": "Lump of Primordium",
+    "icon": "https://render.guildwars2.com/file/3728DC6E10FA4DADCD3B0918A70FAE9DEA96BDD4/65962.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "19925": {
+    "id": 19925,
+    "name": "Obsidian Shard",
+    "icon": "https://render.guildwars2.com/file/AE16FCC326D80A3906B17B6A75E8A91980BE4670/434362.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "19976": {
+    "id": 19976,
+    "name": "Mystic Coin",
+    "icon": "https://render.guildwars2.com/file/AB0317DF5B0E1BA47436A5420248660765154C08/62864.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage",
+      "NoSell"
+    ]
+  },
+  "20796": {
+    "id": 20796,
+    "name": "Philosopher's Stone",
+    "icon": "https://render.guildwars2.com/file/68FF9617BA1BE1AD58E83E4209AEF0FB58950702/434425.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "20797": {
+    "id": 20797,
+    "name": "Bloodstone Shard",
+    "icon": "https://render.guildwars2.com/file/D9F626FA79AA0C49436337B1C767023CCF14EFF9/434426.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "20799": {
+    "id": 20799,
+    "name": "Mystic Crystal",
+    "icon": "https://render.guildwars2.com/file/045C05C2F83A59FC4B6F15073465C5D3040E4DF5/65674.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "24273": {
+    "id": 24273,
+    "name": "Pile of Shimmering Dust",
+    "icon": "https://render.guildwars2.com/file/33653CA0C67796BE03A22B5AE3197D0564376700/434533.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24274": {
+    "id": 24274,
+    "name": "Pile of Radiant Dust",
+    "icon": "https://render.guildwars2.com/file/3F95D5E3E1B07294C7625B36004F6AE76C05E117/434534.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24275": {
+    "id": 24275,
+    "name": "Pile of Luminous Dust",
+    "icon": "https://render.guildwars2.com/file/DDCA6504E718CA6DFF08F1483A2F356D0F4AEB4A/434535.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24276": {
+    "id": 24276,
+    "name": "Pile of Incandescent Dust",
+    "icon": "https://render.guildwars2.com/file/3501C2BBADF95BE5F14E31484850E851EFCA33CB/434536.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24277": {
+    "id": 24277,
+    "name": "Pile of Crystalline Dust",
+    "icon": "https://render.guildwars2.com/file/080D00670558CD9E580D5662030394B2206E92A6/434537.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24279": {
+    "id": 24279,
+    "name": "Small Venom Sac",
+    "icon": "https://render.guildwars2.com/file/0C04FDFF465A682BB080F272E9DB3DBC0637113D/66935.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24280": {
+    "id": 24280,
+    "name": "Venom Sac",
+    "icon": "https://render.guildwars2.com/file/6D1AB79FCCD5E673A0220A39C56E45081B426019/66936.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24281": {
+    "id": 24281,
+    "name": "Full Venom Sac",
+    "icon": "https://render.guildwars2.com/file/FE3D2BD0B88077ACE7E808504A3ACB0C4EDAD8D5/66937.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24282": {
+    "id": 24282,
+    "name": "Potent Venom Sac",
+    "icon": "https://render.guildwars2.com/file/EA6A4C91F561EC5667947AEFE4CA436D0631CBE3/66938.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24283": {
+    "id": 24283,
+    "name": "Powerful Venom Sac",
+    "icon": "https://render.guildwars2.com/file/543EC37900EA2A57E77FA891193A48D66AA224AB/66939.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24285": {
+    "id": 24285,
+    "name": "Small Scale",
+    "icon": "https://render.guildwars2.com/file/EE0C5C5917BE5B0F1569134E40E80399FFC73E17/66941.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24286": {
+    "id": 24286,
+    "name": "Scale",
+    "icon": "https://render.guildwars2.com/file/14C880782A481EE8051BDB176E542AF55C6CE663/66942.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24287": {
+    "id": 24287,
+    "name": "Smooth Scale",
+    "icon": "https://render.guildwars2.com/file/95F72F7A1A3D6D01751148FF3D0D9709366F203B/66943.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24288": {
+    "id": 24288,
+    "name": "Large Scale",
+    "icon": "https://render.guildwars2.com/file/F94ECFFF0FA9C321C108DA34E777B27B0AC9D5F8/66944.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24289": {
+    "id": 24289,
+    "name": "Armored Scale",
+    "icon": "https://render.guildwars2.com/file/7061C82F4F9D0C585742F545C40A0F06BE0154DC/66527.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24291": {
+    "id": 24291,
+    "name": "Vial of Thin Blood",
+    "icon": "https://render.guildwars2.com/file/3008755732C166F3ACF87CC044779C5D95D25896/66946.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24292": {
+    "id": 24292,
+    "name": "Vial of Blood",
+    "icon": "https://render.guildwars2.com/file/7D0B2A322001D999514908D519590D9B5D04DB35/66947.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24293": {
+    "id": 24293,
+    "name": "Vial of Thick Blood",
+    "icon": "https://render.guildwars2.com/file/5103E44DB05DE7A9579C98037332294DB209CB72/66948.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24294": {
+    "id": 24294,
+    "name": "Vial of Potent Blood",
+    "icon": "https://render.guildwars2.com/file/99AAE49EABF9A2415940FDB83CA1CE5E6E256020/66949.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24295": {
+    "id": 24295,
+    "name": "Vial of Powerful Blood",
+    "icon": "https://render.guildwars2.com/file/1A930A6A7B5B01EAB4CB36E79014C12B500BF6B3/66950.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24297": {
+    "id": 24297,
+    "name": "Small Totem",
+    "icon": "https://render.guildwars2.com/file/ABE928F56C08C9ED47664948EB30A25B08DC5DEF/66952.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24298": {
+    "id": 24298,
+    "name": "Totem",
+    "icon": "https://render.guildwars2.com/file/52A92F9505FD49FB655A0631525556D5B80E55C0/66953.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24299": {
+    "id": 24299,
+    "name": "Intricate Totem",
+    "icon": "https://render.guildwars2.com/file/4DBC299E4B036A0DD3119A0F06BACA147C03B5C7/66954.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24300": {
+    "id": 24300,
+    "name": "Elaborate Totem",
+    "icon": "https://render.guildwars2.com/file/C1ABF9082901FC3CEABC3138CBCCA1DAD5D41812/66955.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24309": {
+    "id": 24309,
+    "name": "Onyx Core",
+    "icon": "https://render.guildwars2.com/file/EDE00E4F3F3802F8064D7640A345ADA0E85D045C/66962.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24310": {
+    "id": 24310,
+    "name": "Onyx Lodestone",
+    "icon": "https://render.guildwars2.com/file/2232AA41E3DF20EB249C0B6D10BC0D37FF6C0E3D/66963.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24314": {
+    "id": 24314,
+    "name": "Molten Core",
+    "icon": "https://render.guildwars2.com/file/F23608C7DE13B2BC903D3F6EB9734B423E96A6CB/66967.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24315": {
+    "id": 24315,
+    "name": "Molten Lodestone",
+    "icon": "https://render.guildwars2.com/file/76910A3A41C33D0FF09EF3CBDA4B079706150FB9/66968.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24329": {
+    "id": 24329,
+    "name": "Crystal Core",
+    "icon": "https://render.guildwars2.com/file/D75C7D66B6589636E00AA45B20EB061305B5C52B/66979.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24330": {
+    "id": 24330,
+    "name": "Crystal Lodestone",
+    "icon": "https://render.guildwars2.com/file/C10553036839522AAB54425B431E391F76D878AC/66980.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24333": {
+    "id": 24333,
+    "name": "Pile of Filthy Essence",
+    "icon": "https://render.guildwars2.com/file/A87CFBBE42926064C2F6399F68BE06B23FA53109/63275.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24334": {
+    "id": 24334,
+    "name": "Pile of Vile Essence",
+    "icon": "https://render.guildwars2.com/file/B290F544094427265D049A21425C92F4A324C392/66981.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24335": {
+    "id": 24335,
+    "name": "Pile of Putrid Essence",
+    "icon": "https://render.guildwars2.com/file/CBC82EA8093AE4F60F0752B179F7CD02DDF5CB33/223781.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24341": {
+    "id": 24341,
+    "name": "Large Bone",
+    "icon": "https://render.guildwars2.com/file/13F077BA5D5C6324CFCB0A2E39050F24A441190B/66987.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24343": {
+    "id": 24343,
+    "name": "Bone Shard",
+    "icon": "https://render.guildwars2.com/file/E2EC91117128DC5BC0B0FA0267EBBC2429B3556F/66989.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24344": {
+    "id": 24344,
+    "name": "Bone",
+    "icon": "https://render.guildwars2.com/file/B000AA18322202719E2B251B4EE735B5D3EF4EB1/66990.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24345": {
+    "id": 24345,
+    "name": "Heavy Bone",
+    "icon": "https://render.guildwars2.com/file/A27457964A7F0A19DFFCA57FCB7308D233FE66E1/66991.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24347": {
+    "id": 24347,
+    "name": "Small Claw",
+    "icon": "https://render.guildwars2.com/file/4CFEC931B41FA0092E5C9B6F240FE1F64E2F5247/66993.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24348": {
+    "id": 24348,
+    "name": "Claw",
+    "icon": "https://render.guildwars2.com/file/325E12790C72C161E15B1CCE253C6079960CA138/66994.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24349": {
+    "id": 24349,
+    "name": "Sharp Claw",
+    "icon": "https://render.guildwars2.com/file/97BCA6B90E56E6F0A06B3C031CDEA5EC0EBA17B5/66995.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24350": {
+    "id": 24350,
+    "name": "Large Claw",
+    "icon": "https://render.guildwars2.com/file/3A4D64F4CE2951F358DE0AFCEA6551050FB4B4A7/66420.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24351": {
+    "id": 24351,
+    "name": "Vicious Claw",
+    "icon": "https://render.guildwars2.com/file/043E2BBA270F381870F1B45E7C09C098CAFE3D14/66996.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24353": {
+    "id": 24353,
+    "name": "Small Fang",
+    "icon": "https://render.guildwars2.com/file/58E20991EB9BA6D4954DAFC6AF4B3CE3C8EB7116/220904.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24354": {
+    "id": 24354,
+    "name": "Fang",
+    "icon": "https://render.guildwars2.com/file/112DF0DE564C9C061FE8DDB198EA953ED527E9D6/66809.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24355": {
+    "id": 24355,
+    "name": "Sharp Fang",
+    "icon": "https://render.guildwars2.com/file/5F9923611B4B5314D5993872EC2970CA7BE09DAB/65896.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24356": {
+    "id": 24356,
+    "name": "Large Fang",
+    "icon": "https://render.guildwars2.com/file/DED4F23E44430C2BE1C0D491145A4946FC7D7C6F/223793.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24357": {
+    "id": 24357,
+    "name": "Vicious Fang",
+    "icon": "https://render.guildwars2.com/file/F2050EE1A7A43EDCDCB1E971FDA608AD0566E4DA/66998.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24358": {
+    "id": 24358,
+    "name": "Ancient Bone",
+    "icon": "https://render.guildwars2.com/file/0EE45FBB1E1A004600E9BAA7097830B2DE08587D/66828.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24363": {
+    "id": 24363,
+    "name": "Engraved Totem",
+    "icon": "https://render.guildwars2.com/file/AB3AC996CC791BE0FF784CDC57060F05E6D23020/67000.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24502": {
+    "id": 24502,
+    "name": "Silver Doubloon",
+    "icon": "https://render.guildwars2.com/file/EA581B219A5937D31F145E3CD00CE7046216DE22/220942.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "24563": {
+    "id": 24563,
+    "name": "Major Sigil of Strength",
+    "icon": "https://render.guildwars2.com/file/9E796026D9E2F6550D959054EBB60D416E72A5EF/220982.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24564": {
+    "id": 24564,
+    "name": "Minor Sigil of Strength",
+    "icon": "https://render.guildwars2.com/file/08357DEE4E055A09F82A3D2DC94B9A1C96ED5404/220983.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24573": {
+    "id": 24573,
+    "name": "Minor Sigil of Bloodlust",
+    "icon": "https://render.guildwars2.com/file/2BE192D72AD8F3DF06AA54FD12066960A349C8F2/220988.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24574": {
+    "id": 24574,
+    "name": "Major Sigil of Bloodlust",
+    "icon": "https://render.guildwars2.com/file/362F43FD9D03AE3D0A2E6B49F7720D010D4FA017/220989.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24576": {
+    "id": 24576,
+    "name": "Minor Sigil of Corruption",
+    "icon": "https://render.guildwars2.com/file/066A6C02FB099CD023931E5A0A534E18FA7F5A1F/220990.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24577": {
+    "id": 24577,
+    "name": "Major Sigil of Corruption",
+    "icon": "https://render.guildwars2.com/file/0267261E50A5D8ACE7CAA9C55D2FAFB84C5C606A/220991.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24579": {
+    "id": 24579,
+    "name": "Major Sigil of Perception",
+    "icon": "https://render.guildwars2.com/file/9CBD050D236E76282C16460BD4C4A01006DCD3A6/340592.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24581": {
+    "id": 24581,
+    "name": "Major Sigil of Life",
+    "icon": "https://render.guildwars2.com/file/01D533A1E2373B80A7ED246075BA45060C765557/220992.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24585": {
+    "id": 24585,
+    "name": "Minor Sigil of Benevolence",
+    "icon": "https://render.guildwars2.com/file/7D2CCD49CD52B9F896E7E13B5354287ACA3D7A7D/220993.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24586": {
+    "id": 24586,
+    "name": "Major Sigil of Benevolence",
+    "icon": "https://render.guildwars2.com/file/DCF110D5DB069E00B7074554C77CE0C1A72F036E/220994.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24590": {
+    "id": 24590,
+    "name": "Major Sigil of Luck",
+    "icon": "https://render.guildwars2.com/file/B12C03F39EC76E7B0E3703426E39F6E8DB0A2E0A/220997.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24598": {
+    "id": 24598,
+    "name": "Major Sigil of Leeching",
+    "icon": "https://render.guildwars2.com/file/A469E4E2C6D02AA1DC611ABE1ED8A368E57CCFC4/221002.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24610": {
+    "id": 24610,
+    "name": "Minor Sigil of Agony",
+    "icon": "https://render.guildwars2.com/file/D10642420E7205E09D3731C5645F0954FD76C6C4/221008.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24611": {
+    "id": 24611,
+    "name": "Major Sigil of Agony",
+    "icon": "https://render.guildwars2.com/file/DA440A54094699AC71373E3F3B5934B3954E5DF2/221009.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24613": {
+    "id": 24613,
+    "name": "Minor Sigil of Force",
+    "icon": "https://render.guildwars2.com/file/5F089852CEDA66E947DC14B70661F806CAFD0D01/221010.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24614": {
+    "id": 24614,
+    "name": "Major Sigil of Force",
+    "icon": "https://render.guildwars2.com/file/F4A0F502CD51B36C74ED1656C30BEC940307DFBB/221011.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24616": {
+    "id": 24616,
+    "name": "Minor Sigil of Accuracy",
+    "icon": "https://render.guildwars2.com/file/3ECFA3081802AC4D93E39D80AB7D096A3F0EA821/221012.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24617": {
+    "id": 24617,
+    "name": "Major Sigil of Accuracy",
+    "icon": "https://render.guildwars2.com/file/45386AF86273400EF0E93856292E07BB7E65B65F/221013.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24619": {
+    "id": 24619,
+    "name": "Minor Sigil of Peril",
+    "icon": "https://render.guildwars2.com/file/3311D57B6B11240C35DAD7BDE9B669D12D396A02/221014.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24620": {
+    "id": 24620,
+    "name": "Major Sigil of Peril",
+    "icon": "https://render.guildwars2.com/file/289C0151B980EB0A27C2A62251D9602215BEAFD7/221015.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24622": {
+    "id": 24622,
+    "name": "Minor Sigil of Smoldering",
+    "icon": "https://render.guildwars2.com/file/B7D3E8950008A506E80812F940F47F73F8BB48D9/221016.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24623": {
+    "id": 24623,
+    "name": "Major Sigil of Smoldering",
+    "icon": "https://render.guildwars2.com/file/0345432D40BBF6FFFDEBACD0ADF16AE61A182EEA/221017.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24625": {
+    "id": 24625,
+    "name": "Minor Sigil of Hobbling",
+    "icon": "https://render.guildwars2.com/file/736DEF53DC2E1C0B02220C9302F61AD70860DA4F/221018.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24626": {
+    "id": 24626,
+    "name": "Major Sigil of Hobbling",
+    "icon": "https://render.guildwars2.com/file/C924A6C4DFDB52A4FF6B362758532E09C4CED3C3/221019.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24628": {
+    "id": 24628,
+    "name": "Minor Sigil of Chilling",
+    "icon": "https://render.guildwars2.com/file/4FD122E5B800B308FC962558D302191C37B80B33/221020.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24629": {
+    "id": 24629,
+    "name": "Major Sigil of Chilling",
+    "icon": "https://render.guildwars2.com/file/C30BC6BE64F872FAEDCEEEE0DDFDF0326AE7E62C/221021.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24631": {
+    "id": 24631,
+    "name": "Minor Sigil of Venom",
+    "icon": "https://render.guildwars2.com/file/323B0F26CEFA35AD5C2FED10230602070E0FBC49/221022.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "24633": {
+    "id": 24633,
+    "name": "Major Sigil of Venom",
+    "icon": "https://render.guildwars2.com/file/4F695470AEE5C82DC4C2BB651E063A49ADC56992/221023.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "24861": {
+    "id": 24861,
+    "name": "Minor Sigil of Luck",
+    "icon": "https://render.guildwars2.com/file/504DECC200E3D0B83E0857A4700EB90307BF0F3A/221163.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "29170": {
+    "id": 29170,
+    "name": "The Colossus",
+    "icon": "https://render.guildwars2.com/file/15ED060C6B47716174FC6FB9A60118B5553EEB90/1202804.png",
+    "rarity": "Exotic",
+    "flags": [
+      "HideSuffix",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "SoulBindOnUse"
+    ]
+  },
+  "30690": {
+    "id": 30690,
+    "name": "The Juggernaut",
+    "icon": "https://render.guildwars2.com/file/F9FAEDF77052A514E876145908B3B3346314A13E/456015.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "36038": {
+    "id": 36038,
+    "name": "Trick-or-Treat Bag",
+    "icon": "https://render.guildwars2.com/file/E6017363449406DEE3DD3B80263AA2A91716F1DE/499375.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage",
+      "BulkConsume"
+    ]
+  },
+  "36039": {
+    "id": 36039,
+    "name": "Personalized Trick-or-Treat Bag",
+    "icon": "https://render.guildwars2.com/file/795BAA5C572A2EFDAF33070909F9A893F6FA4FFE/2752282.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "38022": {
+    "id": 38022,
+    "name": "Fractal Relic",
+    "icon": "https://render.guildwars2.com/file/BA9FEE67BC11A82763097396A9F52438F8392109/526361.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "39088": {
+    "id": 39088,
+    "name": "Lost Orrian Jewelry Box",
+    "icon": "https://render.guildwars2.com/file/6B90FB9119A40CBE0134FEFFA8430556989D7F9B/534122.png",
+    "rarity": "Exotic",
+    "flags": [
+      "NoSalvage",
+      "NoSell",
+      "SoulbindOnAcquire",
+      "SoulBindOnUse"
+    ]
+  },
+  "39090": {
+    "id": 39090,
+    "name": "Mini Risen Priest of Balthazar",
+    "icon": "https://render.guildwars2.com/file/3F9A1CA7C192FAFFDEE13E28A09AD8DA0F165FE4/534184.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "39121": {
+    "id": 39121,
+    "name": "Light Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/940FF213716780060BA2760A0CC606C4333DE3FA/534212.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "39122": {
+    "id": 39122,
+    "name": "Medium Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/780F646336EBBE9F6B904AA515441026F1E2FE25/534213.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "39124": {
+    "id": 39124,
+    "name": "Heavy Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/6BA1C677C05D4C65044949FA1116EB112A4E053D/534215.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "39695": {
+    "id": 39695,
+    "name": "Guild Commendation",
+    "icon": "https://render.guildwars2.com/file/F3612F4D754A3FFCDB3C7BF56ED8A009AC4FA7FD/543926.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "41886": {
+    "id": 41886,
+    "name": "Bauble Bubble",
+    "icon": "https://render.guildwars2.com/file/231E351E042921F8BE94B2E3717D2DF734D4B9F4/561863.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "43913": {
+    "id": 43913,
+    "name": "Loot Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "SoulbindOnAcquire",
+      "AccountBindOnUse"
+    ]
+  },
+  "44147": {
+    "id": 44147,
+    "name": "Beaded Pouch",
+    "icon": "https://render.guildwars2.com/file/77C4CFA7690E916E6D030279170B4EA30F4565D8/619522.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44198": {
+    "id": 44198,
+    "name": "Bag of Plant Food",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44199": {
+    "id": 44199,
+    "name": "Branded Strongbox",
+    "icon": "https://render.guildwars2.com/file/26D0E697663F7AA3E233FA7507CF530640F7BFD9/619515.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44200": {
+    "id": 44200,
+    "name": "Gilded Coffer",
+    "icon": "https://render.guildwars2.com/file/9E0BAFF636D296EF96FB9CF37F3CB425A92CC7F0/619517.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44206": {
+    "id": 44206,
+    "name": "Utility Backpack",
+    "icon": "https://render.guildwars2.com/file/CB6FA01074224ECA4BF2AE03B7AFC407264B98F3/619521.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44210": {
+    "id": 44210,
+    "name": "Slime-Covered Strongbox",
+    "icon": "https://render.guildwars2.com/file/6D963F5C551008E358189269A870F813752E2C4E/619525.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44216": {
+    "id": 44216,
+    "name": "Patchwork Knapsack",
+    "icon": "https://render.guildwars2.com/file/E7347E200A1478FF09F2739A195A434027070F2E/619526.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44221": {
+    "id": 44221,
+    "name": "Noxious Seed Pouch",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44231": {
+    "id": 44231,
+    "name": "Heirloom Seed Pod",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44246": {
+    "id": 44246,
+    "name": "Elaborate Ritualist Bag",
+    "icon": "https://render.guildwars2.com/file/E80EFBD73647770BC6FA0FA45EBE6016CE9799F5/619512.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44261": {
+    "id": 44261,
+    "name": "Embroidered Saddlebag",
+    "icon": "https://render.guildwars2.com/file/2169C197D9400AC12D510A7605E975A703CACCDA/619514.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44266": {
+    "id": 44266,
+    "name": "Embroidered Belt Pouch",
+    "icon": "https://render.guildwars2.com/file/CE00984963764D6CBD17A0E4333A56E85E0B1427/619520.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44416": {
+    "id": 44416,
+    "name": "Oversized Rucksack",
+    "icon": "https://render.guildwars2.com/file/A9914D26CC6BE262264AC16C1340403790D6EBCD/619518.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44456": {
+    "id": 44456,
+    "name": "Large Candy Bag",
+    "icon": "https://render.guildwars2.com/file/4E770299D6C97A9BD07AE92CE30C124C57143CD5/619527.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "44942": {
+    "id": 44942,
+    "name": "Minor Sigil of Bursting",
+    "icon": "https://render.guildwars2.com/file/FDF85F32FF2914C8620ECFAD4BD47F973819D601/619701.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "44943": {
+    "id": 44943,
+    "name": "Major Sigil of Bursting",
+    "icon": "https://render.guildwars2.com/file/23BB0880D81AE1C4B60D0C0297F9E1111D0A7352/619702.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "44948": {
+    "id": 44948,
+    "name": "Minor Sigil of Malice",
+    "icon": "https://render.guildwars2.com/file/7396B40F4A32F91DCB0BB04F9171F32FD040C5EE/619707.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "44949": {
+    "id": 44949,
+    "name": "Major Sigil of Malice",
+    "icon": "https://render.guildwars2.com/file/FABB48962E60E6D8C625FF76760B9C080877157A/619708.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "45178": {
+    "id": 45178,
+    "name": "Exotic Essence of Luck",
+    "icon": "https://render.guildwars2.com/file/DAB46301D2175B2CAAC4BACBA02F6A0A2F1DBEB8/631151.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "46747": {
+    "id": 46747,
+    "name": "Thermocatalytic Reagent",
+    "icon": "https://render.guildwars2.com/file/090DF0E7AFD6AD9A6C9FC31CCE510A05663D0A0E/631495.png",
+    "rarity": "Ascended",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "48805": {
+    "id": 48805,
+    "name": "High-Quality Plastic Fangs",
+    "icon": "https://render.guildwars2.com/file/F13AC2EC1990C5D97DFCF547D30CCA06340EB20E/648142.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage",
+      "NoSell"
+    ]
+  },
+  "48807": {
+    "id": 48807,
+    "name": "Gibbering Skull",
+    "icon": "https://render.guildwars2.com/file/9EA2050504ECB1A0B45538B2235C101795A92106/648144.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage",
+      "NoSell"
+    ]
+  },
+  "49038": {
+    "id": 49038,
+    "name": "Shell Pouch",
+    "icon": "https://render.guildwars2.com/file/C007CABA2A4CA303B10C733246C352276D080762/619524.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "49039": {
+    "id": 49039,
+    "name": "Heirloom Seed Pouch",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "50030": {
+    "id": 50030,
+    "name": "Found Belonging",
+    "icon": "https://render.guildwars2.com/file/9E730AACF1D51352E4660A2C924306695795104E/740222.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "64529": {
+    "id": 64529,
+    "name": "Box of Lab Equipment",
+    "icon": "https://render.guildwars2.com/file/E1C5D2E7206D58DA48C80D08B20106B923FF0825/619510.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "64530": {
+    "id": 64530,
+    "name": "Thorny Seed Pouch",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "64532": {
+    "id": 64532,
+    "name": "Icy Strongbox",
+    "icon": "https://render.guildwars2.com/file/9E0BAFF636D296EF96FB9CF37F3CB425A92CC7F0/619517.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "64533": {
+    "id": 64533,
+    "name": "Singed Ritualist Bag",
+    "icon": "https://render.guildwars2.com/file/E80EFBD73647770BC6FA0FA45EBE6016CE9799F5/619512.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65250": {
+    "id": 65250,
+    "name": "Veteran Ooze Loot Box",
+    "icon": "https://render.guildwars2.com/file/A293BB0FBA0967E46C9F01EA23D9C01DC2D83E40/780275.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65251": {
+    "id": 65251,
+    "name": "Undead Animal Loot Box",
+    "icon": "https://render.guildwars2.com/file/666209104CCB024D53359C0EA0A299076E610771/65704.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65254": {
+    "id": 65254,
+    "name": "Undead Spider Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65256": {
+    "id": 65256,
+    "name": "Undead Shark Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65258": {
+    "id": 65258,
+    "name": "Grub Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65259": {
+    "id": 65259,
+    "name": "Undead Hylek Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65263": {
+    "id": 65263,
+    "name": "Champion Wraith Loot Box",
+    "icon": "https://render.guildwars2.com/file/7EA40708336AFD9C674AF3E8420B58DADFAC9A62/780279.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65265": {
+    "id": 65265,
+    "name": "Champion Risen Shark Loot Box",
+    "icon": "https://render.guildwars2.com/file/1AA430090B409E08325EBAE24FA7700F51183AC4/780281.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65268": {
+    "id": 65268,
+    "name": "Ruins of Orr Weapon Skins Box",
+    "icon": "https://render.guildwars2.com/file/500C380F0DFBCA41A8F70D20D955CD73281114C4/780283.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65289": {
+    "id": 65289,
+    "name": "Rock Dog Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65298": {
+    "id": 65298,
+    "name": "Skelk Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65312": {
+    "id": 65312,
+    "name": "Kryta Weapon Skins Box",
+    "icon": "https://render.guildwars2.com/file/E9F3A77F75B77209E3233499207E53A7EEBA0744/780294.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65332": {
+    "id": 65332,
+    "name": "Warg Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65335": {
+    "id": 65335,
+    "name": "Golem Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65338": {
+    "id": 65338,
+    "name": "Insect Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65340": {
+    "id": 65340,
+    "name": "Ooze Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65350": {
+    "id": 65350,
+    "name": "Champion Destroyer Loot Box",
+    "icon": "https://render.guildwars2.com/file/6DAA9C02072AA9E47F01C85D0C40C75EEB4DFB2E/780299.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65367": {
+    "id": 65367,
+    "name": "Tarnished Coast Weapon Skins Box",
+    "icon": "https://render.guildwars2.com/file/F9A09880C402ECD427690C72F0A7BC2936E5440B/780306.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65376": {
+    "id": 65376,
+    "name": "Charr Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65378": {
+    "id": 65378,
+    "name": "Devourer Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65381": {
+    "id": 65381,
+    "name": "Ascalonian Ghost Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65384": {
+    "id": 65384,
+    "name": "Harpy Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65388": {
+    "id": 65388,
+    "name": "Raptor Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65389": {
+    "id": 65389,
+    "name": "Skale Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65396": {
+    "id": 65396,
+    "name": "Veteran Fire Elemental Loot Box",
+    "icon": "https://render.guildwars2.com/file/FF37AE28D868AC443601F221423E266AF002374F/780311.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65401": {
+    "id": 65401,
+    "name": "Wurm Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65404": {
+    "id": 65404,
+    "name": "Ascalon Weapon Skins Box",
+    "icon": "https://render.guildwars2.com/file/09E8486E200614191141CBD8E9C9EF1851F199B8/780316.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65422": {
+    "id": 65422,
+    "name": "Asura Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65423": {
+    "id": 65423,
+    "name": "Bat Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65424": {
+    "id": 65424,
+    "name": "Bear Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65428": {
+    "id": 65428,
+    "name": "Veteran Destroyer Loot Box",
+    "icon": "https://render.guildwars2.com/file/C25B09A216C63F4A7109CF94E66277E80F3DB79E/780319.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65441": {
+    "id": 65441,
+    "name": "Spider Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65443": {
+    "id": 65443,
+    "name": "Inquest Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65453": {
+    "id": 65453,
+    "name": "Shiverpeak Mountains Weapon Skins Box",
+    "icon": "https://render.guildwars2.com/file/9795E70814A4BF0F0DED0A0A4E6CC019080FE876/780327.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65486": {
+    "id": 65486,
+    "name": "Inquest Grenadier Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65487": {
+    "id": 65487,
+    "name": "Inquest Assassin Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65489": {
+    "id": 65489,
+    "name": "Inquest Pilot Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65490": {
+    "id": 65490,
+    "name": "Inquest Engineer Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65493": {
+    "id": 65493,
+    "name": "Veteran Mark III Golem Loot Box",
+    "icon": "https://render.guildwars2.com/file/D6395A1BA351172DAA380E7BA665C00FBB3B5B43/780332.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65499": {
+    "id": 65499,
+    "name": "Inquest Golemcaster Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65524": {
+    "id": 65524,
+    "name": "Champion Ralena Loot Box",
+    "icon": "https://render.guildwars2.com/file/115C7505ADEC3A10295502DFCDC9D3CCAE5FD864/780350.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65527": {
+    "id": 65527,
+    "name": "Graveling Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65528": {
+    "id": 65528,
+    "name": "Ascalonian Warrior Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65531": {
+    "id": 65531,
+    "name": "Veteran Cave Troll Loot Box",
+    "icon": "https://render.guildwars2.com/file/730A99AC6A69DD0F5352DAD56A91FC09D76F0D39/62860.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65556": {
+    "id": 65556,
+    "name": "Icebrood Elemental Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65586": {
+    "id": 65586,
+    "name": "Dredge Bomber Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65589": {
+    "id": 65589,
+    "name": "Veteran Prototype F-IV Golem Loot Box",
+    "icon": "https://render.guildwars2.com/file/B8F308439D4890EE5B02C5DAF5F6B3B978D3F3DA/780376.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65591": {
+    "id": 65591,
+    "name": "Legendary Iron Forgeman Loot Box",
+    "icon": "https://render.guildwars2.com/file/2EA4C77335C435E0BB5B2FD4F0FB33DB26ACE6BB/780378.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65592": {
+    "id": 65592,
+    "name": "Champion Kudu Loot Box",
+    "icon": "https://render.guildwars2.com/file/41E5373CEAF1FB03637CC3E13E16A6CFDDA59C19/780379.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65595": {
+    "id": 65595,
+    "name": "Champion Inspector Snik Loot Box",
+    "icon": "https://render.guildwars2.com/file/A56CE366E5D86A2D1149ACCE030703A94BB93776/780381.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65633": {
+    "id": 65633,
+    "name": "Crafting Material Coffer",
+    "icon": "https://render.guildwars2.com/file/666209104CCB024D53359C0EA0A299076E610771/65704.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65636": {
+    "id": 65636,
+    "name": "Hound of Balthazar Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65637": {
+    "id": 65637,
+    "name": "Acolyte of Balthazar Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65638": {
+    "id": 65638,
+    "name": "Disciple of Balthazar Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "65640": {
+    "id": 65640,
+    "name": "Balthazar Backpack Box",
+    "icon": "https://render.guildwars2.com/file/EB7E38553C1E0B91BD58C3309F6A0F3F40EBC809/779855.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "66605": {
+    "id": 66605,
+    "name": "Store of Edible Cactus Fruit",
+    "icon": "https://render.guildwars2.com/file/D1DEC6FDA7FCEABC656FD6D30C62C97B11D9E711/831461.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "66614": {
+    "id": 66614,
+    "name": "Dusty Bag of Loot",
+    "icon": "https://render.guildwars2.com/file/10ACE47195709F69F366026507FEB0080DF39BE7/63194.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "66622": {
+    "id": 66622,
+    "name": "Box of Inquest Research Supplies",
+    "icon": "https://render.guildwars2.com/file/14A754524227DA043013B9EA09C2ADD505DCBB1F/222416.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "66764": {
+    "id": 66764,
+    "name": "Mordrem Seed Pouch",
+    "icon": "https://render.guildwars2.com/file/E19A2AF4B4B14EB29E0FBD0EA5B804A50F527B77/841516.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "66904": {
+    "id": 66904,
+    "name": "Last Good-Bye",
+    "icon": "https://render.guildwars2.com/file/10ACE47195709F69F366026507FEB0080DF39BE7/63194.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67001": {
+    "id": 67001,
+    "name": "Gift from Mawdrey II",
+    "icon": "https://render.guildwars2.com/file/B0104B9E157103376F7F3CE540360F7301C456FC/855364.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "67075": {
+    "id": 67075,
+    "name": "Arid Inquest Cache",
+    "icon": "https://render.guildwars2.com/file/FD3B9CF7AB1DCE34610D76017E56AA5618529E7E/222604.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67078": {
+    "id": 67078,
+    "name": "Arid Devourer Cache",
+    "icon": "https://render.guildwars2.com/file/FD3B9CF7AB1DCE34610D76017E56AA5618529E7E/222604.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67080": {
+    "id": 67080,
+    "name": "Dust Mite Cache",
+    "icon": "https://render.guildwars2.com/file/10ACE47195709F69F366026507FEB0080DF39BE7/63194.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67082": {
+    "id": 67082,
+    "name": "Champion Arid Inquest Cache",
+    "icon": "https://render.guildwars2.com/file/E1C5D2E7206D58DA48C80D08B20106B923FF0825/619510.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67084": {
+    "id": 67084,
+    "name": "Pristine Sand-Carved Cache",
+    "icon": "https://render.guildwars2.com/file/D1DEC6FDA7FCEABC656FD6D30C62C97B11D9E711/831461.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67086": {
+    "id": 67086,
+    "name": "Champion Arid Devourer Cache",
+    "icon": "https://render.guildwars2.com/file/B79141B64E77DE99C80B725B9F0E3FBCD1F54C69/619509.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67091": {
+    "id": 67091,
+    "name": "Arid Vined Cache",
+    "icon": "https://render.guildwars2.com/file/FD3B9CF7AB1DCE34610D76017E56AA5618529E7E/222604.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "67217": {
+    "id": 67217,
+    "name": "Hylek Maintenance Kit",
+    "icon": "https://render.guildwars2.com/file/96B4F02C0D0464901EC7671A09E836B25AB32770/780301.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "67218": {
+    "id": 67218,
+    "name": "Krait Tuning Kit",
+    "icon": "https://render.guildwars2.com/file/38B579B45A60D21CD306E50130360E75EE0B627A/780295.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "67220": {
+    "id": 67220,
+    "name": "Ogre Sharpening Kit",
+    "icon": "https://render.guildwars2.com/file/6EC75210B1296392A990683621F5F4710139EF0A/780313.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "67790": {
+    "id": 67790,
+    "name": "Ghostly Bag of Loot",
+    "icon": "https://render.guildwars2.com/file/F92967D9142C0B93C3259C560161784CE20D2200/63195.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "68028": {
+    "id": 68028,
+    "name": "Veteran Arid Inquest Cache",
+    "icon": "https://render.guildwars2.com/file/18EA4E0B4BA170249AD2B67ED80F6E06AA49BDF7/222608.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "68029": {
+    "id": 68029,
+    "name": "Warclaw Armor Box",
+    "icon": "https://render.guildwars2.com/file/21E0CCFD196D174B0132CCE10909EFE560221DFC/771003.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "68333": {
+    "id": 68333,
+    "name": "Bag of Mystic Coins",
+    "icon": "https://render.guildwars2.com/file/62A1216D02CE3CF897052EC945DDA547C777AF05/924575.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "68352": {
+    "id": 68352,
+    "name": "Chest of Legendary Crafting Materials",
+    "icon": "https://render.guildwars2.com/file/BFD2CB5A0604A4425DF9CD22DF0F40C4E0AE9AAA/602790.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "69822": {
+    "id": 69822,
+    "name": "Gunk-Covered Pellet",
+    "icon": "https://render.guildwars2.com/file/B0104B9E157103376F7F3CE540360F7301C456FC/855364.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "69841": {
+    "id": 69841,
+    "name": "Glob of Destabilized Ectoplasm",
+    "icon": "https://render.guildwars2.com/file/41350D7C99FA0F96AF2304BB35EFB2D038A1DF44/1010535.png",
+    "rarity": "Ascended",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "69878": {
+    "id": 69878,
+    "name": "Dab of Destabilized Ectoplasm",
+    "icon": "https://render.guildwars2.com/file/E74463BEE178271806CA904DDD2A9DCBF5594F4A/1010538.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "69910": {
+    "id": 69910,
+    "name": "Spirit Shard",
+    "icon": "https://render.guildwars2.com/file/0AD608DE7FDEE0B909905C0AF9401321CF65CD94/1010701.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "NotUpgradeable",
+      "AccountBindOnUse"
+    ]
+  },
+  "69981": {
+    "id": 69981,
+    "name": "Massive Glob of Ectoplasm",
+    "icon": "https://render.guildwars2.com/file/B15CD32CBD61123A92A6ACD01E71C2B9B8E70FE0/1010536.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "69985": {
+    "id": 69985,
+    "name": "Bandit Crest",
+    "icon": "https://render.guildwars2.com/file/2C0705112C2DA3C2555F29D4FB09CEC9BC77179D/904658.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "70023": {
+    "id": 70023,
+    "name": "Clump of Destabilized Ectoplasm",
+    "icon": "https://render.guildwars2.com/file/16E75453E32FD039FBA70EBA1476F562F5024599/1010534.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "70067": {
+    "id": 70067,
+    "name": "Nika Reward Box",
+    "icon": "https://render.guildwars2.com/file/4602BDC15B73422011AC664425D93750707F04F3/1058576.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "70279": {
+    "id": 70279,
+    "name": "Memories of Scarlet Box",
+    "icon": "https://render.guildwars2.com/file/EB06066FAF0637917E0C20E09D3EF0642290904C/1058329.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "70534": {
+    "id": 70534,
+    "name": "Champion Kralkatorrik the Crystal Dragon Loot Box",
+    "icon": "https://render.guildwars2.com/file/A5E6353AA1160433DA7477FC60B9B9E5E20E5216/1201751.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "70778": {
+    "id": 70778,
+    "name": "Jungle Bear Finisher Box",
+    "icon": "https://render.guildwars2.com/file/0CD29D32D59D296595C4FD032C0B39195C467730/1228726.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "71018": {
+    "id": 71018,
+    "name": "Gold Wolf Loot Box",
+    "icon": "https://render.guildwars2.com/file/CC0880A32AD5DD0408537C70E2EF0F09B229DED3/1201765.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "71134": {
+    "id": 71134,
+    "name": "Perfected Hammer",
+    "icon": "https://render.guildwars2.com/file/9ED941BD6F69AFE551FAF43407300119A2E2007D/340698.png",
+    "rarity": "Exotic",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "71220": {
+    "id": 71220,
+    "name": "Minor Sigil of Agility",
+    "icon": "https://render.guildwars2.com/file/711A3D1E05217250029D01A2B19042690BDC112E/220995.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "HideSuffix"
+    ]
+  },
+  "71376": {
+    "id": 71376,
+    "name": "Chest of the Ooze",
+    "icon": "https://render.guildwars2.com/file/FB226FB709F6D56A09CB7BE92EE619ECC2C9EE9E/1204748.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "71581": {
+    "id": 71581,
+    "name": "Memory of Battle",
+    "icon": "https://render.guildwars2.com/file/E4D0455D2EFDB0DFC008F4564B38D6545901A05B/1206833.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoSalvage",
+      "NoSell"
+    ]
+  },
+  "71641": {
+    "id": 71641,
+    "name": "Pile of Coarse Sand",
+    "icon": "https://render.guildwars2.com/file/D838CB1BF7D49E1725EBB1F3ABD00C55EB67CE1E/1205401.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage",
+      "NoSell"
+    ]
+  },
+  "71669": {
+    "id": 71669,
+    "name": "Gold Phoenix Loot Box",
+    "icon": "https://render.guildwars2.com/file/60081BF662E890D263464D5266DB101F054D0C38/1201763.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "71829": {
+    "id": 71829,
+    "name": "Grymm Svaard Reward Box",
+    "icon": "https://render.guildwars2.com/file/0D6C65171A2E634FA5D1B35306E992F6A7431124/1058575.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "71923": {
+    "id": 71923,
+    "name": "Champion Sleepy the Black Bear Loot Box",
+    "icon": "https://render.guildwars2.com/file/9C07550D4618B0273B776B7B1F304D3E550F7CE9/1201739.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "71965": {
+    "id": 71965,
+    "name": "Bladed Glove Box",
+    "icon": "https://render.guildwars2.com/file/21E0CCFD196D174B0132CCE10909EFE560221DFC/771003.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "71966": {
+    "id": 71966,
+    "name": "Jungle Phoenix Finisher Box",
+    "icon": "https://render.guildwars2.com/file/EBF7797924C36701FFD357BAA518227C62020303/1228730.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "72010": {
+    "id": 72010,
+    "name": "Major Sigil of Concentration",
+    "icon": "https://render.guildwars2.com/file/010AF830E933C3C4D1B9912C4102D2A5FF021D91/220987.png",
+    "rarity": "Rare",
+    "flags": [
+      "NoMysticForge"
+    ]
+  },
+  "72058": {
+    "id": 72058,
+    "name": "Thorned Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "72150": {
+    "id": 72150,
+    "name": "Medium Thorned Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "72331": {
+    "id": 72331,
+    "name": "Essence of the Ooze",
+    "icon": "https://render.guildwars2.com/file/472228726FAF741E5ECF0596B9F75B0203BF4DB8/1205278.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "72507": {
+    "id": 72507,
+    "name": "Black Phoenix Loot Box",
+    "icon": "https://render.guildwars2.com/file/60081BF662E890D263464D5266DB101F054D0C38/1201763.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "73014": {
+    "id": 73014,
+    "name": "Nika Mini Reward Box",
+    "icon": "https://render.guildwars2.com/file/715CD0C864E5CE530C60B8E1EB0F5DF604339B31/1203249.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "73076": {
+    "id": 73076,
+    "name": "Jungle Dragon Finisher Box",
+    "icon": "https://render.guildwars2.com/file/1EA952CF69374B5F2590A5C434B2E5CA30A7DF0A/1228729.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "73289": {
+    "id": 73289,
+    "name": "Minor Sigil of Concentration",
+    "icon": "https://render.guildwars2.com/file/64A79CCD42D858AA7FF39A0CF1AEEC800FE1966F/220986.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "NoMysticForge"
+    ]
+  },
+  "73424": {
+    "id": 73424,
+    "name": "Jungle Deer Finisher Box",
+    "icon": "https://render.guildwars2.com/file/19E103A56205D8ED739BD3BCFF0FE2BD91F80513/1228727.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "73509": {
+    "id": 73509,
+    "name": "Brown Wolf Loot Box",
+    "icon": "https://render.guildwars2.com/file/CC0880A32AD5DD0408537C70E2EF0F09B229DED3/1201765.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "73553": {
+    "id": 73553,
+    "name": "Light Thorned Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "74192": {
+    "id": 74192,
+    "name": "Light Karmic Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/940FF213716780060BA2760A0CC606C4333DE3FA/534212.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74207": {
+    "id": 74207,
+    "name": "Ooze Reservoir",
+    "icon": "https://render.guildwars2.com/file/7B65067AD907BF0295FA47A10F92337D7268EA9E/1205094.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "74214": {
+    "id": 74214,
+    "name": "Auric Weapon Crate",
+    "icon": "https://render.guildwars2.com/file/2D6DA36B3062DD261E4F382664039CCFA8B2C218/1201555.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74244": {
+    "id": 74244,
+    "name": "Champion Zhaitan the Corrupted Dragon Loot Box",
+    "icon": "https://render.guildwars2.com/file/06F0616E080897559CD1BFFEEDE93E6172206167/1201742.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74365": {
+    "id": 74365,
+    "name": "Mordremoth Cache",
+    "icon": "https://render.guildwars2.com/file/E75F0D69FD6B0DFB1E9C0AB928FDC7095F1B9F08/780397.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74407": {
+    "id": 74407,
+    "name": "Heavy Karmic Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/6BA1C677C05D4C65044949FA1116EB112A4E053D/534215.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74494": {
+    "id": 74494,
+    "name": "Airship Part",
+    "icon": "https://render.guildwars2.com/file/524C1CF964A3349003095F17DF4B3A476F073755/1029832.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "NotUpgradeable",
+      "AccountBindOnUse"
+    ]
+  },
+  "74561": {
+    "id": 74561,
+    "name": "Hylek Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74616": {
+    "id": 74616,
+    "name": "Thorned Sack",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "74658": {
+    "id": 74658,
+    "name": "Jungle Shark Finisher Box",
+    "icon": "https://render.guildwars2.com/file/6B900E0C18005AD973CC0CFF08CE036CDD3322CE/1228732.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74689": {
+    "id": 74689,
+    "name": "Champion Waffle the White Bear Loot Box",
+    "icon": "https://render.guildwars2.com/file/D698B12E0CE9B15905F0BBEB0D2F15F0200DA06D/1201748.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74847": {
+    "id": 74847,
+    "name": "Major Sigil of Agility",
+    "icon": "https://render.guildwars2.com/file/286CB822EA9FDD683C6B114207BC0E1E6DE33743/220996.png",
+    "rarity": "Rare",
+    "flags": [
+      "HideSuffix"
+    ]
+  },
+  "74904": {
+    "id": 74904,
+    "name": "Jungle Dolyak Finisher Box",
+    "icon": "https://render.guildwars2.com/file/7A04A774EF62EEE766E60F9852FF69D8B1AC20F9/1228728.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "74909": {
+    "id": 74909,
+    "name": "Sculptor's Tools",
+    "icon": "https://render.guildwars2.com/file/D2487B54B56D4AC2F91CD09BBEEE40B290E47CFD/1205125.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "74947": {
+    "id": 74947,
+    "name": "Heavy Goo-Covered Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "75012": {
+    "id": 75012,
+    "name": "Lump of Aurillium",
+    "icon": "https://render.guildwars2.com/file/5D74D6D3D8179FC49D572975CC5E0CC701025508/1206836.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "75207": {
+    "id": 75207,
+    "name": "Spirit of the Perfected Hammer",
+    "icon": "https://render.guildwars2.com/file/A402F6C4D3DD40040B3E6C51B8DCB30410ED02CE/1205603.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "75314": {
+    "id": 75314,
+    "name": "Chak Gerent Cache",
+    "icon": "https://render.guildwars2.com/file/9F0B0CC67A40F9B9429B91191FD35E2CA867499F/780338.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "75334": {
+    "id": 75334,
+    "name": "Zhaitan Minion Loot Box",
+    "icon": "https://render.guildwars2.com/file/AE7F580152DA1D964CD4D42B3477E2D6BBE85527/1201760.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "75369": {
+    "id": 75369,
+    "name": "Glowing Stone",
+    "icon": "https://render.guildwars2.com/file/0A052CEE96D2923A18B99CF0E97A2616350BC34E/855367.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "75505": {
+    "id": 75505,
+    "name": "Sigil Bag",
+    "icon": "https://render.guildwars2.com/file/A905D0DB2ADB984ED70C43680A4309D725275D99/882239.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76014": {
+    "id": 76014,
+    "name": "Noxious Seed Pod",
+    "icon": "https://render.guildwars2.com/file/74921BC51FFC732180CAD2019266B1F3A1E97999/619516.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76042": {
+    "id": 76042,
+    "name": "Goop-Covered Satchel",
+    "icon": "https://render.guildwars2.com/file/B79141B64E77DE99C80B725B9F0E3FBCD1F54C69/619509.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76057": {
+    "id": 76057,
+    "name": "Jungle Wolf Finisher Box",
+    "icon": "https://render.guildwars2.com/file/D9BA7EA64B2920AE0F1A95590D0301034EB3953F/1228734.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76165": {
+    "id": 76165,
+    "name": "Heavy Thorned Bag",
+    "icon": "https://render.guildwars2.com/file/EBC5CEC199D1E51B02756A1C796A65E9D24F04B5/63171.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "76674": {
+    "id": 76674,
+    "name": "Medium Karmic Crafting Bag",
+    "icon": "https://render.guildwars2.com/file/780F646336EBBE9F6B904AA515441026F1E2FE25/534213.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76716": {
+    "id": 76716,
+    "name": "Trophy Bag",
+    "icon": "https://render.guildwars2.com/file/96784FB5994B02F30924C066E8F10B99052669D2/561729.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76830": {
+    "id": 76830,
+    "name": "Feather-Lined Pouch",
+    "icon": "https://render.guildwars2.com/file/CFDD9B6A49F817921D144C4D726CDD6448F35901/619519.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "76843": {
+    "id": 76843,
+    "name": "Colossus Statue",
+    "icon": "https://render.guildwars2.com/file/FD5DC812AA4D4F7BFFBFBC7EB45AD9DFA7489141/1205078.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "77014": {
+    "id": 77014,
+    "name": "Jungle Tiger Finisher Box",
+    "icon": "https://render.guildwars2.com/file/E003AEE261C9A29ADAE422B0AC08A2E4EE00809B/1228733.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "77044": {
+    "id": 77044,
+    "name": "Jungle Rabbit Finisher Box",
+    "icon": "https://render.guildwars2.com/file/389A3EB8F753DBE3925B12C65B26C097BDBFF16C/1228731.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "77160": {
+    "id": 77160,
+    "name": "Grymm Mini Reward Box",
+    "icon": "https://render.guildwars2.com/file/79F201470E15640B09AC0D3C716C561E589D51EF/1203242.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "77199": {
+    "id": 77199,
+    "name": "Half-Eaten Backpack",
+    "icon": "https://render.guildwars2.com/file/B79141B64E77DE99C80B725B9F0E3FBCD1F54C69/619509.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "77222": {
+    "id": 77222,
+    "name": "Kralkatorrik Minion Loot Box",
+    "icon": "https://render.guildwars2.com/file/AE7F580152DA1D964CD4D42B3477E2D6BBE85527/1201760.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "77378": {
+    "id": 77378,
+    "name": "Magnetite Shard",
+    "icon": "https://render.guildwars2.com/file/95F8F70D97186780CE45B54600B90BE356D8EA7C/1302741.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "77523": {
+    "id": 77523,
+    "name": "Glorious Armor Box",
+    "icon": "https://render.guildwars2.com/file/0E02699DEBB3C6306A163DE8D3E7D4B41FEAE501/866841.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "77661": {
+    "id": 77661,
+    "name": "Cold-Forged Exotic Weapon",
+    "icon": "https://render.guildwars2.com/file/B002E0460C6E59A96CDB06A3996891D5C87AC4B7/1601494.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "77696": {
+    "id": 77696,
+    "name": "Tybalt Reward Box",
+    "icon": "https://render.guildwars2.com/file/09492402E20C2293BDAD0CFDD2EB1F922DF9EE3C/1341592.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "77772": {
+    "id": 77772,
+    "name": "Mini Tybalt Reward Box",
+    "icon": "https://render.guildwars2.com/file/E2B24263120555282A6FD84C43571A54E30BF700/1341451.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "78494": {
+    "id": 78494,
+    "name": "Triumphant Armor Box",
+    "icon": "https://render.guildwars2.com/file/76D2420F52E610E1521FC8D57EB15F2E2FAA31C9/1423782.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "78961": {
+    "id": 78961,
+    "name": "Hero Weapon Box",
+    "icon": "https://render.guildwars2.com/file/F62768714D3B58201A4F7E1CB7C4CEF3AFF99AA9/1451155.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "79004": {
+    "id": 79004,
+    "name": "Legacy Armor Box",
+    "icon": "https://render.guildwars2.com/file/9DE8C4F6247C7D5FA4ADDA32CB969C772234AEF0/1459266.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "79187": {
+    "id": 79187,
+    "name": "Magic-Warped Bundle",
+    "icon": "https://render.guildwars2.com/file/A8A7AF7DF2087B676215F3157835CF7F9A419F32/1465577.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "79193": {
+    "id": 79193,
+    "name": "Bloodstone Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "79264": {
+    "id": 79264,
+    "name": "Fluctuating Mass",
+    "icon": "https://render.guildwars2.com/file/FFAD3867BA0FFD9DB2C54CFF37C2CE6F3DB375DD/1465575.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "79297": {
+    "id": 79297,
+    "name": "Unbound Magic",
+    "icon": "https://render.guildwars2.com/file/55CBF5154BC749F0BE7B01F9C75C04F2CD4BC561/1465799.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "NotUpgradeable",
+      "AccountBindOnUse"
+    ]
+  },
+  "79418": {
+    "id": 79418,
+    "name": "Mystic Runestone",
+    "icon": "https://render.guildwars2.com/file/04296A0273A1DB6866E5180B73F5A3E59E2A0C95/1493223.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "79432": {
+    "id": 79432,
+    "name": "Salvaged Debris",
+    "icon": "https://render.guildwars2.com/file/0A96CEEBAB545128C2B3B95DBDAB57AAD1794B55/1493425.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "79607": {
+    "id": 79607,
+    "name": "Ember Bay Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "79911": {
+    "id": 79911,
+    "name": "Bitterfrost Frontier Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "80097": {
+    "id": 80097,
+    "name": "Lake Doric Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "80875": {
+    "id": 80875,
+    "name": "Storm Wizard Loot Box",
+    "icon": "https://render.guildwars2.com/file/4F069837B0A630CE7F0295094195330E64CC069B/1663864.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "80938": {
+    "id": 80938,
+    "name": "King Toad Loot Box",
+    "icon": "https://render.guildwars2.com/file/67BB532D7D4E732C913C479CE9D21614FAFC79B2/1663862.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "81126": {
+    "id": 81126,
+    "name": "Draconis Mons Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "81524": {
+    "id": 81524,
+    "name": "Mist-Warped Bundle",
+    "icon": "https://render.guildwars2.com/file/A8A7AF7DF2087B676215F3157835CF7F9A419F32/1465577.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "81603": {
+    "id": 81603,
+    "name": "Badge of Honor",
+    "icon": "https://render.guildwars2.com/file/596749EC03A1D6B69F05AF90DE26FBF4B4A15FAA/455942.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "81766": {
+    "id": 81766,
+    "name": "Black Lion Material Bag: Orr",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "81782": {
+    "id": 81782,
+    "name": "Orrian Coffer",
+    "icon": "https://render.guildwars2.com/file/AC40E63DA407CA32DC0364CE68DBA1B00F94F5BD/222562.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "82416": {
+    "id": 82416,
+    "name": "Sandstorm Flush Hand",
+    "icon": "https://render.guildwars2.com/file/FE950257BDED466E1DD502944908201E99156114/1766354.png",
+    "rarity": "Ascended",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "82632": {
+    "id": 82632,
+    "name": "Sentient Seed",
+    "icon": "https://render.guildwars2.com/file/06B5FEABECAA45B672EFF80A96BC7380E43B0803/1767183.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "82981": {
+    "id": 82981,
+    "name": "Breezeborne Pyxis",
+    "icon": "https://render.guildwars2.com/file/16622518D460CAFDD92DE344BA672DD30C020FD2/1767145.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83008": {
+    "id": 83008,
+    "name": "Piece of Rare Unidentified Gear",
+    "icon": "https://render.guildwars2.com/file/EF63A10BD2317CECCEA63A3B7E6555550B414C4E/1766399.png",
+    "rarity": "Rare",
+    "flags": []
+  },
+  "83065": {
+    "id": 83065,
+    "name": "Desert Hunter Cache",
+    "icon": "https://render.guildwars2.com/file/4C7407D2F1EAA37C749F4EBD0CF7FC5BBAEDB8DC/1766451.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83122": {
+    "id": 83122,
+    "name": "Battered Forged Components",
+    "icon": "https://render.guildwars2.com/file/F071217B6898CC782F1F063EC50DC70BBA5ED66F/1767142.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83180": {
+    "id": 83180,
+    "name": "Rockhewn Pyxis",
+    "icon": "https://render.guildwars2.com/file/1C023844CE09756F91219A4DFDD76D14C6B6FAF6/1767177.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83265": {
+    "id": 83265,
+    "name": "Cowrie League Trophy Crate",
+    "icon": "https://render.guildwars2.com/file/2C1E57C65F3AE00ADAF5E2BDA1C404A5EB74E79B/1766438.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83419": {
+    "id": 83419,
+    "name": "Hamaseen Ingot Crate",
+    "icon": "https://render.guildwars2.com/file/C79951E93F935228CBE8616E1712941F656F94B9/1766446.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83462": {
+    "id": 83462,
+    "name": "Hamaseen Trophy Crate",
+    "icon": "https://render.guildwars2.com/file/16FAC119B3AC67DD954D2966AFBC01F3294075FF/1766448.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83582": {
+    "id": 83582,
+    "name": "House of Daoud Metal Crate",
+    "icon": "https://render.guildwars2.com/file/1CCF3FA691E325DD6B0E63B314146D594BCED2DB/1766441.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "83650": {
+    "id": 83650,
+    "name": "Sandstorm Meld Hand",
+    "icon": "https://render.guildwars2.com/file/7EB24E6A620B74276A0674CAE540BA79B81D7A07/1766353.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "83746": {
+    "id": 83746,
+    "name": "Lost Saddlebag",
+    "icon": "https://render.guildwars2.com/file/640879E157C8ED454FD1104AF10B7606384FF2FD/1767171.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84084": {
+    "id": 84084,
+    "name": "Branded Geodermite",
+    "icon": "https://render.guildwars2.com/file/94BF25B66A245CB5060E93189A1CDEE301AE9410/1767144.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84254": {
+    "id": 84254,
+    "name": "Cowrie League Metal Crate",
+    "icon": "https://render.guildwars2.com/file/0EE25DC40649931EDAB85697E72EC480FE4BEED1/1766436.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84291": {
+    "id": 84291,
+    "name": "Chewed-Up Caravan Chest",
+    "icon": "https://render.guildwars2.com/file/0EBAEBBFC5590F45D19130B357D16E21B96033FD/1767141.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84305": {
+    "id": 84305,
+    "name": "Palawan Phylactery",
+    "icon": "https://render.guildwars2.com/file/32526A4F17DB097FE111A49BA4BEF1BE2D225BDD/1767166.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84379": {
+    "id": 84379,
+    "name": "Branded Cache",
+    "icon": "https://render.guildwars2.com/file/7C1475BFB76AAEE22C5FBBF8C4C57EB6CFB10197/1766452.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84490": {
+    "id": 84490,
+    "name": "Seaswept Pyxis",
+    "icon": "https://render.guildwars2.com/file/4F62012E7EF5F3B20525B2054170E99BFC7F0E24/1767181.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84588": {
+    "id": 84588,
+    "name": "Sandstorm Trump Hand",
+    "icon": "https://render.guildwars2.com/file/357547FF4BBB74EDF30BB546D040D3C3960BABDE/1766352.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "84668": {
+    "id": 84668,
+    "name": "House of Daoud Trophy Crate",
+    "icon": "https://render.guildwars2.com/file/9325274F08BF10683AD7D5CAC5505195F3530215/1766443.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "84731": {
+    "id": 84731,
+    "name": "Piece of Unidentified Gear",
+    "icon": "https://render.guildwars2.com/file/B147379DFC5430E207FCB742804E199EDF727719/1766400.png",
+    "rarity": "Masterwork",
+    "flags": []
+  },
+  "85016": {
+    "id": 85016,
+    "name": "Piece of Common Unidentified Gear",
+    "icon": "https://render.guildwars2.com/file/E37A036C10C33E4242E568690CB2EA55AA65B915/1938436.png",
+    "rarity": "Fine",
+    "flags": []
+  },
+  "85419": {
+    "id": 85419,
+    "name": "Desert Armor Box",
+    "icon": "https://render.guildwars2.com/file/47CD31BFF3E93DCC2F03FBDA0F5FB513AF80E907/1766461.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "85457": {
+    "id": 85457,
+    "name": "The Evon Gnashblade Trick-or-Treat Bag",
+    "icon": "https://render.guildwars2.com/file/0CC54EB8BCD607135A304EBA24FC3DD2DEB66108/1862164.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "85485": {
+    "id": 85485,
+    "name": "Bag of Trick-or-Treat Bags",
+    "icon": "https://render.guildwars2.com/file/29A40E777BAE5C087374E9A2995CF11044EDAF3F/1862056.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "85626": {
+    "id": 85626,
+    "name": "Black Lion Material Bag: Elona",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "85725": {
+    "id": 85725,
+    "name": "Trophy Shipment",
+    "icon": "https://render.guildwars2.com/file/12280A76B8BF2B15ADFE092A0B9FF6EE442851EE/1894768.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "86132": {
+    "id": 86132,
+    "name": "Istan Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "86384": {
+    "id": 86384,
+    "name": "Volatile Magic",
+    "icon": "https://render.guildwars2.com/file/57F51A1F62E3FBB7B5E02CBD7C9717371D1CC8F2/1894697.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "NotUpgradeable",
+      "AccountBindOnUse"
+    ]
+  },
+  "86921": {
+    "id": 86921,
+    "name": "Pile of Silky Sand",
+    "icon": "https://render.guildwars2.com/file/4AA6F8CB30973B9A6E4C310124EFB5BFF42036E5/63273.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "87247": {
+    "id": 87247,
+    "name": "Sandswept Isles Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "87510": {
+    "id": 87510,
+    "name": "Black Lion Material Bag: Istan",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "87886": {
+    "id": 87886,
+    "name": "Kournan Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "88145": {
+    "id": 88145,
+    "name": "Zephyrite Supply Box",
+    "icon": "https://render.guildwars2.com/file/42DB7C943734DA460A6BBC6E3316E9E6F71A70B3/603286.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "88151": {
+    "id": 88151,
+    "name": "Gnashblade Zephyrite Supply Box",
+    "icon": "https://render.guildwars2.com/file/AA127FDD7A5C913A93492E0BAA7F04DD01C0385E/2015137.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "88218": {
+    "id": 88218,
+    "name": "Zephyrite Curio Box",
+    "icon": "https://render.guildwars2.com/file/DF692004C8590A322596BAF445B7E8B8150FE77F/2179570.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "88594": {
+    "id": 88594,
+    "name": "Jahai Bluffs Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "88904": {
+    "id": 88904,
+    "name": "Volatile Mass",
+    "icon": "https://render.guildwars2.com/file/FFAD3867BA0FFD9DB2C54CFF37C2CE6F3DB375DD/1465575.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "88954": {
+    "id": 88954,
+    "name": "Bag of Lodestones",
+    "icon": "https://render.guildwars2.com/file/E5CFCDEC7DCA7B95DF10094B2241240A783CE1EE/63173.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "89140": {
+    "id": 89140,
+    "name": "Lucent Mote",
+    "icon": "https://render.guildwars2.com/file/BEE21BEFAF42E8DF017C7F41D22F551DC4401EA7/2063470.png",
+    "rarity": "Basic",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "89141": {
+    "id": 89141,
+    "name": "Symbol of Enhancement",
+    "icon": "https://render.guildwars2.com/file/2B7554FA80CC0279F807BB66DD15F1D66FDDB6D5/2063468.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "89265": {
+    "id": 89265,
+    "name": "Black Lion Material Bag: Thunderhead",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "89271": {
+    "id": 89271,
+    "name": "Pile of Lucent Crystal",
+    "icon": "https://render.guildwars2.com/file/607AA1A4574FA66006FFB57C0B2DDBAAFDE50CD6/2063471.png",
+    "rarity": "Fine",
+    "flags": [
+      "NoSalvage"
+    ]
+  },
+  "89815": {
+    "id": 89815,
+    "name": "Gilded Strongbox",
+    "icon": "https://render.guildwars2.com/file/9E0BAFF636D296EF96FB9CF37F3CB425A92CC7F0/619517.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "89913": {
+    "id": 89913,
+    "name": "Thunderhead Peaks Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "89972": {
+    "id": 89972,
+    "name": "Turai Ossa Mini Reward Box",
+    "icon": "https://render.guildwars2.com/file/6B91360962B27D26EE5012C017EAA77B485BFDDC/1313126.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "90017": {
+    "id": 90017,
+    "name": "Tournament of Legends: Magic or Might",
+    "icon": "https://render.guildwars2.com/file/6E9FA3C99A223677280CD9154A3FB50E2B43AE5B/66895.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "90018": {
+    "id": 90018,
+    "name": "Tournament of Legends: Precursor Choice Box",
+    "icon": "https://render.guildwars2.com/file/6E9FA3C99A223677280CD9154A3FB50E2B43AE5B/66895.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "90021": {
+    "id": 90021,
+    "name": "Tournament of Legends: Mastery or Fortune",
+    "icon": "https://render.guildwars2.com/file/6E9FA3C99A223677280CD9154A3FB50E2B43AE5B/66895.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "90096": {
+    "id": 90096,
+    "name": "Carapace Armor Box",
+    "icon": "https://render.guildwars2.com/file/21E0CCFD196D174B0132CCE10909EFE560221DFC/771003.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "90115": {
+    "id": 90115,
+    "name": "Riftstone Satchel",
+    "icon": "https://render.guildwars2.com/file/1C51A32C61D94839C917C3F51A1A1709FA383BE8/2124117.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "90468": {
+    "id": 90468,
+    "name": "Dragonfall Cache",
+    "icon": "https://render.guildwars2.com/file/789811FE130F2198F546B3E9A1E1B930720CD80C/1465541.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "91108": {
+    "id": 91108,
+    "name": "Black Lion Delivery Box",
+    "icon": "https://render.guildwars2.com/file/43171A0061AFFFB7BDD62E452C67694A362D4CAB/1716533.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "91116": {
+    "id": 91116,
+    "name": "Bonus Box of Goods",
+    "icon": "https://render.guildwars2.com/file/EBE999557B0F2D07AAAA26A2EBEBCC9E04300066/2127427.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "91174": {
+    "id": 91174,
+    "name": "Djinn Energy Cluster",
+    "icon": "https://render.guildwars2.com/file/D77E646CF20F072A15B8A4EB6AA1A56204369C5A/2155855.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "NoSalvage",
+      "BulkConsume"
+    ]
+  },
+  "91382": {
+    "id": 91382,
+    "name": "Superior Sigil of Benevolence",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91388": {
+    "id": 91388,
+    "name": "Superior Sigil of Demons",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91393": {
+    "id": 91393,
+    "name": "Superior Sigil of Luck",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91403": {
+    "id": 91403,
+    "name": "Superior Sigil of Agility",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91407": {
+    "id": 91407,
+    "name": "Superior Sigil of Vision",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91416": {
+    "id": 91416,
+    "name": "Superior Sigil of Bursting",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91420": {
+    "id": 91420,
+    "name": "Superior Sigil of Rage",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91426": {
+    "id": 91426,
+    "name": "Superior Sigil of Perception",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91439": {
+    "id": 91439,
+    "name": "Superior Sigil of Force",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91473": {
+    "id": 91473,
+    "name": "Superior Sigil of Concentration",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91476": {
+    "id": 91476,
+    "name": "Superior Sigil of Bloodlust",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91478": {
+    "id": 91478,
+    "name": "Superior Sigil of Malice",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91486": {
+    "id": 91486,
+    "name": "Superior Sigil of Rending",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91488": {
+    "id": 91488,
+    "name": "Superior Sigil of Smoldering",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91496": {
+    "id": 91496,
+    "name": "Superior Sigil of Corruption",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91500": {
+    "id": 91500,
+    "name": "Superior Sigil of Peril",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91502": {
+    "id": 91502,
+    "name": "Superior Sigil of Life",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91511": {
+    "id": 91511,
+    "name": "Superior Sigil of Hobbling",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91521": {
+    "id": 91521,
+    "name": "Superior Sigil of Momentum",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91532": {
+    "id": 91532,
+    "name": "Superior Sigil of Venom",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91534": {
+    "id": 91534,
+    "name": "Superior Sigil of Agony",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91561": {
+    "id": 91561,
+    "name": "Superior Sigil of Strength",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91577": {
+    "id": 91577,
+    "name": "Superior Sigil of Leeching",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91584": {
+    "id": 91584,
+    "name": "Superior Sigil of Chilling",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91603": {
+    "id": 91603,
+    "name": "Superior Sigil of Cruelty",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91607": {
+    "id": 91607,
+    "name": "Superior Sigil of Accuracy",
+    "icon": "https://render.guildwars2.com/file/2DDB0E173860AD433DF6D8AF412FDAFB9BCC4FB9/2179569.png",
+    "rarity": "Legendary",
+    "flags": [
+      "HideSuffix",
+      "AccountBound",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "91810": {
+    "id": 91810,
+    "name": "Black Lion Material Bag: Dragonfall",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "91895": {
+    "id": 91895,
+    "name": "Grothmar Legionnaire Weapons Cache",
+    "icon": "https://render.guildwars2.com/file/4A04D26701BA9EFDB716FC91B70416099CD57BE0/2199286.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "92040": {
+    "id": 92040,
+    "name": "Grand Icebrood Saga Cache",
+    "icon": "https://render.guildwars2.com/file/4A04D26701BA9EFDB716FC91B70416099CD57BE0/2199286.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "92080": {
+    "id": 92080,
+    "name": "Grothmar Legionnaire Banner Cache",
+    "icon": "https://render.guildwars2.com/file/A03ED20ABAC6FF57E7B6A995EE41AFDD54B2E8D8/2199285.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "92236": {
+    "id": 92236,
+    "name": "Raid Encounter: Lost Small Chest of Vigilance",
+    "icon": "https://render.guildwars2.com/file/A7380A7F9B5DC80A1B2FCF271A09484965EFD2F4/602787.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92242": {
+    "id": 92242,
+    "name": "Raid Encounter: Lost Medium Chest of Vigilance",
+    "icon": "https://render.guildwars2.com/file/3FCAC7800E032AD2544939E16648CA668019361D/602788.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92257": {
+    "id": 92257,
+    "name": "Raid Encounter: Lost Small Chest of Resilience",
+    "icon": "https://render.guildwars2.com/file/A7380A7F9B5DC80A1B2FCF271A09484965EFD2F4/602787.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92316": {
+    "id": 92316,
+    "name": "Raid Encounter: Lost Small Chest of Valor",
+    "icon": "https://render.guildwars2.com/file/A7380A7F9B5DC80A1B2FCF271A09484965EFD2F4/602787.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92330": {
+    "id": 92330,
+    "name": "Raid Encounter: Lost Medium Chest of Valor",
+    "icon": "https://render.guildwars2.com/file/3FCAC7800E032AD2544939E16648CA668019361D/602788.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92369": {
+    "id": 92369,
+    "name": "Raid Encounter: Lost Medium Chest of Resilience",
+    "icon": "https://render.guildwars2.com/file/3FCAC7800E032AD2544939E16648CA668019361D/602788.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92697": {
+    "id": 92697,
+    "name": "Raid Encounter: Lost Large Chest of Valor",
+    "icon": "https://render.guildwars2.com/file/907280A46C25F01A3FB202905DE9E10AC6CFA505/602789.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92772": {
+    "id": 92772,
+    "name": "Raid Encounter: Lost Large Chest of Vigilance",
+    "icon": "https://render.guildwars2.com/file/907280A46C25F01A3FB202905DE9E10AC6CFA505/602789.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "92775": {
+    "id": 92775,
+    "name": "Raid Encounter: Lost Large Chest of Resilience",
+    "icon": "https://render.guildwars2.com/file/907280A46C25F01A3FB202905DE9E10AC6CFA505/602789.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93004": {
+    "id": 93004,
+    "name": "Echo of Whispers",
+    "icon": "https://render.guildwars2.com/file/E729D3E5A77BC8FD62377226BC6ECF0FA65D4F5D/2149901.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93012": {
+    "id": 93012,
+    "name": "Emblem of Tournament Victory",
+    "icon": "https://render.guildwars2.com/file/C959D395C4EAE74CCFC62831D450DBA3B0A37855/2270826.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "93035": {
+    "id": 93035,
+    "name": "Echo of the Shiverpeaks",
+    "icon": "https://render.guildwars2.com/file/E729D3E5A77BC8FD62377226BC6ECF0FA65D4F5D/2149901.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93038": {
+    "id": 93038,
+    "name": "Echo of Raven Sanctum",
+    "icon": "https://render.guildwars2.com/file/E729D3E5A77BC8FD62377226BC6ECF0FA65D4F5D/2149901.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93051": {
+    "id": 93051,
+    "name": "Echo of Forging Steel",
+    "icon": "https://render.guildwars2.com/file/E729D3E5A77BC8FD62377226BC6ECF0FA65D4F5D/2149901.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93072": {
+    "id": 93072,
+    "name": "Black Lion Material Bag: Bjora Marches",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "93131": {
+    "id": 93131,
+    "name": "Strong Echo of Whispers",
+    "icon": "https://render.guildwars2.com/file/489AD63A6803782E5CBE6B7244ED7F7C0FA0BB41/2149902.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93158": {
+    "id": 93158,
+    "name": "Strong Echo of the Shiverpeaks",
+    "icon": "https://render.guildwars2.com/file/489AD63A6803782E5CBE6B7244ED7F7C0FA0BB41/2149902.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93195": {
+    "id": 93195,
+    "name": "Faint Echo of Whispers",
+    "icon": "https://render.guildwars2.com/file/ADD9E51CCE4646A3134794B58048B7FFBD3DE858/2149900.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93211": {
+    "id": 93211,
+    "name": "Faint Echo of Forging Steel",
+    "icon": "https://render.guildwars2.com/file/ADD9E51CCE4646A3134794B58048B7FFBD3DE858/2149900.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93221": {
+    "id": 93221,
+    "name": "Strong Echo of Raven Sanctum",
+    "icon": "https://render.guildwars2.com/file/489AD63A6803782E5CBE6B7244ED7F7C0FA0BB41/2149902.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93222": {
+    "id": 93222,
+    "name": "Strong Echo of Forging Steel",
+    "icon": "https://render.guildwars2.com/file/489AD63A6803782E5CBE6B7244ED7F7C0FA0BB41/2149902.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93230": {
+    "id": 93230,
+    "name": "Faint Echo of Raven Sanctum",
+    "icon": "https://render.guildwars2.com/file/ADD9E51CCE4646A3134794B58048B7FFBD3DE858/2149900.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93273": {
+    "id": 93273,
+    "name": "Faint Echo of the Shiverpeaks",
+    "icon": "https://render.guildwars2.com/file/ADD9E51CCE4646A3134794B58048B7FFBD3DE858/2149900.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93364": {
+    "id": 93364,
+    "name": "Iron Legion Claw Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93373": {
+    "id": 93373,
+    "name": "Strong Echo of Drizzlewood Coast",
+    "icon": "https://render.guildwars2.com/file/489AD63A6803782E5CBE6B7244ED7F7C0FA0BB41/2149902.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93478": {
+    "id": 93478,
+    "name": "Blood Legion Blood Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93485": {
+    "id": 93485,
+    "name": "Blood Legion Reward Box",
+    "icon": "https://render.guildwars2.com/file/3172EBBB98687244F06F0BF85DA4D10790E5EC74/2292710.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93492": {
+    "id": 93492,
+    "name": "Flame Legion Molten Materials Box",
+    "icon": "https://render.guildwars2.com/file/E8EA980CC3E04EA7CCBA4E649A3AEB6637901E41/2292713.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93494": {
+    "id": 93494,
+    "name": "Charr Legions Backpack Box",
+    "icon": "https://render.guildwars2.com/file/E8EA980CC3E04EA7CCBA4E649A3AEB6637901E41/2292713.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93495": {
+    "id": 93495,
+    "name": "Echo of Drizzlewood Coast",
+    "icon": "https://render.guildwars2.com/file/E729D3E5A77BC8FD62377226BC6ECF0FA65D4F5D/2149901.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93508": {
+    "id": 93508,
+    "name": "Iron Legion Reward Box",
+    "icon": "https://render.guildwars2.com/file/9970DF075906DAEDD3DC2773521D189DFC39FEBF/2292715.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93543": {
+    "id": 93543,
+    "name": "Flame Legion Reward Box",
+    "icon": "https://render.guildwars2.com/file/2CC2F0530E1EF7C61C412556DE2925B509C8C39C/2292714.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93555": {
+    "id": 93555,
+    "name": "Faint Echo of Drizzlewood Coast",
+    "icon": "https://render.guildwars2.com/file/ADD9E51CCE4646A3134794B58048B7FFBD3DE858/2149900.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "93560": {
+    "id": 93560,
+    "name": "Drizzlewood Coast Supply Drop",
+    "icon": "https://render.guildwars2.com/file/65AEE33144CC0E692494800D38E1D79A036CCB02/2292729.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93574": {
+    "id": 93574,
+    "name": "Ash Legion Reward Box",
+    "icon": "https://render.guildwars2.com/file/5876F65ED2984937CE4CF70406F5E3C780221A64/2292709.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93588": {
+    "id": 93588,
+    "name": "Ash Legion Venom Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93636": {
+    "id": 93636,
+    "name": "Flame Legion Dust Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93651": {
+    "id": 93651,
+    "name": "Frozen Lockbox",
+    "icon": "https://render.guildwars2.com/file/2C3E5BB244E11A36DD4EFDCFE29A32C9A04BF7C6/2292716.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93794": {
+    "id": 93794,
+    "name": "Frost Legion Spoils Box",
+    "icon": "https://render.guildwars2.com/file/259EB10F057B00B39F93E022F7D02E36250B9134/2314069.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93848": {
+    "id": 93848,
+    "name": "Dominion Trophy Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93853": {
+    "id": 93853,
+    "name": "Dominion Crystal Materials Box",
+    "icon": "https://render.guildwars2.com/file/E8EA980CC3E04EA7CCBA4E649A3AEB6637901E41/2292713.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93863": {
+    "id": 93863,
+    "name": "Frost Legion Trophy Box",
+    "icon": "https://render.guildwars2.com/file/5AC603DAA66AECC8C842A443EB2D610ADA08DCF8/2292712.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93870": {
+    "id": 93870,
+    "name": "Dominion Spoils Box",
+    "icon": "https://render.guildwars2.com/file/CF0C260A383410AB6B3969200E2CBCCDAD1354CA/2314068.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "93958": {
+    "id": 93958,
+    "name": "Festival Token",
+    "icon": "https://render.guildwars2.com/file/63E1A0F023D101045B5BA2331C289327687FC7E3/797790.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "BulkConsume",
+      "AccountBindOnUse"
+    ]
+  },
+  "94265": {
+    "id": 94265,
+    "name": "Ebon Vanguard Supply Box",
+    "icon": "https://render.guildwars2.com/file/BA0E2CC6D26FFEED4B58E052CF91ECD565C4146E/2351436.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94318": {
+    "id": 94318,
+    "name": "Crystal Bloom Supply Box",
+    "icon": "https://render.guildwars2.com/file/94344CECFF5B61AF0C4EED7FD39DD05FE30410F8/2351435.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94560": {
+    "id": 94560,
+    "name": "Deldrimor Supply Box",
+    "icon": "https://render.guildwars2.com/file/B9E471AD650DF101C24E045B1A4F4649ED616959/2388155.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94605": {
+    "id": 94605,
+    "name": "Exalted Supply Box",
+    "icon": "https://render.guildwars2.com/file/19AA25F0615461C49D514E712631B21F94450F7A/2388156.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94710": {
+    "id": 94710,
+    "name": "Skritt Supply Box",
+    "icon": "https://render.guildwars2.com/file/9CEDCE36CCBD1002CE6F69B8F607B6FB7A09086D/2412858.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94741": {
+    "id": 94741,
+    "name": "Tengu Supply Box",
+    "icon": "https://render.guildwars2.com/file/46A9E000279A45D6F220F9E8269E05FE6306090E/2412859.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94751": {
+    "id": 94751,
+    "name": "Kodan Supply Box",
+    "icon": "https://render.guildwars2.com/file/980C3CD454B0ACC127A4F927199365CC5B004739/2412856.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "94860": {
+    "id": 94860,
+    "name": "Olmakhan Supply Box",
+    "icon": "https://render.guildwars2.com/file/2909C94B0B2B019D64740E6CE8692FE971CB5F15/2412857.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "AccountBindOnUse"
+    ]
+  },
+  "95542": {
+    "id": 95542,
+    "name": "Black Lion Material Bag: Icebrood Saga",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "95603": {
+    "id": 95603,
+    "name": "Spotted Stingray",
+    "icon": "https://render.guildwars2.com/file/B390F77A9FED5A9F2BA0D7540211320CD5AD0853/2594651.png",
+    "rarity": "Ascended",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "95632": {
+    "id": 95632,
+    "name": "Chambered Nautilus",
+    "icon": "https://render.guildwars2.com/file/49DDE828275DD505E14D5031003D58662409AA1C/2594537.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "95641": {
+    "id": 95641,
+    "name": "Starter Kit: The Juggernaut",
+    "icon": "https://render.guildwars2.com/file/9D070C471D57A905A7A85D0E4BF6ADA1ECB10119/3187533.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "95670": {
+    "id": 95670,
+    "name": "Toadfish",
+    "icon": "https://render.guildwars2.com/file/34B0D00D6EF1A7B2D5377C79C6B4174859384710/2594533.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "95860": {
+    "id": 95860,
+    "name": "Canthan Ritualist Satchel",
+    "icon": "https://render.guildwars2.com/file/3F13F2250EDCFD2FAE10713C18DB46FCD03D96B5/2593809.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "95992": {
+    "id": 95992,
+    "name": "Bloodfish",
+    "icon": "https://render.guildwars2.com/file/3915B0520A60E49BE5D70E55AE737954FCAF4A7E/2594461.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96003": {
+    "id": 96003,
+    "name": "Watertight Bag",
+    "icon": "https://render.guildwars2.com/file/91BCAFA3247EEFC3DEF93A9AAECD40B215A72EE7/2593814.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96108": {
+    "id": 96108,
+    "name": "Clawfish",
+    "icon": "https://render.guildwars2.com/file/57A2AB72080E91A6780C95940AC6C25AD74196B9/2594463.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96110": {
+    "id": 96110,
+    "name": "Shimmering Squid",
+    "icon": "https://render.guildwars2.com/file/C23ADBDBAB666FAD02FAB706FFECE20C02310FC1/2594474.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96141": {
+    "id": 96141,
+    "name": "Venomfish",
+    "icon": "https://render.guildwars2.com/file/CD70C0C570411A2DC9C5CB0CB20C30CF0CC9E743/2594467.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96144": {
+    "id": 96144,
+    "name": "Scavenger Bag: Magic Trophies",
+    "icon": "https://render.guildwars2.com/file/31B3F3FCE4AC0B24209CAA7AD738B51F766A04E3/619511.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96265": {
+    "id": 96265,
+    "name": "Googly-Eyed Squid",
+    "icon": "https://render.guildwars2.com/file/3BBF4EDA6BBF0FEC7513BE0E3B7546F20198FF2C/2594473.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96304": {
+    "id": 96304,
+    "name": "Dustfish",
+    "icon": "https://render.guildwars2.com/file/A4EE284464B64D5368F57703280FE0EDB5911C67/2594464.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96631": {
+    "id": 96631,
+    "name": "Spectral Jellyfish",
+    "icon": "https://render.guildwars2.com/file/566EB75963F545FBA575BDC794E95550A6BEDF1E/2594624.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96667": {
+    "id": 96667,
+    "name": "Krytan Puffer",
+    "icon": "https://render.guildwars2.com/file/FEA17732FC7FE53AEDFC7A08069B6EC99BE49BF6/2594674.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96792": {
+    "id": 96792,
+    "name": "Petrifish",
+    "icon": "https://render.guildwars2.com/file/2C03CDAF5C31A82A4CA0E571390B0DDB3B38EDA6/2594522.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "96817": {
+    "id": 96817,
+    "name": "Cuttlefish",
+    "icon": "https://render.guildwars2.com/file/A14CE3D36ECDE9D3067544674ED0B0C0A1907F53/2594538.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "96933": {
+    "id": 96933,
+    "name": "Blowfish",
+    "icon": "https://render.guildwars2.com/file/BB3993DB54EE19D7F41A1FDD60766CED69437640/2594583.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97183": {
+    "id": 97183,
+    "name": "Spotted Pufferfish",
+    "icon": "https://render.guildwars2.com/file/582A2316064C4AF976CD75177CAB0A4FCAE2C9E3/2594535.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97254": {
+    "id": 97254,
+    "name": "Scavenger Bag: Might Trophies",
+    "icon": "https://render.guildwars2.com/file/31B3F3FCE4AC0B24209CAA7AD738B51F766A04E3/619511.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97291": {
+    "id": 97291,
+    "name": "Jade Tech Lockbox",
+    "icon": "https://render.guildwars2.com/file/30E46503C16C1B2A59AC4A087FA6D0C40DF6BDA5/2594265.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97302": {
+    "id": 97302,
+    "name": "Man-of-War",
+    "icon": "https://render.guildwars2.com/file/A0AB07F87643C598912CEEF40DD0D9D42B13311F/2594623.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97319": {
+    "id": 97319,
+    "name": "Partially Chewed Box",
+    "icon": "https://render.guildwars2.com/file/62B40A60DFE596B63C60915FC2DBC8EA42DE1761/2594712.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97340": {
+    "id": 97340,
+    "name": "Vampire Squid",
+    "icon": "https://render.guildwars2.com/file/E229DCFCB231394802DC552B3F6EF31AB47456BE/2594475.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97498": {
+    "id": 97498,
+    "name": "Scorpion Fish",
+    "icon": "https://render.guildwars2.com/file/F7066703DC61CBEC185440AC429A1C239A7846CA/2594689.png",
+    "rarity": "Ascended",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97511": {
+    "id": 97511,
+    "name": "Embroidered Coin Purse",
+    "icon": "https://render.guildwars2.com/file/A36607CECB172039B022307E0E34BAB2EFDE51C6/619513.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97527": {
+    "id": 97527,
+    "name": "Black Lionfish",
+    "icon": "https://render.guildwars2.com/file/E7209BB9A4FB3056A498199FE5A341F55361AC4B/2594667.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "97604": {
+    "id": 97604,
+    "name": "Stingray",
+    "icon": "https://render.guildwars2.com/file/93B6B279DE4B4A3E493A5D5165FE082E18A5B353/2594646.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97753": {
+    "id": 97753,
+    "name": "Fugu Fish",
+    "icon": "https://render.guildwars2.com/file/66062E6CD322D1B36B7C004056FE377517D9C774/2594644.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "97770": {
+    "id": 97770,
+    "name": "Abyssal Squid",
+    "icon": "https://render.guildwars2.com/file/06760AD993E0EF0D572E0A2FDAD6FD45219114EA/2594632.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97830": {
+    "id": 97830,
+    "name": "Pufferfish",
+    "icon": "https://render.guildwars2.com/file/044034A06C0C0763DA33DC69DDD72155950F695E/2594582.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97839": {
+    "id": 97839,
+    "name": "Canthan Armor Box",
+    "icon": "https://render.guildwars2.com/file/002F01D65A3078B1F64A3298497D22031CD39F6B/2594321.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97854": {
+    "id": 97854,
+    "name": "Chewed Canthan Backpack",
+    "icon": "https://render.guildwars2.com/file/3F13F2250EDCFD2FAE10713C18DB46FCD03D96B5/2593809.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "97889": {
+    "id": 97889,
+    "name": "Legendary Choice Box",
+    "icon": "https://render.guildwars2.com/file/6E9FA3C99A223677280CD9154A3FB50E2B43AE5B/66895.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "97890": {
+    "id": 97890,
+    "name": "Canthan Backpack",
+    "icon": "https://render.guildwars2.com/file/3F13F2250EDCFD2FAE10713C18DB46FCD03D96B5/2593809.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "98034": {
+    "id": 98034,
+    "name": "Black Lion Material Bag: End of Dragons",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "99484": {
+    "id": 99484,
+    "name": "Dragonjade-Tier Reward Package",
+    "icon": "https://render.guildwars2.com/file/FE31FC2E0FA4094F463CEEF8E5801F59F27059F5/2594309.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "99971": {
+    "id": 99971,
+    "name": "Bird Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "100500": {
+    "id": 100500,
+    "name": "Amnytas Gear Box",
+    "icon": "https://render.guildwars2.com/file/46EC231103323FB5EEBBC1AEF74AE015050F013E/3122156.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "100733": {
+    "id": 100733,
+    "name": "Jade Tech Loot Box",
+    "icon": "https://render.guildwars2.com/file/A36C02DCA1BAD2ACA9FDF60AD5D808C0A90BCF6A/2666678.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "101240": {
+    "id": 101240,
+    "name": "Blightbob",
+    "icon": "https://render.guildwars2.com/file/06760AD993E0EF0D572E0A2FDAD6FD45219114EA/2594632.png",
+    "rarity": "Rare",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "101321": {
+    "id": 101321,
+    "name": "Black Lion Material Bag: Secrets of the Obscure",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "101569": {
+    "id": 101569,
+    "name": "Deluxe Gear Box",
+    "icon": "https://render.guildwars2.com/file/B9BA95E7DEEFF80259C17EB724F7C5E17FB2A1C3/3073209.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "101727": {
+    "id": 101727,
+    "name": "Astral Fluctuating Mass",
+    "icon": "https://render.guildwars2.com/file/F294472FD16067583D90764F4207DC2980CACAB3/3301296.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "102283": {
+    "id": 102283,
+    "name": "Janthiri Gear Box",
+    "icon": "https://render.guildwars2.com/file/B76F500FD492F00954A972A6FDC801DBF095D654/3374828.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "102936": {
+    "id": 102936,
+    "name": "Janthir Wilds Bloodstone Loot Box",
+    "icon": "https://render.guildwars2.com/file/26D0E697663F7AA3E233FA7507CF530640F7BFD9/619515.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "103066": {
+    "id": 103066,
+    "name": "Janthir Wilds Gear Box",
+    "icon": "https://render.guildwars2.com/file/149F011DF718B696F87A397B9248EA039272D7E5/3374940.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "103141": {
+    "id": 103141,
+    "name": "Janthir Wilds Mursaat Loot Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "103233": {
+    "id": 103233,
+    "name": "Janthir Wilds Jade Construct Loot Box",
+    "icon": "https://render.guildwars2.com/file/A36C02DCA1BAD2ACA9FDF60AD5D808C0A90BCF6A/2666678.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "103716": {
+    "id": 103716,
+    "name": "Black Lion Material Bag: Janthir Wilds",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "103799": {
+    "id": 103799,
+    "name": "Box of Purified Rift Essence Components",
+    "icon": "https://render.guildwars2.com/file/666209104CCB024D53359C0EA0A299076E610771/65704.png",
+    "rarity": "Ascended",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "103820": {
+    "id": 103820,
+    "name": "Legendary Gift Starter Kit",
+    "icon": "https://render.guildwars2.com/file/B12D41A5A67EAA554108FC6D20C9BE697EF77E1A/3122159.png",
+    "rarity": "Legendary",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse",
+      "DeleteWarning"
+    ]
+  },
+  "104545": {
+    "id": 104545,
+    "name": "Dungeon Armor Container",
+    "icon": "https://render.guildwars2.com/file/77A4604527F40677BD3CCF689143B26E98074902/1459265.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "105332": {
+    "id": 105332,
+    "name": "Lucent Crystal Vault Bag",
+    "icon": "https://render.guildwars2.com/file/607AA1A4574FA66006FFB57C0B2DDBAAFDE50CD6/2063471.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106011": {
+    "id": 106011,
+    "name": "Castoran Gear Box",
+    "icon": "https://render.guildwars2.com/file/06EF27B8679A18099CCDF508C121F248575E9A36/3708812.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106105": {
+    "id": 106105,
+    "name": "Castoran Inquest Treasure Box",
+    "icon": "https://render.guildwars2.com/file/D6395A1BA351172DAA380E7BA665C00FBB3B5B43/780332.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106157": {
+    "id": 106157,
+    "name": "Bag of Loot",
+    "icon": "https://render.guildwars2.com/file/70F67BE580E740231D5F23C2B85317D5E2072CD7/1894640.png",
+    "rarity": "Fine",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106338": {
+    "id": 106338,
+    "name": "Castoran Choya Treasure Box",
+    "icon": "https://render.guildwars2.com/file/900B6F07174AEFC96A664AC6115D2DABC90B06B8/66867.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106748": {
+    "id": 106748,
+    "name": "Castoran Cache of Riches",
+    "icon": "https://render.guildwars2.com/file/30A952F6BC06D49B74281B136D0E4154CF4744E7/3708798.png",
+    "rarity": "Exotic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  },
+  "106774": {
+    "id": 106774,
+    "name": "Black Lion Material Bag: Visions of Eternity",
+    "icon": "https://render.guildwars2.com/file/5C94EF9F6BA4040BDA51A06914C2E6EEE07D0718/1729433.png",
+    "rarity": "Masterwork",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "DeleteWarning",
+      "AccountBindOnUse"
+    ]
+  },
+  "107137": {
+    "id": 107137,
+    "name": "Glorious Raiders Cache",
+    "icon": "https://render.guildwars2.com/file/A57130663E4ACDA9957C1E02BFF20C7DDFC0B893/3744653.png",
+    "rarity": "Basic",
+    "flags": [
+      "AccountBound",
+      "NoMysticForge",
+      "NoSalvage",
+      "NoSell",
+      "AccountBindOnUse"
+    ]
+  }
+}
