@@ -5,11 +5,41 @@ import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, MINIS_CACHE, REQUESTS_CACHE,
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
-import { groupBy, mapFields } from "./utils/helper-utils";
 import wxdates from "./wxjs_dates";
 import { getScopes, createScopeError } from "$lib/services/api/layers/authorization";
 import { additionalMapping, toHtml } from "$lib/services/api/layers/mapping";
 import { buildEntityCacheName, buildRequestCacheName } from "$lib/services/api/layers/cache-keys";
+import { getValidCacheEntry, persistCacheEntry, type CacheEntry } from "$lib/services/api/layers/cache";
+import {
+    createApiRuntimeState,
+    createDefaultApiClientOptions,
+    hasLanguageChanged,
+    mergeApiClientOptions,
+    shouldSkipInit,
+    type ApiClientOptions,
+    type TokenInfo,
+} from "$lib/services/api/layers/runtime";
+import {
+    decodeApiResponseData,
+    throwApiResponseError,
+    toAbsoluteRequest,
+    toAuthorizedUrl,
+    toRequestKey,
+    toScopeRequest,
+    withLanguageQuery,
+} from "$lib/services/api/layers/transport";
+import { mapTransactionsForCurrent, sumQuantitiesByItemAndPrice } from "$lib/services/api/domains/transactions";
+import { sortWizardsVaultObjectives } from "$lib/services/api/domains/wizards-vault";
+import { buildLegendariesData } from "$lib/services/api/domains/legendaries";
+import { buildCharacterItemCollection, collectItemIds, normalizeNonNullItems } from "$lib/services/api/domains/items-materials";
+import { collectUniqueGuildIds, mapCharactersWithCrafting, withLocalAccountDates } from "$lib/services/api/domains/account-characters-guilds";
+import { applyCurrencyOrder, buildDeprecatedCurrencyOverlay } from "$lib/services/api/domains/wallet";
+import {
+    buildIgnoredAchievementIds,
+    collectUncategorizedAchievementIds,
+    normalizeAccountAchievements,
+    normalizeAchievementCategories,
+} from "$lib/services/api/domains/achievements";
 import type { AchievementBit } from "$lib/types/achievements";
 import type { ItemTooltipData } from "$lib/types/items";
 import type {
@@ -24,7 +54,6 @@ import type {
     ApiCharacterDto,
     ApiCommerceDeliveryDto,
     ApiCommercePriceDto,
-    ApiCommercePriceOfferDto,
     ApiCommerceTransactionDto,
     ApiCurrencyDto,
     ApiGuildDto,
@@ -40,7 +69,6 @@ import type {
     ExpandedItem,
     GuildStashData,
     LegendariesData,
-    LegendaryItemSummary,
     TransactionCurrentItem,
     WalletCurrency,
     WizardsVaultCategoryData,
@@ -85,12 +113,6 @@ const ignoreCache = getQueryStringFlag('ignore-cache');
 const devMode = getQueryStringFlag('dev-mode');
 const realApi = getQueryStringFlag('real-api');
 
-
-interface CacheEntry {
-    time: Date | string;
-    timeout: number;
-    data: unknown;
-}
 
 type Dictionary = Record<string, unknown>;
 
@@ -166,25 +188,6 @@ type AccountData = ApiAccountDto & {
     [key: string]: unknown;
 };
 
-interface TokenInfo {
-    id: string;
-    name: string;
-    permissions: string[];
-    missingScopes: string[];
-    error: string | null;
-}
-
-interface ApiClientOptions extends RequestInit {
-    baseURL: string;
-    timeout: number;
-    expectJson: boolean;
-    apiLang: string;
-    onError(request: RequestInfo | string, response: Response, options: object): void;
-    fetchFunction: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
-    debug: boolean;
-    transform?: (data: unknown) => unknown;
-}
-
 let _items: [number, ItemLike][] | undefined;
 let _minis: [number, ApiMiniDto][] | undefined;
 let _skins: [number, ApiSkinDto][] | undefined;
@@ -195,74 +198,29 @@ let skinsCache: Map<number, ApiSkinDto>;
 let achievementsCache: Map<number, AchievementData>;
 let requestCache: Map<string, CacheEntry>;
 let inflightItems: Map<number, Promise<ItemLike[]>> = new Map();
-let _tokenInfo: TokenInfo = {
-    id: '',
-    name: '',
-    permissions: [],
-    error: null,
-    missingScopes: [],
-};
+const runtime = createApiRuntimeState(createDefaultApiClientOptions({
+    devMode,
+    realApi,
+    defaultApiUrl,
+    mockApiUrl,
+}));
 
-let _apiKey = "";
-let fetchOptions: ApiClientOptions = {
-    method: "GET",
-    baseURL: devMode ? realApi ? defaultApiUrl : mockApiUrl : defaultApiUrl,
-    timeout: 10000,
-    expectJson: true,
-    apiLang: 'en',
-    onError(request: Request, response: Response, options: object) {
-        Logger.error(`apiClient response error ${response?.status}: ${response?.statusText ? response?.statusText : '(HTTP status: ' + response?.status + ')'} \n req: ${JSON.stringify(request)}, options: ${JSON.stringify(options)}`, response);
-    },
-    fetchFunction: fetch,
-    debug: false,
-};
+const requestCacheName = (): string => buildRequestCacheName(REQUESTS_CACHE, runtime.apiKey);
 
-const requestCacheName = (): string => buildRequestCacheName(REQUESTS_CACHE, _apiKey);
-
-const entityCacheName = (base: string): string => buildEntityCacheName(base, fetchOptions.apiLang);
+const entityCacheName = (base: string): string => buildEntityCacheName(base, runtime.fetchOptions.apiLang);
 
 // const notifyOnError = (req, error, options) => {
-//     if (fetchOptions.onError) {
-//         fetchOptions.onError(req, error, options);
+//     if (runtime.fetchOptions.onError) {
+//         runtime.fetchOptions.onError(req, error, options);
 //     }
 // };
-
-const secondsBetween = (d1: Date | string, d2: Date): number => {
-    if (typeof d1 == 'string') {
-        d1 = new Date(d1);
-    }
-    const diff = Math.round(Math.abs(d1.getTime() - d2.getTime()) / 1000);
-    return diff;
-};
-
-const tryCache = (req: string): CacheEntry | undefined => {
-    if (_apiKey && requestCache.has(req)) {
-        let info = requestCache.get(req);
-        let secs = secondsBetween(info!.time, new Date());
-        if (secs < CACHE_TIMEOUT) {
-            Logger.always('tryCache hit, reusing cache', { req, ageSeconds: secs });
-            return info;
-        }
-    }
-    return undefined;
-};
-
-const cacheRequest = async (req: string, value: unknown) => {
-    const obj: CacheEntry = {
-        time: new Date(),
-        timeout: CACHE_TIMEOUT,
-        data: value,
-    };
-    requestCache.set(req, obj);
-    await ls.set(requestCacheName(), [...requestCache.entries()]);
-};
 
 const getFromAchievementsCache = (key: string): AchievementData | undefined => {
     return achievementsCache.get(Number(key));
 }
 
 const readSettings = async () => {
-    const response = await fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
+    const response = await runtime.fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
         Logger.error('error loading settings', error);
     });
 
@@ -311,92 +269,66 @@ const readSettings = async () => {
 }
 
 const apiClient = async <T = unknown>(req: string | RequestInfo, query: string, options?: Partial<ApiClientOptions>): Promise<T> => {
-    if (!_apiKey) {
+    if (!runtime.apiKey) {
         Logger.error('not initialized, please provide api key from https://account.arena.net');
         return null as unknown as T;
     }
-    const scopeReq = typeof req === 'string' ? req : req instanceof Request ? req.url : String(req);
-    let missingScopes = getScopes(scopeReq).filter(x => !_tokenInfo.permissions.includes(x));
+    const scopeReq = toScopeRequest(req);
+    let missingScopes = getScopes(scopeReq).filter(x => !runtime.tokenInfo.permissions.includes(x));
     if (missingScopes.length) {
-        _tokenInfo.missingScopes.push(...missingScopes);
+        runtime.tokenInfo.missingScopes.push(...missingScopes);
         throw createScopeError(missingScopes)
     }
-    query = query ? `lang=${fetchOptions.apiLang}&${query}` : `lang=${fetchOptions.apiLang}`;
-    const origReq = req + query;
-    const _options: ApiClientOptions = Object.assign({}, fetchOptions, options);
-    const cacheEntry = !ignoreCache ? tryCache(origReq) : undefined;
-    if (cacheEntry !== undefined) {
+    const queryWithLang = withLanguageQuery(query, runtime.fetchOptions.apiLang);
+    const requestKey = toRequestKey(req, queryWithLang);
+    const _options: ApiClientOptions = mergeApiClientOptions(runtime.fetchOptions, options);
+    const cacheResult = !ignoreCache ? getValidCacheEntry({
+        apiKey: runtime.apiKey,
+        requestKey,
+        requestCache,
+        timeoutSeconds: CACHE_TIMEOUT,
+    }) : {};
+    if (cacheResult.entry !== undefined) {
+        Logger.always('tryCache hit, reusing cache', { req: requestKey, ageSeconds: cacheResult.ageSeconds });
         Logger.log("requestCache is valid, returning cached response");
-        return cacheEntry.data as T;
+        return cacheResult.entry.data as T;
     }
 
     Logger.log("requestCache is INVALID, refreshing...");
 
-    if (typeof req == "string") {
-        req = _options.baseURL + req;
-    }
+    const absoluteReq = toAbsoluteRequest(req, _options.baseURL);
 
     if (_options.debug) {
-        Logger.log(`req: ${req}, options: `, _options);
+        Logger.log(`req: ${absoluteReq}, options: `, _options);
     }
-    const response = await _options.fetchFunction(`${req}?access_token=${_apiKey}${query ? "&" : ""}${query}`, _options as RequestInit).catch(error => {
+    const requestUrl = toAuthorizedUrl(absoluteReq, runtime.apiKey, queryWithLang);
+    const response = await _options.fetchFunction(requestUrl, _options as RequestInit).catch(error => {
         Logger.error('error', error);
     });
     if (response && response.status >= 400) {
-        const body = await response.text();
-
-        if (response.headers.get('content-type')?.includes('application/json')) {
-            let errorMsg = '';
-            try {
-                errorMsg = JSON.parse(body)?.text || '';
-            } catch {
-                errorMsg = '';
-            }
-            if (errorMsg !== "") {
-                throw new Error(errorMsg);
-            } else {
-                throw new Error(body);
-            }
-        } else {
-            throw new Error(body);
-        }
-
+        await throwApiResponseError(response);
     } else if (response?.ok) {
-        let data;
-        if (_options.expectJson) {
-            data = await response.json();
-        } else {
-            data = await response.text();
-        }
-        if (_options.transform) {
-            data = _options.transform(data);
-        }
-        cacheRequest(origReq, data);
-        Logger.log(`requestCache for ${origReq} updated`, data);
+        const data = await decodeApiResponseData<T>(response, _options.expectJson, _options.transform);
+        await persistCacheEntry({
+            requestKey,
+            value: data,
+            timeoutSeconds: CACHE_TIMEOUT,
+            requestCache,
+            persist: async (entries) => ls.set(requestCacheName(), entries),
+        });
+        Logger.log(`requestCache for ${requestKey} updated`, data);
         return data as T;
     }
 
-    Logger.warn(`got response.status = ${response?.status} for ${origReq}... returning empty`);
-    return (query ? [] : {}) as T;
+    Logger.warn(`got response.status = ${response?.status} for ${requestKey}... returning empty`);
+    return (queryWithLang ? [] : {}) as T;
 };
 
 const charactersItems = async (): Promise<CharacterWithItems[]> => {
     const rawData: CharacterData[] = (await apiClient<CharacterData[]>("/v2/characters", "ids=all")) || [];
     for (const char of rawData) {
-        let bags = (char.bags || []).filter((x): x is CharacterBag => x != null).map((x) => ({ id: x.id, count: 1 }));
-        let itemsInBags = (char.bags || [])
-            .filter((x): x is CharacterBag => x != null)
-            .map((bag) => bag.inventory)
-            .flat()
-            .filter((x): x is ItemLike => x != null);
-        let equipment = (char.equipment || []).flat().filter((x): x is ItemLike => x != null).map((x) => ({ ...x, count: 1, equipped: true }));
-        let charItems: ItemLike[] = [...bags, ...itemsInBags, ...equipment];
-        const addons: number[] = [];
-        charItems.forEach((x) => {
-            addons.push(...(x.upgrades || []), ...(x.infusions || []));
-        })
-        charItems.push(...addons.map((x: number) => ({ id: x, count: 1, equipped: true })))
-        let ids: number[] = charItems.map((x) => x.id);
+        const charItems = buildCharacterItemCollection(char) as ItemLike[];
+        const ids = collectItemIds(charItems);
         char._items = (await expandItems(ids, charItems)) as ExpandedItem[];
     }
     return rawData as CharacterWithItems[];
@@ -404,41 +336,19 @@ const charactersItems = async (): Promise<CharacterWithItems[]> => {
 
 const materials = async (): Promise<ExpandedItem[]> => {
     const rawData: ItemLike[] = (await apiClient<ItemLike[]>("/v2/account/materials", "")) || [];
-    const ids: number[] = rawData.map((x) => x.id);
+    const ids = collectItemIds(rawData);
     return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
 
-function sumQuantities(data: TransactionExpanded[]): TransactionExpanded[] {
-    // for more general function use sumGroupBy from utils.js
-    return Object.values(data.reduce((result: Record<string, TransactionExpanded>, item) => {
-        // Create a unique key combining item_id and price
-        const key = `${item.item_id}-${item.price}`;
-        // If the key already exists, add to the existing quantity
-        if
-            (result[key]) { result[key].count += item.count; }
-        else {
-            // Otherwise, initialize the quantity with the current item's quantity
-            result[key] = { ...item };
-        }
-        return result;
-    }, {})); // Initialize with an empty object
-}
-
 const _getTransactions = async (_transactions: TransactionData[]): Promise<TransactionCurrentItem[]> => {
-    const transactions: TransactionExpanded[] = _transactions.map((x) => ({
-        ...x,
-        transId: x.id,
-        id: x.item_id,
-        count: x.quantity,
-
-    }));
+    const transactions: TransactionExpanded[] = mapTransactionsForCurrent(_transactions) as TransactionExpanded[];
 
 
     const ids: number[] = transactions.map((x) => x.id);
 
     // let sum = sumGroupBy(exp, ['item_id', 'price'], 'count')
-    let sum = sumQuantities(transactions);
+    let sum = sumQuantitiesByItemAndPrice(transactions);
     sum = await expandItems(ids, sum);
     sum = await expandPrices(ids, sum);
     return sum as TransactionCurrentItem[];
@@ -459,7 +369,7 @@ const transactionsCurrent = async (): Promise<{ buys: TransactionCurrentItem[]; 
 const _getGuilds = async (full: boolean = false): Promise<ApiGuildDto[]> => {
     const account = await apiClient<AccountData>("/v2/account", "");
     // concat and remove duplicates
-    const _guilds = [...new Set([...(account.guild_leader || []), ...(account.guilds || [])])];
+    const _guilds = collectUniqueGuildIds(account);
 
         let tasks: Array<Promise<ApiGuildDto>> = [];
         for (const guild of _guilds) {
@@ -527,7 +437,7 @@ const guildItems = async (): Promise<GuildStashData[]> => {
                 .map((x) => x.inventory as ItemLike[] | null | undefined)
                 .flat()
                 .filter((x: ItemLike | null | undefined): x is ItemLike => x != null);
-            const ids = normalizedStashRaw.map((x) => x.id);
+            const ids = collectItemIds(normalizedStashRaw);
             items.push({
                 name: guild.name,
                 stash: (await expandItems(ids, normalizedStashRaw)) as ExpandedItem[],
@@ -545,7 +455,7 @@ const guildItems = async (): Promise<GuildStashData[]> => {
 
 const characters = async (): Promise<Array<ApiCharacterDto & { crafting_discipline: string }>> => {
     const resp: CharacterData[] = (await apiClient<CharacterData[]>("/v2/characters", "ids=all")) || [];
-    return resp.map((x) => ({ ...x, crafting_discipline: (x.crafting || []).map((c) => c?.discipline).flat().join(', ') }));
+    return mapCharactersWithCrafting(resp);
 };
 
 const guilds = async (): Promise<ApiGuildDto[]> => {
@@ -564,20 +474,7 @@ const legendaries = async (): Promise<LegendariesData> => {
     const ids: number[] = available.map((x) => x.id);
     const expanded = await expandItems(ids, available);
     const data = mergeById(expanded, unlocked);
-    const armor = groupBy(data.filter((x) => x.type === "Armor"), ['details.weight_class', 'subtype'], ['id', 'name', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['armor'];
-    const trinkets = groupBy(data.filter((x) => x.type === "Trinket" && x.id !== 95093), ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['trinkets'];
-    const back = data.filter((x) => x.type === "Back").map((x) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendaryItemSummary);
-    const upgrades = data.filter((x) => ['Rune', 'Sigil'].includes(String(x.subtype)) || x.type == 'Relic').map((x) => mapFields(x, ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity', { equipped: true }]) as unknown as LegendaryItemSummary);
-    const _weapons = data.filter((x) => x.type === "Weapon");
-    _weapons.forEach((x) => {
-        // change subtype naming to match current one in game & Wiki
-        if (x.subtype == 'Harpoon') x.subtype = 'Spear';
-        else if (x.subtype == 'Speargun') x.subtype = 'Harpoon gun';
-        else if (x.subtype == 'LongBow') x.subtype = 'Long bow';
-        else if (x.subtype == 'ShortBow') x.subtype = 'Short bow';
-    })
-    const weapons = groupBy(_weapons, ['subtype'], ['id', 'name', 'description', 'icon', 'max_count', 'count', 'rarity']) as unknown as LegendariesData['weapons'];
-    return { armor, trinkets, back, upgrades, weapons };
+    return buildLegendariesData(data);
 };
 
 const prices = (x: string) => {
@@ -586,24 +483,22 @@ const prices = (x: string) => {
 
 const account = async (): Promise<AccountWithLocalDates> => {
     const _acc = await apiClient<AccountData>("/v2/account", `v=${SCHEMA_VERSION}`);
-    _acc.created_local = _acc.created ? new Date(_acc.created).toLocaleString() : '';
-    _acc.last_modified_local = _acc.last_modified ? new Date(_acc.last_modified).toLocaleString() : '';
-    return _acc as AccountWithLocalDates;
+    return withLocalAccountDates(_acc) as AccountWithLocalDates;
 };
 
 const sharedInventory = async (): Promise<ExpandedItem[]> => {
     const resp: Array<ItemLike | null> = (await apiClient<Array<ItemLike | null>>("/v2/account/inventory", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x): x is ItemLike => x != null);
-    const ids: number[] = rawData.map((x) => x.id);
+    const rawData = normalizeNonNullItems(resp);
+    const ids = collectItemIds(rawData);
     return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
 const bank = async (): Promise<ExpandedItem[]> => {
     const resp: Array<ItemLike | null> = (await apiClient<Array<ItemLike | null>>("/v2/account/bank", "")) || [];
     // this endpoint returns null in "empty" slots and we don't want that
-    const rawData = resp.filter((x): x is ItemLike => x != null);
-    const ids: number[] = rawData.map((x) => x.id);
+    const rawData = normalizeNonNullItems(resp);
+    const ids = collectItemIds(rawData);
     return (await expandItems(ids, rawData)) as ExpandedItem[];
 };
 
@@ -619,19 +514,9 @@ const achievements = async (all: boolean = false): Promise<AchievementsData & { 
         apiClient<number[]>("/v2/achievements", "")
     ]);
 
-    const normalizedAccountAchievements = (account_achievements || []).map((x) => ({
-        ...x,
-        bits_done: Array.isArray(x.bits_done) ? [...x.bits_done] : [...(x.bits || [])],
-    }));
+    const normalizedAccountAchievements = normalizeAccountAchievements(account_achievements || []);
 
-    const normalizedCategories: AchievementCategoryData[] = categories.map((cat) => ({
-        ...cat,
-        name: cat.name || '',
-        description: cat.description || '',
-        rewards_to_get: new Map<string, number>(),
-        points_to_get: 0,
-        achievements: cat.achievements.map((entry) => ({ id: typeof entry === 'number' ? entry : entry.id, name: '' })),
-    }));
+    const normalizedCategories: AchievementCategoryData[] = normalizeAchievementCategories(categories);
 
     return (await expandAchievements(account, normalizedCategories, normalizedAccountAchievements, allIds)) as AchievementsData & { rewards_to_get: Map<string, number> };
 };
@@ -708,32 +593,13 @@ const skins = async (ids: number[]): Promise<void> => {
 }
 
 const currencies = async (order: number[] = []): Promise<WalletCurrency[]> => {
-    const depreciated = [
-        {
-            reason: 'Replaced by "Tales of Dungeon Delving"',
-            ids: [5, 6, 9, 10, 11, 12, 13, 14]
-        },
-        {
-            reason: 'Replaced by "Blue Prophet Shard"',
-            ids: [52, 53]
-        },
-        {
-            reason: 'Replaced by "Blue Prophet Crystal"',
-            ids: [55, 56]
-        },
-    ];
-    // denormalize
-    const _dep = depreciated.flatMap(({ reason, ids }) => ids.map(id => ({ depreciated: true, depreciationReason: reason, id, active: 0 })));
+    const _dep = buildDeprecatedCurrencyOverlay();
     const ignored = [74];
     type CurrencyEntry = ApiCurrencyDto & { depreciated?: boolean; active?: number; [key: string]: unknown };
     const resp = await apiClient<CurrencyEntry[]>("/v2/currencies", `ids=all`);
     const _rawData = resp.filter((x) => !ignored.includes(x.id)).map((x) => ({ ...x, active: 1, value: 0 }));
     const _data = mergeById(_rawData, _dep);
-    _data.forEach(x => {
-        const idx = order.findIndex(y => y == x.id)
-        x.order = (idx >= 0) ? idx : x.depreciated ? x.order + 20000 : x.order + 10000;
-    });
-    return _data.sort((a, b) => a.order - b.order) as unknown as WalletCurrency[];
+    return applyCurrencyOrder(_data, order) as unknown as WalletCurrency[];
 }
 
 const wallet = async (order: number[] = []): Promise<WalletCurrency[]> => {
@@ -758,12 +624,7 @@ const delivery = async (): Promise<DeliveryData> => {
 
 const wizardVaultSorted = async (promise: Promise<WizardsVaultCategoryData>): Promise<WizardsVaultCategoryData> => {
     const resp = await promise;
-    const byClaimed = Object.groupBy((resp.objectives || []), (x) => String(Boolean(x.claimed))) as Record<string, NonNullable<WizardsVaultCategoryData['objectives']>>;
-    byClaimed.false ??= [];
-    byClaimed.true ??= [];
-    resp.objectives = byClaimed.false.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title));
-    resp.objectives.push(...byClaimed.true.sort((a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title)));
-    return resp;
+    return sortWizardsVaultObjectives(resp);
 }
 
 const wizardsVaultDaily = async (): Promise<WizardsVaultCategoryData> => {
@@ -779,12 +640,12 @@ const wizardsVaultSpecial = async (): Promise<WizardsVaultCategoryData> => {
 }
 
 const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
-    const nextFetchOptions = Object.assign({}, fetchOptions, options);
-    const languageChanged = nextFetchOptions.apiLang !== fetchOptions.apiLang;
-    if (newApiKey === _apiKey && _tokenInfo && !languageChanged) return;
+    const nextFetchOptions = mergeApiClientOptions(runtime.fetchOptions, options);
+    const languageChanged = hasLanguageChanged(runtime.fetchOptions, nextFetchOptions);
+    if (shouldSkipInit(newApiKey, runtime.apiKey, languageChanged)) return;
 
-    _apiKey = newApiKey;
-    fetchOptions = nextFetchOptions;
+    runtime.apiKey = newApiKey;
+    runtime.fetchOptions = nextFetchOptions;
 
     _items = await ls.getObject(entityCacheName(ITEMS_CACHE), []);
     _achievements = await ls.getObject(entityCacheName(ACHIEVEMENTS_CACHE), []);
@@ -801,11 +662,11 @@ const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
     requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
     await readSettings();
     try {
-        _tokenInfo = await tokenInfo();
+        runtime.tokenInfo = await tokenInfo();
     } catch (error) {
-        _tokenInfo.error = error instanceof Error ? error.message : String(error);
+        runtime.tokenInfo.error = error instanceof Error ? error.message : String(error);
     }
-    // Logger.log('tokenInfo', { tokenInfo: _tokenInfo });
+    // Logger.log('tokenInfo', { tokenInfo: runtime.tokenInfo });
 };
 
 const mergeById = <TBase extends { id: number }, TDetails extends { id: number }>(a1: TBase[], a2: TDetails[]) => {
@@ -984,29 +845,9 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
     let _log = '';
 
     // we don't want categories of achievements that are not obtainable anymore
-    const ignoredAchievementIds = new Set(INACTIVE_ACHIEVEMENTS_CATEGORIES);
-    // so we also ignore seasonal ones (appart from current season ofc)
     Logger.log('current season:', { season: _settings.currentSeason });
-    Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach((season: string) => {
-        if (season != _settings.currentSeason) {
-            SEASONAL_ACHIEVEMENTS_CATEGORIES[season as keyof typeof SEASONAL_ACHIEVEMENTS_CATEGORIES]
-                .forEach((id) => ignoredAchievementIds.add(id));
-        }
-    })
-
-    const achievsInCategories = new Set<number>();
-    const noCategory: number[] = [];
-    categories.forEach((cat) => {
-        cat.achievements
-            .map((x) => Number((x as { id?: number }).id || 0))
-            .filter((x) => x > 0)
-            .forEach((id) => achievsInCategories.add(id));
-    });
-    allIds.forEach((id: number) => {
-        if (!ignoredAchievementIds.has(id) && !achievsInCategories.has(id)) {
-            noCategory.push(id)
-        }
-    });
+    const ignoredAchievementIds = buildIgnoredAchievementIds(_settings.currentSeason, INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES);
+    const noCategory = collectUncategorizedAchievementIds(categories, allIds, ignoredAchievementIds);
 
     categories.push({
         id: 0,
@@ -1128,7 +969,7 @@ const clearCache = async () => {
 }
 
 const getApiKey = () => {
-    return _apiKey;
+    return runtime.apiKey;
 }
 
 export default {
@@ -1155,9 +996,9 @@ export default {
     transactionsCurrent,
     legendaries,
     startSession: () => {
-        _tokenInfo.missingScopes = [];
+        runtime.tokenInfo.missingScopes = [];
     },
-    tokenInfo: () => _tokenInfo,
+    tokenInfo: () => runtime.tokenInfo,
     itemsCache: (id: string | number) => itemsCache.get(parseInt(String(id))),
     minisCache: (id: string | number) => minisCache.get(parseInt(String(id))),
     skinsCache: (id: string | number) => skinsCache.get(parseInt(String(id))),
