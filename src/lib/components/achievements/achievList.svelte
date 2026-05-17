@@ -13,10 +13,7 @@
 	}
 
 	let { items, todoList, onToggleTodo, children = undefined }: Props = $props();
-
-	function isOnTodo(todoList: number[], achievId: number){
-		return todoList.findIndex((x: number) => x == achievId) >= 0;
-	}
+	let todoSet = $derived(new Set(todoList));
 
 	// console.log('achieveList ' + name, items);
 	const tooltipOptions = {
@@ -39,7 +36,7 @@
 			current={achiev.current}
 			max={achiev.max}
 			flags={achiev.flags}
-			todo={isOnTodo(todoList, achiev.id ?? 0)}
+			todo={todoSet.has(achiev.id ?? 0)}
 			rewardsObj={achiev.rewardsObj}
 			done={achiev.done}
 			bits={achiev.bits}

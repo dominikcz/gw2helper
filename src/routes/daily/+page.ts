@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		weekly: WizardsVaultCategoryData | Promise<WizardsVaultCategoryData>;
 		special: WizardsVaultCategoryData | Promise<WizardsVaultCategoryData>;
 		achievements: (AchievementsData & { rewards_to_get: Map<string, number> }) | Promise<AchievementsData & { rewards_to_get: Map<string, number> }>;
-		toDoList: unknown;
+		toDoList: Promise<number[]>;
 		seasonEnd: string | null;
 		account: AccountWithLocalDates | Promise<AccountWithLocalDates>;
 	};

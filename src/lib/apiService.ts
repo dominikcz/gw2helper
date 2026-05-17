@@ -942,9 +942,13 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
     })
 
     const knownIds = [...achievementsCache.keys()];
+    const knownIdsSet = new Set(knownIds);
+    const invalidAchievementIdsSet = new Set(INVALID_ACHIEVEMENTS_IDS);
     const _doneIds = accountAchievements.filter((x) => x.done === true).map((x) => x.id);
-    const _notDone = allIds.filter((x: number) => !_doneIds.includes(x));
-    const missingIds = allIds.filter((x: number) => !INVALID_ACHIEVEMENTS_IDS.includes(x) && !knownIds.includes(x));
+    const doneIdsSet = new Set(_doneIds);
+    const _notDone = allIds.filter((x: number) => !doneIdsSet.has(x));
+    const missingIds = allIds.filter((x: number) => !invalidAchievementIdsSet.has(x) && !knownIdsSet.has(x));
+    const accountAchievementsById = new Map(accountAchievements.map((achiev) => [achiev.id, achiev]));
 
     // prepare list of ids to request in batches of 200 max
     const batches = [];
@@ -987,22 +991,26 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
     let _log = '';
 
     // we don't want categories of achievements that are not obtainable anymore
-    const ignored_achievements = [...INACTIVE_ACHIEVEMENTS_CATEGORIES];
+    const ignoredAchievementIds = new Set(INACTIVE_ACHIEVEMENTS_CATEGORIES);
     // so we also ignore seasonal ones (appart from current season ofc)
     // console.log('current season:', _settings.currentSeason)
     Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach((season: string) => {
         if (season != _settings.currentSeason) {
-            ignored_achievements.push(...SEASONAL_ACHIEVEMENTS_CATEGORIES[season as keyof typeof SEASONAL_ACHIEVEMENTS_CATEGORIES]);
+            SEASONAL_ACHIEVEMENTS_CATEGORIES[season as keyof typeof SEASONAL_ACHIEVEMENTS_CATEGORIES]
+                .forEach((id) => ignoredAchievementIds.add(id));
         }
     })
 
-    const achievsInCategories: number[] = [];
+    const achievsInCategories = new Set<number>();
     const noCategory: number[] = [];
     categories.forEach((cat) => {
-        achievsInCategories.push(...cat.achievements.map((x) => Number((x as { id?: number }).id || 0)).filter((x) => x > 0));
+        cat.achievements
+            .map((x) => Number((x as { id?: number }).id || 0))
+            .filter((x) => x > 0)
+            .forEach((id) => achievsInCategories.add(id));
     });
     allIds.forEach((id: number) => {
-        if (!ignored_achievements.includes(id) && !achievsInCategories.includes(id)) {
+        if (!ignoredAchievementIds.has(id) && !achievsInCategories.has(id)) {
             noCategory.push(id)
         }
     });
@@ -1023,7 +1031,7 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         //     cat.achievements = unique(tmp);
         // }
         _log += `${cat.id}, // ${cat.name}\n`;
-        cat.ignore = (ignored_achievements.includes(cat.id)) ? true : false;
+        cat.ignore = ignoredAchievementIds.has(cat.id);
         const categoryAchievements = cat.achievements
             .map((entry) => ({ id: Number((entry as { id?: number }).id || 0) }))
             .filter((entry): entry is { id: number } => entry.id > 0);
@@ -1033,7 +1041,7 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
                 console.warn('achiev Id not found', x.id);
                 achiev = x;
             }
-            const mine = accountAchievements.find((acv) => acv.id == x.id) || {
+            const mine = accountAchievementsById.get(x.id) || {
                 id: x.id,
                 current: 0,
                 repeated: 0,
