@@ -41,6 +41,7 @@
     "@typescript-eslint/parser": "^8.58.1",
     "@vitest/browser-playwright": "^4.1.6",
     "@zerodevx/svelte-toast": "^0.9.6",
+    "ajv": "^8.20.0",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.17.1",

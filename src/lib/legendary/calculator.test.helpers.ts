@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { CalculationFor } from './calculation-scenario';
 import { fixtureExistsByItemName } from './test-helpers';
 import type { CalculatorContext } from './calculator';
@@ -36,11 +36,7 @@ export function defineRepresentativeCoverage(spec: LegendaryRepresentativeSpec):
         }
 
         describe('baseline scenario (inventory = {}, priceMode = buy)', () => {
-            let baseScenario: ReturnType<typeof CalculationFor>;
-
-            beforeAll(() => {
-                baseScenario = CalculationFor(spec.name);
-            });
+            const baseScenario = CalculationFor(spec.name);
 
             it('recipe is available and rows are consistent', () => {
                 baseScenario.recipeIsAvailable().rowsAreConsistent();
@@ -48,13 +44,8 @@ export function defineRepresentativeCoverage(spec: LegendaryRepresentativeSpec):
         });
 
         describe('special and edge cases: priceMode', () => {
-            let buyScenario: ReturnType<typeof CalculationFor>;
-            let sellScenario: ReturnType<typeof CalculationFor>;
-
-            beforeAll(() => {
-                buyScenario = CalculationFor(spec.name, { priceMode: 'buy' });
-                sellScenario = CalculationFor(spec.name, { priceMode: 'sell' });
-            });
+            const buyScenario = CalculationFor(spec.name, { priceMode: 'buy' });
+            const sellScenario = CalculationFor(spec.name, { priceMode: 'sell' });
 
             it('row invariants hold in both price modes', () => {
                 buyScenario.rowsAreConsistent();
@@ -64,12 +55,8 @@ export function defineRepresentativeCoverage(spec: LegendaryRepresentativeSpec):
 
         if (spec.category === 'weapon') {
             describe('special and edge cases: inventory', () => {
-                let inventoryScenario: ReturnType<typeof CalculationFor>;
-
-                beforeAll(() => {
-                    // Use numeric key to avoid fixture-specific name lookup requirements.
-                    inventoryScenario = CalculationFor(spec.name, { inventory: { 19721: 250 } });
-                });
+                // Use numeric key to avoid fixture-specific name lookup requirements.
+                const inventoryScenario = CalculationFor(spec.name, { inventory: { 19721: 250 } });
 
                 it('row invariants hold when inventory is injected', () => {
                     inventoryScenario.rowsAreConsistent();
