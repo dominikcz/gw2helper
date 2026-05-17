@@ -29,8 +29,11 @@ type AchievementDetails = {
 	category: CategoryLike | null;
 	isTodo: boolean;
 	prerequisites: PrerequisiteInfo[];
+	rewardItemIds: number[];
+	rewardTitleIds: number[];
 	rewardItems: RewardItemInfo[];
 	rewardTitles: RewardTitleInfo[];
+	apiLang?: string;
 };
 
 export const load: PageLoad = async ({ parent, params, fetch }) => {
@@ -53,8 +56,11 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 			category: null,
 			isTodo: false,
 			prerequisites: [],
+			rewardItemIds: [],
+			rewardTitleIds: [],
 			rewardItems: [],
 			rewardTitles: [],
+			apiLang,
 		};
 		return empty;
 	}
@@ -113,41 +119,16 @@ export const load: PageLoad = async ({ parent, params, fetch }) => {
 		.map((r) => Number(r.id))
 		.filter((id) => Number.isFinite(id) && id > 0))];
 
-	const rewardItems: RewardItemInfo[] = rewardItemIds.length
-		? ((await apiService.items(rewardItemIds.join(','))) || []).map((x) => ({
-				id: Number(x.id),
-				name: x.name,
-				icon: x.icon,
-				rarity: x.rarity,
-			}))
-		: [];
-
-	let rewardTitles: RewardTitleInfo[] = [];
-	if (rewardTitleIds.length) {
-		const titleBatches: number[][] = [];
-		for (let i = 0; i < rewardTitleIds.length; i += 200) {
-			titleBatches.push(rewardTitleIds.slice(i, i + 200));
-		}
-
-		const titleResults = await Promise.all(
-			titleBatches.map(async (batch) => {
-				const query = `ids=${batch.join(',')}${apiLang ? `&lang=${apiLang}` : ''}`;
-				const response = await fetch(`https://api.guildwars2.com/v2/titles?${query}`);
-				if (!response.ok) return [] as RewardTitleInfo[];
-				const json = (await response.json()) as Array<{ id: number; name?: string }>;
-				return json.map((x) => ({ id: Number(x.id), name: x.name }));
-			})
-		);
-		rewardTitles = titleResults.flat();
-	}
-
 	const result: AchievementDetails = {
 		achievement: foundAchievement,
 		category: foundCategory,
 		isTodo: todo.includes(achievId),
 		prerequisites,
-		rewardItems,
-		rewardTitles,
+		rewardItemIds,
+		rewardTitleIds,
+		rewardItems: [],
+		rewardTitles: [],
+		apiLang,
 	};
 
 	return result;

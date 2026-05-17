@@ -249,6 +249,14 @@ const requestCacheName = (): string => {
     return `${REQUESTS_CACHE}.${_apiKey}`;
 }
 
+const currentApiLang = (): string => {
+    return fetchOptions.apiLang || 'en';
+}
+
+const entityCacheName = (base: string): string => {
+    return `${base}.${currentApiLang()}`;
+}
+
 // const notifyOnError = (req, error, options) => {
 //     if (fetchOptions.onError) {
 //         fetchOptions.onError(req, error, options);
@@ -708,7 +716,7 @@ const minis = async (ids: number[]): Promise<void> => {
                 minisCache.set(x.id, x);
             }
         });
-        await ls.set(MINIS_CACHE, [...minisCache.entries()]);
+        await ls.set(entityCacheName(MINIS_CACHE), [...minisCache.entries()]);
     }
 
 }
@@ -730,7 +738,7 @@ const skins = async (ids: number[]): Promise<void> => {
                 skinsCache.set(x.id, x);
             }
         });
-        await ls.set(SKINS_CACHE, [...skinsCache.entries()]);
+        await ls.set(entityCacheName(SKINS_CACHE), [...skinsCache.entries()]);
     }
 
 }
@@ -807,19 +815,23 @@ const wizardsVaultSpecial = async (): Promise<WizardsVaultCategoryData> => {
 }
 
 const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
-    if (newApiKey === _apiKey && _tokenInfo) return;
-    _items = await ls.getObject(ITEMS_CACHE, []);
-    _achievements = await ls.getObject(ACHIEVEMENTS_CACHE, []);
-    _minis = await ls.getObject(MINIS_CACHE, []);
-    _skins = await ls.getObject(SKINS_CACHE, []);
+    const nextFetchOptions = Object.assign({}, fetchOptions, options);
+    const languageChanged = nextFetchOptions.apiLang !== fetchOptions.apiLang;
+    if (newApiKey === _apiKey && _tokenInfo && !languageChanged) return;
+
+    _apiKey = newApiKey;
+    fetchOptions = nextFetchOptions;
+
+    _items = await ls.getObject(entityCacheName(ITEMS_CACHE), []);
+    _achievements = await ls.getObject(entityCacheName(ACHIEVEMENTS_CACHE), []);
+    _minis = await ls.getObject(entityCacheName(MINIS_CACHE), []);
+    _skins = await ls.getObject(entityCacheName(SKINS_CACHE), []);
     itemsCache = _items ? new Map(_items) : new Map();
     minisCache = _minis ? new Map(_minis) : new Map();
     skinsCache = _skins ? new Map(_skins) : new Map();
     achievementsCache = _achievements ? new Map(_achievements) : new Map();
 
     Logger.log("apiService.init", newApiKey);
-    _apiKey = newApiKey;
-    fetchOptions = Object.assign({}, fetchOptions, options);
     const _req = await ls.getObject(requestCacheName(), []);
 
     requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
@@ -898,7 +910,7 @@ const expandItems = async <T extends { id: number }>(ids: Array<number>, collect
                     itemsCache.set(x.id, x);
                 }
             });
-            await ls.set(ITEMS_CACHE, [...itemsCache.entries()]);
+            await ls.set(entityCacheName(ITEMS_CACHE), [...itemsCache.entries()]);
         } finally {
             // Remove from inflight
             for (const id of allToFetch) {
@@ -985,7 +997,7 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
             }
         });
         // store updated achievs in localStorage for future
-        await ls.set(ACHIEVEMENTS_CACHE, [...achievementsCache.entries()]);
+        await ls.set(entityCacheName(ACHIEVEMENTS_CACHE), [...achievementsCache.entries()]);
         mergeById(resp, accountAchievements);
 
         // Do not block initial achievements page render on reward entity hydration.
@@ -1213,6 +1225,11 @@ const additionalMapping = <T extends { description?: string; details?: { type?: 
 const clearCache = async () => {
     Logger.log('clearing cache...');
     await ls.delete(requestCacheName());
+    await ls.delete(entityCacheName(ITEMS_CACHE));
+    await ls.delete(entityCacheName(MINIS_CACHE));
+    await ls.delete(entityCacheName(SKINS_CACHE));
+    await ls.delete(entityCacheName(ACHIEVEMENTS_CACHE));
+    // Cleanup legacy non-language keys.
     await ls.delete(ITEMS_CACHE);
     await ls.delete(MINIS_CACHE);
     await ls.delete(SKINS_CACHE);

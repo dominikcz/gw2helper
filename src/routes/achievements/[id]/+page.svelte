@@ -10,6 +10,7 @@
 	import { t as _ } from '$lib/services/i18n';
 	import helperUtils from '$lib/utils/helper-utils';
 	import utils from '$lib/utils';
+	import { onMount } from 'svelte';
 	import type { AchievementLike, CategoryLike } from '$lib/components/achievements/achievements';
 	import type { AchievementBit, MasteryReward, RewardsObj } from '$lib/types/achievements';
 	import type { ApiAchievementRewardDto } from '$lib/types/gw2-api';
@@ -21,16 +22,64 @@
 			category: CategoryLike | null;
 			isTodo: boolean;
 			prerequisites: Array<{ id: number; name?: string; done?: boolean }>;
+			rewardItemIds: number[];
+			rewardTitleIds: number[];
 			rewardItems: Array<{ id: number; name?: string; icon?: string; rarity?: string }>;
 			rewardTitles: Array<{ id: number; name?: string }>;
+			apiLang?: string;
 		};
 	}
 
 	let { data }: Props = $props();
 	let todoList = $state<number[]>([]);
+	let rewardItems = $state<Array<{ id: number; name?: string; icon?: string; rarity?: string }>>([]);
+	let rewardTitles = $state<Array<{ id: number; name?: string }>>([]);
+	let enrichmentLoadSeq = 0;
 
 	$effect(() => {
 		todoList = data.isTodo && data.achievement?.id ? [Number(data.achievement.id)] : [];
+	});
+
+	onMount(() => {
+		void (async () => {
+			const currentLoad = ++enrichmentLoadSeq;
+			rewardItems = data.rewardItems || [];
+			rewardTitles = data.rewardTitles || [];
+
+			const rewardItemIds = data.rewardItemIds || [];
+			if (rewardItemIds.length) {
+				const items = ((await apiService.items(rewardItemIds.join(','))) || []).map((x) => ({
+					id: Number(x.id),
+					name: x.name,
+					icon: x.icon,
+					rarity: x.rarity,
+				}));
+				if (currentLoad === enrichmentLoadSeq) {
+					rewardItems = items;
+				}
+			}
+
+			const rewardTitleIds = data.rewardTitleIds || [];
+			if (rewardTitleIds.length) {
+				const titleBatches: number[][] = [];
+				for (let i = 0; i < rewardTitleIds.length; i += 200) {
+					titleBatches.push(rewardTitleIds.slice(i, i + 200));
+				}
+
+				const titleResults = await Promise.all(
+					titleBatches.map(async (batch) => {
+						const query = `ids=${batch.join(',')}${data.apiLang ? `&lang=${data.apiLang}` : ''}`;
+						const response = await fetch(`https://api.guildwars2.com/v2/titles?${query}`);
+						if (!response.ok) return [] as Array<{ id: number; name?: string }>;
+						const json = (await response.json()) as Array<{ id: number; name?: string }>;
+						return json.map((x) => ({ id: Number(x.id), name: x.name }));
+					})
+				);
+				if (currentLoad === enrichmentLoadSeq) {
+					rewardTitles = titleResults.flat();
+				}
+			}
+		})();
 	});
 
 	function onToggleTodo(event: { id: number; todo: boolean }) {
@@ -105,8 +154,8 @@
 	{@const rewards = (achiev.rewardsObj || {}) as RewardsObj}
 	{@const rewardsRaw = (achiev.rewards || []) as ApiAchievementRewardDto[]}
 	{@const prerequisites = data.prerequisites || []}
-	{@const rewardItemsMap = new Map((data.rewardItems || []).map((x) => [Number(x.id), x]))}
-	{@const rewardTitlesMap = new Map((data.rewardTitles || []).map((x) => [Number(x.id), x]))}
+	{@const rewardItemsMap = new Map((rewardItems || []).map((x) => [Number(x.id), x]))}
+	{@const rewardTitlesMap = new Map((rewardTitles || []).map((x) => [Number(x.id), x]))}
 	{@const titleRewards = rewardsRaw.filter((r) => r.type === 'Title' && r.id != null)}
 	{@const itemRewards = rewardsRaw.filter((r) => r.type === 'Item' && r.id != null)}
 	{@const coinRewards = rewardsRaw.filter((r) => r.type === 'Coins')}
