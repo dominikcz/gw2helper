@@ -108,10 +108,11 @@ export const sumRewards = (rewardsToGet: Map<string, number>, rewards: RewardLik
 
 export function expandToDoList(all: AchievementsData, list: number[]): AchievementLike[] {
     const _data: AchievementLike[] = [];
+    const todoIds = new Set(list);
 
     all.categories.forEach((cat) => {
         cat.achievements.forEach((x) => {
-            if (x.id !== undefined && list.includes(x.id)) {
+            if (x.id !== undefined && todoIds.has(x.id)) {
                 _data.push({ ...x, todo: true });
             }
         });

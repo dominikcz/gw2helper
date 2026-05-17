@@ -3,6 +3,7 @@ import { render } from '@testing-library/svelte';
 import Item from '$lib/components/items/item.svelte';
 import Legendary from '$lib/components/items/legendary.svelte';
 import ItemTooltip from '$lib/components/items/itemTooltip.svelte';
+import { TEST_ICON } from '$lib/test-assets';
 
 describe('items', () => {
 	describe('item', () => {
@@ -25,22 +26,22 @@ describe('items', () => {
 		});
 
 		it('renders count when greater than 1', () => {
-			const { container } = render(Item, { props: { item: { id: 1, name: 'Coin', icon: '/coin.png', count: 5 } } });
+			const { container } = render(Item, { props: { item: { id: 1, name: 'Coin', icon: TEST_ICON, count: 5 } } });
 			expect(container.querySelector('figcaption')).toHaveTextContent('5');
 		});
 
 		it('does not render count when 1 or less', () => {
-			const { container } = render(Item, { props: { item: { id: 1, name: 'Coin', icon: '/coin.png', count: 1 } } });
+			const { container } = render(Item, { props: { item: { id: 1, name: 'Coin', icon: TEST_ICON, count: 1 } } });
 			expect(container.querySelector('figcaption')).not.toBeInTheDocument();
 		});
 
 		it('renders locked class when locked', () => {
-			const { container } = render(Item, { props: { item: { id: 1, name: 'Test', icon: '/test.png', count: 1, locked: true } } });
+			const { container } = render(Item, { props: { item: { id: 1, name: 'Test', icon: TEST_ICON, count: 1, locked: true } } });
 			expect(container.querySelector('.locked')).toBeInTheDocument();
 		});
 
 		it('renders rarity class in lowercase', () => {
-			const { container } = render(Item, { props: { item: { id: 1, name: 'Test', icon: '/t.png', rarity: 'Exotic', count: 1 } } });
+			const { container } = render(Item, { props: { item: { id: 1, name: 'Test', icon: TEST_ICON, rarity: 'Exotic', count: 1 } } });
 			expect(container.querySelector('.rarity-exotic')).toBeInTheDocument();
 		});
 	});
@@ -48,44 +49,44 @@ describe('items', () => {
 	describe('legendary', () => {
 		it('renders wiki link and image', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 1, name: 'Sunrise', icon: '/sunrise.png', count: 1, max_count: 1 } },
+				props: { item: { id: 1, name: 'Sunrise', icon: TEST_ICON, count: 1, max_count: 1 } },
 			});
 			expect(container.querySelector('a')).toHaveAttribute('href', 'https://wiki.guildwars2.com/wiki/Sunrise');
 			expect(container.querySelector('img')).toHaveAttribute('alt', 'Sunrise');
-			expect(container.querySelector('img')).toHaveAttribute('src', '/sunrise.png');
+			expect(container.querySelector('img')).toHaveAttribute('src', TEST_ICON);
 		});
 
 		it('renders count/max when max_count > 1 and item is owned', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 2, name: 'Bolt', icon: '/bolt.png', count: 2, max_count: 3 } },
+				props: { item: { id: 2, name: 'Bolt', icon: TEST_ICON, count: 2, max_count: 3 } },
 			});
 			expect(container.querySelector('figcaption')).toHaveTextContent('2/3');
 		});
 
 		it('does not render count when max_count is 1', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 3, name: 'Incinerator', icon: '/inc.png', count: 1, max_count: 1 } },
+				props: { item: { id: 3, name: 'Incinerator', icon: TEST_ICON, count: 1, max_count: 1 } },
 			});
 			expect(container.querySelector('figcaption')).not.toBeInTheDocument();
 		});
 
 		it('renders locked class when count is 0', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 4, name: 'Twilight', icon: '/twi.png', count: 0, max_count: 1 } },
+				props: { item: { id: 4, name: 'Twilight', icon: TEST_ICON, count: 0, max_count: 1 } },
 			});
 			expect(container.querySelector('.locked')).toBeInTheDocument();
 		});
 
 		it('does not render locked class when count > 0', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 5, name: 'Twilight', icon: '/twi.png', count: 1, max_count: 1 } },
+				props: { item: { id: 5, name: 'Twilight', icon: TEST_ICON, count: 1, max_count: 1 } },
 			});
 			expect(container.querySelector('.locked')).not.toBeInTheDocument();
 		});
 
 		it('sets autotooltip renderer attribute', () => {
 			const { container } = render(Legendary, {
-				props: { item: { id: 6, name: 'Test', icon: '/t.png', count: 1, max_count: 1 } },
+				props: { item: { id: 6, name: 'Test', icon: TEST_ICON, count: 1, max_count: 1 } },
 			});
 			const el = container.querySelector('[data-autotooltip-renderer="img.item"]')!;
 			expect(el).toBeInTheDocument();
@@ -96,38 +97,38 @@ describe('items', () => {
 	describe('itemTooltip', () => {
 		it('renders item name and image', () => {
 			const { container, getByText } = render(ItemTooltip, {
-				props: { item: { id: 10, name: 'Eternity', icon: '/eternity.png', rarity: 'Legendary' } },
+				props: { item: { id: 10, name: 'Eternity', icon: TEST_ICON, rarity: 'Legendary' } },
 			});
 			expect(container.querySelector('img')).toHaveAttribute('alt', 'Eternity');
-			expect(container.querySelector('img')).toHaveAttribute('src', '/eternity.png');
+			expect(container.querySelector('img')).toHaveAttribute('src', TEST_ICON);
 			expect(getByText('Eternity')).toBeInTheDocument();
 			expect(container.querySelector('.rarity-legendary')).toBeInTheDocument();
 		});
 
 		it('renders description html', () => {
 			const { container } = render(ItemTooltip, {
-				props: { item: { id: 11, name: 'Test', icon: '/t.png', description: '<em>A powerful weapon</em>' } },
+				props: { item: { id: 11, name: 'Test', icon: TEST_ICON, description: '<em>A powerful weapon</em>' } },
 			});
 			expect(container.querySelector('em')).toHaveTextContent('A powerful weapon');
 		});
 
 		it('renders required level', () => {
 			const { container } = render(ItemTooltip, {
-				props: { item: { id: 12, name: 'Sword', icon: '/s.png', level: 80 } },
+				props: { item: { id: 12, name: 'Sword', icon: TEST_ICON, level: 80 } },
 			});
 			expect(container).toHaveTextContent('Required level: 80');
 		});
 
 		it('renders flags', () => {
 			const { container } = render(ItemTooltip, {
-				props: { item: { id: 13, name: 'Sword', icon: '/s.png', flags: ['AccountBound', 'SoulbindOnAcquire'] } },
+				props: { item: { id: 13, name: 'Sword', icon: TEST_ICON, flags: ['AccountBound', 'SoulbindOnAcquire'] } },
 			});
 			expect(container).toHaveTextContent('AccountBound, SoulbindOnAcquire');
 		});
 
 		it('renders item count when greater than 1', () => {
 			const { container } = render(ItemTooltip, {
-				props: { item: { id: 14, name: 'Material', icon: '/m.png', count: 250 } },
+				props: { item: { id: 14, name: 'Material', icon: TEST_ICON, count: 250 } },
 			});
 			expect(container).toHaveTextContent('250');
 		});

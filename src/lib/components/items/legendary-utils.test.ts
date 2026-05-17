@@ -9,9 +9,10 @@ import {
 	completionWeapons,
 } from '$lib/components/items/legendary-utils';
 import type { LegendaryItemSummary } from '$lib/types/gw2-api';
+import { TEST_ICON } from '$lib/test-assets';
 
 function makeItem(count: number): LegendaryItemSummary {
-	return { id: 1, name: 'Test', icon: '/t.png', max_count: 1, count };
+	return { id: 1, name: 'Test', icon: TEST_ICON, max_count: 1, count };
 }
 
 describe('legendary-utils', () => {

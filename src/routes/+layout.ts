@@ -7,12 +7,13 @@ import type { LayoutLoad } from './$types';
 
 import utils from "$lib/utils";
 import apiService from "$lib/apiService";
+import Logger from '$lib/logger';
 
 import { loadTranslations, t as _ } from '$lib/services/i18n';
 import ReminderSettings from "$lib/services/reminderSettings.svelte";
 
 // @ts-ignore vite define
-console.log(__NAME__, __VERSION__);
+Logger.always(__NAME__, __VERSION__);
 
 export const load: LayoutLoad = async ({ fetch, url }) => {
 	const { pathname } = url;
@@ -21,9 +22,10 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 
 	await loadTranslations(initLocale, pathname);
 	let no_token = _.get('layout.no_token');
-	console.log('initialized');
+    Logger.log('translations initialized', { initLocale, pathname });
 
 	const key = await utils.readApiKey();
+	Logger.always('api key', { key });
 	// const apiService = await import("$lib/apiService.ts");
 	let apiLang = await utils.readApiLang();
 	/** @type {string[]} */
@@ -54,7 +56,6 @@ export const load: LayoutLoad = async ({ fetch, url }) => {
 		tokenInfo: apiService.tokenInfo() as TokenInfo,
 	};
 
-	console.log('key', key);
 	if (key) {
 		await apiService.init(key, { apiLang, fetchFunction: fetch });
 		returnObj.tokenInfo = apiService.tokenInfo();

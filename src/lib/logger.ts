@@ -8,6 +8,7 @@ type LoggerApi = {
 	log: (message: string, params?: unknown) => void;
 	error: (message: string, params?: unknown) => void;
 	warn: (message: string, params?: unknown) => void;
+	always: (message: string, params?: unknown) => void;
 };
 
 const logger: LoggerApi = {
@@ -16,6 +17,9 @@ const logger: LoggerApi = {
 		if (debugMode) {
 			console.log(message, params);
 		}
+	},
+	always: (message, params) => {
+		console.log(message, params);
 	},
 	error: (message, params) => {
 		console.error(message, params);

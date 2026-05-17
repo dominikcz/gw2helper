@@ -2,6 +2,7 @@ import i18n from '@sveltekit-i18n/base';
 import parser from '@sveltekit-i18n/parser-icu';
 
 import languages from '$lib/locales/languages.json';
+import Logger from '$lib/logger';
 import utils from '$lib/utils';
 
 const namespaces = ['common', 'home', 'layout', 'account', 'achievements', 'characters', 'daily', 'events', 'guilds', 'items', 'materials', 'trading-post', 'legendary'];
@@ -35,7 +36,7 @@ const isTestEnv = typeof process !== 'undefined' && Boolean(process.env?.VITEST)
 locale.subscribe((value) => {
 	if (value != undefined) {
 		if (!isTestEnv) {
-			console.log('locales subscribe', value);
+			Logger.log('locale changed', { locale: value });
 		}
 		utils.saveLang(value);
 		if (typeof document !== 'undefined') {
@@ -46,6 +47,6 @@ locale.subscribe((value) => {
 
 loading.subscribe(($loading) => {
 	if ($loading && !isTestEnv) {
-		console.log('Loading translations...');
+		Logger.log('loading translations');
 	}
 });

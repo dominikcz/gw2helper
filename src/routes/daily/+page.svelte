@@ -14,7 +14,7 @@
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';
 	import { Period, getTimerTarget, currentDay, currentWeek } from '$lib/components/daily/dailyUtils';
 	import type { PageData } from './$types';
-	import type { AchievementsData } from '$lib/components/achievements/achievements';
+	import type { AchievementsData, CategoryLike } from '$lib/components/achievements/achievements';
 	import type { AccountWithLocalDates, WalletCurrency, WizardsVaultCategoryData } from '$lib/types/gw2-api';
 
 	interface Props {
@@ -88,6 +88,8 @@
 		{@const dailies = extractDaily(result)}
 		{@const weeklies = extractWeekly(result)}
 		{@const dailiesWeeklies = extractDailyAndWeekly(result)}
+		{@const sortedDailyCategories = sort([...(dailies.categories as CategoryLike[])], sortBy)}
+		{@const sortedWeeklyCategories = sort([...(weeklies.categories as CategoryLike[])], sortBy)}
 		{@const todos = expandToDoList(dailiesWeeklies, todoList)}
 
 		<AchievList items={todos} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)}>
@@ -96,13 +98,13 @@
 
 		<h3>{$_('daily.daily')}</h3>
 		<div class="achiev-container" use:grungeBorder>
-					{#each sort(dailies.categories as import('$lib/components/achievements/achievements').CategoryLike[], sortBy) as category (category.id)}
+			{#each sortedDailyCategories as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>
 		<h3>{$_('daily.weekly')}</h3>
 		<div class="achiev-container" use:grungeBorder>
-					{#each sort(weeklies.categories as import('$lib/components/achievements/achievements').CategoryLike[], sortBy) as category (category.id)}
+			{#each sortedWeeklyCategories as category (category.id)}
 				<AchievGroup {category} {showApiLinks} {sortBy} {todoList} onToggleTodo={(event: { id: number; todo: boolean }) => utils.hndToggleTodo(event, todoList)} />
 			{/each}
 		</div>

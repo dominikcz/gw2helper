@@ -3,12 +3,13 @@ import { render } from '@testing-library/svelte';
 import WidgetImg from '$lib/components/widgets/widgetImg.svelte';
 import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';
 import WidgetsGroup from '$lib/components/widgets/widgetsGroup.svelte';
+import { TEST_ICON } from '$lib/test-assets';
 
 describe('widgets', () => {
 	describe('widgetImg', () => {
 		it('renders linked image with active class', () => {
 			const { container } = render(WidgetImg, {
-				props: { title: 'Wiki', url: '/assets/logo.svg', link: 'https://example.com', linkTitle: 'open', active: true, class: 'custom' },
+				props: { title: 'Wiki', url: TEST_ICON, link: 'https://example.com', linkTitle: 'open', active: true, class: 'custom' },
 			});
 			expect(container.querySelector('.widget.image.custom')).toBeInTheDocument();
 			const link = container.querySelector('a')!;
@@ -16,13 +17,13 @@ describe('widgets', () => {
 			expect(link).toHaveAttribute('title', 'open');
 			expect(link).toHaveAttribute('target', '_blank');
 			const img = container.querySelector('img')!;
-			expect(img).toHaveAttribute('src', '/assets/logo.svg');
+			expect(img).toHaveAttribute('src', TEST_ICON);
 			expect(img).toHaveClass('active');
 		});
 
 		it('renders non-linked image when link is not provided', () => {
 			const { container } = render(WidgetImg, {
-				props: { title: 'Wiki', url: '/assets/logo.svg', active: false },
+				props: { title: 'Wiki', url: TEST_ICON, active: false },
 			});
 			expect(container.querySelector('a')).not.toBeInTheDocument();
 			expect(container).toHaveTextContent('Wiki');

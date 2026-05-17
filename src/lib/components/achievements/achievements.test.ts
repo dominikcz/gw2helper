@@ -3,6 +3,7 @@ import { cleanup, render } from '@testing-library/svelte';
 import AchievementProgress from '$lib/components/achievements/achievementProgress.svelte';
 import AchievementRewards from '$lib/components/achievements/achievementRewards.svelte';
 import Achievement from '$lib/components/achievements/achievement.svelte';
+import { TEST_ICON } from '$lib/test-assets';
 
 afterEach(() => {
 	cleanup();
@@ -86,19 +87,19 @@ describe('achievementProgress', () => {
 	});
 
 	it('renders Minipet bits via minisCache', () => {
-		const minisCache = (id: number) => (id === 5 ? { name: 'Mini Quaggan', icon: 'quaggan.png' } : {});
+		const minisCache = (id: number) => (id === 5 ? { name: 'Mini Quaggan', icon: TEST_ICON } : {});
 		const { container } = render(AchievementProgress, {
 			props: { type: 'ItemSet', bits: [{ id: 5, type: 'Minipet' }], bitsDone: [], minisCache },
 		});
-		expect(container.querySelector('img[src="quaggan.png"]')).toBeInTheDocument();
+		expect(container.querySelector(`img[src="${TEST_ICON}"]`)).toBeInTheDocument();
 	});
 
 	it('renders Skin bits via skinsCache', () => {
-		const skinsCache = (id: number) => (id === 9 ? { name: 'Dragon Skin', icon: 'skin.png' } : {});
+		const skinsCache = (id: number) => (id === 9 ? { name: 'Dragon Skin', icon: TEST_ICON } : {});
 		const { container } = render(AchievementProgress, {
 			props: { type: 'ItemSet', bits: [{ id: 9, type: 'Skin' }], bitsDone: [], skinsCache },
 		});
-		expect(container.querySelector('img[src="skin.png"]')).toBeInTheDocument();
+		expect(container.querySelector(`img[src="${TEST_ICON}"]`)).toBeInTheDocument();
 	});
 });
 
@@ -244,8 +245,8 @@ describe('achievement', () => {
 	});
 
 	it('renders icon image when icon is provided', () => {
-		const { container } = render(Achievement, { props: { ...baseProps, icon: '/icons/foo.png' } });
-		expect(container.querySelector('img[src="/icons/foo.png"]')).toBeInTheDocument();
+		const { container } = render(Achievement, { props: { ...baseProps, icon: TEST_ICON } });
+		expect(container.querySelector(`img[src="${TEST_ICON}"]`)).toBeInTheDocument();
 	});
 
 	it('renders detail link pointing to /achievements/42/', () => {

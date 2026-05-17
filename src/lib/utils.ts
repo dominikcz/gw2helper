@@ -1,5 +1,6 @@
 import idb from "$lib/wxjs_idb";
 import ls from "$lib/wxjs_localstorage";
+import Logger from "$lib/logger";
 
 import {
     KEY_NAME,
@@ -209,7 +210,7 @@ export function runsDesktop(): boolean {
     }
     const browser = window.navigator.userAgent || '';
     const desktop = ['Windows', 'Linux', 'Macintosh'].some((v) => browser.includes(v));
-    console.log('desktop', desktop);
+    Logger.log('platform detection', { desktop });
     return desktop;
 }
 

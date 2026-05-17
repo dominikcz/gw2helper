@@ -268,7 +268,7 @@ const tryCache = (req: string): CacheEntry | undefined => {
         let info = requestCache.get(req);
         let secs = secondsBetween(info!.time, new Date());
         if (secs < CACHE_TIMEOUT) {
-            console.log('tryCache', req, secs, 'reusing cache')
+            Logger.always('tryCache hit, reusing cache', { req, ageSeconds: secs });
             return info;
         }
     }
@@ -469,7 +469,6 @@ const _getTransactions = async (_transactions: TransactionData[]): Promise<Trans
     let sum = sumQuantities(transactions);
     sum = await expandItems(ids, sum);
     sum = await expandPrices(ids, sum);
-    // console.log('sum', sum, transactions)
     return sum as TransactionCurrentItem[];
 }
 
@@ -515,7 +514,6 @@ const _getGuilds = async (full: boolean = false): Promise<ApiGuildDto[]> => {
             const bgs: number[] = [];
             let clrs: number[] = [];
 
-            // console.log('emblems', _emblems);
             for (const emblem of _emblems) {
                 bgs.push(emblem.background.id);
                 fgs.push(emblem.foreground.id);
@@ -540,8 +538,6 @@ const _getGuilds = async (full: boolean = false): Promise<ApiGuildDto[]> => {
                     emblem.background.colors = emblem.background.colors.map((color) => colors.find((x) => Number(color) == x.id) ?? color);
                 }
             }
-            // console.log('emblems', {bgs, fgs, clrs});
-            // console.log('emblems data', _rawData)
         }
     return _rawData;
 }
@@ -833,18 +829,28 @@ const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
     } catch (error) {
         _tokenInfo.error = error instanceof Error ? error.message : String(error);
     }
-    // console.log('tokenInfo', _tokenInfo)
+    // Logger.log('tokenInfo', { tokenInfo: _tokenInfo });
 };
 
 const mergeById = <TBase extends { id: number }, TDetails extends { id: number }>(a1: TBase[], a2: TDetails[]) => {
-    return a1.filter((x): x is TBase => x != undefined).map((t1) => ({ ...t1, ...a2.find((t2) => t2.id === t1.id) }));
+    const byId = new Map<number, TDetails>();
+    for (const detail of a2) {
+        if (detail && !byId.has(detail.id)) {
+            byId.set(detail.id, detail);
+        }
+    }
+
+    return a1
+        .filter((x): x is TBase => x != undefined)
+        .map((t1) => {
+            const match = byId.get(t1.id);
+            return match ? { ...t1, ...match } : t1;
+        });
 };
 
 const addPropertiesById = <TBase extends Dictionary & { id?: number }, TDetails extends { id: number } & Dictionary>(base: TBase, details: TDetails[]) => {
-    const clone = JSON.parse(JSON.stringify(base));
     const match = details.find(x => x.id == base.id);
     if (!match) return;
-    // console.log('addPropertiesById', {clone, details})
     for (const key of Object.keys(match)) {
         if (key != 'id') {
             (base as Dictionary)[key] = match[key as keyof TDetails];
@@ -904,13 +910,13 @@ const expandItems = async <T extends { id: number }>(ids: Array<number>, collect
     // All needed items should now be in cache — merge with collection
     const missingFromCache = ids.filter(x => !itemsCache.has(x));
     if (missingFromCache.length) {
-        console.warn('expandItems: items NOT in cache after fetch:', missingFromCache);
+        Logger.warn('expandItems: items NOT in cache after fetch:', { missingFromCache });
     }
     const knownItems = ids.map((x) => itemsCache.get(x)).filter(x => x != null);
     const data = mergeById(collection, knownItems) as Array<T & ItemLike>;
     const missingAfterMerge = data.filter(x => x.id && !(x as { name?: string }).name && !INVALID_ITEM_IDS.includes(x.id));
     if (missingAfterMerge.length) {
-        console.warn('expandItems: items without name after merge:', missingAfterMerge.map(x => x.id), { collectionSize: collection.length, knownItemsSize: knownItems.length, idsSize: ids.length });
+        Logger.warn('expandItems: items without name after merge:', { missingAfterMerge: missingAfterMerge.map(x => x.id), collectionSize: collection.length, knownItemsSize: knownItems.length, idsSize: ids.length });
     }
     additionalMapping(data);
 
@@ -1004,7 +1010,7 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
     // we don't want categories of achievements that are not obtainable anymore
     const ignoredAchievementIds = new Set(INACTIVE_ACHIEVEMENTS_CATEGORIES);
     // so we also ignore seasonal ones (appart from current season ofc)
-    // console.log('current season:', _settings.currentSeason)
+    Logger.log('current season:', { season: _settings.currentSeason });
     Object.keys(SEASONAL_ACHIEVEMENTS_CATEGORIES).forEach((season: string) => {
         if (season != _settings.currentSeason) {
             SEASONAL_ACHIEVEMENTS_CATEGORIES[season as keyof typeof SEASONAL_ACHIEVEMENTS_CATEGORIES]
@@ -1025,7 +1031,6 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
             noCategory.push(id)
         }
     });
-    // console.log('noCategory', noCategory);
 
     categories.push({
         id: 0,
@@ -1049,7 +1054,7 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         cat.achievements = categoryAchievements.map((x) => {
             let achiev = achievementsCache.get(x.id);
             if (!achiev) {
-                console.warn('achiev Id not found', x.id);
+                Logger.warn('achiev Id not found', x.id);
                 achiev = x;
             }
             const mine = accountAchievementsById.get(x.id) || {
@@ -1089,10 +1094,8 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         });
         // missing 
         if (cat.id == 0) {
-            // console.log('missing...')
             // remove daily and weekly from missing achievements
             cat.achievements = cat.achievements.filter((x) => !((x.flags || []).includes('Daily') || (x.flags || []).includes('Weekly')));
-            // console.log('missing', cat.achievements)
         }
         cat.points_to_get = sum(cat.achievements as Array<Record<string, unknown>>, 'points_to_get' as never);
         cat.points_done = sum(cat.achievements as Array<Record<string, unknown>>, 'points_done' as never);
@@ -1107,11 +1110,9 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
         // cat.mastery_to_get.Tyria = cat.achievements.filter(x => !x.done && x.rewardsObj.item && x.rewardsObj.item.find(y => y.region == 'Tyria')).length;
     })
 
-    // console.log('achiev ids:', _log);
 
     // get all masteries for dev purposes
     // const tmp = categories.map(c => c.rewards.mastery).filter(x => x != undefined).flat(true).map((x => x.region))
-    // console.log('masteries', [... new Set(tmp)])
 
     const rewards_to_get = new Map();
 
