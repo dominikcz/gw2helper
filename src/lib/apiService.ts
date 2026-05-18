@@ -5,11 +5,12 @@ import { ACHIEVEMENTS_CACHE, ITEMS_CACHE, KEY_HIST, MINIS_CACHE, REQUESTS_CACHE,
 import { sum, getQueryStringFlag } from "./utils";
 import wxjs_types from "./wxjs_types";
 import { INACTIVE_ACHIEVEMENTS_CATEGORIES, SEASONAL_ACHIEVEMENTS_CATEGORIES, sumRewards } from "./components/achievements/achievements";
-import wxdates from "./wxjs_dates";
 import { getScopes, createScopeError } from "$lib/services/api/layers/authorization";
 import { additionalMapping, toHtml } from "$lib/services/api/layers/mapping";
 import { buildEntityCacheName, buildRequestCacheName } from "$lib/services/api/layers/cache-keys";
 import { getValidCacheEntry, persistCacheEntry, type CacheEntry } from "$lib/services/api/layers/cache";
+import { clearCacheStorage, loadEntityCaches, loadRequestCache } from "$lib/services/api/layers/bootstrap";
+import { readAndNormalizeSettings, type GW2HelperSettings } from "$lib/services/api/layers/settings";
 import {
     createApiRuntimeState,
     createDefaultApiClientOptions,
@@ -85,13 +86,6 @@ const ACHIEVEMENTS_NOT_IN_API: Record<string, number[]> = {
     // TODO: will have to change to list of objects and get achievements' descriptions from wiki :(
     // 361: [7661, 7080, 7697, 7615, 7700, 7637, 7729, 7632, 7723, 7674, 7235, 7228, 7007, 7123, 7142, 7635],
 }
-
-type GW2HelperSettings = {
-    currentSeason: string;
-    wizardsVault: {
-        seasonEnd: string;
-    };
-};
 
 let _settings: GW2HelperSettings = {
     currentSeason: '',
@@ -188,10 +182,6 @@ type AccountData = ApiAccountDto & {
     [key: string]: unknown;
 };
 
-let _items: [number, ItemLike][] | undefined;
-let _minis: [number, ApiMiniDto][] | undefined;
-let _skins: [number, ApiSkinDto][] | undefined;
-let _achievements: [number, AchievementData][] | undefined;
 let itemsCache: Map<number, ItemLike>;
 let minisCache: Map<number, ApiMiniDto>;
 let skinsCache: Map<number, ApiSkinDto>;
@@ -217,55 +207,6 @@ const entityCacheName = (base: string): string => buildEntityCacheName(base, run
 
 const getFromAchievementsCache = (key: string): AchievementData | undefined => {
     return achievementsCache.get(Number(key));
-}
-
-const readSettings = async () => {
-    const response = await runtime.fetchOptions.fetchFunction('/gw2helper_settings.json').catch(error => {
-        Logger.error('error loading settings', error);
-    });
-
-    if (response?.ok) {
-        const contentType = (response.headers.get('content-type') || '').toLowerCase();
-        const isJson = contentType.includes('application/json');
-
-        if (!isJson) {
-            Logger.warn('settings file missing or non-json response, using defaults', {
-                status: response.status,
-                url: response.url,
-                contentType,
-            });
-        } else {
-            try {
-                const data = await response.json();
-                if (wxjs_types.isObject(data)) {
-                    _settings = Object.assign({}, _settings, data);
-                } else {
-                    Logger.warn('invalid settings payload, using defaults', {
-                        payloadType: typeof data,
-                    });
-                }
-            } catch (error) {
-                Logger.warn('could not parse settings json, using defaults', {
-                    error: error instanceof Error ? error.message : String(error),
-                    status: response.status,
-                    url: response.url,
-                });
-            }
-        }
-    } else if (response) {
-        Logger.warn('error loading settings', { status: response.status, url: response.url });
-    }
-
-    // code below is not really correct as season end is not always 3 months after season start, but it will do as a fallback
-    let seasonEnd: Date | undefined = new Date(_settings.wizardsVault.seasonEnd);
-    if (seasonEnd < new Date()){
-        while (seasonEnd && seasonEnd < new Date()) {
-            seasonEnd = wxdates.dateAdd(seasonEnd, 'month', 3);
-        }
-        if (seasonEnd) {
-            _settings.wizardsVault.seasonEnd = seasonEnd.toISOString();
-        }
-    }
 }
 
 const apiClient = async <T = unknown>(req: string | RequestInfo, query: string, options?: Partial<ApiClientOptions>): Promise<T> => {
@@ -647,20 +588,40 @@ const init = async (newApiKey: string, options?: Partial<ApiClientOptions>) => {
     runtime.apiKey = newApiKey;
     runtime.fetchOptions = nextFetchOptions;
 
-    _items = await ls.getObject(entityCacheName(ITEMS_CACHE), []);
-    _achievements = await ls.getObject(entityCacheName(ACHIEVEMENTS_CACHE), []);
-    _minis = await ls.getObject(entityCacheName(MINIS_CACHE), []);
-    _skins = await ls.getObject(entityCacheName(SKINS_CACHE), []);
-    itemsCache = _items ? new Map(_items) : new Map();
-    minisCache = _minis ? new Map(_minis) : new Map();
-    skinsCache = _skins ? new Map(_skins) : new Map();
-    achievementsCache = _achievements ? new Map(_achievements) : new Map();
+    const entityCaches = await loadEntityCaches<ItemLike, ApiMiniDto, ApiSkinDto, AchievementData>({
+        storage: ls,
+        entityCacheName,
+        keys: {
+            items: ITEMS_CACHE,
+            minis: MINIS_CACHE,
+            skins: SKINS_CACHE,
+            achievements: ACHIEVEMENTS_CACHE,
+        },
+    });
+    itemsCache = entityCaches.itemsCache;
+    minisCache = entityCaches.minisCache;
+    skinsCache = entityCaches.skinsCache;
+    achievementsCache = entityCaches.achievementsCache;
 
     Logger.log("apiService.init", newApiKey);
-    const _req = await ls.getObject(requestCacheName(), []);
-
-    requestCache = _req.length ? new Map<string, CacheEntry>(_req) : new Map<string, CacheEntry>();
-    await readSettings();
+    requestCache = await loadRequestCache({
+        storage: ls,
+        requestCacheName,
+    });
+    _settings = await readAndNormalizeSettings({
+        fetchFunction: runtime.fetchOptions.fetchFunction,
+        currentSettings: _settings,
+        isObject: wxjs_types.isObject,
+        addMonths: (value: Date, unit: string, amount: number) => {
+            const next = new Date(value);
+            if (unit === 'month') {
+                next.setMonth(next.getMonth() + amount);
+            }
+            return next;
+        },
+        onWarn: (message, details) => Logger.warn(message, details),
+        onError: (message, details) => Logger.error(message, details),
+    });
     try {
         runtime.tokenInfo = await tokenInfo();
     } catch (error) {
@@ -949,17 +910,18 @@ const expandAchievements = async (account: AccountData, categories: AchievementC
 
 const clearCache = async () => {
     Logger.log('clearing cache...');
-    await ls.delete(requestCacheName());
-    await ls.delete(entityCacheName(ITEMS_CACHE));
-    await ls.delete(entityCacheName(MINIS_CACHE));
-    await ls.delete(entityCacheName(SKINS_CACHE));
-    await ls.delete(entityCacheName(ACHIEVEMENTS_CACHE));
-    // Cleanup legacy non-language keys.
-    await ls.delete(ITEMS_CACHE);
-    await ls.delete(MINIS_CACHE);
-    await ls.delete(SKINS_CACHE);
-    await ls.delete(ACHIEVEMENTS_CACHE);
-    await ls.delete(KEY_HIST);
+    await clearCacheStorage({
+        storage: ls,
+        requestCacheName,
+        entityCacheName,
+        keys: {
+            items: ITEMS_CACHE,
+            minis: MINIS_CACHE,
+            skins: SKINS_CACHE,
+            achievements: ACHIEVEMENTS_CACHE,
+            keyHistory: KEY_HIST,
+        },
+    });
     itemsCache.clear();
     achievementsCache.clear();
     requestCache.clear();
