@@ -22,6 +22,7 @@
 
 	import eventsUtils from '$lib/components/events/eventsUtils';
 	import Clock from '$lib/services/clock.svelte';
+	import ScreenWakeService from '$lib/services/screenWake';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import LocaleSwitch from '$lib/components/ui/localeSwitch.svelte';
 	import SharePageMenu from '$lib/components/ui/sharePageMenu.svelte';
@@ -50,6 +51,7 @@
 	// svelte-ignore state_referenced_locally
 	let apiKey = $state(data.apiKey);
 	let reminders = new Reminders();
+	let screenWake = new ScreenWakeService();
 	let lastNotify = '';
 	let confirmedNotify = '';
 	let noAudio = 0;
@@ -147,6 +149,7 @@
 	function onTimeChange() {
 		const inAdvance = data.remindersSettings.inAdvance;
 		const list = reminders.activeAlarms(time.value, inAdvance);
+		void screenWake.setEnabled(list.length > 0);
 		// const list = ['event 1', 'event 2']; // test
 		if (list.length) {
 			// we repeat alarm till it's active, unless confirmed by user (by closing associated toast message)
@@ -260,6 +263,7 @@
 	});
 
 	onMount(() => {
+		screenWake.start();
 		const onUserInteraction = () => {
 			checkIfAudioPlayable();
 		};
@@ -269,6 +273,7 @@
 		window.addEventListener('touchstart', onUserInteraction, { passive: true });
 		window.addEventListener('notification-test', handler as EventListener);
 		return () => {
+			void screenWake.stop();
 			window.removeEventListener('pointerdown', onUserInteraction);
 			window.removeEventListener('keydown', onUserInteraction);
 			window.removeEventListener('touchstart', onUserInteraction);
