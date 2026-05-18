@@ -1,6 +1,7 @@
 <script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import { asset, resolve } from '$app/paths';
+	import { dragHandle } from 'svelte-dnd-action';
 	import Wiki from '$lib/components/ui/wiki.svelte';
 	import { getQueryStringFlag } from '$lib/utils';
 	import { t as _ } from '$lib/services/i18n';
@@ -33,6 +34,7 @@
 		onToggleTodo?: (event: { id: number; todo: boolean }) => void;
 		showTooltip?: boolean;
 		showDetailsLink?: boolean;
+		showDragHandle?: boolean;
 	}
 
 	let {
@@ -55,6 +57,7 @@
 		onToggleTodo = () => {},
 		showTooltip = true,
 		showDetailsLink = true,
+		showDragHandle = false,
 	}: Props = $props();
 
 	const showApiLinks = getQueryStringFlag('show-api-links');
@@ -78,6 +81,9 @@
 </script>
 
 <div class="achiev {done ? 'done' : ''}">
+	{#if showDragHandle}
+		<span class="drag-handle" use:dragHandle aria-label={`drag-handle for ${name}`} title="Drag to reorder">⋮⋮</span>
+	{/if}
 	<div
 		class="head"
 		class:autotooltip={showTooltip}
@@ -132,6 +138,7 @@
 <style lang="scss">
 	.achiev {
 		width: 21em;
+		position: relative;
 		display: flex;
 		flex-flow: row nowrap;
 		padding: 0.5em;
@@ -151,6 +158,18 @@
 		}
 		&:hover {
 			box-shadow: var(--gw2helper-module-shadow-hover);
+		}
+		.drag-handle {
+			position: absolute;
+			left: 0.2em;
+			top: 0.15em;
+			cursor: grab;
+			font-size: 0.85em;
+			line-height: 1;
+			padding: 0.1em 0.25em;
+			border-radius: 0.2em;
+			background: rgba(0, 0, 0, 0.08);
+			z-index: 1;
 		}
 		.head {
 			display: flex;

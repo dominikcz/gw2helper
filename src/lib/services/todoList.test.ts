@@ -93,4 +93,71 @@ describe('todoList service', () => {
 		expect(todoList.has(4)).toBe(true);
 		expect(todoList.has(99)).toBe(false);
 	});
+
+	it('moves item up/down and persists ordered list', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20, 30]);
+
+		await todoList.move({ id: 20, direction: -1 });
+		expect(todoList.todos).toEqual([20, 10, 30]);
+		expect(saveAchievementsToDo).toHaveBeenNthCalledWith(1, [20, 10, 30]);
+
+		await todoList.move({ id: 20, direction: 1 });
+		expect(todoList.todos).toEqual([10, 20, 30]);
+		expect(saveAchievementsToDo).toHaveBeenNthCalledWith(2, [10, 20, 30]);
+	});
+
+	it('ignores move when item is missing or out of bounds', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20]);
+
+		await todoList.move({ id: 10, direction: -1 });
+		await todoList.move({ id: 20, direction: 1 });
+		await todoList.move({ id: 999, direction: 1 });
+
+		expect(todoList.todos).toEqual([10, 20]);
+		expect(saveAchievementsToDo).not.toHaveBeenCalled();
+	});
+
+	it('reorders items by source and target id and persists', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20, 30, 40]);
+
+		await todoList.reorder({ sourceId: 40, targetId: 20 });
+
+		expect(todoList.todos).toEqual([10, 40, 20, 30]);
+		expect(saveAchievementsToDo).toHaveBeenCalledWith([10, 40, 20, 30]);
+	});
+
+	it('ignores invalid reorder operations', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20, 30]);
+
+		await todoList.reorder({ sourceId: 10, targetId: 10 });
+		await todoList.reorder({ sourceId: 999, targetId: 20 });
+		await todoList.reorder({ sourceId: 10, targetId: 999 });
+
+		expect(todoList.todos).toEqual([10, 20, 30]);
+		expect(saveAchievementsToDo).not.toHaveBeenCalled();
+	});
+
+	it('reorders only visible subset via reorderByList while preserving hidden positions', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20, 30, 40, 50]);
+
+		await todoList.reorderByList([40, 10, 50]);
+
+		expect(todoList.todos).toEqual([40, 20, 30, 10, 50]);
+		expect(saveAchievementsToDo).toHaveBeenCalledWith([40, 20, 30, 10, 50]);
+	});
+
+	it('ignores reorderByList when some ids are outside todo list', async () => {
+		const todoList = await loadTodoList();
+		await todoList.init([10, 20, 30]);
+
+		await todoList.reorderByList([30, 999, 10]);
+
+		expect(todoList.todos).toEqual([10, 20, 30]);
+		expect(saveAchievementsToDo).not.toHaveBeenCalled();
+	});
 });

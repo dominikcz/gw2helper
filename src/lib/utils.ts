@@ -42,6 +42,7 @@ export type AchievementSettings = {
     daily?: boolean;
     weekly?: boolean;
     sortBy?: string;
+    todoSortBy?: 'ap' | 'progress' | 'manual';
 };
 export type ReminderSettings = { inAdvance?: number; sound?: string; sortBy?: string };
 

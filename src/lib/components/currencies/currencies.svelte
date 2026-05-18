@@ -4,7 +4,7 @@
 	import { flip } from 'svelte/animate';
 	import helperUtils from '$lib/utils/helper-utils';
 	import Currency from './currency.svelte';
-import type { WalletCurrency } from '$lib/types/gw2-api';
+	import type { WalletCurrency } from '$lib/types/gw2-api';
 
 	interface Props {
 		items?: WalletCurrency[];

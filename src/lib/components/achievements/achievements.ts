@@ -1,7 +1,7 @@
 import helperUtils from "$lib/utils/helper-utils";
 import { sum } from "$lib/utils";
 
-type SortBy = 'ap' | 'name' | 'order' | string;
+type SortBy = 'ap' | 'name' | 'order' | 'progress' | string;
 
 type RewardLike = {
     type: string;
@@ -67,7 +67,27 @@ type Sortable = {
     order?: number;
     done?: boolean;
     points_to_get?: number;
+    current?: number;
+    max?: number;
+    bits?: unknown[];
+    bits_done?: number[];
 };
+
+function progressValue(item: Sortable): number {
+    const max = Number(item.max ?? 0);
+    const current = Number(item.current ?? 0);
+    if (max > 0) {
+        return Math.min(Math.max(current / max, 0), 1);
+    }
+
+    const bits = Array.isArray(item.bits) ? item.bits.length : 0;
+    const bitsDone = Array.isArray(item.bits_done) ? item.bits_done.length : 0;
+    if (bits > 0) {
+        return Math.min(Math.max(bitsDone / bits, 0), 1);
+    }
+
+    return item.done ? 1 : 0;
+}
 
 export function sort(collection: AchievementLike[], sortBy: SortBy): AchievementLike[];
 export function sort(collection: CategoryLike[], sortBy: SortBy): CategoryLike[];
@@ -85,6 +105,17 @@ export function sort<T extends Sortable>(collection: T[], sortBy: SortBy): T[] {
         case 'name': {
             collection.sort((a, b) => {
                 return a.name.localeCompare(b.name);
+            });
+            break;
+        }
+        case 'progress': {
+            collection.sort((a, b) => {
+                const p = progressValue(b) - progressValue(a);
+                if (p !== 0) {
+                    return p;
+                }
+                const ap = (b.points_to_get || 0) - (a.points_to_get || 0);
+                return ap !== 0 ? ap : a.name.localeCompare(b.name);
             });
             break;
         }

@@ -36,6 +36,10 @@
 		done?: boolean;
 		flags?: string[];
 		points_to_get?: number;
+		current?: number;
+		max?: number;
+		bits?: unknown[];
+		bits_done?: number[];
 		rewardsObj?: {
 			mastery?: MasteryReward[];
 			title?: unknown;
@@ -46,11 +50,16 @@
 		desription?: string;
 		requirement?: string;
 	};
+	type TodoSortBy = 'ap' | 'progress' | 'manual';
+	let todoSortBy = $state<TodoSortBy>('ap');
 
 	onMount(async () => {
 		showApiLinks = utils.getQueryStringFlag('show-api-links');
 		const settings = await data.settings as AchievementSettings;
 		applySettings(filters, settings);
+		if (settings.todoSortBy === 'ap' || settings.todoSortBy === 'progress' || settings.todoSortBy === 'manual') {
+			todoSortBy = settings.todoSortBy;
+		}
 		await todoList.init(data.toDoList);
 	});
 
@@ -80,7 +89,36 @@
 	}
 
 	function saveSettings() {
-		utils.saveAchievementsSettings(filters);
+		utils.saveAchievementsSettings({ ...filters, todoSortBy });
+	}
+
+	function sortByTodoMode(items: import('$lib/components/achievements/achievements').AchievementLike[]): import('$lib/components/achievements/achievements').AchievementLike[] {
+		if (todoSortBy === 'manual') {
+			const indexById: Record<number, number> = {};
+			todoList.todos.forEach((id, index) => {
+				indexById[Number(id)] = index;
+			});
+			return [...items].sort((a, b) => {
+				const aId = Number(a.id || 0);
+				const bId = Number(b.id || 0);
+				const aIndex = indexById[aId] ?? Number.MAX_SAFE_INTEGER;
+				const bIndex = indexById[bId] ?? Number.MAX_SAFE_INTEGER;
+				return aIndex === bIndex ? a.name.localeCompare(b.name) : aIndex - bIndex;
+			});
+		}
+		return sort([...items], todoSortBy);
+	}
+
+	function setTodoSortBy(value: TodoSortBy) {
+		todoSortBy = value;
+		saveSettings();
+	}
+
+	function hndTodoReorderByOrder(event: { order: number[] }) {
+		if (todoSortBy !== 'manual') {
+			setTodoSortBy('manual');
+		}
+		void todoList.reorderByList(event.order);
 	}
 </script>
 
@@ -93,7 +131,7 @@
 		{@const typedResult = result as AchievementsView}
 		{@const _result = filteredAchievements(typedResult, filter, achievFilterCallback, null, filters)}
 		{@const sortedCategories = sort([...( _result.categories as import('$lib/components/achievements/achievements').CategoryLike[] )], filters.sortBy)}
-		{@const myItems = expandToDoList(_result, todoList.todos)}
+		{@const myItems = sortByTodoMode(expandToDoList(_result, todoList.todos))}
 		<WidgetsGroup name={$_('achievements.achievements_completed')}>
 			<WidgetInfo title={$_('achievements.achievements_completed')} value={typedResult.completed} image={asset('/assets/rewards/Monthly_Achievement.png')} />
 			<WidgetInfo title={$_('achievements.daily_points')} value={typedResult.daily_ap} image={asset('/assets/rewards/AP.png')} />
@@ -149,7 +187,20 @@
 
 				<TabPanel>
 					<h2>{$_('achievements.your_list')}</h2>
-					<AchievList items={myItems} todoList={todoList.todos} onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)}>
+					<fieldset class="settings todo-sort-settings">
+						<legend>{$_('common.settings')}</legend>
+						<div class="group">
+							<button type="button" class:active={todoSortBy === 'ap'} onclick={() => setTodoSortBy('ap')}>{$_('achievements.sort_by_points')}</button>
+							<button type="button" class:active={todoSortBy === 'progress'} onclick={() => setTodoSortBy('progress')}>{$_('achievements.detailed_progress')}</button>
+							<button type="button" class:active={todoSortBy === 'manual'} onclick={() => setTodoSortBy('manual')}>{$_('achievements.sort_by_in_game_order')}</button>
+						</div>
+					</fieldset>
+					<AchievList
+						items={myItems}
+						todoList={todoList.todos}
+						onToggleTodo={(event: { id: number; todo: boolean }) => todoList.toggle(event)}
+						onReorder={hndTodoReorderByOrder}
+					>
 						{@html $_('achievements.empty_list', { img_url: asset('/assets/rewards/map_heart_empty.png') })}
 					</AchievList>
 				</TabPanel>
@@ -161,6 +212,19 @@
 <style lang="scss">
 	.tabs-container {
 		margin-top: 4em;
+	}
+
+	.todo-sort-settings {
+		margin-bottom: 1em;
+		.group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4em;
+		}
+		button.active {
+			outline: 2px solid var(--gw2helper-module-border);
+			font-weight: bold;
+		}
 	}
 </style>
 
