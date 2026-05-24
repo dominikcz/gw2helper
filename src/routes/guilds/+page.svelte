@@ -64,7 +64,7 @@
 			text-indent: 0;
 			hanging-punctuation: first;
 			font-style: italic;
-			quotes: 'â€ś' 'â€ť' 'â€' 'â€™';
+			quotes: '“' '”' '‘' '’';
 		}
 	}
 	.details {
