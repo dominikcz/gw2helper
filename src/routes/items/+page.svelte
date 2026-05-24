@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import ItemsList from '$lib/components/items/itemsList.svelte';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import SearchInput from '$lib/components/search/searchInput.svelte';

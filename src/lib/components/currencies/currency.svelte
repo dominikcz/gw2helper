@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 
 	import Price from '$lib/components/currencies/price.svelte';
 	import helperUtils from '$lib/utils/helper-utils';

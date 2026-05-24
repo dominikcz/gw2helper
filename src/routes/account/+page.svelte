@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import helperUtils from '$lib/utils/helper-utils';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import WidgetInfo from '$lib/components/widgets/widgetInfo.svelte';

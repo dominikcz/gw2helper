@@ -1,4 +1,4 @@
-﻿<script lang="ts" generics="T">
+<script lang="ts" generics="T">
 	import Spinner from '$lib/components/branding/gw2spinner.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import InfoBlock from '$lib/components/infoBlock/infoBlock.svelte';

@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { asset } from "$app/paths";
 	import Price from "$lib/components/currencies/price.svelte";
 	import { t as _ } from '$lib/services/i18n';

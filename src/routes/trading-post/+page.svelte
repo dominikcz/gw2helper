@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import CollapsibleSection from '$lib/components/ui/collapsibleSection.svelte';
 	import DeliveryBox from '$lib/components/trading-post/deliveryBox.svelte';

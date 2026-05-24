@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import '$lib/scss/gw2.scss';
 	import { asset, resolve } from '$app/paths';
 	import { afterNavigate, invalidateAll } from '$app/navigation';

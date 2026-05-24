@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	// based on https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_stores
     import { alert } from './alert';
     import Modal from '$lib/components/ui/modal.svelte';

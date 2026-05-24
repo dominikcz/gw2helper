@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
 	import Legendary from '$lib/components/items/legendary.svelte';

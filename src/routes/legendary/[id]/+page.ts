@@ -1,4 +1,4 @@
-﻿export const ssr = false;
+export const ssr = false;
 
 import { asset } from '$app/paths';
 import type { PageLoad } from './$types';
