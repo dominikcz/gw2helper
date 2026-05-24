@@ -55,6 +55,7 @@ import type {
     ApiCharacterDto,
     ApiCommerceDeliveryDto,
     ApiCommercePriceDto,
+    ApiCommerceListingsDto,
     ApiCommerceTransactionDto,
     ApiCurrencyDto,
     ApiGuildDto,
@@ -282,7 +283,7 @@ const materials = async (): Promise<ExpandedItem[]> => {
 };
 
 
-const _getTransactions = async (_transactions: TransactionData[]): Promise<TransactionCurrentItem[]> => {
+const _getTransactions = async (_transactions: TransactionData[], offerType: 'buys' | 'sells'): Promise<TransactionCurrentItem[]> => {
     const transactions: TransactionExpanded[] = mapTransactionsForCurrent(_transactions) as TransactionExpanded[];
 
 
@@ -292,7 +293,7 @@ const _getTransactions = async (_transactions: TransactionData[]): Promise<Trans
     let sum = sumQuantitiesByItemAndPrice(transactions);
     sum = await expandItems(ids, sum);
     sum = await expandPrices(ids, sum);
-    return sum as TransactionCurrentItem[];
+    return expandOutbidQuantities(sum as TransactionCurrentItem[], offerType);
 }
 
 const transactionsCurrent = async (): Promise<{ buys: TransactionCurrentItem[]; sells: TransactionCurrentItem[] }> => {
@@ -301,8 +302,8 @@ const transactionsCurrent = async (): Promise<{ buys: TransactionCurrentItem[]; 
         apiClient<TransactionData[]>("/v2/commerce/transactions/current/sells", "")
     ]);
     const [buys, sells] = await Promise.all([
-        _getTransactions(_buys),
-        _getTransactions(_sells)
+        _getTransactions(_buys, 'buys'),
+        _getTransactions(_sells, 'sells')
     ]);
     return { buys, sells };
 }
@@ -420,6 +421,53 @@ const legendaries = async (): Promise<LegendariesData> => {
 
 const prices = (x: string) => {
     return apiClient("/v2/commerce/prices", `ids=${x}`);
+};
+
+const listings = (x: string) => {
+    return apiClient<ApiCommerceListingsDto[]>("/v2/commerce/listings", `ids=${x}`);
+};
+
+const expandOutbidQuantities = async (
+    collection: TransactionCurrentItem[],
+    offerType: 'buys' | 'sells'
+): Promise<TransactionCurrentItem[]> => {
+    const outbidItems = collection.filter((item) => {
+        const offer = item[offerType];
+        if (!offer?.unit_price) return false;
+        return offerType === 'sells' ? item.price > offer.unit_price : item.price < offer.unit_price;
+    });
+
+    if (!outbidItems.length) return collection;
+
+    const ids = outbidItems.map((x) => x.id).filter((id) => !INVALID_ITEM_IDS.includes(id));
+
+    const batches: string[] = [];
+    const idsCopy = [...ids];
+    do {
+        const batch = idsCopy.splice(0, 200);
+        if (batch.length > 0) batches.push(batch.join(','));
+    } while (idsCopy.length > 0);
+
+    const listingsData: ApiCommerceListingsDto[] = (
+        await Promise.all(batches.map((b) => listings(b)))
+    ).flat() as ApiCommerceListingsDto[];
+
+    const listingsById = new Map<number, ApiCommerceListingsDto>();
+    for (const l of listingsData) {
+        listingsById.set(l.id, l);
+    }
+
+    return collection.map((item) => {
+        const listing = listingsById.get(item.id);
+        if (!listing) return item;
+
+        const outbid_quantity =
+            offerType === 'sells'
+                ? listing.sells.filter((t) => t.unit_price < item.price).reduce((acc, t) => acc + t.quantity, 0)
+                : listing.buys.filter((t) => t.unit_price > item.price).reduce((acc, t) => acc + t.quantity, 0);
+
+        return { ...item, outbid_quantity };
+    });
 };
 
 const account = async (): Promise<AccountWithLocalDates> => {

@@ -5,6 +5,7 @@ my_offer: Mon offre
 age: Age
 best_offer: Meilleure offre
 ordered_qty: '# commandes'
+offered_qty: '# mis en vente'
 ordered_qty_value: '{value, number}'
 outbid: Surencheri
 undercut: Prix inferieur

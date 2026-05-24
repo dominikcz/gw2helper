@@ -169,6 +169,18 @@ export interface ApiCommercePriceDto {
     sells?: ApiCommercePriceOfferDto;
 }
 
+export interface ApiCommerceListingTierDto {
+    listings: number;
+    unit_price: number;
+    quantity: number;
+}
+
+export interface ApiCommerceListingsDto {
+    id: number;
+    buys: ApiCommerceListingTierDto[];
+    sells: ApiCommerceListingTierDto[];
+}
+
 export interface ApiCommerceDeliveryDto {
     coins: number;
     items: Array<{ id: number; count: number }>;
@@ -261,6 +273,7 @@ export interface TransactionCurrentItem extends ExpandedItem {
     count: number;
     buys?: ApiCommercePriceOfferDto;
     sells?: ApiCommercePriceOfferDto;
+    outbid_quantity?: number;
 }
 
 export interface GuildStashData {

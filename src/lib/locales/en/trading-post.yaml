@@ -5,6 +5,7 @@ my_offer: My offer
 age: Age
 best_offer: Best offer
 ordered_qty: '# ordered'
+offered_qty: '# offered'
 ordered_qty_value: '{value, number}'
 outbid: Outbid
 undercut: Undercut

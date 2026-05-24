@@ -31,6 +31,10 @@
 		return offerType === 'sells' ? 'trading-post.undercut' : 'trading-post.outbid';
 	}
 
+	function orderedColumnLabelKey(): string {
+		return offerType === 'sells' ? 'trading-post.offered_qty' : 'trading-post.ordered_qty';
+	}
+
 	const tooltipOptions = {
 		customRenderers: {
 			'img.item': itemTooltipRenderer,
@@ -47,7 +51,7 @@
 				<th>{$_('trading-post.my_offer')}</th>
 				<th>{$_('trading-post.age')}</th>
 				<th>{$_('trading-post.best_offer')}</th>
-				<th>{$_('trading-post.ordered_qty')}</th>
+				<th>{$_(orderedColumnLabelKey())}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -62,7 +66,9 @@
 					<td>
 						<Price value={item.price} />
 						{#if outbid}
-							<div class="status outbid">{$_(outbidLabelKey())}</div>
+							<div class="status outbid">
+								{$_(outbidLabelKey())} ({$_('trading-post.ordered_qty_value', { value: item.outbid_quantity ?? 0 })})
+							</div>
 						{/if}
 					</td>
 					<td class="item-time">
@@ -71,7 +77,7 @@
 					<td class="offer" data-label={$_('trading-post.best_offer')}>
 						<Price value={offer.unit_price} />
 					</td>
-					<td class="offer-qty" data-label={$_('trading-post.ordered_qty')}>
+					<td class="offer-qty" data-label={$_(orderedColumnLabelKey())}>
 						{$_('trading-post.ordered_qty_value', { value: offer.quantity })}
 					</td>
 				</tr>
@@ -133,13 +139,18 @@
 	}
 
 	tbody {
+		&::before {
+			content: '';
+			display: table-row;
+			height: 0.4rem;
+		}
 		tr {
 			&:nth-child(even) {
 				background-color: rgba(0, 0, 0, 0.1);
 			}
 		}
 		tr.outbid {
-			box-shadow: inset 0 0 0 1px rgba(255, 120, 120, 0.7);
+			background-color: #ff8f8f;
 		}
 		td {
 			padding: 0 0.6rem;
@@ -156,7 +167,19 @@
 	}
 
 	.status.outbid {
-		color: #ff8d8d;
+		color: #a70000;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		tbody {
+			tr.outbid {
+				background-color: #ff5d5d7a;
+			}
+		}
+
+		.status.outbid {
+			color: #ff8d8d;
+		}
 	}
 
 	@media screen and (max-width: 880px) {

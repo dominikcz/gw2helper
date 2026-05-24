@@ -5,6 +5,7 @@ my_offer: Mein Angebot
 age: Alter
 best_offer: Bestes Angebot
 ordered_qty: '# bestellt'
+offered_qty: '# angeboten'
 ordered_qty_value: '{value, number}'
 outbid: Uberboten
 undercut: Unterboten
