@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import GuildEmblem from '$lib/components/branding/guildEmblem.svelte';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';
 	import { t as _ } from '$lib/services/i18n';
@@ -19,7 +19,7 @@
 					<GuildEmblem emblem={emblem as never} background="#777" />
 					<div class="guild-h">
 						<h2>{guild.name} [{guild.tag}]</h2>
-						<blockquote>{guild.motd ? `â€ś${guild.motd}â€ť` : ''}</blockquote>
+						<blockquote>{guild.motd ? `“${guild.motd}”` : ''}</blockquote>
 					</div>
 				</div>
 				<div class="details">
