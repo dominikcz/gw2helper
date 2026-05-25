@@ -2,5 +2,5 @@
   RewriteEngine On
   RewriteBase /gw2helper
   RewriteCond %{REQUEST_FILENAME}   !-s
-  RewriteRule ^.*          index.html [L]
+  RewriteRule ^.*          404.html [L]
 </IfModule>
