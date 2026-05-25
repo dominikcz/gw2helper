@@ -76,7 +76,7 @@ export function normalizeAcquisition(rawAcq: unknown): ItemAcquisition | null {
 							const amount = Number(co.amount);
 							const item_name = typeof co.item_name === 'string' ? co.item_name.trim() : '';
 							if (!Number.isFinite(amount) || amount <= 0 || !item_name) return null;
-							const icon_url = typeof co.icon_url === 'string' && co.icon_url ? co.icon_url : undefined;
+							const icon_url = typeof co.icon_url === 'string' && co.icon_url && !co.icon_url.includes('wiki.guildwars2.com') ? co.icon_url : undefined;
 							const item_id = isFinitePositiveInt(co.item_id) ? Number(co.item_id) : undefined;
 							return { amount, item_name, ...(icon_url ? { icon_url } : {}), ...(item_id ? { item_id } : {}) };
 						})

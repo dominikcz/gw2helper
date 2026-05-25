@@ -8,6 +8,17 @@ export const INGREDIENT_DELAY_MS = Number(process.env.GW2W_INGREDIENT_DELAY_MS |
 export const MAX_RETRIES = Number(process.env.GW2W_MAX_RETRIES || 2);
 export const GW2_WIKI = 'https://wiki.guildwars2.com/api.php';
 
+/** Decode HTML entities in strings extracted from wiki HTML */
+export function decodeHtmlEntities(str) {
+	if (!str || !str.includes('&')) return str;
+	return str
+		.replace(/&#39;/g, "'")
+		.replace(/&amp;/g, '&')
+		.replace(/&quot;/g, '"')
+		.replace(/&#160;|&nbsp;/g, '\u00a0')
+		.replace(/&#(\d+);/g, (_, c) => String.fromCharCode(Number(c)));
+}
+
 // ─── HTTP helpers ────────────────────────────────────────────────────────────
 
 export let lastRequestTime = 0;
@@ -205,7 +216,7 @@ export function parseVendorTableHtml(html) {
 			const altMatch = attrs.match(/alt="([^"]+)"/i);
 			const srcMatch = attrs.match(/src="([^"]+)"/i);
 			if (!altMatch) continue;
-			const item_name = altMatch[1].trim();
+			const item_name = decodeHtmlEntities(altMatch[1].trim());
 			const isGold = /\bgold\s*coin\b/i.test(item_name);
 			const isSilver = /\bsilver\s*coin\b/i.test(item_name);
 			const isCopper = /\bcopper\s*coin\b/i.test(item_name);

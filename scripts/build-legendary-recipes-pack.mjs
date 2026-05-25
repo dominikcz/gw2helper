@@ -21,6 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
 const RECIPES_DIR = path.join(ROOT_DIR, 'static', 'data', 'recipies');
 const LEGENDARY_ITEMS_PATH = path.join(ROOT_DIR, 'src', 'api', 'leg.json');
+const RECIPES_CACHE_PATH = path.join(ROOT_DIR, 'static', 'legendary_recipes_cache.json');
 const OUTPUT_PATH = path.join(RECIPES_DIR, 'legendary-pack.json');
 
 function pickBestRecipeEntry(entries) {
@@ -36,13 +37,28 @@ async function readLegendaryRootIds() {
 	}
 	const raw = await fs.readFile(LEGENDARY_ITEMS_PATH, 'utf-8');
 	const items = JSON.parse(raw);
-	if (!Array.isArray(items)) return [];
+	const fromApi = Array.isArray(items)
+		? items
+			.filter((item) => item && item.rarity === 'Legendary' && Number(item.id) > 0)
+			.map((item) => Number(item.id))
+		: [];
 
-	return items
-		.filter((item) => item && item.rarity === 'Legendary' && Number(item.id) > 0)
-		.map((item) => Number(item.id))
-		.filter((id, index, arr) => arr.indexOf(id) === index)
-		.sort((a, b) => a - b);
+	// Also include roots from legendary_recipes_cache.json (wiki-scraped items not in the API)
+	const fromCache = [];
+	if (existsSync(RECIPES_CACHE_PATH)) {
+		try {
+			const cacheRaw = await fs.readFile(RECIPES_CACHE_PATH, 'utf-8');
+			const cache = JSON.parse(cacheRaw);
+			if (cache && Array.isArray(cache.roots)) {
+				fromCache.push(...cache.roots.map(Number).filter((id) => Number.isInteger(id) && id > 0));
+			}
+		} catch {
+			// ignore
+		}
+	}
+
+	const merged = [...new Set([...fromApi, ...fromCache])];
+	return merged.filter((id, index, arr) => arr.indexOf(id) === index).sort((a, b) => a - b);
 }
 
 async function indexAllRecipes() {
@@ -76,7 +92,18 @@ async function indexAllRecipes() {
 					.filter((ingredientId) => Number.isInteger(ingredientId) && ingredientId > 0)
 				: [];
 
-			recipeIndex.set(itemId, { best, ingredients });
+			// Also follow vendor cost items — items obtained by opening a container have
+			// the container as a vendor cost; their recipes must be included in the pack
+			// so the tree can expand them.
+			const vendorCostIds = (best.acquisition?.vendors ?? [])
+				.flatMap((v) => v.cost ?? [])
+				.map((c) => Number(c?.item_id))
+				.filter((id) => Number.isInteger(id) && id > 0);
+
+			// Deduplicate against recipe ingredients
+			const allFollowIds = [...new Set([...ingredients, ...vendorCostIds])];
+
+			recipeIndex.set(itemId, { best, ingredients: allFollowIds });
 		}
 	}
 

@@ -324,10 +324,35 @@
 			if (wikiData.acquisition) {
 				form.acquisition = wikiData.acquisition;
 				// Replace wiki thumbnail icon_urls with GW2 API icons from batched lookups
+				const unresolvedCurrencyNames: string[] = [];
 				for (const cost of allCosts) {
 					const matched = lookupByName[normalizeLookupName(cost.item_name)];
 					if (matched?.icon) {
 						cost.icon_url = matched.icon;
+					} else {
+						unresolvedCurrencyNames.push(cost.item_name);
+					}
+				}
+				// For unresolved items, try currencies (Karma, Laurel, etc.)
+				if (unresolvedCurrencyNames.length) {
+					const currencyResults = await Promise.all(
+						[...new Set(unresolvedCurrencyNames)].map(async (name) => {
+							try {
+								const r = await fetch(resolve('/recipies/api/currencies') + '?q=' + encodeURIComponent(name));
+								if (!r.ok) return null;
+								const { currencies } = await r.json();
+								return currencies?.[0] ?? null;
+							} catch { return null; }
+						})
+					);
+					const currencyByName = new Map(
+						[...new Set(unresolvedCurrencyNames)].map((name, i) => [name.toLowerCase(), currencyResults[i]])
+					);
+					for (const cost of allCosts) {
+						if (!lookupByName[normalizeLookupName(cost.item_name)]?.icon) {
+							const c = currencyByName.get(cost.item_name.toLowerCase());
+							if (c?.icon) cost.icon_url = c.icon;
+						}
 					}
 				}
 			}

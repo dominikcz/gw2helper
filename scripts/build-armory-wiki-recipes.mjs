@@ -50,6 +50,20 @@ const API_BATCH_SIZE = 200;
 const itemsByName = new Map();
 /** @type {Map<number, { name: string; icon: string | null; rarity: string; type: string }>} id → item */
 const itemsById = new Map();
+/** @type {Map<string, { id: number; icon: string | null }>} name → currency */
+const currenciesByName = new Map();
+const CURRENCIES_CACHE = path.join(ROOT_DIR, 'scripts', '.cache', 'gw2_currencies.json');
+
+/** Decode common HTML entities in item names from the wiki parser output */
+function decodeHtmlEntities(str) {
+	if (!str || !str.includes('&')) return str;
+	return str
+		.replace(/&#39;/g, "'")
+		.replace(/&amp;/g, '&')
+		.replace(/&quot;/g, '"')
+		.replace(/&#160;|&nbsp;/g, '\u00a0')
+		.replace(/&#(\d+);/g, (_, c) => String.fromCharCode(Number(c)));
+}
 
 async function loadItemsCache() {
 	if (!existsSync(ITEMS_CACHE)) {
@@ -63,6 +77,15 @@ async function loadItemsCache() {
 		itemsById.set(item.id, item);
 	}
 	console.log(`[cache] Loaded ${items.length} items`);
+
+	if (existsSync(CURRENCIES_CACHE)) {
+		const rawCurr = await fs.readFile(CURRENCIES_CACHE, 'utf-8');
+		const currencies = JSON.parse(rawCurr);
+		for (const c of currencies) {
+			if (c.name) currenciesByName.set(c.name.toLowerCase(), { id: c.id, icon: c.icon ?? null });
+		}
+		console.log(`[cache] Loaded ${currencies.length} currencies`);
+	}
 }
 
 /** Resolve item ID from name — first tries local cache, then wiki SMW */
@@ -81,14 +104,18 @@ async function resolveItemId(name) {
 	return id ?? null;
 }
 
-/** Replace wiki thumbnail icon_urls with GW2 API render URLs from items cache */
+/** Replace wiki thumbnail icon_urls with GW2 API render URLs from items/currencies cache */
 function enrichAcquisitionIcons(acquisition) {
 	if (!acquisition?.vendors) return;
 	for (const vendor of acquisition.vendors) {
 		for (const cost of vendor.cost ?? []) {
 			if (!cost.item_name) continue;
-			const item = itemsByName.get(cost.item_name.toLowerCase());
-			if (item?.icon) cost.icon_url = item.icon;
+			const decoded = decodeHtmlEntities(cost.item_name);
+			const lower = decoded.toLowerCase();
+			const item = itemsByName.get(lower);
+			if (item?.icon) { cost.icon_url = item.icon; continue; }
+			const currency = currenciesByName.get(lower);
+			if (currency?.icon) cost.icon_url = currency.icon;
 		}
 	}
 }
@@ -99,7 +126,8 @@ function enrichVendorCostItemIds(acquisition) {
 	for (const vendor of acquisition.vendors) {
 		for (const cost of vendor.cost ?? []) {
 			if (!cost.item_name || cost.item_id) continue;
-			const item = itemsByName.get(cost.item_name.toLowerCase());
+			const decoded = decodeHtmlEntities(cost.item_name);
+			const item = itemsByName.get(decoded.toLowerCase());
 			if (item?.id) cost.item_id = item.id;
 		}
 	}
@@ -233,6 +261,24 @@ async function processItem(itemId, depth, rootProgress = null) {
 	// Enrich vendor icon_urls with GW2 API icons
 	if (acquisition) enrichAcquisitionIcons(acquisition);
 	if (acquisition) enrichVendorCostItemIds(acquisition);
+
+	// "Contained in" pattern: vendor.name === cost[0].item_name means the item is obtained
+	// by opening/consuming a container. Promote that container to a recipe ingredient so the
+	// calculator tree can expand it. The acquisition.vendors entry is kept for display purposes.
+	//
+	// Only apply when there is exactly ONE vendor entry — multi-source items (like basic crafting
+	// materials dropped from many loot bags) must NOT be promoted.
+	if (acquisition?.vendors?.length === 1) {
+		const [vendor] = acquisition.vendors;
+		const cost = vendor.cost ?? [];
+		if (cost.length === 1 && cost[0].item_name === vendor.name) {
+			const containerId = cost[0].item_id ?? null;
+			if (containerId && containerId > 0 && !ingredients.some(i => i.item_id === containerId)) {
+				ingredients.push({ item_id: containerId, count: cost[0].amount ?? 1 });
+				console.log(`${indent}  ↑ promoted container ingredient: ${vendor.name} (id=${containerId})`);
+			}
+		}
+	}
 
 	// Build custom recipe entry (id=0 = wiki/custom)
 	const customEntry = {

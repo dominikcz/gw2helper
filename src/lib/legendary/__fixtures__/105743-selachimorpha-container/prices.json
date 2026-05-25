@@ -1,1 +1,632 @@
-{}
+{
+  "8915": {
+    "buys": {
+      "quantity": 6891,
+      "unit_price": 293
+    },
+    "sells": {
+      "quantity": 1159,
+      "unit_price": 592
+    }
+  },
+  "8917": {
+    "buys": {
+      "quantity": 4283,
+      "unit_price": 388
+    },
+    "sells": {
+      "quantity": 683,
+      "unit_price": 790
+    }
+  },
+  "8918": {
+    "buys": {
+      "quantity": 14520,
+      "unit_price": 507
+    },
+    "sells": {
+      "quantity": 1990,
+      "unit_price": 707
+    }
+  },
+  "8920": {
+    "buys": {
+      "quantity": 177237,
+      "unit_price": 248
+    },
+    "sells": {
+      "quantity": 775029,
+      "unit_price": 250
+    }
+  },
+  "9281": {
+    "buys": {
+      "quantity": 18249,
+      "unit_price": 266
+    },
+    "sells": {
+      "quantity": 12738,
+      "unit_price": 319
+    }
+  },
+  "9282": {
+    "buys": {
+      "quantity": 16848,
+      "unit_price": 287
+    },
+    "sells": {
+      "quantity": 9979,
+      "unit_price": 355
+    }
+  },
+  "9288": {
+    "buys": {
+      "quantity": 13140,
+      "unit_price": 276
+    },
+    "sells": {
+      "quantity": 8396,
+      "unit_price": 450
+    }
+  },
+  "9289": {
+    "buys": {
+      "quantity": 16842,
+      "unit_price": 395
+    },
+    "sells": {
+      "quantity": 5556,
+      "unit_price": 483
+    }
+  },
+  "9290": {
+    "buys": {
+      "quantity": 10285,
+      "unit_price": 315
+    },
+    "sells": {
+      "quantity": 8098,
+      "unit_price": 520
+    }
+  },
+  "9291": {
+    "buys": {
+      "quantity": 3203,
+      "unit_price": 900
+    },
+    "sells": {
+      "quantity": 555,
+      "unit_price": 4583
+    }
+  },
+  "9293": {
+    "buys": {
+      "quantity": 188091,
+      "unit_price": 201
+    },
+    "sells": {
+      "quantity": 27212,
+      "unit_price": 260
+    }
+  },
+  "9304": {
+    "buys": {
+      "quantity": 16495,
+      "unit_price": 182
+    },
+    "sells": {
+      "quantity": 3389,
+      "unit_price": 281
+    }
+  },
+  "9305": {
+    "buys": {
+      "quantity": 12941,
+      "unit_price": 322
+    },
+    "sells": {
+      "quantity": 6460,
+      "unit_price": 450
+    }
+  },
+  "9306": {
+    "buys": {
+      "quantity": 10881,
+      "unit_price": 439
+    },
+    "sells": {
+      "quantity": 2597,
+      "unit_price": 711
+    }
+  },
+  "9307": {
+    "buys": {
+      "quantity": 8255,
+      "unit_price": 285
+    },
+    "sells": {
+      "quantity": 255,
+      "unit_price": 634
+    }
+  },
+  "9309": {
+    "buys": {
+      "quantity": 5801,
+      "unit_price": 301
+    },
+    "sells": {
+      "quantity": 4738,
+      "unit_price": 595
+    }
+  },
+  "9312": {
+    "buys": {
+      "quantity": 9237,
+      "unit_price": 269
+    },
+    "sells": {
+      "quantity": 1324,
+      "unit_price": 280
+    }
+  },
+  "9313": {
+    "buys": {
+      "quantity": 7660,
+      "unit_price": 429
+    },
+    "sells": {
+      "quantity": 254,
+      "unit_price": 722
+    }
+  },
+  "9314": {
+    "buys": {
+      "quantity": 6098,
+      "unit_price": 415
+    },
+    "sells": {
+      "quantity": 3285,
+      "unit_price": 510
+    }
+  },
+  "9315": {
+    "buys": {
+      "quantity": 11937,
+      "unit_price": 312
+    },
+    "sells": {
+      "quantity": 10406,
+      "unit_price": 512
+    }
+  },
+  "9317": {
+    "buys": {
+      "quantity": 51031,
+      "unit_price": 247
+    },
+    "sells": {
+      "quantity": 35810,
+      "unit_price": 252
+    }
+  },
+  "9320": {
+    "buys": {
+      "quantity": 6201,
+      "unit_price": 458
+    },
+    "sells": {
+      "quantity": 257,
+      "unit_price": 1970
+    }
+  },
+  "9321": {
+    "buys": {
+      "quantity": 1743,
+      "unit_price": 21526
+    },
+    "sells": {
+      "quantity": 20,
+      "unit_price": 190695
+    }
+  },
+  "9325": {
+    "buys": {
+      "quantity": 14148,
+      "unit_price": 215
+    },
+    "sells": {
+      "quantity": 6640,
+      "unit_price": 284
+    }
+  },
+  "9329": {
+    "buys": {
+      "quantity": 5672,
+      "unit_price": 1255
+    },
+    "sells": {
+      "quantity": 435,
+      "unit_price": 3253
+    }
+  },
+  "9330": {
+    "buys": {
+      "quantity": 24759,
+      "unit_price": 403
+    },
+    "sells": {
+      "quantity": 10982,
+      "unit_price": 479
+    }
+  },
+  "9331": {
+    "buys": {
+      "quantity": 10898,
+      "unit_price": 365
+    },
+    "sells": {
+      "quantity": 7452,
+      "unit_price": 834
+    }
+  },
+  "9333": {
+    "buys": {
+      "quantity": 64884,
+      "unit_price": 232
+    },
+    "sells": {
+      "quantity": 16997,
+      "unit_price": 236
+    }
+  },
+  "9344": {
+    "buys": {
+      "quantity": 17169,
+      "unit_price": 238
+    },
+    "sells": {
+      "quantity": 5504,
+      "unit_price": 300
+    }
+  },
+  "9345": {
+    "buys": {
+      "quantity": 27129,
+      "unit_price": 461
+    },
+    "sells": {
+      "quantity": 14827,
+      "unit_price": 558
+    }
+  },
+  "9346": {
+    "buys": {
+      "quantity": 10355,
+      "unit_price": 290
+    },
+    "sells": {
+      "quantity": 317,
+      "unit_price": 390
+    }
+  },
+  "9347": {
+    "buys": {
+      "quantity": 10126,
+      "unit_price": 388
+    },
+    "sells": {
+      "quantity": 2024,
+      "unit_price": 667
+    }
+  },
+  "9349": {
+    "buys": {
+      "quantity": 30228,
+      "unit_price": 197
+    },
+    "sells": {
+      "quantity": 55355,
+      "unit_price": 198
+    }
+  },
+  "9352": {
+    "buys": {
+      "quantity": 10857,
+      "unit_price": 263
+    },
+    "sells": {
+      "quantity": 1142,
+      "unit_price": 352
+    }
+  },
+  "9353": {
+    "buys": {
+      "quantity": 16508,
+      "unit_price": 342
+    },
+    "sells": {
+      "quantity": 2832,
+      "unit_price": 764
+    }
+  },
+  "9354": {
+    "buys": {
+      "quantity": 6380,
+      "unit_price": 335
+    },
+    "sells": {
+      "quantity": 1726,
+      "unit_price": 522
+    }
+  },
+  "9355": {
+    "buys": {
+      "quantity": 2666,
+      "unit_price": 312
+    },
+    "sells": {
+      "quantity": 1319,
+      "unit_price": 507
+    }
+  },
+  "9357": {
+    "buys": {
+      "quantity": 21931,
+      "unit_price": 178
+    },
+    "sells": {
+      "quantity": 6897,
+      "unit_price": 496
+    }
+  },
+  "9368": {
+    "buys": {
+      "quantity": 15039,
+      "unit_price": 121
+    },
+    "sells": {
+      "quantity": 3102,
+      "unit_price": 205
+    }
+  },
+  "9369": {
+    "buys": {
+      "quantity": 6842,
+      "unit_price": 798
+    },
+    "sells": {
+      "quantity": 342,
+      "unit_price": 5087
+    }
+  },
+  "9370": {
+    "buys": {
+      "quantity": 16202,
+      "unit_price": 284
+    },
+    "sells": {
+      "quantity": 3748,
+      "unit_price": 465
+    }
+  },
+  "9371": {
+    "buys": {
+      "quantity": 9007,
+      "unit_price": 249
+    },
+    "sells": {
+      "quantity": 5790,
+      "unit_price": 324
+    }
+  },
+  "9373": {
+    "buys": {
+      "quantity": 55820,
+      "unit_price": 181
+    },
+    "sells": {
+      "quantity": 61388,
+      "unit_price": 290
+    }
+  },
+  "19663": {
+    "buys": {
+      "quantity": 11563,
+      "unit_price": 2500
+    },
+    "sells": {
+      "quantity": 15085,
+      "unit_price": 3144
+    }
+  },
+  "19976": {
+    "buys": {
+      "quantity": 10226254,
+      "unit_price": 18601
+    },
+    "sells": {
+      "quantity": 132764,
+      "unit_price": 18897
+    }
+  },
+  "24273": {
+    "buys": {
+      "quantity": 158129,
+      "unit_price": 266
+    },
+    "sells": {
+      "quantity": 52428,
+      "unit_price": 302
+    }
+  },
+  "24274": {
+    "buys": {
+      "quantity": 134577,
+      "unit_price": 884
+    },
+    "sells": {
+      "quantity": 122255,
+      "unit_price": 986
+    }
+  },
+  "24275": {
+    "buys": {
+      "quantity": 74422,
+      "unit_price": 876
+    },
+    "sells": {
+      "quantity": 147893,
+      "unit_price": 994
+    }
+  },
+  "24276": {
+    "buys": {
+      "quantity": 1192238,
+      "unit_price": 187
+    },
+    "sells": {
+      "quantity": 413592,
+      "unit_price": 196
+    }
+  },
+  "24277": {
+    "buys": {
+      "quantity": 144405,
+      "unit_price": 1122
+    },
+    "sells": {
+      "quantity": 653529,
+      "unit_price": 1158
+    }
+  },
+  "24333": {
+    "buys": {
+      "quantity": 57717,
+      "unit_price": 40
+    },
+    "sells": {
+      "quantity": 55366,
+      "unit_price": 44
+    }
+  },
+  "24334": {
+    "buys": {
+      "quantity": 7176,
+      "unit_price": 51
+    },
+    "sells": {
+      "quantity": 279308,
+      "unit_price": 52
+    }
+  },
+  "24335": {
+    "buys": {
+      "quantity": 107437,
+      "unit_price": 208
+    },
+    "sells": {
+      "quantity": 343781,
+      "unit_price": 254
+    }
+  },
+  "36038": {
+    "buys": {
+      "quantity": 306486,
+      "unit_price": 409
+    },
+    "sells": {
+      "quantity": 10132567,
+      "unit_price": 441
+    }
+  },
+  "71581": {
+    "buys": {
+      "quantity": 88846,
+      "unit_price": 587
+    },
+    "sells": {
+      "quantity": 1080349,
+      "unit_price": 729
+    }
+  },
+  "72058": {
+    "buys": {
+      "quantity": 514,
+      "unit_price": 2285
+    },
+    "sells": {
+      "quantity": 61,
+      "unit_price": 109999
+    }
+  },
+  "72150": {
+    "buys": {
+      "quantity": 2297,
+      "unit_price": 2919
+    },
+    "sells": {
+      "quantity": 258,
+      "unit_price": 29500
+    }
+  },
+  "73553": {
+    "buys": {
+      "quantity": 1747,
+      "unit_price": 1257
+    },
+    "sells": {
+      "quantity": 103,
+      "unit_price": 59500
+    }
+  },
+  "74616": {
+    "buys": {
+      "quantity": 4587,
+      "unit_price": 3007
+    },
+    "sells": {
+      "quantity": 8,
+      "unit_price": 389999
+    }
+  },
+  "74947": {
+    "buys": {
+      "quantity": 44516,
+      "unit_price": 249
+    },
+    "sells": {
+      "quantity": 4159,
+      "unit_price": 275
+    }
+  },
+  "76165": {
+    "buys": {
+      "quantity": 32284,
+      "unit_price": 176
+    },
+    "sells": {
+      "quantity": 134616,
+      "unit_price": 268
+    }
+  },
+  "91174": {
+    "buys": {
+      "quantity": 9835,
+      "unit_price": 5018
+    },
+    "sells": {
+      "quantity": 5243,
+      "unit_price": 8941
+    }
+  },
+  "96151": {
+    "buys": {
+      "quantity": 25097,
+      "unit_price": 2342
+    },
+    "sells": {
+      "quantity": 18425,
+      "unit_price": 2995
+    }
+  }
+}

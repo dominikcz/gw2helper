@@ -1,3 +1,4 @@
+import { getCurrentTest } from '@vitest/runner';
 import { describe, expect, it } from 'vitest';
 import { CalculationFor } from './calculation-scenario';
 import { fixtureExistsByItemName } from './test-helpers';
@@ -97,7 +98,7 @@ export function recipeIngredientNames(ctx: CalculatorContext, parentName: string
         .filter((name): name is string => Boolean(name));
 }
 
-export function expectRecipeIngredientsExactly(ctx: CalculatorContext, parentName: string, expected: ExpectedIngredient[]): void {
+function assertIngredientsExact(ctx: CalculatorContext, parentName: string, expected: ExpectedIngredient[]): void {
     const id = findItemIdByName(ctx, parentName);
     const recipe = ctx.recipeCache.get(id);
 
@@ -114,6 +115,22 @@ export function expectRecipeIngredientsExactly(ctx: CalculatorContext, parentNam
         .sort((a, b) => a.name.localeCompare(b.name) || a.count - b.count);
 
     expect(actual, `${parentName} ingredients with counts`).toEqual(normalizedExpected);
+}
+
+export function expectRecipeIngredientsExactly(ctx: CalculatorContext, parentName: string, expected: ExpectedIngredient[]): void {
+    if (getCurrentTest()) {
+        assertIngredientsExact(ctx, parentName, expected);
+        return;
+    }
+    describe(parentName, () => {
+        if (expected.length === 0) {
+            it('has no crafting ingredients', () => assertIngredientsExact(ctx, parentName, expected));
+        } else {
+            for (const ing of expected) {
+                it(`${ing.count}× ${ing.name}`, () => assertIngredientsExact(ctx, parentName, expected));
+            }
+        }
+    });
 }
 
 export const ingredient = (name: string, count: number): ExpectedIngredient => ({ name, count });
@@ -165,7 +182,7 @@ export function expectCommonProwessTemplateL3(ctx: CalculatorContext): void {
     ]);
 }
 
-export function expectVendorCostsContain(ctx: CalculatorContext, parentName: string, expectedCostNames: string[]): void {
+function assertVendorCostContains(ctx: CalculatorContext, parentName: string, expectedCostNames: string[]): void {
     const id = findItemIdByName(ctx, parentName);
     const recipe = ctx.recipeCache.get(id);
     const costNames = (recipe?.acquisition?.vendors ?? [])
@@ -177,4 +194,16 @@ export function expectVendorCostsContain(ctx: CalculatorContext, parentName: str
     for (const expected of expectedCostNames.map(normalizeName)) {
         expect(costNames, `${parentName} vendor cost names`).toContain(expected);
     }
+}
+
+export function expectVendorCostsContain(ctx: CalculatorContext, parentName: string, expectedCostNames: string[]): void {
+    if (getCurrentTest()) {
+        assertVendorCostContains(ctx, parentName, expectedCostNames);
+        return;
+    }
+    describe(`${parentName} vendor`, () => {
+        for (const costName of expectedCostNames) {
+            it(`contains ${costName}`, () => assertVendorCostContains(ctx, parentName, [costName]));
+        }
+    });
 }

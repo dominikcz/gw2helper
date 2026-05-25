@@ -1,19 +1,16 @@
-import { describe, it, expect } from 'vitest';
-import { fixtureExistsByItemName, loadFixtureContextByItemName } from './test-helpers';
+import { describe, it } from 'vitest';
+import { loadFixtureContextByItemName } from './test-helpers';
 import {
     expectCommonEconomicTemplateL3,
     expectCommonProwessTemplateL3,
     expectRecipeIngredientsExactly,
     expectVendorCostsContain,
     ingredient,
-    recipeIngredientNames,
 } from './calculator.test.helpers';
 
 describe('Legendary armor expected structure from wiki', () => {
     describe('WvW: Sublime Mistforged Triumphant Hero\'s Raiment', () => {
-        const SKIP = !fixtureExistsByItemName("Sublime Mistforged Triumphant Hero's Raiment");
-
-        it.skipIf(SKIP)('has full L1/L2 and expected L3 blocks matching wiki template', () => {
+        it('has full L1/L2 and expected L3 blocks matching wiki template', () => {
             const { ctx } = loadFixtureContextByItemName("Sublime Mistforged Triumphant Hero's Raiment");
 
             expectRecipeIngredientsExactly(ctx, "Sublime Mistforged Triumphant Hero's Raiment", [
@@ -50,9 +47,7 @@ describe('Legendary armor expected structure from wiki', () => {
     });
 
     describe('PvP: Mistforged Glorious Hero\'s Raiment', () => {
-        const SKIP = !fixtureExistsByItemName("Mistforged Glorious Hero's Raiment");
-
-        it.skipIf(SKIP)('has full L1/L2 and expected L3 blocks matching wiki template', () => {
+        it('has full L1/L2 and expected L3 blocks matching wiki template', () => {
             const { ctx } = loadFixtureContextByItemName("Mistforged Glorious Hero's Raiment");
 
             expectRecipeIngredientsExactly(ctx, "Mistforged Glorious Hero's Raiment", [
@@ -89,9 +84,7 @@ describe('Legendary armor expected structure from wiki', () => {
     });
 
     describe('Raid: Perfected Envoy Vestments', () => {
-        const SKIP = !fixtureExistsByItemName('Perfected Envoy Vestments');
-
-        it.skipIf(SKIP)('has full L1/L2 and expected L3 blocks matching wiki template', () => {
+        it('has full L1/L2 and expected L3 blocks matching wiki template', () => {
             const { ctx } = loadFixtureContextByItemName('Perfected Envoy Vestments');
 
             expectRecipeIngredientsExactly(ctx, 'Perfected Envoy Vestments', [
@@ -128,9 +121,7 @@ describe('Legendary armor expected structure from wiki', () => {
     });
 
     describe('Open world: Obsidian Light Regalia', () => {
-        const SKIP = !fixtureExistsByItemName('Obsidian Light Regalia');
-
-        it.skipIf(SKIP)('has full L1/L2 and selected L3 blocks matching wiki template', () => {
+        it('has full L1/L2 and selected L3 blocks matching wiki template', () => {
             const { ctx } = loadFixtureContextByItemName('Obsidian Light Regalia');
 
             expectRecipeIngredientsExactly(ctx, 'Obsidian Light Regalia', [
@@ -174,37 +165,60 @@ describe('Legendary armor expected structure from wiki', () => {
     });
 
     describe('Open world: Selachimorpha (aquabreather)', () => {
-        const SKIP = !fixtureExistsByItemName('Selachimorpha');
-
-        it.skipIf(SKIP)('is represented as terminal acquisition (no crafted sub-levels)', () => {
+        it('has Selachimorpha Container as its only ingredient', () => {
             const { ctx } = loadFixtureContextByItemName('Selachimorpha');
-            const directIngredients = recipeIngredientNames(ctx, 'Selachimorpha');
-            expect(directIngredients, 'Selachimorpha direct recipe ingredients').toEqual([]);
+            expectRecipeIngredientsExactly(ctx, 'Selachimorpha', [
+                ingredient('Selachimorpha Container', 1),
+            ]);
         });
     });
 
     describe('Open world: Selachimorpha Container (wiki material table)', () => {
-        const SKIP = !fixtureExistsByItemName('Selachimorpha Container');
+        const { ctx } = loadFixtureContextByItemName('Selachimorpha Container');
 
-        it.skipIf(SKIP)('matches the container-level wiki template blocks available in cache', () => {
-            const { ctx } = loadFixtureContextByItemName('Selachimorpha Container');
+        expectRecipeIngredientsExactly(ctx, 'Selachimorpha Container', [
+            ingredient('Gift of the Survivors', 1),
+            ingredient('Gift of the People', 1),
+            ingredient('Gift of Castoran Mastery', 1),
+            ingredient('Agaleus', 1),
+        ]);
 
-            expectRecipeIngredientsExactly(ctx, 'Selachimorpha Container', [
-                ingredient('Gift of the Survivors', 1),
-                ingredient('Gift of the People', 1),
-                ingredient('Gift of Castoran Mastery', 1),
-            ]);
+        expectVendorCostsContain(ctx, 'Gift of the Survivors', [
+            'Concentrated Chromatic Sap',
+            'Gift of Shipwreck Strand Exploration',
+        ]);
 
-            expectVendorCostsContain(ctx, 'Gift of the Survivors', [
-                'Concentrated Chromatic Sap',
-                'Gift of Shipwreck Strand Exploration',
-            ]);
+        expectVendorCostsContain(ctx, 'Gift of the People', [
+            'Gift of Starlit Weald Exploration',
+            'Patron of the Magical Arts Plaque',
+            'Seer Wreath of Service',
+        ]);
 
-            expectVendorCostsContain(ctx, 'Gift of the People', [
-                'Gift of Starlit Weald Exploration',
-                'Patron of the Magical Arts Plaque',
-                'Seer Wreath of Service',
-            ]);
-        });
+        expectRecipeIngredientsExactly(ctx, 'Gift of Castoran Mastery', [
+            ingredient('Gift of Adventure', 1),
+            ingredient('Gift of the Seas', 1),
+            ingredient('Bloodstone Shard', 1),
+            ingredient('Obsidian Shard', 250),
+        ]);
+
+        expectVendorCostsContain(ctx, 'Gift of Adventure', [
+            'Vision Crystal',
+            'Mystic Clover',
+            'Tale of Adventure',
+            'Unusual Coin',
+        ]);
+
+        expectVendorCostsContain(ctx, 'Gift of the Seas', [
+            'Gift of the Tides',
+            'Gift of Research',
+            'Gift of Condensed Might',
+            'Gift of Condensed Magic',
+        ]);
+
+        expectRecipeIngredientsExactly(ctx, 'Agaleus', [
+            ingredient('Agaleus Container', 1),
+        ]);
+
+        expectRecipeIngredientsExactly(ctx, 'Agaleus Container', []);
     });
 });
