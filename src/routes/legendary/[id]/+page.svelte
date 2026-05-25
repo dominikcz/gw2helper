@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import { SvelteMap } from 'svelte/reactivity';
 	import Awaiter from '$lib/components/ui/awaiter.svelte';

@@ -39,6 +39,11 @@
 	const label = $derived(name || (id != null ? `#${id}` : '?'));
 	const finalHref = $derived(href);
 	const resolvedHref = $derived(finalHref ? (finalHref.startsWith('http') ? finalHref : resolve(finalHref)) : undefined);
+
+	function formatCount(n: number): string {
+		if (n < 2000) return String(n);
+		return (Math.round(n / 100) / 10) + 'k';
+	}
 </script>
 
 <span class="item-label {className}">
@@ -59,18 +64,18 @@
 			{/if}
 		{/if}
 		{#if showCount && count > 1 && countOnIcon}
-			<span class="count-badge" aria-label={`count ${count}`}>{count}</span>
+			<span class="count-badge" aria-label={`count ${count}`}>{formatCount(count)}</span>
 		{/if}
 	</span>
 	{#if resolvedHref && linkCaption}
 		<a class="caption-link" href={resolvedHref} target="_blank" rel="noopener noreferrer" title={linkTitle}>
 			<span class="caption {rarityClass}" class:crossed>
-				{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
+				{#if showCount && count > 1 && !countOnIcon}{formatCount(count)}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
 			</span>
 		</a>
 	{:else}
 		<span class="caption {rarityClass}" class:crossed>
-			{#if showCount && count > 1 && !countOnIcon}{count}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
+			{#if showCount && count > 1 && !countOnIcon}{formatCount(count)}x {/if}{label}{#if showId && id != null} (id: {id}){/if}
 		</span>
 	{/if}
 </span>
